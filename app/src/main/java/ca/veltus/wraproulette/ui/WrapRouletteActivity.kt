@@ -14,7 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.ActivityWrapRouletteBinding
-import ca.veltus.wraproulette.ui.home.HomeFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -49,7 +48,7 @@ class WrapRouletteActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_chat, R.id.nav_statistics
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
