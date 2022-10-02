@@ -1,18 +1,21 @@
-package ca.veltus.wraproulette.ui.home
+package ca.veltus.wraproulette.ui.home.bids
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import ca.veltus.wraproulette.databinding.FragmentHomeBinding
+import ca.veltus.wraproulette.R
+import ca.veltus.wraproulette.databinding.FragmentBidsBinding
+import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 
-class HomeFragment : Fragment() {
+
+class BidsFragment : Fragment() {
     companion object {
-        private const val TAG = "HomeFragment"
+        private const val TAG = "BidsFragment"
     }
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentBidsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,18 +27,9 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentBidsBinding.inflate(inflater, container, false)
 
         return binding.root
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-
-
 
 }

@@ -17,4 +17,5 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/statistics" />
     </group>
+
 </menu>
