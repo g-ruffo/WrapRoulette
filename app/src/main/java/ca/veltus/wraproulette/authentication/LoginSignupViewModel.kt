@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.authentication
 
 import android.app.Application
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.authentication.login.LoginFragmentDirections
@@ -61,6 +62,7 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
         repository.logout()
         _loginFlow.value = null
         _signupFlow.value = null
+        Log.d(TAG, "logout: ")
     }
 
     // Check to see if entered email is valid and matches correct format. If valid return true.

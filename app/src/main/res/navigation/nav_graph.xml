@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_chat"
-        android:name="ca.veltus.wraproulette.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_pools"
+        android:name="ca.veltus.wraproulette.ui.pools.PoolsFragment"
+        android:label="@string/pools"
+        tools:layout="@layout/fragment_pools" />
 
     <fragment
         android:id="@+id/nav_statistics"
-        android:name="ca.veltus.wraproulette.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="ca.veltus.wraproulette.ui.statistics.StatisticsFragment"
+        android:label="@string/statistics"
+        tools:layout="@layout/fragment_statistics" />
 </navigation>

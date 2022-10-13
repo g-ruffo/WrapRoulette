@@ -9,13 +9,21 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_chat"
+            android:id="@+id/nav_pools"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/chat" />
+            android:title="@string/pools" />
         <item
             android:id="@+id/nav_statistics"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/statistics" />
     </group>
+
+    <item android:title="@string/action_settings">
+        <menu>
+            <item
+                android:id="@+id/logoutMenu"
+                android:title="@string/logout" />
+        </menu>
+    </item>
 
 </menu>
