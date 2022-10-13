@@ -16,4 +16,6 @@ class PoolsViewModel @Inject constructor(private val repository: AuthenticationR
         value = "This is gallery Fragment"
     }
     val text: LiveData<String> = _text
+
+
 }

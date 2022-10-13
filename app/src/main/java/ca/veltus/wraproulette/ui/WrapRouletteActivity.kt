@@ -81,5 +81,4 @@ class WrapRouletteActivity : AppCompatActivity() {
             true
         }
     }
-
 }
