@@ -5,6 +5,19 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="warningRed">#FF0000</color>
+    <color name="optionalGrey">#8c8c8c</color>
+    <color name="purpleLogoDark">#3D0340</color>
+    <color name="purpleLogoLight">#6B406E</color>
+    <color name="greyBackground">#F0F8FF</color>
+    <color name="earningsGreen">#00D905</color>
+    <color name="calendarGrey">#888</color>
+    <color name="calendarBlack">#FF000000</color>
+    <color name="calendarWhite">#FFFFFFFF</color>
+    <color name="calendarBlue">#0000FF</color>
+    <color name="timerNotRunningYellow">#20FFFF00</color>
+    <color name="timerRunningGreen">#2000D905</color>
 </resources>
