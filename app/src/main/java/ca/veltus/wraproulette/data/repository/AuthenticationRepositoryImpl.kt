@@ -10,6 +10,11 @@ import javax.inject.Inject
 class AuthenticationRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : AuthenticationRepository {
+
+    companion object {
+        private const val TAG = "AuthenticationRepoLog"
+    }
+
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
 

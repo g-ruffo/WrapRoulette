@@ -2,7 +2,6 @@ package ca.veltus.wraproulette.authentication
 
 import android.app.Application
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.authentication.login.LoginFragmentDirections
@@ -80,7 +79,7 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
     }
 
     // Check if entered email and password are valid and match correct format. If valid return true.
-    fun validateEmailAndPassword(): Boolean {
+    fun validateEmailAndPassword(signUp: Boolean = false): Boolean {
         emailAddress.value = emailAddress.value?.trim()
         password.value = password.value?.trim()
         username.value = username.value?.trim()
@@ -96,7 +95,14 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
         return if (TextUtils.isEmpty(password.value)) {
             showToast.value = "Please Enter A Password"
             false
-        } else true
+        } else {
+            if (signUp) {
+                signup(username.value!!, emailAddress.value!!, password.value!!)
+            } else {
+                login(emailAddress.value!!, password.value!!)
+            }
+            true
+        }
     }
 
     // Returns email, password and username as a triple.

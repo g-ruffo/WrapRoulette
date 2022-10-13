@@ -1,25 +1,27 @@
 package ca.veltus.wraproulette.authentication.login
 
-import android.os.Build
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import ca.veltus.wraproulette.BuildConfig
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.base.BaseFragment
-import ca.veltus.wraproulette.base.BaseViewModel
+import ca.veltus.wraproulette.data.Resource
 import ca.veltus.wraproulette.databinding.FragmentLoginBinding
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment() {
@@ -31,8 +33,6 @@ class LoginFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var databaseReference: FirebaseFirestore
-    private lateinit var firebaseUser: FirebaseUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +44,8 @@ class LoginFragment : BaseFragment() {
         binding.viewModel = _viewModel
 
         firebaseAuth = FirebaseAuth.getInstance()
+
+        observeLogin()
 
         return binding.root
     }
@@ -61,22 +63,61 @@ class LoginFragment : BaseFragment() {
 
     // If email and password are valid pass login values to Firebase and log success or failure response.
     private fun launchEmailSignIn() {
-        Log.i(TAG, "launchEmailSignIn Clicked")
-        if (_viewModel.validateEmailAndPassword()) {
-            firebaseAuth.signInWithEmailAndPassword(
-                _viewModel.getEmailPasswordAndName().first,
-                _viewModel.getEmailPasswordAndName().second!!
-            ).addOnCompleteListener(
-                OnCompleteListener<AuthResult> { task ->
-                    if (task.isSuccessful) {
-                        firebaseUser = task.result!!.user!!
-                        Log.i(TAG, "Login was Successful: $firebaseUser")
-                    } else {
-                        _viewModel.showSnackBar.value = "Login Failed"
-                        Log.e(TAG, "Login not successful: ${task.exception}")
+        _viewModel.validateEmailAndPassword()
+
+    }
+
+    private fun observeLogin() {
+        lifecycleScope.launchWhenStarted {
+            _viewModel.loginFlow.collectLatest {
+                when (it) {
+                    is Resource.Success -> {
+                        Log.i(TAG, "observeLogin = Resource.Success")
+                        startActivity(
+                            Intent(requireContext(), WrapRouletteActivity::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        )
+                        requireActivity().finish()
+                    }
+                    is Resource.Loading -> {
+                        Log.i(TAG, "observeLogin = Resource.Loading")
+                        CircularProgressIndicator(requireContext())
+                    }
+                    is Resource.Failure -> {
+                        Log.i(TAG, "observeLogin = Resource.Failure")
+                        when (it.exception) {
+                            is FirebaseAuthInvalidCredentialsException -> {
+                                binding.passwordEditTextLayout.helperText =
+                                    it.exception.message.toString()
+                                binding.passwordEditTextLayout.setHelperTextColor(
+                                    ColorStateList.valueOf(
+                                        ContextCompat.getColor(
+                                            requireContext(),
+                                            R.color.warningRed
+                                        )
+                                    )
+                                )
+                            }
+                            is FirebaseAuthInvalidUserException -> {
+                                binding.emailEditTextLayout.helperText =
+                                    it.exception.message.toString()
+                                binding.emailEditTextLayout.setHelperTextColor(
+                                    ColorStateList.valueOf(
+                                        ContextCompat.getColor(
+                                            requireContext(),
+                                            R.color.warningRed
+                                        )
+                                    )
+                                )
+                            }
+                            else -> {
+                                _viewModel.showToast.value = it.exception.message
+                            }
+                        }
                     }
                 }
-            )
+            }
+
         }
     }
 }
