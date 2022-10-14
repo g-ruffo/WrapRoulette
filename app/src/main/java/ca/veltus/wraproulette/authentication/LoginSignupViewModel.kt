@@ -28,6 +28,7 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
 
     val username = MutableLiveData<String>()
     val emailAddress = MutableLiveData<String>()
+    val department = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
@@ -100,6 +101,10 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
             }
             true
         }
+    }
+
+    fun getDepartmentString(): String {
+        return department.value ?: ""
     }
 
     fun navigateBack() {

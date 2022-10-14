@@ -4,6 +4,11 @@ import java.io.Serializable
 
 data class User(
     val uid: String,
-    val userName: String,
+    val displayName: String,
+    val email: String,
+    val department: String?,
+    val profilePicturePath: String?,
     val pools: MutableMap<String, Any>? = null
-) : Serializable
+) {
+    constructor(): this("", "", "", null, null, null)
+}

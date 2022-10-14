@@ -17,6 +17,7 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.Resource
 import ca.veltus.wraproulette.databinding.FragmentSignupBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
+import ca.veltus.wraproulette.utils.FirestoreUtil
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -76,15 +77,18 @@ class SignupFragment : BaseFragment() {
                 when (it) {
                     is Resource.Success -> {
                         Log.i(TAG, "observeSignup = Resource.Success")
-                        databaseReference = FirebaseFirestore.getInstance()
-                        databaseReference.collection("Users").document(_viewModel.currentUser!!.uid)
-                            .set(_viewModel.buildHashMap())
+//                        databaseReference = FirebaseFirestore.getInstance()
+//                        databaseReference.collection("Users").document(_viewModel.currentUser!!.uid)
+//                            .set(_viewModel.buildHashMap())
 
-                        startActivity(
-                            Intent(requireContext(), WrapRouletteActivity::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        )
-                        requireActivity().finish()
+                        FirestoreUtil.initCurrentUserIfFirstTime(_viewModel.getDepartmentString()) {
+                            startActivity(
+                                Intent(requireContext(), WrapRouletteActivity::class.java)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            )
+                            requireActivity().finish()
+                        }
+
                     }
                     is Resource.Loading -> {
                         Log.i(TAG, "observeSignup = Resource.Loading")
