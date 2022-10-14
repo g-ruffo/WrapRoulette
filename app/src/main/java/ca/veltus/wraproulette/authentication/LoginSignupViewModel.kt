@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,19 +66,13 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
         Log.d(TAG, "logout: ")
     }
 
-    // Check to see if entered email is valid and matches correct format. If valid return true.
-    fun validateEmail(): Boolean {
-        emailAddress.value = emailAddress.value?.trim()
-        if (TextUtils.isEmpty(emailAddress.value)) {
-            showToast.value = "Please Enter Your Email Address"
-            return false
-        }
-        return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value)
-                .matches()
-        ) {
-            showToast.value = "Email Address Is Not Valid"
-            false
-        } else true
+    // Create HashMap of all saved entries in database.
+    fun buildHashMap(): HashMap<String, Any> {
+        val userHashMap = HashMap<String, Any>()
+        userHashMap["uid"] = currentUser!!.uid
+        userHashMap["userName"] = currentUser!!.displayName.toString()
+        userHashMap["email"] = currentUser!!.email.toString()
+        return userHashMap
     }
 
     // Check if entered email and password are valid and match correct format. If valid return true.
@@ -105,11 +100,6 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
             }
             true
         }
-    }
-
-    // Returns email, password and username as a triple.
-    fun getEmailPasswordAndName(): Triple<String, String?, String?> {
-        return Triple(emailAddress.value!!, password.value, username.value)
     }
 
     fun navigateBack() {

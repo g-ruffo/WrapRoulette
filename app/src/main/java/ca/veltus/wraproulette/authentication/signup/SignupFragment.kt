@@ -21,6 +21,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -34,6 +35,8 @@ class SignupFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSignupBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var databaseReference: FirebaseFirestore
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +76,10 @@ class SignupFragment : BaseFragment() {
                 when (it) {
                     is Resource.Success -> {
                         Log.i(TAG, "observeSignup = Resource.Success")
+                        databaseReference = FirebaseFirestore.getInstance()
+                        databaseReference.collection("Users").document(_viewModel.currentUser!!.uid)
+                            .set(_viewModel.buildHashMap())
+
                         startActivity(
                             Intent(requireContext(), WrapRouletteActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

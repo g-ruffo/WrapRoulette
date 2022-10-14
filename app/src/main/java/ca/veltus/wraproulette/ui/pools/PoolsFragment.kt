@@ -26,8 +26,6 @@ class PoolsFragment : BaseFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var firebaseAuth: FirebaseAuth
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,10 +34,6 @@ class PoolsFragment : BaseFragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textGallery
-        _viewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 
