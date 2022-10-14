@@ -22,4 +22,9 @@
         android:name="ca.veltus.wraproulette.ui.statistics.StatisticsFragment"
         android:label="@string/statistics"
         tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="ca.veltus.wraproulette.ui.account.AccountFragment"
+        android:label="AccountFragment"
+        tools:layout="@layout/fragment_account"/>
 </navigation>
