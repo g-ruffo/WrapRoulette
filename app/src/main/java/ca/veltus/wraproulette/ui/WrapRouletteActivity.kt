@@ -42,10 +42,6 @@ class WrapRouletteActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
 
         setupNavigationAndToolbar()
 
@@ -70,7 +66,7 @@ class WrapRouletteActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_pools, R.id.nav_statistics
+                R.id.nav_home, R.id.nav_pools, R.id.nav_statistics, R.id.nav_account
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
