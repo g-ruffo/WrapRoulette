@@ -107,10 +107,6 @@ class LoginSignupViewModel @Inject constructor(private val repository: Authentic
         return department.value ?: ""
     }
 
-    fun navigateBack() {
-        navigationCommand.postValue(NavigationCommand.Back)
-    }
-
     fun navigateToForgottenPassword() {
         navigationCommand.postValue(
             NavigationCommand.To(
