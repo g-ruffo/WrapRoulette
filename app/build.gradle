@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-kapt'
     id "androidx.navigation.safeargs"
     id 'com.google.dagger.hilt.android'
+    id 'kotlin-parcelize'
 
 }
 
@@ -78,6 +79,13 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
+
+    // Groupie Dependencies
+    implementation 'com.github.lisawray.groupie:groupie:2.10.1'
+    implementation 'com.github.lisawray.groupie:groupie-databinding:2.10.1'
+    implementation "com.github.lisawray.groupie:groupie-kotlin-android-extensions:2.10.1"
+
+
 
     // Unit Testing Dependencies
     testImplementation 'junit:junit:4.13.2'
