@@ -15,7 +15,11 @@
         android:id="@+id/nav_pools"
         android:name="ca.veltus.wraproulette.ui.pools.PoolsFragment"
         android:label="@string/pools"
-        tools:layout="@layout/fragment_pools" />
+        tools:layout="@layout/fragment_pools" >
+        <action
+            android:id="@+id/action_nav_pools_to_addPoolFragment"
+            app:destination="@id/addPoolFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_statistics"
@@ -27,4 +31,9 @@
         android:name="ca.veltus.wraproulette.ui.account.AccountFragment"
         android:label="AccountFragment"
         tools:layout="@layout/fragment_account"/>
+    <fragment
+        android:id="@+id/addPoolFragment"
+        android:name="ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragment"
+        android:label="AddPoolFragment"
+        tools:layout="@layout/fragment_add_pool"/>
 </navigation>

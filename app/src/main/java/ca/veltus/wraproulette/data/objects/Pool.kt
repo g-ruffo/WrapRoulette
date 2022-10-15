@@ -1,19 +1,41 @@
 package ca.veltus.wraproulette.data.objects
 
 import android.os.Parcelable
-import java.io.Serializable
-import java.sql.Timestamp
-import java.util.*
+import ca.veltus.wraproulette.R
+import ca.veltus.wraproulette.databinding.PoolListItemBinding
+import com.google.firebase.Timestamp
+import com.xwray.groupie.databinding.BindableItem
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Pool(
-    var id: String = UUID.randomUUID().toString(),
+    var adminUid: String,
     var production: String,
     var password: String,
-    var admin: Boolean,
     var date: Timestamp,
-    var bet: String?,
+    var betAmount: String?,
     var margin: Timestamp?,
     var lockTime: Timestamp?,
     var startTime: Timestamp,
     var endTime: Timestamp?
-    ) : Serializable
+) : Parcelable {
+    constructor(): this("", "", "", Timestamp.now(), null, null, null, Timestamp.now(), null)
+
+}
+
+class PoolItem(val pool: Pool
+) : BindableItem<PoolListItemBinding>() {
+
+    override fun bind(viewBinding: PoolListItemBinding, position: Int) {
+        viewBinding.pool = pool
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.pool_list_item
+    }
+
+    companion object {
+        private const val TAG = "Pool"
+    }
+
+}
