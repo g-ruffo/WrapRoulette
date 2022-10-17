@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
@@ -24,12 +25,53 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/joinPoolFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/purpleLogoLight"
+            android:drawableLeft="@drawable/ic_baseline_group_add_24"
+            android:drawableTint="@color/calendarWhite"
+            android:focusable="true"
+            android:gravity="center"
+            android:shadowColor="@color/black"
+            android:text="Join"
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@id/newPoolFab"
+            app:layout_constraintEnd_toEndOf="@+id/expandFab" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/newPoolFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/purpleLogoLight"
+            android:drawableLeft="@drawable/ic_baseline_edit_24"
+            android:drawableTint="@color/calendarWhite"
+            android:focusable="true"
+            android:visibility="gone"
+            android:shadowColor="@color/black"
+            android:text="New"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@id/expandFab"
+            app:layout_constraintEnd_toEndOf="@+id/expandFab"
+            app:tint="@android:color/white" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/expandFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:backgroundTint="@color/purpleLogoDark"
+            android:focusable="true"
+            android:shadowColor="@color/black"
+            android:src="@drawable/ic_baseline_add_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
