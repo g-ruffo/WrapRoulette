@@ -17,16 +17,16 @@ import com.xwray.groupie.databinding.BindableItem
 object FirestoreUtil {
     private const val TAG = "FirestoreUtil"
 
-    private val firestoreUserInstance: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val firestoreInstance: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val currentUserDocReference: DocumentReference
-        get() = firestoreUserInstance.document(
+        get() = firestoreInstance.document(
             "users/${
                 FirebaseAuth.getInstance().uid ?: throw NullPointerException(
                     "UID is null."
                 )
             }"
         )
-    private lateinit var poolsDocReference: FirebaseFirestore
+    private val poolsCollectionReference = firestoreInstance.collection("pools")
 
 
     fun initCurrentUserIfFirstTime(department: String, onComplete: () -> Unit) {
@@ -78,42 +78,54 @@ object FirestoreUtil {
     }
 
     fun createPool(production: String, password: String, onComplete: () -> Unit) {
-        poolsDocReference = FirebaseFirestore.getInstance()
+        val docId: String = poolsCollectionReference.document().getId()
 
-                val newPool = Pool(
-                    FirebaseAuth.getInstance().currentUser?.uid ?: "",
-                    production,
-                    FirebaseAuth.getInstance().currentUser?.email ?: "",
-                    Timestamp.now(),
-                    null,
-                    null,
-                    null,
-                    Timestamp.now(),
-                    null
-                )
-        poolsDocReference.collection("pools").document().set(newPool).addOnSuccessListener {
-                    onComplete()
-                }
-            }
+        val newPool = Pool(
+            docId,
+            FirebaseAuth.getInstance().currentUser?.uid ?: "",
+            production,
+            FirebaseAuth.getInstance().currentUser?.email ?: "",
+            Timestamp.now(),
+            null,
+            null,
+            null,
+            Timestamp.now(),
+            null,
+            mutableMapOf(FirebaseAuth.getInstance().currentUser?.uid!! to true)
+        )
 
+        poolsCollectionReference.document(docId).set(newPool).addOnSuccessListener {
+            addPoolToUser(docId)
+            onComplete()
+        }
+    }
+
+    private fun addPoolToUser(poolId: String) {
+        val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
+        currentUserDocReference.update(newMap)
+    }
 
     fun addPoolsListener(
         context: Context,
         onListen: (List<BindableItem<PoolListItemBinding>>) -> Unit
     ): ListenerRegistration {
         // TODO: Make private pools for individual users.
-        return firestoreUserInstance.collection("pools")
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+        return poolsCollectionReference.whereEqualTo(
+            "users.${FirebaseAuth.getInstance().currentUser?.uid!!}",
+            true
+        ).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (firebaseFirestoreException != null) {
                     Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
                     return@addSnapshotListener
                 }
+
                 val items = mutableListOf<BindableItem<PoolListItemBinding>>()
                 querySnapshot!!.documents.forEach {
                     Log.i(TAG, "addPoolsListener: $it")
                     items.add(PoolItem(it.toObject(Pool::class.java)!!))
                 }
                 onListen(items)
+
             }
 
     }
