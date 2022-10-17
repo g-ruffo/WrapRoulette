@@ -7,8 +7,8 @@ import com.google.firebase.Timestamp
 import com.xwray.groupie.databinding.BindableItem
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Pool(
+    var docId: String,
     var adminUid: String,
     var production: String,
     var password: String,
@@ -17,9 +17,10 @@ data class Pool(
     var margin: Timestamp?,
     var lockTime: Timestamp?,
     var startTime: Timestamp,
-    var endTime: Timestamp?
-) : Parcelable {
-    constructor(): this("", "", "", Timestamp.now(), null, null, null, Timestamp.now(), null)
+    var endTime: Timestamp?,
+    val users: MutableMap<String, Any>? = null
+) {
+    constructor(): this("", "", "", "", Timestamp.now(), null, null, null, Timestamp.now(), null, mutableMapOf())
 
 }
 
