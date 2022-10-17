@@ -1,7 +1,5 @@
 package ca.veltus.wraproulette.data.objects
 
-import java.io.Serializable
-
 data class User(
     val uid: String,
     val displayName: String,
@@ -10,5 +8,5 @@ data class User(
     val profilePicturePath: String?,
     val pools: MutableMap<String, Any>? = null
 ) {
-    constructor(): this("", "", "", null, null, null)
+    constructor() : this("", "", "", null, null, null)
 }
