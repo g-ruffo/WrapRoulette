@@ -77,15 +77,15 @@ object FirestoreUtil {
             }
     }
 
-    fun createPool(production: String, password: String, onComplete: () -> Unit) {
+    fun createPool(production: String, password: String, date: String, onComplete: () -> Unit) {
         val docId: String = poolsCollectionReference.document().getId()
 
         val newPool = Pool(
             docId,
             FirebaseAuth.getInstance().currentUser?.uid ?: "",
             production,
-            FirebaseAuth.getInstance().currentUser?.email ?: "",
-            Timestamp.now(),
+            password,
+            date,
             null,
             null,
             null,
@@ -100,9 +100,30 @@ object FirestoreUtil {
         }
     }
 
+    fun joinPool(production: String, password: String, date: String, onComplete: () -> Unit) {
+        poolsCollectionReference.whereEqualTo("production", production)
+            .whereEqualTo("password", password)
+            .whereEqualTo("date", date)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                Log.i(TAG, "joinPool: $querySnapshot")
+                querySnapshot.documents.forEach {
+                    Log.i(TAG, "joinPool: $it")
+                    val pool = it.toObject(Pool::class.java)
+                    addPoolToUser(pool!!.docId)
+                    addUserToPool(pool.docId, FirebaseAuth.getInstance().currentUser!!.uid)
+                }
+                onComplete()
+            }
+    }
+
     private fun addPoolToUser(poolId: String) {
         val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
         currentUserDocReference.update(newMap)
+    }
+    private fun addUserToPool(poolId: String, uid: String) {
+        val newMap = mutableMapOf<String, Any>("users.$uid" to true)
+        poolsCollectionReference.document(poolId).update(newMap)
     }
 
     fun addPoolsListener(
@@ -114,19 +135,19 @@ object FirestoreUtil {
             "users.${FirebaseAuth.getInstance().currentUser?.uid!!}",
             true
         ).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (firebaseFirestoreException != null) {
-                    Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
-                    return@addSnapshotListener
-                }
-
-                val items = mutableListOf<BindableItem<PoolListItemBinding>>()
-                querySnapshot!!.documents.forEach {
-                    Log.i(TAG, "addPoolsListener: $it")
-                    items.add(PoolItem(it.toObject(Pool::class.java)!!))
-                }
-                onListen(items)
-
+            if (firebaseFirestoreException != null) {
+                Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
+                return@addSnapshotListener
             }
+
+            val items = mutableListOf<BindableItem<PoolListItemBinding>>()
+            querySnapshot!!.documents.forEach {
+                Log.i(TAG, "addPoolsListener: $it")
+                items.add(PoolItem(it.toObject(Pool::class.java)!!))
+            }
+            onListen(items)
+
+        }
 
     }
 
