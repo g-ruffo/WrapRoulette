@@ -76,8 +76,6 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordEditTextLayout"
                 style="@style/LoginTextInputOuterFieldStyle"
-                emailHelperTextColorSwitcher="@{String.valueOf(viewModel.poolPassword)}"
-                emailTextInputEditTextStatus="@{passwordInputEditText}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -96,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Pool password"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:text="@={viewModel.poolPassword}" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,7 +134,7 @@
                 android:layout_marginTop="44dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/rounded_corners_button"
-                android:text="Create"
+                android:text="Join"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

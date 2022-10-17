@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,129 +11,139 @@
 
     </data>
 
-        <ScrollView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".authentication.signup.SignupFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            tools:context=".authentication.signup.SignupFragment">
+            tools:context=".ui.pools.createpool.AddPoolFragment">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/createNewPoolTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:text="Create New Pool"
+                android:textSize="44sp"
+                app:layout_constraintBottom_toTopOf="@+id/createNewPoolSubtitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/createNewPoolSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter the pool details below"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toTopOf="@+id/productionEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createNewPoolTitle" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productionEditTextLayout"
+                style="@style/LoginTextInputOuterFieldStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".ui.pools.createpool.AddPoolFragment">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="44dp"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createNewPoolSubtitle"
+                app:startIconDrawable="@drawable/ic_baseline_person_24">
 
-                <ImageView
-                    android:id="@+id/backButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="Back button"
-                    android:onClick="@{() -> viewModel.navigateBack()}"
-                    android:src="@drawable/ic_baseline_arrow_back_24"
-                    app:layout_constraintBottom_toTopOf="@+id/createNewPoolTitle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.06"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.42000002"
-                    app:layout_constraintVertical_chainStyle="packed"
-                    app:tint="@color/optionalGrey" />
-
-
-                <TextView
-                    android:id="@+id/createNewPoolTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="64dp"
-                    android:text="Create New Pool"
-                    android:textSize="44sp"
-                    app:layout_constraintBottom_toTopOf="@+id/createNewPoolSubtitle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.15"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/backButton" />
-
-                <TextView
-                    android:id="@+id/createNewPoolSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Enter the pool details below"
-                    android:textSize="22sp"
-                    app:layout_constraintBottom_toTopOf="@+id/productionEditTextLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.25"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createNewPoolTitle" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/productionEditTextLayout"
-                    style="@style/LoginTextInputOuterFieldStyle"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/productionInputEditText"
+                    style="@style/LoginTextInputInnerFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="44dp"
-                    app:boxStrokeColor="@color/purpleLogoLight"
-                    app:hintTextColor="@color/purpleLogoLight"
-                    app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/createNewPoolSubtitle"
-                    app:startIconDrawable="@drawable/ic_baseline_person_24">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/productionInputEditText"
-                        style="@style/LoginTextInputInnerFieldStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Production name"
-                        android:inputType="textCapWords"
-                        android:text="@={viewModel.poolProduction}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Production name"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.poolProduction}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/passwordEditTextLayout"
-                    style="@style/LoginTextInputOuterFieldStyle"
-                    emailHelperTextColorSwitcher="@{String.valueOf(viewModel.poolPassword)}"
-                    emailTextInputEditTextStatus="@{passwordInputEditText}"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordEditTextLayout"
+                style="@style/LoginTextInputOuterFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/selectDateTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productionEditTextLayout"
+                app:startIconDrawable="@drawable/ic_baseline_email_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInputEditText"
+                    style="@style/LoginTextInputInnerFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    app:boxStrokeColor="@color/purpleLogoLight"
-                    app:helperTextEnabled="true"
-                    app:hintTextColor="@color/purpleLogoLight"
-                    app:layout_constraintBottom_toTopOf="@+id/createButton"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/productionEditTextLayout"
-                    app:startIconDrawable="@drawable/ic_baseline_email_24">
+                    android:hint="Pool password"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.poolPassword}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/passwordInputEditText"
-                        style="@style/LoginTextInputInnerFieldStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Pool password"
-                        android:inputType="textEmailAddress"
-                        android:text="@={viewModel.poolPassword}" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectDateTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="18dp"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@id/createButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/createButton"
-                    android:layout_width="347dp"
+                <AutoCompleteTextView
+                    android:id="@+id/selectDateAutoComplete"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="44dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/rounded_corners_button"
-                    android:text="Create"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
+                    android:hint="Date"
+                    android:inputType="none"
+                    android:text="@={viewModel.poolDate}" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/createButton"
+                android:layout_width="347dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/rounded_corners_button"
+                android:text="Create"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectDateTextInputLayout" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
