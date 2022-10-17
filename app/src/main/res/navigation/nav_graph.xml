@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_pools_to_addPoolFragment"
             app:destination="@id/addPoolFragment" />
+        <action
+            android:id="@+id/action_nav_pools_to_joinPoolFragment"
+            app:destination="@id/joinPoolFragment" />
     </fragment>
 
     <fragment
@@ -36,4 +39,10 @@
         android:name="ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragment"
         android:label="AddPoolFragment"
         tools:layout="@layout/fragment_add_pool"/>
+    <fragment
+        android:id="@+id/joinPoolFragment"
+        android:name="ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragment"
+        android:label="JoinPoolFragment"
+        tools:layout="@layout/fragment_join_pool"/>
+
 </navigation>

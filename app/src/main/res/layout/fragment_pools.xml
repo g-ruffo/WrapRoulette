@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -13,6 +13,12 @@ class PoolsViewModel @Inject constructor(private val repository: AuthenticationR
 
     val poolProduction = MutableStateFlow<String?>(null)
     val poolPassword = MutableStateFlow<String?>(null)
+    val poolDate = MutableStateFlow<String?>(null)
+
+
+    fun setPoolDate(date: String) {
+        poolDate.value = date
+    }
 
 
 }
