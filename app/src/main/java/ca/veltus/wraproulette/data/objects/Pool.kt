@@ -6,13 +6,14 @@ import ca.veltus.wraproulette.databinding.PoolListItemBinding
 import com.google.firebase.Timestamp
 import com.xwray.groupie.databinding.BindableItem
 import kotlinx.parcelize.Parcelize
+import java.util.Date
 
 data class Pool(
     var docId: String,
     var adminUid: String,
     var production: String,
     var password: String,
-    var date: Timestamp,
+    var date: String,
     var betAmount: String?,
     var margin: Timestamp?,
     var lockTime: Timestamp?,
@@ -20,7 +21,7 @@ data class Pool(
     var endTime: Timestamp?,
     val users: MutableMap<String, Any>? = null
 ) {
-    constructor(): this("", "", "", "", Timestamp.now(), null, null, null, Timestamp.now(), null, mutableMapOf())
+    constructor(): this("", "", "", "", "", null, null, null, Timestamp.now(), null, mutableMapOf())
 
 }
 
