@@ -87,6 +87,11 @@ class PoolsFragment : BaseFragment() {
         binding.newPoolFab.setOnClickListener {
             _viewModel.navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToAddPoolFragment()))
         }
+
+        // TODO: Move to ViewModel
+        binding.joinPoolFab.setOnClickListener {
+            _viewModel.navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToJoinPoolFragment()))
+        }
         // TODO: Move to ViewModel
         binding.expandFab.setOnClickListener {
             onExpandButtonClicked()
@@ -168,6 +173,4 @@ class PoolsFragment : BaseFragment() {
             updateItems()
         }
     }
-
-
 }

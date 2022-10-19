@@ -1,5 +1,6 @@
 package ca.veltus.wraproulette.ui.pools.joinpool
 
+import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
@@ -15,9 +16,11 @@ import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import ca.veltus.wraproulette.utils.FirestoreUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class JoinPoolFragment : BaseFragment() {
     companion object {
         private const val TAG = "JoinPoolFragment"
@@ -28,6 +31,7 @@ class JoinPoolFragment : BaseFragment() {
     private lateinit var databaseReference: FirebaseFirestore
 
     private var _binding: FragmentJoinPoolBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -45,9 +49,10 @@ class JoinPoolFragment : BaseFragment() {
 
         binding.joinButton.setOnClickListener {
             Log.i(TAG, "onCreateView: ${_viewModel.poolProduction.value!!}")
-            FirestoreUtil.createPool(
+            FirestoreUtil.joinPool(
                 _viewModel.poolProduction.value!!,
-                _viewModel.poolPassword.value!!
+                _viewModel.poolPassword.value!!,
+                _viewModel.poolDate.value!!
             ) {
                 _viewModel.navigateBack()
             }
@@ -58,6 +63,8 @@ class JoinPoolFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.selectDateAutoComplete.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -97,6 +104,7 @@ class JoinPoolFragment : BaseFragment() {
 
         val dialog = DatePickerDialog(
             requireContext(),
+            THEME_HOLO_DARK,
             datePickerListener,
             selectedYear,
             selectedMonth,

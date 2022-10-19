@@ -8,8 +8,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class PoolsViewModel @Inject constructor(private val repository: AuthenticationRepository, app: Application) :
+class PoolsViewModel @Inject constructor(
+    private val repository: AuthenticationRepository,
+    app: Application
+) :
     BaseViewModel(app) {
+
+    companion object {
+        private const val TAG = "PoolsViewModel"
+    }
 
     val poolProduction = MutableStateFlow<String?>(null)
     val poolPassword = MutableStateFlow<String?>(null)
@@ -19,6 +26,5 @@ class PoolsViewModel @Inject constructor(private val repository: AuthenticationR
     fun setPoolDate(date: String) {
         poolDate.value = date
     }
-
 
 }

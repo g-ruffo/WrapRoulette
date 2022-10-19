@@ -1,5 +1,6 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
+import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -102,6 +103,7 @@ class AddPoolFragment : BaseFragment() {
 
         val dialog = DatePickerDialog(
             requireContext(),
+            THEME_HOLO_DARK,
             datePickerListener,
             selectedYear,
             selectedMonth,
