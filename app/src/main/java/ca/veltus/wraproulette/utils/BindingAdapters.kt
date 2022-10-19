@@ -2,11 +2,13 @@ package ca.veltus.wraproulette.utils
 
 import android.content.res.ColorStateList
 import android.util.Patterns
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.util.*
 
 object BindingAdapters {
     @BindingAdapter(
@@ -34,6 +36,15 @@ object BindingAdapters {
                 )
                 view.helperText = null
             }
+        }
+    }
+
+    @BindingAdapter("dateToStringConverter")
+    @JvmStatic
+    fun dateToStringConverter(view: TextView, date: Date?) {
+        if (date != null) {
+            val time = "${date.hours}:${date.minutes}"
+            view.text = time
         }
     }
 
