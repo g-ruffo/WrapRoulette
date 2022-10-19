@@ -6,7 +6,8 @@ data class User(
     val email: String,
     val department: String?,
     val profilePicturePath: String?,
+    val activePool: String?,
     val pools: MutableMap<String, Any>? = null
 ) {
-    constructor() : this("", "", "", null, null, null)
+    constructor() : this("", "", "", null, null, null, null)
 }
