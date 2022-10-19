@@ -65,6 +65,11 @@ class BidsFragment : BaseFragment() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        FirestoreUtil.removeListener(bidListenerRegistration)
+    }
+
 
     private fun updateRecyclerView(items: List<BindableItem<MemberListItemBinding>>) {
         fun init() {

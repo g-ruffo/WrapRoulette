@@ -3,6 +3,7 @@ package ca.veltus.wraproulette.data.objects
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.MemberListItemBinding
 import com.xwray.groupie.databinding.BindableItem
+import java.util.*
 
 data class Member(
     val uid: String,
@@ -10,7 +11,7 @@ data class Member(
     val displayName: String,
     val email: String,
     val department: String?,
-    val bidTime: String?,
+    val bidTime: Date?,
     val profilePicturePath: String?
 ) {
     constructor() : this("", "", "", "", null, null, null)
