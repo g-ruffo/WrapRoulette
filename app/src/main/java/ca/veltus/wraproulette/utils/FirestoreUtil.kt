@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.xwray.groupie.databinding.BindableItem
+import java.util.*
 
 
 object FirestoreUtil {
@@ -126,6 +127,13 @@ object FirestoreUtil {
         }
     }
 
+    fun setUserPoolBet(poolId: String, userUid: String, bid: Date, onComplete: () -> Unit) {
+        poolsCollectionReference.document(poolId).collection("members").document(userUid)
+            .update("bidTime", bid).addOnSuccessListener {
+            onComplete()
+        }
+    }
+
     private fun addPoolToUser(poolId: String) {
         val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
         currentUserDocReference.update(newMap)
@@ -133,6 +141,7 @@ object FirestoreUtil {
 
         }
     }
+
     private fun addUserToPool(poolId: String, uid: String) {
         val newMap = mutableMapOf<String, Any>("users.$uid" to true)
         poolsCollectionReference.document(poolId).update(newMap)
@@ -142,14 +151,15 @@ object FirestoreUtil {
         getCurrentUser { user ->
             val member = Member(
                 uid,
-            poolId,
-            user.displayName,
+                poolId,
+                user.displayName,
                 user.email,
                 user.department,
                 null,
                 user.profilePicturePath
             )
-            poolsCollectionReference.document(poolId).collection("members").document(uid).set(member)
+            poolsCollectionReference.document(poolId).collection("members").document(uid)
+                .set(member)
         }
     }
 
@@ -185,19 +195,20 @@ object FirestoreUtil {
         onListen: (List<BindableItem<MemberListItemBinding>>) -> Unit
     ): ListenerRegistration {
         // TODO: Make private pools for individual users.
-        return poolsCollectionReference.document(pool).collection("members").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            if (firebaseFirestoreException != null) {
-                Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
-                return@addSnapshotListener
-            }
+        return poolsCollectionReference.document(pool).collection("members")
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if (firebaseFirestoreException != null) {
+                    Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
 
-            val items = mutableListOf<BindableItem<MemberListItemBinding>>()
-            querySnapshot!!.documents.forEach {
-                Log.i(TAG, "addPoolsListener: $it")
-                items.add(MemberItem(it.toObject(Member::class.java)!!))
+                val items = mutableListOf<BindableItem<MemberListItemBinding>>()
+                querySnapshot!!.documents.forEach {
+                    Log.i(TAG, "addPoolsListener: $it")
+                    items.add(MemberItem(it.toObject(Member::class.java)!!))
+                }
+                onListen(items)
             }
-            onListen(items)
-        }
 
     }
 
