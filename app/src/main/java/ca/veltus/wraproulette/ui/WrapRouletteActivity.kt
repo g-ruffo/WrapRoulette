@@ -72,7 +72,7 @@ class WrapRouletteActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_pools, R.id.nav_statistics, R.id.nav_account
+                R.id.nav_home, R.id.nav_pools, R.id.nav_account
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -80,15 +80,20 @@ class WrapRouletteActivity : AppCompatActivity() {
 
         // Get Firebase current user data and display it in header.
         FirestoreUtil.getCurrentUser { user ->
-            navView.getHeaderView(0).findViewById<TextView>(R.id.userNameHeaderTextView).text = user.displayName
-            navView.getHeaderView(0).findViewById<TextView>(R.id.userEmailHeaderTextView).text = user.email
+            navView.getHeaderView(0).findViewById<TextView>(R.id.userNameHeaderTextView).text =
+                user.displayName
+            navView.getHeaderView(0).findViewById<TextView>(R.id.userEmailHeaderTextView).text =
+                user.email
 
-                if (user.profilePicturePath != null) {
-                    Glide.with(this).load(FirebaseStorageUtil.pathToReference(user.profilePicturePath))
-                        .placeholder(R.drawable.ic_baseline_account_circle_24)
-                        .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.profileHeaderImageView))
-                }
+            if (user.profilePicturePath != null) {
+                Glide.with(this).load(FirebaseStorageUtil.pathToReference(user.profilePicturePath))
+                    .placeholder(R.drawable.ic_baseline_account_circle_24)
+                    .into(
+                        navView.getHeaderView(0)
+                            .findViewById<ImageView>(R.id.profileHeaderImageView)
+                    )
             }
+        }
 
 
         navView.menu.findItem(R.id.logoutMenu).setOnMenuItemClickListener {
