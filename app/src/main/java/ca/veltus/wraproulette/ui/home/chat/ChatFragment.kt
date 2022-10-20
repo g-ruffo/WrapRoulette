@@ -1,20 +1,23 @@
 package ca.veltus.wraproulette.ui.home.chat
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ca.veltus.wraproulette.R
+import androidx.fragment.app.viewModels
+import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentChatBinding
-import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
+import ca.veltus.wraproulette.ui.home.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class ChatFragment : Fragment() {
+@AndroidEntryPoint
+class ChatFragment : BaseFragment() {
     companion object {
         private const val TAG = "ChatFragment"
     }
 
     private var _binding: FragmentChatBinding? = null
+    override val _viewModel by viewModels<HomeViewModel>()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -27,9 +30,14 @@ class ChatFragment : Fragment() {
     ): View? {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
+        binding.viewModel = _viewModel
+
         return binding.root
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
 
 }
