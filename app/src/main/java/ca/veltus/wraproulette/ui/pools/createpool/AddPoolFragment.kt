@@ -13,8 +13,6 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import ca.veltus.wraproulette.utils.FirestoreUtil
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,25 +25,24 @@ class AddPoolFragment : BaseFragment() {
     }
 
     override val _viewModel by viewModels<PoolsViewModel>()
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var databaseReference: FirebaseFirestore
 
-    private var _binding: FragmentAddPoolBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentAddPoolBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding =
+        binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
 
-        databaseReference = FirebaseFirestore.getInstance()
-
         binding.viewModel = _viewModel
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.createButton.setOnClickListener {
             FirestoreUtil.createPool(
@@ -56,13 +53,6 @@ class AddPoolFragment : BaseFragment() {
                 _viewModel.navigateBack()
             }
         }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.selectDateAutoComplete.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -75,10 +65,6 @@ class AddPoolFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     // Launch date dialog and listen for its result.
     private fun launchDatePickerDialog() {
