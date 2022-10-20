@@ -1,19 +1,23 @@
 package ca.veltus.wraproulette.ui.home.summary
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
+import ca.veltus.wraproulette.ui.home.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class SummaryFragment : Fragment() {
+@AndroidEntryPoint
+class SummaryFragment : BaseFragment() {
     companion object {
         private const val TAG = "SummaryFragment"
     }
 
     private var _binding: FragmentSummaryBinding? = null
+    override val _viewModel by viewModels<HomeViewModel>()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
