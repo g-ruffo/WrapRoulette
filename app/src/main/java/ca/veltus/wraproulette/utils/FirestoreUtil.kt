@@ -1,17 +1,20 @@
 package ca.veltus.wraproulette.utils
 
-import android.content.Context
 import android.util.Log
-import ca.veltus.wraproulette.data.objects.*
-import ca.veltus.wraproulette.databinding.MemberListItemBinding
-import ca.veltus.wraproulette.databinding.PoolListItemBinding
+import ca.veltus.wraproulette.data.objects.Member
+import ca.veltus.wraproulette.data.objects.Pool
+import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
-import com.xwray.groupie.databinding.BindableItem
+import com.google.firebase.firestore.ktx.snapshots
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.*
 
 
@@ -78,8 +81,13 @@ object FirestoreUtil {
             }
     }
 
+    fun getCurrentUserFlow(): Flow<User?> {
+        return currentUserDocReference.snapshots().map { it.toObject() }
+    }
+
+
     fun createPool(production: String, password: String, date: String, onComplete: () -> Unit) {
-        val docId: String = poolsCollectionReference.document().getId()
+        val docId: String = poolsCollectionReference.document().id
         val newPool = Pool(
             docId,
             FirebaseAuth.getInstance().currentUser?.uid ?: "",
@@ -93,7 +101,6 @@ object FirestoreUtil {
             null,
             mutableMapOf(FirebaseAuth.getInstance().currentUser?.uid!! to true)
         )
-
         poolsCollectionReference.document(docId).set(newPool).addOnSuccessListener {
             addPoolToUser(docId)
             addMemberToPool(docId, FirebaseAuth.getInstance().currentUser!!.uid)
@@ -130,8 +137,8 @@ object FirestoreUtil {
     fun setUserPoolBet(poolId: String, userUid: String, bid: Date, onComplete: () -> Unit) {
         poolsCollectionReference.document(poolId).collection("members").document(userUid)
             .update("bidTime", bid).addOnSuccessListener {
-            onComplete()
-        }
+                onComplete()
+            }
     }
 
     private fun addPoolToUser(poolId: String) {
@@ -164,53 +171,20 @@ object FirestoreUtil {
     }
 
 
-    fun addPoolsListener(
-        context: Context,
-        onListen: (List<BindableItem<PoolListItemBinding>>) -> Unit
-    ): ListenerRegistration {
-        // TODO: Make private pools for individual users.
+    fun getPoolMemberList(poolId: String): Flow<List<Member>> {
+        val db = FirebaseFirestore.getInstance()
+        return db.collection("pools")
+            .document(poolId)
+            .collection("members")
+            .snapshots().map { querySnapshot -> querySnapshot.toObjects() }
+    }
+
+    fun getPoolsList(userUid: String): Flow<List<Pool>> {
         return poolsCollectionReference.whereEqualTo(
-            "users.${FirebaseAuth.getInstance().currentUser?.uid!!}",
-            true
-        ).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            if (firebaseFirestoreException != null) {
-                Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
-                return@addSnapshotListener
-            }
-
-            val items = mutableListOf<BindableItem<PoolListItemBinding>>()
-            querySnapshot!!.documents.forEach {
-                Log.i(TAG, "addPoolsListener: $it")
-                items.add(PoolItem(it.toObject(Pool::class.java)!!))
-            }
-            onListen(items)
-
-        }
-
+            "users.$userUid", true
+        ).snapshots().map { querySnapshot -> querySnapshot.toObjects() }
     }
 
-    fun addBidsListener(
-        context: Context,
-        pool: String,
-        onListen: (List<BindableItem<MemberListItemBinding>>) -> Unit
-    ): ListenerRegistration {
-        // TODO: Make private pools for individual users.
-        return poolsCollectionReference.document(pool).collection("members")
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                if (firebaseFirestoreException != null) {
-                    Log.e(TAG, "addPoolsListener: User listener error.", firebaseFirestoreException)
-                    return@addSnapshotListener
-                }
-
-                val items = mutableListOf<BindableItem<MemberListItemBinding>>()
-                querySnapshot!!.documents.forEach {
-                    Log.i(TAG, "addPoolsListener: $it")
-                    items.add(MemberItem(it.toObject(Member::class.java)!!))
-                }
-                onListen(items)
-            }
-
-    }
 
     fun removeListener(registration: ListenerRegistration) = registration.remove()
 

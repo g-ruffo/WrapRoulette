@@ -16,11 +16,11 @@ data class Pool(
     var betAmount: String?,
     var margin: Timestamp?,
     var lockTime: Timestamp?,
-    var startTime: Timestamp,
+    var startTime: Timestamp?,
     var endTime: Timestamp?,
     val users: MutableMap<String, Any>? = null
 ) {
-    constructor(): this("", "", "", "", "", null, null, null, Timestamp.now(), null, mutableMapOf())
+    constructor(): this("", "", "", "", "", null, null, null, null, null, mutableMapOf())
 
 }
 

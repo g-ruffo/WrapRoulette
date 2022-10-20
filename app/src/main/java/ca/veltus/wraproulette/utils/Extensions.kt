@@ -1,5 +1,9 @@
 package ca.veltus.wraproulette.utils
 
+import ca.veltus.wraproulette.data.objects.Member
+import ca.veltus.wraproulette.data.objects.MemberItem
+import ca.veltus.wraproulette.data.objects.Pool
+import ca.veltus.wraproulette.data.objects.PoolItem
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resumeWithException
@@ -14,5 +18,17 @@ suspend fun <T> Task<T>.await(): T {
                 cont.resume(it.result, null)
             }
         }
+    }
+}
+
+fun List<Member>.toMemberItem() : List<MemberItem> {
+    return this.map {
+        MemberItem(it)
+    }
+}
+
+fun List<Pool>.toPoolItem() : List<PoolItem> {
+    return this.map {
+        PoolItem(it)
     }
 }

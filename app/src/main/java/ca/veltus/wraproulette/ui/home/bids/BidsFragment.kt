@@ -1,21 +1,21 @@
 package ca.veltus.wraproulette.ui.home.bids
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.veltus.wraproulette.base.BaseFragment
+import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.databinding.FragmentBidsBinding
-import ca.veltus.wraproulette.databinding.MemberListItemBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
-import ca.veltus.wraproulette.utils.FirestoreUtil
-import com.google.firebase.firestore.ListenerRegistration
+import ca.veltus.wraproulette.utils.toMemberItem
 import com.xwray.groupie.GroupieAdapter
-import com.xwray.groupie.Section
-import com.xwray.groupie.databinding.BindableItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BidsFragment : BaseFragment() {
@@ -25,9 +25,6 @@ class BidsFragment : BaseFragment() {
 
     private var _binding: FragmentBidsBinding? = null
     override val _viewModel by viewModels<HomeViewModel>()
-    private var shouldInitRecyclerView = true
-    private lateinit var bidListenerRegistration: ListenerRegistration
-    private lateinit var bidSection: Section
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -39,22 +36,9 @@ class BidsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentBidsBinding.inflate(inflater, container, false)
 
-        FirestoreUtil.getCurrentUser { user ->
-            if (user.activePool == null) {
-                return@getCurrentUser
-            } else {
-                bidListenerRegistration =
-                    FirestoreUtil.addBidsListener(
-                        requireActivity(),
-                        user.activePool!!,
-                        this::updateRecyclerView
-                    )
-            }
-        }
-
+        Log.i(TAG, "onCreateView: called")
 
         return binding.root
     }
@@ -63,34 +47,39 @@ class BidsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        lifecycleScope.launch {
+            _viewModel._bids.collect {
+                Log.i(TAG, "onViewCreated: $it")
+                setupRecyclerView(it.toMemberItem())
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG, "onStart: called")
+        _viewModel.getPoolData()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i(TAG, "onStop: called")
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        FirestoreUtil.removeListener(bidListenerRegistration)
+        Log.i(TAG, "onDestroy: called")
+        _binding = null
     }
 
-
-    private fun updateRecyclerView(items: List<BindableItem<MemberListItemBinding>>) {
-        fun init() {
-            binding.poolsRecyclerView.apply {
-                layoutManager = LinearLayoutManager(this@BidsFragment.context)
-                adapter = GroupieAdapter().apply {
-                    bidSection = Section(items)
-                    add(bidSection)
-                }
-
-            }
-            shouldInitRecyclerView = false
+    private fun setupRecyclerView(items: List<MemberItem>) {
+        val groupieAdapter = GroupieAdapter().apply {
+            addAll(items)
         }
-
-        fun updateItems() {
-
-        }
-        if (shouldInitRecyclerView) {
-            init()
-        } else {
-            updateItems()
+        binding.poolsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = groupieAdapter
         }
     }
 }
