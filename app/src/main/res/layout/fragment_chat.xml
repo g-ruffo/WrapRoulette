@@ -15,7 +15,7 @@
         tools:context=".ui.home.chat.ChatFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_gchat"
+            android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="16dp"
-                android:layout_toStartOf="@+id/button_gchat_send"
+                android:layout_toStartOf="@+id/sendMessageButton"
                 android:background="@android:color/transparent"
                 android:hint="Enter Message"
                 android:inputType="text"
@@ -62,13 +62,12 @@
                 tools:ignore="Autofill" />
 
             <Button
-                android:id="@+id/button_gchat_send"
-                android:layout_width="64dp"
+                android:id="@+id/sendMessageButton"
+                android:layout_width="80dp"
                 android:layout_height="48dp"
                 android:layout_alignParentEnd="true"
                 android:background="?attr/selectableItemBackground"
                 android:text="Send"
-                android:onClick="@{() -> viewModel.sendMessage()}"
                 android:textColor="@color/black" />
 
         </RelativeLayout>
