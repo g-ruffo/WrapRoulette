@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
+import ca.veltus.wraproulette.ui.home.dialog.BetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,9 +40,13 @@ class HomeFragment : BaseFragment() {
             tab.text = ViewPagerAdapter.fragmentTitle[position]
         }.attach()
 
+        binding.bidFab.setOnClickListener {
+            var dialog = BetDialogFragment()
+            dialog.show(requireActivity().supportFragmentManager, "betDialog")
+        }
+
         return binding.root
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
