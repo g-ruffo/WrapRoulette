@@ -2,13 +2,14 @@ package ca.veltus.wraproulette.utils
 
 import android.util.Log
 import ca.veltus.wraproulette.data.objects.Member
+import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
@@ -31,6 +32,7 @@ object FirestoreUtil {
             }"
         )
     private val poolsCollectionReference = firestoreInstance.collection("pools")
+    private val messagesCollectionReference = firestoreInstance.collection("messages")
 
 
     fun initCurrentUserIfFirstTime(department: String, onComplete: () -> Unit) {
@@ -145,7 +147,6 @@ object FirestoreUtil {
         val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
         currentUserDocReference.update(newMap)
         setActivePool(poolId) {
-
         }
     }
 
@@ -185,7 +186,20 @@ object FirestoreUtil {
         ).snapshots().map { querySnapshot -> querySnapshot.toObjects() }
     }
 
+    fun sendChatMessage(activePool: String, message: Message, onComplete: () -> Unit) {
+        val docId =
+            messagesCollectionReference.document(activePool).collection("chat").document().id
+        message.messageUid = docId
+        messagesCollectionReference.document(activePool).collection("chat").document(docId)
+            .set(message).addOnSuccessListener {
+                onComplete()
+            }
+    }
 
-    fun removeListener(registration: ListenerRegistration) = registration.remove()
+    fun getChatList(activePool: String): Flow<List<Message>> {
+        return messagesCollectionReference.document(activePool).collection("chat")
+            .orderBy("time", Query.Direction.ASCENDING).snapshots()
+            .map { querySnapshot -> querySnapshot.toObjects() }
+    }
 
 }
