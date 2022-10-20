@@ -2,6 +2,8 @@ package ca.veltus.wraproulette.data.objects
 
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.MemberListItemBinding
+import ca.veltus.wraproulette.utils.FirebaseStorageUtil
+import com.bumptech.glide.Glide
 import com.xwray.groupie.databinding.BindableItem
 import java.util.*
 
@@ -17,11 +19,18 @@ data class Member(
     constructor() : this("", "", "", "", null, null, null)
 }
 
-class MemberItem(val member: Member
+class MemberItem(
+    val member: Member
 ) : BindableItem<MemberListItemBinding>() {
 
     override fun bind(viewBinding: MemberListItemBinding, position: Int) {
         viewBinding.member = member
+        if (member.profilePicturePath != null) {
+            Glide.with(viewBinding.root)
+                .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))
+                .placeholder(R.drawable.ic_baseline_account_circle_24)
+                .into(viewBinding.memberProfileImageView)
+        }
     }
 
     override fun getLayout(): Int {
