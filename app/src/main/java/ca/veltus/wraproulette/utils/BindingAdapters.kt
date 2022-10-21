@@ -8,6 +8,7 @@ import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.text.SimpleDateFormat
 import java.util.*
 
 object BindingAdapters {
@@ -42,6 +43,25 @@ object BindingAdapters {
     @BindingAdapter("dateToStringConverter")
     @JvmStatic
     fun dateToStringConverter(view: TextView, date: Date?) {
+        if (date != null) {
+            val time = "${date.hours}:${date.minutes}"
+            view.text = time
+        }
+    }
+
+    @BindingAdapter("dateToStringDayConverter")
+    @JvmStatic
+    fun dateToStringDayConverter(view: TextView, date: Date?) {
+        if (date != null) {
+            val dateFormatter = SimpleDateFormat("EEEE, d MMM yyyy", Locale.ENGLISH)
+            val day = dateFormatter.format(date)
+            view.text = day
+        }
+    }
+
+    @BindingAdapter("dateToStringTimeConverter")
+    @JvmStatic
+    fun dateToStringTimeConverter(view: TextView, date: Date?) {
         if (date != null) {
             val time = "${date.hours}:${date.minutes}"
             view.text = time
