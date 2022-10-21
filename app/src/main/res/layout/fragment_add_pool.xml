@@ -146,11 +146,11 @@
                 <AutoCompleteTextView
                     android:id="@+id/selectStartTimeAutoComplete"
                     style="@style/LoginTextInputInnerFieldStyle"
+                    getTimeFromDate="@{viewModel.poolStartTime}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Start Time"
-                    android:inputType="none"
-                    android:text="@={viewModel.poolDate}" />
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,11 +173,11 @@
                 <AutoCompleteTextView
                     android:id="@+id/selectBettingCloseTimeAutoComplete"
                     style="@style/LoginTextInputInnerFieldStyle"
+                    getTimeFromDate="@{viewModel.poolBetLockTime}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Betting Time"
-                    android:inputType="none"
-                    android:text="@={viewModel.poolDate}" />
+                    android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -199,14 +199,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextInputLayout"
                 app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/selectBetAmountAutoComplete"
                     style="@style/LoginTextInputInnerFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Bet Amount"
-                    android:inputType="none"
-                    android:text="@={viewModel.poolDate}" />
+                    android:inputType="number"
+                    android:text="@={viewModel.poolBetAmount}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,17 +223,16 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/selectBetAmountTextInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/selectBetAmountTextInputLayout"
-                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
-                tools:layout_editor_absoluteY="491dp">
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/selectMarginAutoComplete"
                     style="@style/LoginTextInputInnerFieldStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Margin"
-                    android:inputType="none"
-                    android:text="@={viewModel.poolDate}" />
+                    android:inputType="number"
+                    android:text="@={viewModel.poolMargin}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -244,6 +243,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="64dp"
                 android:background="@drawable/rounded_corners_button"
+                android:onClick="@{() -> viewModel.createPool()}"
                 android:text="Create"
                 android:textColor="@color/white"
                 android:textStyle="bold"
