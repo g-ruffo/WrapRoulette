@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.home.summary
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,21 @@ class SummaryFragment : BaseFragment() {
     ): View {
         _binding = FragmentSummaryBinding.inflate(inflater, container, false)
 
+        binding.viewModel = _viewModel
+
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        _viewModel.getPoolData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "onResume: ${_viewModel.currentPool.value}")
+    }
+
 
 }

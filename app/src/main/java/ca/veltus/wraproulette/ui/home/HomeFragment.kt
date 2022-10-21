@@ -47,14 +47,11 @@ class HomeFragment : BaseFragment() {
             dialog.show(requireActivity().supportFragmentManager, "betDialog")
         }
 
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
-
         setupViewPagerListener()
     }
 
@@ -85,5 +82,4 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
-
 }
