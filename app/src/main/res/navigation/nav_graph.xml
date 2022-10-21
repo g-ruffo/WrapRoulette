@@ -22,6 +22,10 @@
         <action
             android:id="@+id/action_nav_pools_to_joinPoolFragment"
             app:destination="@id/joinPoolFragment" />
+        <action
+            android:id="@+id/action_nav_pools_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_pools" />
     </fragment>
 
     <fragment
