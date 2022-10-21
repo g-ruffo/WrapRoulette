@@ -59,7 +59,6 @@ class BidsFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         Log.i(TAG, "onStart: called")
-        _viewModel.getPoolMemberList()
     }
 
     override fun onStop() {

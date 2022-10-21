@@ -43,7 +43,7 @@ class HomeFragment : BaseFragment() {
 
 
         binding.bidFab.setOnClickListener {
-            var dialog = BetDialogFragment()
+            var dialog = BetDialogFragment(_viewModel.getActivePoolDate()!!)
             dialog.show(requireActivity().supportFragmentManager, "betDialog")
         }
 
@@ -81,5 +81,11 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        _viewModel.getPoolMemberList()
+
     }
 }
