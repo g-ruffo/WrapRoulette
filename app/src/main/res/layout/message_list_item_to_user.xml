@@ -25,15 +25,15 @@
             android:paddingTop="4dp"
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
-            android:text="@{message.time.toString()}"
+            dateToStringDayConverter="@{message.time}"
             android:textColor="#C0C0C0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="December 01, 2022" />
 
-        <ImageView
-            android:id="@+id/profilePictureImageView"
+        <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePictureImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -93,9 +93,10 @@
             android:id="@+id/timestampTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="8:00"
             android:textColor="#C0C0C0"
+            tools:text="10:09"
             android:textSize="10sp"
+            dateToStringTimeConverter="@{message.time}"
             app:layout_constraintBottom_toBottomOf="@+id/messageCardView"
             app:layout_constraintStart_toEndOf="@+id/messageCardView" />
 
