@@ -1,13 +1,12 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Message
+import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.FirestoreUtil
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -37,44 +37,69 @@ class HomeViewModel @Inject constructor(
 
     val userBetTime = MutableStateFlow<Date?>(null)
 
-    val _chatListArray = MutableStateFlow<List<Message>?>(null)
-    val chatListArray: StateFlow<List<Message>?>
-        get() = _chatListArray
-
-    val _betListArray = MutableStateFlow<List<Member>?>(null)
-    val betListArray: StateFlow<List<Member>?>
-        get() = _betListArray
+    val _chatList = MutableStateFlow<List<Message>>(listOf())
+    val chatList: StateFlow<List<Message>?>
+        get() = _chatList
 
     val _bids = MutableStateFlow<List<Member>>(listOf())
 
+    val currentPool = MutableStateFlow<Pool?>(null)
+
 
     init {
-//        getPoolData()
+        Log.i(TAG, "ViewModel: Initialized")
+    }
+
+    fun getChatData() {
+        FirestoreUtil.getCurrentUser { user ->
+            viewModelScope.launch {
+                _chatList.emitAll(FirestoreUtil.getChatList(user.activePool!!))
+            }
+        }
+    }
+
+    fun sendChatMessage(onComplete: () -> Unit) {
+        FirestoreUtil.getCurrentUser { user ->
+            val message = Message(
+                userMessageEditText.value!!,
+                Date(Calendar.getInstance().time.time),
+                user.uid,
+                user.displayName,
+                user.profilePicturePath,
+                ""
+            )
+            FirestoreUtil.sendChatMessage(user.activePool!!, message) {
+                viewModelScope.launch {
+                    userMessageEditText.emit(null)
+                    onComplete()
+                }
+            }
+        }
+    }
+
+    fun getPoolMemberList() {
+        FirestoreUtil.getCurrentUser { user ->
+            viewModelScope.launch {
+                userData.value = user
+                _bids.emitAll(FirestoreUtil.getPoolMemberList(user.activePool!!))
+            }
+        }
     }
 
     fun getPoolData() {
         FirestoreUtil.getCurrentUser { user ->
             viewModelScope.launch {
-                _bids.emitAll(FirestoreUtil.getPoolMemberList(user.activePool!!))
-
+                currentPool.emitAll(FirestoreUtil.getPoolData(user.activePool!!))
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun sendMessage() {
-        val document = firestore.collection("chat").document(userData.value!!.activePool!!).collection("messages")
-            .document()
-
-        val message = Message(
-            userMessageEditText.value!!,
-            Date(Calendar.getInstance().time.time),
-            userData.value!!.uid,
-            userData.value!!.profilePicturePath,
-            document.id
-        )
-        document.set(message)
-        Log.i(TAG, "sendMessage: $message")
+    fun getActivePoolDate(): Date? {
+        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        return parsedDate.parse(currentPool.value!!.date)
     }
 
+    fun setUserBetTime(date: Date) {
+        userBetTime.value = date
+    }
 }
