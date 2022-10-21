@@ -15,6 +15,7 @@ import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import java.util.*
 
@@ -93,6 +94,7 @@ object FirestoreUtil {
         val newPool = Pool(
             docId,
             FirebaseAuth.getInstance().currentUser?.uid ?: "",
+            FirebaseAuth.getInstance().currentUser?.displayName ?: "",
             production,
             password,
             date,
@@ -101,7 +103,7 @@ object FirestoreUtil {
             null,
             Timestamp.now(),
             null,
-            mutableMapOf(FirebaseAuth.getInstance().currentUser?.uid!! to true)
+            mutableMapOf(FirebaseAuth.getInstance().currentUser?.uid!! to false)
         )
         poolsCollectionReference.document(docId).set(newPool).addOnSuccessListener {
             addPoolToUser(docId)
@@ -151,7 +153,7 @@ object FirestoreUtil {
     }
 
     private fun addUserToPool(poolId: String, uid: String) {
-        val newMap = mutableMapOf<String, Any>("users.$uid" to true)
+        val newMap = mutableMapOf<String, Any>("users.$uid" to false)
         poolsCollectionReference.document(poolId).update(newMap)
     }
 
@@ -180,6 +182,16 @@ object FirestoreUtil {
             .snapshots().map { querySnapshot -> querySnapshot.toObjects() }
     }
 
+    fun getPoolData(poolId: String): Flow<Pool?> {
+        if (poolId.isNullOrBlank()) {
+            return flowOf()
+        }
+        val db = FirebaseFirestore.getInstance()
+        return db.collection("pools")
+            .document(poolId).snapshots()
+            .map { querySnapshot -> querySnapshot.toObject<Pool?>() }
+    }
+
     fun getPoolsList(userUid: String): Flow<List<Pool>> {
         return poolsCollectionReference.whereEqualTo(
             "users.$userUid", true
@@ -201,5 +213,4 @@ object FirestoreUtil {
             .orderBy("time", Query.Direction.ASCENDING).snapshots()
             .map { querySnapshot -> querySnapshot.toObjects() }
     }
-
 }
