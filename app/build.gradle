@@ -86,6 +86,7 @@ dependencies {
     implementation "com.github.lisawray.groupie:groupie-kotlin-android-extensions:2.10.1"
 
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     // Unit Testing Dependencies
     testImplementation 'junit:junit:4.13.2'
