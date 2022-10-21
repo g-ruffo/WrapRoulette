@@ -20,4 +20,5 @@
     <color name="calendarBlue">#0000FF</color>
     <color name="timerNotRunningYellow">#20FFFF00</color>
     <color name="timerRunningGreen">#2000D905</color>
+    <color name="selectedPoolCardView">#2000FF00</color>
 </resources>
