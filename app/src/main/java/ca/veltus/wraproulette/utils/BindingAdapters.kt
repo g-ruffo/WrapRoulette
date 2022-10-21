@@ -68,5 +68,16 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter("convertDateToSummaryTitle")
+    @JvmStatic
+    fun convertDateToDetail(view: TextView, date: String?) {
+        if (date != null) {
+            val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val dateFormatter = SimpleDateFormat("EEEE MMM d, yyyy", Locale.ENGLISH)
+            val dateObject = parsedDate.parse(date)
+            val convertedDate = dateFormatter.format(dateObject!!)
+            view.text = convertedDate
+        }
+    }
 }
 
