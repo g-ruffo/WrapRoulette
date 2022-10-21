@@ -1,33 +1,30 @@
 package ca.veltus.wraproulette.data.objects
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.view.View
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import ca.veltus.wraproulette.R
-import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.databinding.PoolListItemBinding
 import ca.veltus.wraproulette.ui.pools.PoolsFragmentDirections
 import ca.veltus.wraproulette.utils.FirestoreUtil
-import com.google.firebase.Timestamp
 import com.xwray.groupie.databinding.BindableItem
+import java.util.*
 
 data class Pool(
     var docId: String,
     var adminUid: String,
+    var adminName: String,
     var production: String,
     var password: String,
     var date: String,
     var betAmount: String?,
-    var margin: Timestamp?,
-    var lockTime: Timestamp?,
-    var startTime: Timestamp?,
-    var endTime: Timestamp?,
-    val users: MutableMap<String, Any>? = null
+    var margin: String?,
+    var lockTime: Date?,
+    var startTime: Date?,
+    var endTime: Date?,
+    var users: MutableMap<String, Any>? = null
 ) {
-    constructor() : this("", "", "", "", "", null, null, null, null, null, mutableMapOf())
+    constructor() : this("", "", "", "", "", "", null, null, null, null, null, mutableMapOf())
 
 }
 
@@ -58,7 +55,8 @@ class PoolItem(
                         R.color.selectedPoolCardView
                     )
                 )
-                Navigation.findNavController(viewBinding.root).navigate(PoolsFragmentDirections.actionNavPoolsToNavHome())
+                Navigation.findNavController(viewBinding.root)
+                    .navigate(PoolsFragmentDirections.actionNavPoolsToNavHome())
             }
         }
     }

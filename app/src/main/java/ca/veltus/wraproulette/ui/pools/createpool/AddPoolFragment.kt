@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.ui.pools.createpool
 
 import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,17 +44,17 @@ class AddPoolFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.createButton.setOnClickListener {
-            FirestoreUtil.createPool(
-                _viewModel.poolProduction.value!!,
-                _viewModel.poolPassword.value!!,
-                _viewModel.poolDate.value!!
-            ) {
-                _viewModel.navigateBack()
+        binding.selectDateAutoComplete.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                v.performClick()
             }
         }
-
-        binding.selectDateAutoComplete.setOnFocusChangeListener { v, hasFocus ->
+        binding.selectStartTimeAutoComplete.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                v.performClick()
+            }
+        }
+        binding.selectBettingCloseTimeAutoComplete.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 v.performClick()
             }
@@ -63,8 +63,64 @@ class AddPoolFragment : BaseFragment() {
         binding.selectDateAutoComplete.setOnClickListener {
             launchDatePickerDialog()
         }
+
+        binding.selectStartTimeAutoComplete.setOnClickListener {
+            launchStartTImePickerDialog()
+        }
+
+        binding.selectBettingCloseTimeAutoComplete.setOnClickListener {
+            launchBetLockTimePickerDialog()
+        }
+
     }
 
+    private fun launchBetLockTimePickerDialog() {
+        val time = Calendar.getInstance()
+        var selectedHour = time.get(Calendar.HOUR_OF_DAY)
+        var selectedMinute = time.get(Calendar.MINUTE)
+
+        val timePickerListener =
+            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                time.set(Calendar.MINUTE, minute)
+                time.set(Calendar.SECOND, 0)
+
+                _viewModel.setPoolBetLockTime(Date(time.timeInMillis))
+            }
+
+        TimePickerDialog(
+            requireContext(),
+            THEME_HOLO_DARK,
+            timePickerListener,
+            selectedHour,
+            selectedMinute,
+            true
+        ).show()
+    }
+
+    private fun launchStartTImePickerDialog() {
+        val time = Calendar.getInstance()
+        var selectedHour = time.get(Calendar.HOUR_OF_DAY)
+        var selectedMinute = time.get(Calendar.MINUTE)
+
+        val timePickerListener =
+            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                time.set(Calendar.MINUTE, minute)
+                time.set(Calendar.SECOND, 0)
+
+                _viewModel.setPoolStartTime(Date(time.timeInMillis))
+            }
+
+        TimePickerDialog(
+            requireContext(),
+            THEME_HOLO_DARK,
+            timePickerListener,
+            selectedHour,
+            selectedMinute,
+            true
+        ).show()
+    }
 
     // Launch date dialog and listen for its result.
     private fun launchDatePickerDialog() {
@@ -79,7 +135,6 @@ class AddPoolFragment : BaseFragment() {
                 calendar.set(Calendar.MONTH, month)
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-//                _viewModel.setPoolDate(calendar.time)
                 _viewModel.setPoolDate(
                     SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(
                         calendar.time
@@ -87,16 +142,14 @@ class AddPoolFragment : BaseFragment() {
                 )
             }
 
-        val dialog = DatePickerDialog(
+        DatePickerDialog(
             requireContext(),
             THEME_HOLO_DARK,
             datePickerListener,
             selectedYear,
             selectedMonth,
             selectedDay
-        )
-
-        dialog.show()
+        ).show()
     }
 
 }
