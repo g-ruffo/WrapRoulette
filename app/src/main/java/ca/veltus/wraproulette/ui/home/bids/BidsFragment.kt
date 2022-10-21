@@ -24,7 +24,7 @@ class BidsFragment : BaseFragment() {
     }
 
     private var _binding: FragmentBidsBinding? = null
-    override val _viewModel by viewModels<HomeViewModel>()
+    override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -38,6 +38,7 @@ class BidsFragment : BaseFragment() {
     ): View {
         _binding = FragmentBidsBinding.inflate(inflater, container, false)
 
+        binding.viewModel = _viewModel
         Log.i(TAG, "onCreateView: called")
 
         return binding.root

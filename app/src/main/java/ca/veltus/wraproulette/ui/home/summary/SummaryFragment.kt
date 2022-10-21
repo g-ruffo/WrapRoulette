@@ -17,7 +17,7 @@ class SummaryFragment : BaseFragment() {
     }
 
     private var _binding: FragmentSummaryBinding? = null
-    override val _viewModel by viewModels<HomeViewModel>()
+    override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
 
     // This property is only valid between onCreateView and
     // onDestroyView.

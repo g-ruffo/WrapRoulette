@@ -22,7 +22,7 @@ class BetDialogFragment : DialogFragment() {
     }
 
     private var _binding: FragmentBetDialogBinding? = null
-    val viewModel by viewModels<HomeViewModel>()
+//    val viewMode by viewModels<HomeViewModel>()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -74,6 +74,5 @@ class BetDialogFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
     }
 }

@@ -28,7 +28,7 @@ class ChatFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentChatBinding
-    override val _viewModel by viewModels<HomeViewModel>()
+    override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +37,6 @@ class ChatFragment : BaseFragment() {
         binding = FragmentChatBinding.inflate(inflater, container, false)
 
         binding.viewModel = _viewModel
-
-        _viewModel.hideFab()
 
         return binding.root
     }
