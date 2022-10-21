@@ -1,15 +1,16 @@
 package ca.veltus.wraproulette.ui.home.summary
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SummaryFragment : BaseFragment() {
@@ -41,12 +42,20 @@ class SummaryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         _viewModel.getPoolData()
+
+        lifecycleScope.launch {
+            _viewModel._bids.collect { members ->
+                members.forEach {
+                    if (it.uid == _viewModel.userData.value!!.uid) {
+                        _viewModel.setUserBetTime(it.bidTime!!)
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i(TAG, "onResume: ${_viewModel.currentPool.value}")
     }
-
 
 }
