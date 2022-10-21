@@ -5,7 +5,6 @@ import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -89,25 +88,15 @@ object FirestoreUtil {
     }
 
 
-    fun createPool(production: String, password: String, date: String, onComplete: () -> Unit) {
+    fun createPool(pool: Pool, onComplete: () -> Unit) {
         val docId: String = poolsCollectionReference.document().id
-        val newPool = Pool(
-            docId,
-            FirebaseAuth.getInstance().currentUser?.uid ?: "",
-            FirebaseAuth.getInstance().currentUser?.displayName ?: "",
-            production,
-            password,
-            date,
-            null,
-            null,
-            null,
-            Timestamp.now(),
-            null,
-            mutableMapOf(FirebaseAuth.getInstance().currentUser?.uid!! to false)
-        )
-        poolsCollectionReference.document(docId).set(newPool).addOnSuccessListener {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        pool.adminUid = currentUser!!.uid
+        pool.adminName = currentUser.displayName!!
+        pool.users = mutableMapOf(currentUser.uid to true)
+        poolsCollectionReference.document(docId).set(pool).addOnSuccessListener {
             addPoolToUser(docId)
-            addMemberToPool(docId, FirebaseAuth.getInstance().currentUser!!.uid)
+            addMemberToPool(docId, currentUser.uid)
             onComplete()
         }
     }
