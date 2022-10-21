@@ -26,12 +26,10 @@
                 android:id="@+id/createNewPoolTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
                 android:text="Create New Pool"
                 android:textSize="44sp"
                 app:layout_constraintBottom_toTopOf="@+id/createNewPoolSubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.15"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
@@ -44,18 +42,17 @@
                 android:textSize="22sp"
                 app:layout_constraintBottom_toTopOf="@+id/productionEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.25"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/createNewPoolTitle" />
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/productionEditTextLayout"
                 style="@style/LoginTextInputOuterFieldStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="44dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="16dp"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:hintTextColor="@color/purpleLogoLight"
                 app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
@@ -80,7 +77,8 @@
                 style="@style/LoginTextInputOuterFieldStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:helperTextEnabled="true"
                 app:hintTextColor="@color/purpleLogoLight"
@@ -106,15 +104,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="18dp"
                 app:boxBackgroundColor="@color/white"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:endIconMode="clear_text"
                 app:hintTextColor="@color/purpleLogoLight"
-                app:layout_constraintBottom_toTopOf="@id/createButton"
+                app:layout_constraintBottom_toTopOf="@+id/selectStartTimeTextInputLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout"
+                app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
                 app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
                 <AutoCompleteTextView
@@ -128,13 +125,124 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectStartTimeTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/selectBetAmountTextInputLayout"
+                app:layout_constraintEnd_toStartOf="@id/selectBettingCloseTimeTextInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectDateTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                tools:layout_editor_absoluteX="16dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/selectStartTimeAutoComplete"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Start Time"
+                    android:inputType="none"
+                    android:text="@={viewModel.poolDate}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectBettingCloseTimeTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBaseline_toBaselineOf="@id/selectStartTimeTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/selectStartTimeTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                tools:layout_editor_absoluteY="562dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/selectBettingCloseTimeAutoComplete"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Betting Time"
+                    android:inputType="none"
+                    android:text="@={viewModel.poolDate}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectBetAmountTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
+                app:layout_constraintEnd_toStartOf="@id/selectMarginTextInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/selectBetAmountAutoComplete"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Bet Amount"
+                    android:inputType="none"
+                    android:text="@={viewModel.poolDate}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectMarginTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:boxBackgroundColor="@color/white"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBaseline_toBaselineOf="@id/selectBetAmountTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/selectBetAmountTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                tools:layout_editor_absoluteY="491dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/selectMarginAutoComplete"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Margin"
+                    android:inputType="none"
+                    android:text="@={viewModel.poolDate}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createButton"
                 android:layout_width="347dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="44dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginTop="64dp"
                 android:background="@drawable/rounded_corners_button"
                 android:text="Create"
                 android:textColor="@color/white"
@@ -142,7 +250,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selectDateTextInputLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/selectBetAmountTextInputLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
