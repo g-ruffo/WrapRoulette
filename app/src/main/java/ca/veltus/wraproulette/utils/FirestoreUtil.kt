@@ -94,6 +94,7 @@ object FirestoreUtil {
         pool.adminUid = currentUser!!.uid
         pool.adminName = currentUser.displayName!!
         pool.users = mutableMapOf(currentUser.uid to true)
+        pool.docId = docId
         poolsCollectionReference.document(docId).set(pool).addOnSuccessListener {
             addPoolToUser(docId)
             addMemberToPool(docId, currentUser.uid)
@@ -142,7 +143,7 @@ object FirestoreUtil {
     }
 
     private fun addUserToPool(poolId: String, uid: String) {
-        val newMap = mutableMapOf<String, Any>("users.$uid" to false)
+        val newMap = mutableMapOf<String, Any>("users.$uid" to true)
         poolsCollectionReference.document(poolId).update(newMap)
     }
 
