@@ -45,9 +45,10 @@ class SummaryFragment : BaseFragment() {
 
         lifecycleScope.launch {
             _viewModel._bids.collect { members ->
+                _viewModel.addBidMemberToList(members)
                 members.forEach {
-                    if (it.uid == _viewModel.userData.value!!.uid) {
-                        _viewModel.setUserBetTime(it.bidTime!!)
+                    if (it.uid == _viewModel.userData.value!!.uid && it.bidTime != null) {
+                        _viewModel.setUserBetTime(it.bidTime)
                     }
                 }
             }

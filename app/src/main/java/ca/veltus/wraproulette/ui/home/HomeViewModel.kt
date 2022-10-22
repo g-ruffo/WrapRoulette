@@ -36,6 +36,7 @@ class HomeViewModel @Inject constructor(
     val userData = MutableStateFlow<User?>(null)
 
     val userBetTime = MutableStateFlow<Date?>(null)
+    val poolTotalBets = MutableStateFlow<List<Member>>(listOf())
 
     val _chatList = MutableStateFlow<List<Message>>(listOf())
     val chatList: StateFlow<List<Message>?>
@@ -101,5 +102,18 @@ class HomeViewModel @Inject constructor(
 
     fun setUserBetTime(date: Date) {
         userBetTime.value = date
+    }
+
+    fun addBidMemberToList(members: List<Member>) {
+        val list = mutableListOf<Member>()
+        members.forEach {
+            if (it.bidTime != null) {
+                list.add(it)
+            }
+            poolTotalBets.value = list
+
+            Log.i(TAG, "addBidMemberToList: ${poolTotalBets.value.size}")
+
+        }
     }
 }

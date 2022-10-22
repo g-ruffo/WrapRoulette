@@ -2,10 +2,12 @@ package ca.veltus.wraproulette.utils
 
 import android.content.res.ColorStateList
 import android.util.Patterns
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
+import ca.veltus.wraproulette.data.objects.Member
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
@@ -44,7 +46,8 @@ object BindingAdapters {
     @JvmStatic
     fun dateToStringConverter(view: TextView, date: Date?) {
         if (date != null) {
-            val time = "${date.hours}:${date.minutes}"
+            val parsedDate = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+            val time = parsedDate.format(date)
             view.text = time
         }
     }
@@ -79,5 +82,29 @@ object BindingAdapters {
             view.text = convertedDate
         }
     }
+
+    @BindingAdapter("getTimeFromDate")
+    @JvmStatic
+    fun getTimeFromDate(view: AutoCompleteTextView, date: Date?) {
+        if (date != null) {
+            val parsedDate = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+            val time = parsedDate.format(date)
+            view.setText(time)
+        }
+    }
+
+    @BindingAdapter(
+        value = ["calculatePoolPotSizePrice", "calculatePoolPotSizeList"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun calculatePoolPotSize(view: TextView, bidPrice: String?, list: MutableList<Member>) {
+        if (bidPrice != null) {
+            val price = bidPrice.toInt()
+            val total = "$${(price * list.size)}"
+            view.text = total
+        }
+    }
+
 }
 
