@@ -8,6 +8,7 @@
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
+
         <import type="android.view.View" />
 
     </data>
@@ -92,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@{viewModel.currentPool.betAmount}"
+                    android:text="@{`$` + viewModel.currentPool.betAmount}"
                     android:textSize="18sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/poolBetAmountTitle"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -138,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="@{viewModel.currentPool.adminName}"
+                    android:text="@{viewModel.currentPool.margin + ` Minutes`}"
                     android:textSize="18sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/poolMarginTitle"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -279,15 +280,17 @@
 
                         <TextView
                             android:id="@+id/potTotalTextView"
+                            calculatePoolPotSizeList="@{viewModel.poolTotalBets}"
+                            calculatePoolPotSizePrice="@{viewModel.currentPool.betAmount}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$ 359.51"
                             android:textSize="38sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/potTotalTitle"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:text="$50" />
 
                         <TextView
                             android:id="@+id/potTotalTitle"
@@ -304,13 +307,14 @@
                             android:id="@+id/betTotalTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="8"
+                            android:text="@{String.valueOf(viewModel.poolTotalBets.size)}"
                             android:textSize="38sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/potTotalTitle"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:text="9" />
 
                         <TextView
                             android:id="@+id/betTotalTitle"
@@ -469,7 +473,8 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/wrapTimeTextView"
+                            android:id="@+id/currentBetTimeTextView"
+                            dateToStringConverter="@{viewModel.userBetTime}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
@@ -480,7 +485,7 @@
                             tools:text="06:12" />
 
                         <TextView
-                            android:id="@+id/wrapTimeTitle"
+                            android:id="@+id/currentBetTimeTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -491,7 +496,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/wrapTimeTextView" />
+                            app:layout_constraintTop_toBottomOf="@+id/currentBetTimeTextView" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
