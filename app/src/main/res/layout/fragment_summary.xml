@@ -193,13 +193,13 @@
                             android:id="@+id/currentTimeTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="18:14:01"
                             android:textSize="38sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:text="18:14:01" />
 
                         <TextView
                             android:id="@+id/currentTimeTitle"
@@ -224,9 +224,9 @@
 
                         <TextView
                             android:id="@+id/workStartTimeTextView"
+                            dateToStringTimeConverter="@{viewModel.currentPool.startTime}"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="06:30"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
@@ -244,6 +244,7 @@
 
                         <TextView
                             android:id="@+id/workWrapTimeTextView"
+                            dateToStringTimeConverter="@{viewModel.currentPool.endTime}"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="18:14"
