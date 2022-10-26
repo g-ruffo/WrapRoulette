@@ -18,6 +18,5 @@ class FirestoreGlideModule : AppGlideModule() {
             InputStream::class.java,
             FirebaseImageLoader.Factory()
         )
-
     }
 }
