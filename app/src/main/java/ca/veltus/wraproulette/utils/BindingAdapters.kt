@@ -66,7 +66,20 @@ object BindingAdapters {
     @JvmStatic
     fun dateToStringTimeConverter(view: TextView, date: Date?) {
         if (date != null) {
-            val time = "${date.hours}:${date.minutes}"
+            val parsedDate = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+            val time = parsedDate.format(date)
+            view.text = time
+        } else {
+            view.text = "NA"
+        }
+    }
+
+    @BindingAdapter("currentTimeFromDateToString")
+    @JvmStatic
+    fun currentTimeFromDateToString(view: TextView, date: Date?) {
+        if (date != null) {
+            val parsedDate = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
+            val time = parsedDate.format(date)
             view.text = time
         }
     }
