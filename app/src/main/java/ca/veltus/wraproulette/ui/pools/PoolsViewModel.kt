@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
+import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
@@ -41,6 +42,8 @@ class PoolsViewModel @Inject constructor(
     private val _pools = MutableStateFlow<List<Pool>>(listOf())
     val pools: StateFlow<List<Pool>>
         get() = _pools
+
+    val isFabClicked = MutableStateFlow<Boolean>(false)
 
     init {
         fetchPoolList()
@@ -101,5 +104,17 @@ class PoolsViewModel @Inject constructor(
         FirestoreUtil.createPool(pool) {
             navigateBack()
         }
+    }
+
+    fun toggleFabButton() {
+        isFabClicked.value = !isFabClicked.value
+    }
+
+    fun navigateToAddPoolFragment() {
+        navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToAddPoolFragment()))
+    }
+
+    fun navigateToJoinPoolFragment() {
+        navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToJoinPoolFragment()))
     }
 }
