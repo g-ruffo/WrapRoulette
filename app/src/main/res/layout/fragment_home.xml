@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
+
         <import type="android.view.View" />
 
     </data>
@@ -114,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="Set Wrap Time"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/setWrapAdminFab"
                 app:layout_constraintEnd_toStartOf="@+id/setWrapAdminFab"
                 app:layout_constraintTop_toTopOf="@+id/setWrapAdminFab" />
@@ -140,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="Add Member"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/addMemberAdminFab"
                 app:layout_constraintEnd_toStartOf="@+id/addMemberAdminFab"
                 app:layout_constraintTop_toTopOf="@+id/addMemberAdminFab" />
