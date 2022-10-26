@@ -61,10 +61,12 @@ class HomeFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewLifecycleOwner.lifecycleScope.launch {
+            _viewModel.showLoading.postValue(true)
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.userAccount.collectLatest {
                     if (it != null) {
                         _viewModel.getPoolData(it.activePool ?: "")
+                        _viewModel.showLoading.postValue(false)
                     }
                 }
             }
