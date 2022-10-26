@@ -2,6 +2,8 @@ package ca.veltus.wraproulette.di
 
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.data.repository.AuthenticationRepositoryImpl
+import ca.veltus.wraproulette.data.repository.PoolListRepository
+import ca.veltus.wraproulette.data.repository.PoolListRepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -23,4 +25,12 @@ class AppModule {
         return AuthenticationRepositoryImpl(firebaseAuth, firestore)
     }
 
+    @Provides
+    @Singleton
+    fun providePoolListRepository(
+        firebaseAuth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): PoolListRepository {
+        return PoolListRepositoryImpl(firebaseAuth, firestore)
+    }
 }
