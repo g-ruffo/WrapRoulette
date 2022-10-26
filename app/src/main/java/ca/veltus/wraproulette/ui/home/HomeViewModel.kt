@@ -1,7 +1,7 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
-import android.util.Log
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.data.objects.Member
@@ -10,8 +10,8 @@ import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.FirestoreUtil
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emitAll
@@ -23,38 +23,65 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: AuthenticationRepository,
-    app: Application
+    private val app: Application
 ) : BaseViewModel(app) {
     companion object {
         private const val TAG = "HomeViewModel"
     }
 
-    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     val userMessageEditText = MutableStateFlow<String?>(null)
 
-    val userData = MutableStateFlow<User?>(null)
+    private val _userAccount = MutableStateFlow<User?>(null)
+    val userAccount: StateFlow<User?>
+        get() = _userAccount
+
+    val currentPool = MutableStateFlow<Pool?>(null)
 
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolTotalBets = MutableStateFlow<List<Member>>(listOf())
 
     val _chatList = MutableStateFlow<List<Message>>(listOf())
-    val chatList: StateFlow<List<Message>?>
+    val chatList: StateFlow<List<Message>>
         get() = _chatList
 
     val _bids = MutableStateFlow<List<Member>>(listOf())
+    val bids: StateFlow<List<Member>>
+        get() = _bids
 
-    val currentPool = MutableStateFlow<Pool?>(null)
+
+    val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolEndTime = MutableStateFlow<Date>(Calendar.getInstance().time)
 
 
-    init {
-        Log.i(TAG, "ViewModel: Initialized")
+    val timeWorkedDate = liveData {
+        while (true) {
+            val time = Calendar.getInstance().time.time - poolStartTime.value.time
+            emit(time)
+            delay(1000)
+        }
     }
 
-    fun getChatData() {
-        FirestoreUtil.getCurrentUser { user ->
-            viewModelScope.launch {
-                _chatList.emitAll(FirestoreUtil.getChatList(user.activePool!!))
+    val betTimeRemainingDate = liveData {
+        while (true) {
+            val time = poolRemainingBetTime.value.time - Calendar.getInstance().time.time
+            emit(time)
+            delay(1000)
+        }
+    }
+
+    val currentTimeDate = liveData {
+        while (true) {
+            emit(Calendar.getInstance().time)
+            delay(1000)
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            repository.getCurrentUserProfile().collect {
+                _userAccount.value = it
+
             }
         }
     }
@@ -78,19 +105,31 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getPoolMemberList() {
-        FirestoreUtil.getCurrentUser { user ->
-            viewModelScope.launch {
-                userData.value = user
-                _bids.emitAll(FirestoreUtil.getPoolMemberList(user.activePool!!))
-            }
-        }
-    }
 
-    fun getPoolData() {
-        FirestoreUtil.getCurrentUser { user ->
-            viewModelScope.launch {
-                currentPool.emitAll(FirestoreUtil.getPoolData(user.activePool!!))
+    fun getPoolData(activePool: String) {
+        viewModelScope.launch {
+            launch {
+                FirestoreUtil.getPoolData(activePool).collect { pool ->
+                    currentPool.emit(pool)
+                    poolStartTime.emit(pool!!.startTime!!)
+                    poolRemainingBetTime.emit(pool.lockTime!!)
+                }
+            }
+
+            launch {
+                _chatList.emitAll(FirestoreUtil.getChatList(activePool))
+            }
+
+            launch {
+                FirestoreUtil.getPoolMemberList(activePool).collect { members ->
+                    _bids.emit(members)
+                    addBidMemberToList(members)
+                    members.forEach {
+                        if (it.uid == userAccount.value!!.uid && it.bidTime != null) {
+                            setUserBetTime(it.bidTime)
+                        }
+                    }
+                }
             }
         }
     }
@@ -111,9 +150,6 @@ class HomeViewModel @Inject constructor(
                 list.add(it)
             }
             poolTotalBets.value = list
-
-            Log.i(TAG, "addBidMemberToList: ${poolTotalBets.value.size}")
-
         }
     }
 }
