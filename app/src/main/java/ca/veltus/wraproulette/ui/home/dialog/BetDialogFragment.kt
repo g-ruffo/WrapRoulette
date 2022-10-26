@@ -14,14 +14,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class BetDialogFragment(poolDate: Date?) : DialogFragment() {
+class BetDialogFragment(private val poolDate: Date) : DialogFragment() {
     companion object {
         private const val TAG = "BetDialogFragment"
     }
 
     private var _binding: FragmentBetDialogBinding? = null
-
-    private val date = poolDate
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -35,25 +33,24 @@ class BetDialogFragment(poolDate: Date?) : DialogFragment() {
         _binding = FragmentBetDialogBinding.inflate(inflater, container, false)
 
         binding.timePickerSpinner.setIs24HourView(true)
-        binding.timePickerSpinner.hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        binding.timePickerSpinner.minute = Calendar.getInstance().get(Calendar.MINUTE)
 
         binding.cancelBetButton.setOnClickListener {
             dismiss()
         }
         binding.placeBetButton.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.HOUR_OF_DAY, binding.timePickerSpinner.hour)
-            calendar.set(Calendar.MINUTE, binding.timePickerSpinner.minute)
-            calendar.set(Calendar.DATE, date!!.date)
-            calendar.set(Calendar.DATE, date!!.month)
-            calendar.set(Calendar.DATE, date!!.year)
+            val pickedDate = Calendar.getInstance().time
+            pickedDate.hours = binding.timePickerSpinner.hour
+            pickedDate.minutes = binding.timePickerSpinner.minute
+
+            if (pickedDate.before(poolDate)) {
+                pickedDate.date = pickedDate.date + 1
+            }
 
             FirestoreUtil.getCurrentUser { user ->
                 FirestoreUtil.setUserPoolBet(
                     user.activePool!!,
                     user.uid,
-                    Date(calendar.time.time)
+                    pickedDate
                 ) {
                     dismiss()
                 }
