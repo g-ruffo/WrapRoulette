@@ -148,11 +148,11 @@
 
                 <TextView
                     android:id="@+id/hoursWorkedTextView"
+                    getTimeStringFromLong="@{viewModel.timeWorkedDate}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="18dp"
                     android:maxLines="1"
-                    android:text="01:60:30"
                     android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/timeWorkedTitle"
@@ -191,8 +191,11 @@
 
                         <TextView
                             android:id="@+id/currentTimeTextView"
+                            currentTimeFromDateToString="@{viewModel.currentTimeDate}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:format12Hour="kk:mm:ss"
+                            android:textColor="#889"
                             android:textSize="38sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -230,7 +233,8 @@
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/workStartTimeTitle" />
+                            app:layout_constraintTop_toBottomOf="@id/workStartTimeTitle"
+                            tools:text="18:14" />
 
                         <TextView
                             android:id="@+id/workWrapTimeTitle"
@@ -247,11 +251,11 @@
                             dateToStringTimeConverter="@{viewModel.currentPool.endTime}"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="18:14"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/workStartTimeTitle" />
+                            app:layout_constraintTop_toBottomOf="@id/workStartTimeTitle"
+                            tools:text="18:14" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -353,25 +357,16 @@
                         android:layout_height="match_parent"
                         android:layout_margin="12dp">
 
-                        <!--                        <ImageView-->
-                        <!--                            android:id="@+id/startImageView"-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="48dp"-->
-                        <!--                            android:adjustViewBounds="true"-->
-                        <!--                            android:src="@drawable/ic_baseline_monetization_on_24"-->
-                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
-                        <!--                            app:layout_constraintStart_toStartOf="parent"-->
-                        <!--                            app:layout_constraintTop_toTopOf="parent" />-->
-
                         <TextView
                             android:id="@+id/bettingClosesTextView"
+                            getTimeStringFromLong="@{viewModel.betTimeRemainingDate}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="-06:12:00"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="-06:12:00" />
 
                         <TextView
                             android:id="@+id/bettingClosesTitle"
