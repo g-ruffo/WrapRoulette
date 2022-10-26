@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SummaryFragment : BaseFragment() {
@@ -24,7 +22,6 @@ class SummaryFragment : BaseFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,22 +38,5 @@ class SummaryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        _viewModel.getPoolData()
-
-        lifecycleScope.launch {
-            _viewModel._bids.collect { members ->
-                _viewModel.addBidMemberToList(members)
-                members.forEach {
-                    if (it.uid == _viewModel.userData.value!!.uid && it.bidTime != null) {
-                        _viewModel.setUserBetTime(it.bidTime)
-                    }
-                }
-            }
-        }
     }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
 }

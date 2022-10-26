@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
@@ -47,11 +49,12 @@ class BidsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
         lifecycleScope.launch {
-            _viewModel._bids.collect {
-                Log.i(TAG, "onViewCreated: $it")
-                setupRecyclerView(it.toMemberItem())
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.bids.collect {
+                    Log.i(TAG, "onViewCreated: $it")
+                    setupRecyclerView(it.toMemberItem())
+                }
             }
         }
     }

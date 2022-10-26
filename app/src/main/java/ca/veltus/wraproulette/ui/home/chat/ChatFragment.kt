@@ -2,13 +2,14 @@ package ca.veltus.wraproulette.ui.home.chat
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.Message
@@ -44,12 +45,11 @@ class ChatFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        Log.i(TAG, "onViewCreated: Called")
         lifecycleScope.launch {
-            Log.i(TAG, "lifecycleScope: Called")
-            _viewModel._chatList.collect {
-                Log.i(TAG, "onViewCreated: $it")
-                setupRecyclerView(it)
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.chatList.collect {
+                    setupRecyclerView(it)
+                }
             }
         }
 
@@ -60,11 +60,6 @@ class ChatFragment : BaseFragment() {
                 inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        _viewModel.getChatData()
     }
 
     private fun setupRecyclerView(items: List<Message>) {
@@ -83,5 +78,4 @@ class ChatFragment : BaseFragment() {
             scrollToPosition(items.size - 1)
         }
     }
-
 }

@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
 import ca.veltus.wraproulette.ui.home.dialog.BetDialogFragment
 import ca.veltus.wraproulette.utils.onPageSelected
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
@@ -53,6 +58,17 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPagerListener()
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.userAccount.collectLatest {
+                    if (it != null) {
+                        _viewModel.getPoolData(it.activePool ?: "")
+                    }
+                }
+            }
+        }
     }
 
 
@@ -81,11 +97,5 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        _viewModel.getPoolMemberList()
-
     }
 }
