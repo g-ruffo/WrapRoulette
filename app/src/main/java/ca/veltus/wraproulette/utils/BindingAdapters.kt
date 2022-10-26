@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.utils
 
 import android.content.res.ColorStateList
 import android.util.Patterns
+import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -84,6 +85,16 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter("getTimeStringFromLong")
+    @JvmStatic
+    fun getTimeStringFromLong(view: TextView, time: Long) {
+        val seconds = (time / 1000) % 60
+        val minutes = (time / (1000 * 60) % 60)
+        val hours = (time / (1000 * 60 * 60) % 24)
+
+        view.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
     @BindingAdapter("convertDateToSummaryTitle")
     @JvmStatic
     fun convertDateToDetail(view: TextView, date: String?) {
@@ -116,6 +127,25 @@ object BindingAdapters {
             val price = bidPrice.toInt()
             val total = "$${(price * list.size)}"
             view.text = total
+        }
+    }
+
+    // Use this binding adapter to show and hide the views using boolean variables.
+    @BindingAdapter("android:fadeVisible")
+    @JvmStatic
+    fun setFadeVisible(view: View, visible: Boolean? = true) {
+        if (view.tag == null) {
+            view.tag = true
+            view.visibility = if (visible == true) View.VISIBLE else View.GONE
+        } else {
+            view.animate().cancel()
+            if (visible == true) {
+                if (view.visibility == View.GONE)
+                    view.fadeIn()
+            } else {
+                if (view.visibility == View.VISIBLE)
+                    view.fadeOut()
+            }
         }
     }
 

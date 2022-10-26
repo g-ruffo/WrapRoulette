@@ -16,6 +16,25 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            android:indeterminate="true"
+            android:secondaryProgressTint="@color/black"
+            app:indicatorColor="@color/earningsGreen"
+            app:indicatorSize="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/purpleLogoLight"
+            app:trackThickness="15dp" />
+
         <com.google.android.material.tabs.TabLayout
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
