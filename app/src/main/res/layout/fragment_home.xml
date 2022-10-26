@@ -20,15 +20,16 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:elevation="8dp"
             android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
             android:gravity="center"
             android:indeterminate="true"
             android:secondaryProgressTint="@color/black"
+            android:visibility="gone"
             app:indicatorColor="@color/earningsGreen"
             app:indicatorSize="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,35 +37,114 @@
             app:trackThickness="15dp" />
 
         <com.google.android.material.tabs.TabLayout
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/tabLayout"
-            app:tabMode="fixed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabMode="fixed" />
 
         <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/viewPager"
             android:layout_below="@id/tabLayout"
-            app:layout_constraintTop_toBottomOf="@id/tabLayout"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bidFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="24dp"
-            android:id="@+id/bidFab"
-            android:layout_alignBottom="@id/viewPager"
             android:layout_alignEnd="@id/viewPager"
+            android:layout_alignBottom="@id/viewPager"
+            android:layout_margin="24dp"
+            android:enabled="@{viewModel.isPoolAdmin == false ? true : false}"
             android:scaleType="center"
             android:src="@drawable/ic_baseline_monetization_on_24"
+            android:visibility="@{viewModel.isPoolAdmin == false ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/adminFabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="100dp"
+            android:visibility="@{viewModel.isPoolAdmin == true ? View.VISIBLE : View.GONE}"
+            tools:ignore="HardcodedText">
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/adminExpandableFab"
+                setExpandableFabAdminState="@{viewModel.isPoolAdmin}"
+                setExpandableFabState="@{viewModel.isFabClicked}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/purple_200"
+                android:onClick="@{() -> viewModel.toggleFabButton()}"
+                android:text="Actions"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/setWrapAdminFab"
+                setExpandableFabEnabledState="@{viewModel.isFabClicked}"
+                setExpandableFabVisibleState="@{viewModel.isPoolAdmin}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/purple_200"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toTopOf="@+id/adminExpandableFab"
+                app:layout_constraintEnd_toEndOf="@+id/adminExpandableFab"
+                app:srcCompat="@drawable/ic_baseline_stop_24" />
+
+            <TextView
+                android:id="@+id/setWrapAdminFabTextView"
+                setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
+                setExpandableFabVisibleTextViewsState="@{viewModel.isPoolAdmin}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Set Wrap Time"
+                app:layout_constraintBottom_toBottomOf="@+id/setWrapAdminFab"
+                app:layout_constraintEnd_toStartOf="@+id/setWrapAdminFab"
+                app:layout_constraintTop_toTopOf="@+id/setWrapAdminFab" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addMemberAdminFab"
+                setExpandableFabEnabledState="@{viewModel.isFabClicked}"
+                setExpandableFabVisibleState="@{viewModel.isPoolAdmin}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/purple_200"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toTopOf="@+id/setWrapAdminFab"
+                app:layout_constraintEnd_toEndOf="@+id/setWrapAdminFab"
+                app:layout_constraintStart_toStartOf="@+id/setWrapAdminFab"
+                app:srcCompat="@drawable/ic_baseline_person_24" />
+
+            <TextView
+                android:id="@+id/addMemberAdminFabTextView"
+                setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
+                setExpandableFabVisibleTextViewsState="@{viewModel.isPoolAdmin}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Add Member"
+                app:layout_constraintBottom_toBottomOf="@+id/addMemberAdminFab"
+                app:layout_constraintEnd_toStartOf="@+id/addMemberAdminFab"
+                app:layout_constraintTop_toTopOf="@+id/addMemberAdminFab" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
 </layout>

@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -14,9 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -29,6 +28,10 @@ class HomeViewModel @Inject constructor(
         private const val TAG = "HomeViewModel"
     }
 
+    val isPoolAdmin = MutableStateFlow<Boolean>(false)
+
+    val isFabClicked = MutableStateFlow<Boolean>(false)
+
     val userMessageEditText = MutableStateFlow<String?>(null)
 
     private val _userAccount = MutableStateFlow<User?>(null)
@@ -38,7 +41,10 @@ class HomeViewModel @Inject constructor(
     val currentPool = MutableStateFlow<Pool?>(null)
 
     val userBetTime = MutableStateFlow<Date?>(null)
-    val poolTotalBets = MutableStateFlow<List<Member>>(listOf())
+
+    val _poolTotalBets = MutableStateFlow<List<Member>>(listOf())
+    val poolTotalBets: StateFlow<List<Member>>
+        get() = _poolTotalBets
 
     val _chatList = MutableStateFlow<List<Message>>(listOf())
     val chatList: StateFlow<List<Message>>
@@ -53,7 +59,6 @@ class HomeViewModel @Inject constructor(
     val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolEndTime = MutableStateFlow<Date>(Calendar.getInstance().time)
 
-
     val timeWorkedDate = liveData {
         while (true) {
             val time = Calendar.getInstance().time.time - poolStartTime.value.time
@@ -65,8 +70,13 @@ class HomeViewModel @Inject constructor(
     val betTimeRemainingDate = liveData {
         while (true) {
             val time = poolRemainingBetTime.value.time - Calendar.getInstance().time.time
-            emit(time)
-            delay(1000)
+            if (time > 0) {
+                emit(time)
+                delay(1000)
+            } else {
+                emit(0)
+                delay(1000)
+            }
         }
     }
 
@@ -113,11 +123,18 @@ class HomeViewModel @Inject constructor(
                     currentPool.emit(pool)
                     poolStartTime.emit(pool!!.startTime!!)
                     poolRemainingBetTime.emit(pool.lockTime!!)
+                    if (pool.adminUid == _userAccount.value!!.uid) {
+                        isPoolAdmin.emit(true)
+                    } else {
+                        isPoolAdmin.emit(false)
+                    }
                 }
             }
 
             launch {
-                _chatList.emitAll(FirestoreUtil.getChatList(activePool))
+                FirestoreUtil.getChatList(activePool).collect {
+                    _chatList.emit(it)
+                }
             }
 
             launch {
@@ -134,22 +151,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getActivePoolDate(): Date? {
-        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-        return parsedDate.parse(currentPool.value!!.date)
+    fun getActivePoolDate(): Date {
+        return currentPool.value!!.startTime!!
     }
 
-    fun setUserBetTime(date: Date) {
+    private fun setUserBetTime(date: Date) {
         userBetTime.value = date
     }
 
-    fun addBidMemberToList(members: List<Member>) {
-        val list = mutableListOf<Member>()
-        members.forEach {
-            if (it.bidTime != null) {
-                list.add(it)
+    private fun addBidMemberToList(members: List<Member>) {
+        viewModelScope.launch {
+            val list = mutableListOf<Member>()
+            members.forEach {
+                if (it.bidTime != null) {
+                    list.add(it)
+                }
+                _poolTotalBets.emit(list)
+                Log.i(TAG, "addBidMemberToList: ${list.size}")
+
             }
-            poolTotalBets.value = list
         }
+    }
+
+    fun toggleFabButton() {
+        isFabClicked.value = !isFabClicked.value
     }
 }

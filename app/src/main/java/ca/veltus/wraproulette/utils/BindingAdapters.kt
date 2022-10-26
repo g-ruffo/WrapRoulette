@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.data.objects.Member
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
@@ -149,5 +151,58 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter(
+        value = ["setExpandableFabVisibleState", "setExpandableFabEnabledState"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun setExpandableFabViews(view: FloatingActionButton, visible: Boolean, enabled: Boolean) {
+        if (visible && enabled) {
+            view.isEnabled = true
+            view.show()
+        } else {
+            view.hide()
+            view.isEnabled = false
+        }
+    }
+
+    @BindingAdapter(
+        value = ["setExpandableFabVisibleTextViewsState", "setExpandableFabEnabledTextViewsState"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun setExpandableFabTextViews(view: View, visible: Boolean, enabled: Boolean) {
+        if (visible && enabled) {
+            view.visibility = View.VISIBLE
+            view.isEnabled = true
+        } else {
+            view.visibility = View.GONE
+            view.isEnabled = false
+        }
+    }
+
+    @BindingAdapter(
+        value = ["setExpandableFabState", "setExpandableFabAdminState"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun setExpandableFabState(
+        view: ExtendedFloatingActionButton,
+        isClicked: Boolean,
+        isAdmin: Boolean
+    ) {
+        if (isAdmin) {
+            view.visibility = View.VISIBLE
+            view.isEnabled = true
+            if (isClicked) {
+                view.extend()
+            } else {
+                view.shrink()
+            }
+        } else {
+            view.visibility = View.GONE
+            view.isEnabled = false
+        }
+    }
 }
 
