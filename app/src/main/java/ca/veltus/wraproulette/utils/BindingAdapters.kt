@@ -158,11 +158,11 @@ object BindingAdapters {
     @JvmStatic
     fun setExpandableFabViews(view: FloatingActionButton, visible: Boolean, enabled: Boolean) {
         if (visible && enabled) {
-            view.isEnabled = true
+            view.isClickable = true
             view.show()
         } else {
             view.hide()
-            view.isEnabled = false
+            view.isClickable = false
         }
     }
 
