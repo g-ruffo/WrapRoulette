@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -50,8 +51,8 @@ class HomeViewModel @Inject constructor(
     val chatList: StateFlow<List<Message>>
         get() = _chatList
 
-    val _readChatListItems = MutableStateFlow<List<Message>>(listOf())
-    val readChatListItems: StateFlow<List<Message>>
+    val _readChatListItems = MutableStateFlow<Pair<List<Message>, Boolean>>(Pair(listOf(), false))
+    val readChatListItems: StateFlow<Pair<List<Message>, Boolean>>
         get() = _readChatListItems
 
     val _bids = MutableStateFlow<List<Member>>(listOf())
@@ -92,10 +93,15 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
+        showLoading.postValue(true)
         viewModelScope.launch {
-            repository.getCurrentUserProfile().collect {
+            repository.getCurrentUserProfile().collectLatest {
                 _userAccount.value = it
-
+                if (it != null && !it.activePool.isNullOrEmpty()) {
+                    getPoolData(it.activePool)
+                } else {
+                    showLoading.postValue(false)
+                }
             }
         }
     }
@@ -120,39 +126,44 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getPoolData(activePool: String) {
-        viewModelScope.launch {
-            launch {
-                FirestoreUtil.getPoolData(activePool).collect { pool ->
-                    currentPool.emit(pool)
-                    poolStartTime.emit(pool!!.startTime!!)
-                    poolRemainingBetTime.emit(pool.lockTime!!)
-                    if (pool.adminUid == _userAccount.value!!.uid) {
-                        isPoolAdmin.emit(true)
-                    } else {
-                        isPoolAdmin.emit(false)
+    fun getPoolData(activePool: String?) {
+        if (!activePool.isNullOrEmpty()) {
+            viewModelScope.launch {
+                launch {
+                    FirestoreUtil.getPoolData(activePool).collect { pool ->
+                        currentPool.emit(pool)
+                        poolStartTime.emit(pool!!.startTime!!)
+                        poolRemainingBetTime.emit(pool.lockTime!!)
+                        if (pool.adminUid == _userAccount.value!!.uid) {
+                            isPoolAdmin.emit(true)
+                        } else {
+                            isPoolAdmin.emit(false)
+                        }
+                        showLoading.postValue(false)
                     }
                 }
-            }
 
-            launch {
-                FirestoreUtil.getChatList(activePool).collect {
-                    _chatList.emit(it)
+                launch {
+                    FirestoreUtil.getChatList(activePool).collect {
+                        _chatList.emit(it)
+                        markMessagesAsRead(true)
+                    }
                 }
-            }
 
-            launch {
-                FirestoreUtil.getPoolMemberList(activePool).collect { members ->
-                    _bids.emit(members)
-                    addBidMemberToList(members)
-                    members.forEach {
-                        if (it.uid == userAccount.value!!.uid && it.bidTime != null) {
-                            setUserBetTime(it.bidTime)
+                launch {
+                    FirestoreUtil.getPoolMemberList(activePool).collect { members ->
+                        _bids.emit(members)
+                        addBidMemberToList(members)
+                        members.forEach {
+                            if (it.uid == userAccount.value!!.uid && it.bidTime != null) {
+                                setUserBetTime(it.bidTime)
+                            }
                         }
                     }
                 }
             }
-        }
+            showLoading.postValue(false)
+        } else return
     }
 
     fun getActivePoolDate(): Date {
@@ -171,14 +182,20 @@ class HomeViewModel @Inject constructor(
                     list.add(it)
                 }
                 _poolTotalBets.emit(list)
-                Log.i(TAG, "addBidMemberToList: ${list.size}")
-
             }
         }
     }
 
-    fun markMessagesAsRead() {
-        _readChatListItems.value = _chatList.value
+    fun markMessagesAsRead(isUpdated: Boolean) {
+        viewModelScope.launch {
+            if (isUpdated && !_readChatListItems.value.second || !isUpdated) {
+                _readChatListItems.emit(Pair(_chatList.value, true))
+                Log.i(
+                    TAG,
+                    "isUpdated && !_readChatListItems.value.second: ${_readChatListItems.value}"
+                )
+            }
+        }
     }
 
     fun toggleFabButton() {
