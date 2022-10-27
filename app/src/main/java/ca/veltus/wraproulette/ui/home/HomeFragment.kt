@@ -17,11 +17,13 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
 import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.onPageSelected
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -51,11 +53,15 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
 
         binding.bidFab.setOnClickListener {
-            launchStartTImePickerDialog()
+            launchStartTimePickerDialog()
         }
 
         binding.bitAdminFab.setOnClickListener {
-            launchStartTImePickerDialog()
+            launchStartTimePickerDialog()
+        }
+
+        binding.setWrapAdminFab.setOnClickListener {
+            launchStartTimePickerDialog(true)
         }
 
         return binding.root
@@ -143,8 +149,9 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
-    private fun launchStartTImePickerDialog() {
+    private fun launchStartTimePickerDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance().time
+        var submitButtonText = "Bet"
         val timePickerListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 time.hours = hourOfDay
@@ -155,37 +162,71 @@ class HomeFragment : BaseFragment(), MenuProvider {
                     time.date = time.date + 1
                 }
 
-                FirestoreUtil.getCurrentUser { user ->
-                    FirestoreUtil.setUserPoolBet(
-                        user.activePool!!,
-                        user.uid,
-                        time
-                    ) {
+                if (setWrapTime) {
+                    launchConfirmationDialog(time)
+                } else {
+                    FirestoreUtil.getCurrentUser { user ->
+                        FirestoreUtil.setUserPoolBet(
+                            user.activePool!!,
+                            user.uid,
+                            time
+                        ) {
+                        }
                     }
                 }
             }
 
         val timePickerDialog = TimePickerDialog(
             requireContext(),
-            AlertDialog.THEME_HOLO_DARK,
+            AlertDialog.THEME_HOLO_LIGHT,
             timePickerListener,
             time.hours,
             time.minutes,
             true
         )
+        if (setWrapTime) {
+            submitButtonText = "Set Wrap Time"
+            timePickerDialog.setButton(
+                DialogInterface.BUTTON_NEUTRAL,
+                "Clear"
+            ) { _, _ ->
+                Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_NEUTRAL")
+                launchConfirmationDialog(null)
+            }
+        }
+
         timePickerDialog.setButton(
             DialogInterface.BUTTON_POSITIVE,
-            "Bet"
-        ) { _, _ -> }
+            submitButtonText
+        ) { _, _ ->
+            Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_POSITIVE")
+        }
 
         timePickerDialog.setButton(
             DialogInterface.BUTTON_NEGATIVE,
             "Cancel"
-        ) { dialog, which ->
-            if (which == DialogInterface.BUTTON_NEGATIVE) {
-                dialog.dismiss()
-            }
+        ) { _, _ ->
+            Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_NEGATIVE")
         }
         timePickerDialog.show()
+    }
+
+    private fun launchConfirmationDialog(time: Date?) {
+        val format = SimpleDateFormat("HH:mm MMM d, yyyy", Locale.ENGLISH)
+        var message = ""
+        message = if (time == null) {
+            "Are you sure you want to clear the set wrap time?"
+        } else {
+            "Please confirm the selected wrap time is correct: ${format.format(time)}"
+        }
+        MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?")
+            .setMessage(message)
+            .setPositiveButton("Yes") { _, _ ->
+                _viewModel.showToast.value = "true"
+                _viewModel.setWrapTime(time, true)
+            }.setNegativeButton("No") { _, _ ->
+                _viewModel.showToast.value = "false"
+                _viewModel.setWrapTime(time, false)
+            }.show()
     }
 }

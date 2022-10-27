@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-    val poolEndTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolEndTime = MutableStateFlow<Date?>(null)
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
@@ -130,6 +130,7 @@ class HomeViewModel @Inject constructor(
                         currentPool.emit(pool)
                         poolStartTime.emit(pool!!.startTime!!)
                         poolRemainingBetTime.emit(pool.lockTime!!)
+                        poolEndTime.emit(pool.endTime)
                         if (pool.adminUid == _userAccount.value!!.uid) {
                             isPoolAdmin.emit(true)
                         } else {
@@ -162,10 +163,6 @@ class HomeViewModel @Inject constructor(
         } else return
     }
 
-    fun getActivePoolDate(): Date {
-        return currentPool.value!!.startTime!!
-    }
-
     private fun setUserBetTime(date: Date) {
         userBetTime.value = date
     }
@@ -192,5 +189,14 @@ class HomeViewModel @Inject constructor(
 
     fun toggleFabButton() {
         isFabClicked.value = !isFabClicked.value
+    }
+
+    fun setWrapTime(wrapTime: Date?, isConfirmed: Boolean = false) {
+        if (isConfirmed) {
+            viewModelScope.launch {
+                FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
+                }
+            }
+        }
     }
 }
