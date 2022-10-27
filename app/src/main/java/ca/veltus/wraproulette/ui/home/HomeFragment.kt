@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,42 +77,36 @@ class HomeFragment : BaseFragment() {
         binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    _viewModel.isPoolAdmin.collectLatest {
-                        Log.i(TAG, "onViewCreated: $it")
-                        when (it) {
-                            true -> {
-                                if (position == 2) {
-                                    binding.adminFabLayout.animate().translationX(400f).alpha(0f)
-                                        .setDuration(200).setInterpolator(AccelerateInterpolator())
-                                        .withEndAction {
-                                            binding.adminFabLayout.visibility = View.GONE
-                                        }.start()
-
-                                } else {
-                                    if (binding.adminFabLayout.visibility == View.GONE) {
-                                        binding.adminFabLayout.visibility = View.VISIBLE
-                                        binding.adminFabLayout.animate().translationX(0F).alpha(1f)
-                                            .setDuration(200)
-                                            .setInterpolator(AccelerateInterpolator())
-                                            .start()
-                                    }
-                                }
+                    launch {
+                        _viewModel.chatList.collectLatest {
+                            if (_viewModel.readChatListItems.value.size < it.size) {
+                                binding.tabLayout.getTabAt(2)!!.orCreateBadge.number =
+                                    it.size - _viewModel.readChatListItems.value.size
                             }
-                            false -> {
-                                if (position == 2) {
-                                    binding.bidFab.animate().translationX(400f).alpha(0f)
-                                        .setDuration(200).setInterpolator(AccelerateInterpolator())
-                                        .withEndAction {
-                                            binding.bidFab.visibility = View.GONE
-                                        }.start()
+                        }
+                    }
+                    launch {
+                        _viewModel.isPoolAdmin.collectLatest {
+                            val fabView = when (it) {
+                                true -> binding.adminFabLayout
+                                false -> binding.bidFab
+                            }
 
-                                } else {
-                                    if (binding.bidFab.visibility == View.GONE) {
-                                        binding.bidFab.visibility = View.VISIBLE
-                                        binding.bidFab.animate().translationX(0F).alpha(1f)
-                                            .setDuration(200)
-                                            .setInterpolator(AccelerateInterpolator()).start()
-                                    }
+                            if (position == 2) {
+                                _viewModel.markMessagesAsRead()
+                                binding.tabLayout.getTabAt(2)!!.removeBadge()
+                                fabView.animate().translationX(400f).alpha(0f)
+                                    .setDuration(200).setInterpolator(AccelerateInterpolator())
+                                    .withEndAction {
+                                        fabView.visibility = View.GONE
+                                    }.start()
+
+                            } else {
+                                if (fabView.visibility == View.GONE) {
+                                    fabView.visibility = View.VISIBLE
+                                    fabView.animate().translationX(0F).alpha(1f)
+                                        .setDuration(200)
+                                        .setInterpolator(AccelerateInterpolator()).start()
                                 }
                             }
                         }

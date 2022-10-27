@@ -50,6 +50,10 @@ class HomeViewModel @Inject constructor(
     val chatList: StateFlow<List<Message>>
         get() = _chatList
 
+    val _readChatListItems = MutableStateFlow<List<Message>>(listOf())
+    val readChatListItems: StateFlow<List<Message>>
+        get() = _readChatListItems
+
     val _bids = MutableStateFlow<List<Member>>(listOf())
     val bids: StateFlow<List<Member>>
         get() = _bids
@@ -171,6 +175,10 @@ class HomeViewModel @Inject constructor(
 
             }
         }
+    }
+
+    fun markMessagesAsRead() {
+        _readChatListItems.value = _chatList.value
     }
 
     fun toggleFabButton() {
