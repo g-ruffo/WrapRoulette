@@ -83,11 +83,6 @@ object FirestoreUtil {
             }
     }
 
-    fun getCurrentUserFlow(): Flow<User?> {
-        return currentUserDocReference.snapshots().map { it.toObject() }
-    }
-
-
     fun createPool(pool: Pool, onComplete: () -> Unit) {
         val docId: String = poolsCollectionReference.document().id
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -131,6 +126,11 @@ object FirestoreUtil {
     fun setUserPoolBet(poolId: String, userUid: String, bid: Date, onComplete: () -> Unit) {
         poolsCollectionReference.document(poolId).collection("members").document(userUid)
             .update("bidTime", bid).addOnSuccessListener {
+                onComplete()
+            }
+    }
+    fun setPoolWrapTime(poolId: String, wrapTime: Date?, onComplete: () -> Unit) {
+        poolsCollectionReference.document(poolId).update("endTime", wrapTime).addOnSuccessListener {
                 onComplete()
             }
     }
