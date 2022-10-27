@@ -2,6 +2,8 @@
     <string name="app_name">Wrap Roulette</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -19,4 +21,6 @@
     <string name="new_pool">New Pool</string>
     <string name="pools">Pools</string>
     <string name="account">Account</string>
+    <string name="add_member">Add Member</string>
+    <string name="edit_pool">Edit Pool</string>
 </resources>

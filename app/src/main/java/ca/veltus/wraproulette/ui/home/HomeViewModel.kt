@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -29,11 +28,15 @@ class HomeViewModel @Inject constructor(
         private const val TAG = "HomeViewModel"
     }
 
+    val isBettingOpen = MutableStateFlow<Boolean>(false)
     val isPoolAdmin = MutableStateFlow<Boolean>(false)
     val isFabClicked = MutableStateFlow<Boolean>(false)
     val userMessageEditText = MutableStateFlow<String?>(null)
     val currentPool = MutableStateFlow<Pool?>(null)
     val userBetTime = MutableStateFlow<Date?>(null)
+    val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolEndTime = MutableStateFlow<Date>(Calendar.getInstance().time)
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
@@ -55,11 +58,6 @@ class HomeViewModel @Inject constructor(
     val bids: StateFlow<List<Member>>
         get() = _bids
 
-
-    val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-    val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-    val poolEndTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-
     val timeWorkedDate = liveData {
         while (true) {
             val time = Calendar.getInstance().time.time - poolStartTime.value.time
@@ -73,8 +71,10 @@ class HomeViewModel @Inject constructor(
             val time = poolRemainingBetTime.value.time - Calendar.getInstance().time.time
             if (time > 0) {
                 emit(time)
+                isBettingOpen.emit(true)
                 delay(1000)
             } else {
+                isBettingOpen.emit(false)
                 emit(0)
                 delay(1000)
             }
