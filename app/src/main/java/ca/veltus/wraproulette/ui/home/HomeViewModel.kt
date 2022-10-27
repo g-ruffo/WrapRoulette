@@ -30,18 +30,14 @@ class HomeViewModel @Inject constructor(
     }
 
     val isPoolAdmin = MutableStateFlow<Boolean>(false)
-
     val isFabClicked = MutableStateFlow<Boolean>(false)
-
     val userMessageEditText = MutableStateFlow<String?>(null)
+    val currentPool = MutableStateFlow<Pool?>(null)
+    val userBetTime = MutableStateFlow<Date?>(null)
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
         get() = _userAccount
-
-    val currentPool = MutableStateFlow<Pool?>(null)
-
-    val userBetTime = MutableStateFlow<Date?>(null)
 
     val _poolTotalBets = MutableStateFlow<List<Member>>(listOf())
     val poolTotalBets: StateFlow<List<Member>>
@@ -190,10 +186,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             if (isUpdated && !_readChatListItems.value.second || !isUpdated) {
                 _readChatListItems.emit(Pair(_chatList.value, true))
-                Log.i(
-                    TAG,
-                    "isUpdated && !_readChatListItems.value.second: ${_readChatListItems.value}"
-                )
             }
         }
     }
