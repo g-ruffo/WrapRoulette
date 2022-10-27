@@ -1,34 +1,37 @@
 package ca.veltus.wraproulette.ui.home
 
+import android.app.AlertDialog
+import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AccelerateInterpolator
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
-import ca.veltus.wraproulette.ui.home.dialog.BetDialogFragment
+import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.onPageSelected
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.util.*
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), MenuProvider {
     companion object {
         private const val TAG = "HomeFragment"
     }
 
     private lateinit var binding: FragmentHomeBinding
     override val _viewModel by viewModels<HomeViewModel>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,9 +44,6 @@ class HomeFragment : BaseFragment() {
         val adapter = ViewPagerAdapter(this)
 
         binding.viewPager.adapter = adapter
-        Log.i(TAG, "onCreateView")
-
-        setupViewPagerListener()
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = ViewPagerAdapter.fragmentTitle[position]
@@ -51,8 +51,11 @@ class HomeFragment : BaseFragment() {
 
 
         binding.bidFab.setOnClickListener {
-            val dialog = BetDialogFragment(_viewModel.getActivePoolDate())
-            dialog.show(requireActivity().supportFragmentManager, "betDialog")
+            launchStartTImePickerDialog()
+        }
+
+        binding.bitAdminFab.setOnClickListener {
+            launchStartTImePickerDialog()
         }
 
         return binding.root
@@ -61,13 +64,23 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
+        setupViewPagerListener()
     }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.main, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return true
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy: called")
     }
+
 
     private fun setupViewPagerListener() {
         lifecycleScope.launch {
@@ -95,6 +108,14 @@ class HomeFragment : BaseFragment() {
                 binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
                     launch {
                         _viewModel.isPoolAdmin.collectLatest {
+                            if (it) {
+                                activity?.addMenuProvider(
+                                    this@HomeFragment,
+                                    viewLifecycleOwner,
+                                    Lifecycle.State.RESUMED
+                                )
+                                Log.i(TAG, "addMenuProvider: called")
+                            }
                             val fabView = when (it) {
                                 true -> binding.adminFabLayout
                                 false -> binding.bidFab
@@ -120,5 +141,51 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun launchStartTImePickerDialog() {
+        val time = Calendar.getInstance().time
+        val timePickerListener =
+            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                time.hours = hourOfDay
+                time.minutes = minute
+                time.seconds = 0
+
+                if (time.before(_viewModel.poolStartTime.value)) {
+                    time.date = time.date + 1
+                }
+
+                FirestoreUtil.getCurrentUser { user ->
+                    FirestoreUtil.setUserPoolBet(
+                        user.activePool!!,
+                        user.uid,
+                        time
+                    ) {
+                    }
+                }
+            }
+
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            AlertDialog.THEME_HOLO_DARK,
+            timePickerListener,
+            time.hours,
+            time.minutes,
+            true
+        )
+        timePickerDialog.setButton(
+            DialogInterface.BUTTON_POSITIVE,
+            "Bet"
+        ) { _, _ -> }
+
+        timePickerDialog.setButton(
+            DialogInterface.BUTTON_NEGATIVE,
+            "Cancel"
+        ) { dialog, which ->
+            if (which == DialogInterface.BUTTON_NEGATIVE) {
+                dialog.dismiss()
+            }
+        }
+        timePickerDialog.show()
     }
 }
