@@ -5,13 +5,11 @@ import android.animation.AnimatorListenerAdapter
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
-import ca.veltus.wraproulette.data.objects.Member
-import ca.veltus.wraproulette.data.objects.MemberItem
-import ca.veltus.wraproulette.data.objects.Pool
-import ca.veltus.wraproulette.data.objects.PoolItem
+import ca.veltus.wraproulette.data.objects.*
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resumeWithException
@@ -57,9 +55,9 @@ fun List<Member>.toMemberItem(): List<MemberItem> {
     }
 }
 
-fun List<Pool>.toPoolItem(): List<PoolItem> {
+fun List<Pool>.toPoolItem(user: User): List<PoolItem> {
     return this.map {
-        PoolItem(it)
+        PoolItem(it, user)
     }
 }
 

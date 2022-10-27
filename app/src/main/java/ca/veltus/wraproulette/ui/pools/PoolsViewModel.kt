@@ -12,7 +12,7 @@ import ca.veltus.wraproulette.utils.FirestoreUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,7 +37,9 @@ class PoolsViewModel @Inject constructor(
     val poolBetLockTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date?>(null)
 
-    val currentUserProfile = MutableStateFlow<User?>(null)
+    private val _userAccount = MutableStateFlow<User?>(null)
+    val userAccount: StateFlow<User?>
+        get() = _userAccount
 
     private val _pools = MutableStateFlow<List<Pool>>(listOf())
     val pools: StateFlow<List<Pool>>
@@ -46,13 +48,27 @@ class PoolsViewModel @Inject constructor(
     val isFabClicked = MutableStateFlow<Boolean>(false)
 
     init {
-        fetchPoolList()
+        showLoading.postValue(true)
+        viewModelScope.launch {
+            repository.getCurrentUserProfile().collectLatest {
+                _userAccount.emit(it)
+                Log.i(TAG, "_userAccount: $it")
+                if (it != null && !it.uid.isNullOrEmpty()) {
+                    fetchPoolList(it.uid)
+                } else {
+                    showLoading.postValue(false)
+                }
+            }
+        }
     }
 
-    fun fetchPoolList() {
-        Log.i(TAG, "fetchPoolList: called")
+    fun fetchPoolList(uid: String) {
         viewModelScope.launch {
-            _pools.emitAll(FirestoreUtil.getPoolsList(repository.currentUser!!.uid))
+            FirestoreUtil.getPoolsList(uid).collect {
+                Log.i(TAG, "fetchPoolList: $it")
+                _pools.emit(it)
+                showLoading.postValue(false)
+            }
         }
     }
 

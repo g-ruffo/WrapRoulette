@@ -29,12 +29,12 @@ data class Pool(
 }
 
 class PoolItem(
-    val pool: Pool
+    val pool: Pool,
+    val user: User
 ) : BindableItem<PoolListItemBinding>() {
 
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {
         viewBinding.pool = pool
-        FirestoreUtil.getCurrentUser { user ->
             if (pool.docId == user.activePool) {
                 viewBinding.cardView.setBackgroundColor(
                     ContextCompat.getColor(
@@ -46,7 +46,7 @@ class PoolItem(
                 viewBinding.cardView.setBackgroundColor(Color.WHITE)
             }
             user.activePool
-        }
+
         viewBinding.cardView.setOnClickListener {
             FirestoreUtil.setActivePool(pool.docId) {
                 viewBinding.cardView.setBackgroundColor(

@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.pools
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import ca.veltus.wraproulette.databinding.FragmentPoolsBinding
 import ca.veltus.wraproulette.utils.toPoolItem
 import com.xwray.groupie.GroupieAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,8 +35,6 @@ class PoolsFragment : BaseFragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
 
-        Log.i(TAG, "onCreateView: called")
-
         binding.viewModel = _viewModel
 
         return binding.root
@@ -44,12 +42,15 @@ class PoolsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "onViewCreated: called")
         binding.lifecycleOwner = viewLifecycleOwner
 
         lifecycleScope.launch {
-            _viewModel.pools.collect {
-                setupRecyclerView(it.toPoolItem())
+            _viewModel.userAccount.zip(_viewModel.pools) { user, pools ->
+                Pair(pools, user)
+            }.collect {
+                if (it.second != null) {
+                    setupRecyclerView(it.first.toPoolItem(it.second!!))
+                }
             }
         }
     }
