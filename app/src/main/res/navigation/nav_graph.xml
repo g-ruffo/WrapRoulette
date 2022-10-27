@@ -25,7 +25,8 @@
         <action
             android:id="@+id/action_nav_pools_to_nav_home"
             app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_pools" />
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
