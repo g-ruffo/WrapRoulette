@@ -31,6 +31,7 @@ class HomeViewModel @Inject constructor(
     val isBettingOpen = MutableStateFlow<Boolean>(false)
     val isPoolAdmin = MutableStateFlow<Boolean>(false)
     val isFabClicked = MutableStateFlow<Boolean>(false)
+    val isScrolling = MutableStateFlow<Boolean>(false)
     val userMessageEditText = MutableStateFlow<String?>(null)
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
@@ -215,6 +216,13 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {}
             }
+        }
+    }
+
+    fun setIsScrolling(isScrolled: Boolean = false) {
+        viewModelScope.launch {
+
+            isScrolling.emit(isScrolled)
         }
     }
 }

@@ -14,6 +14,7 @@
     </data>
 
     <ScrollView
+        android:id="@+id/summaryScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/greyBackground"
@@ -22,7 +23,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:context=".ui.home.summary.SummaryFragment">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -196,6 +196,7 @@
                                 android:textColor="#889"
                                 android:textSize="38sp"
                                 android:textStyle="bold"
+                                android:visibility="@{viewModel.isPoolActive == true ? View.VISIBLE : View.GONE}"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -206,13 +207,14 @@
                                 android:id="@+id/currentTimeTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="Current Time"
+                                android:text="@{viewModel.isPoolActive == true ? `Current Time` : `Winner`}"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/currentTimeTextView" />
+                                app:layout_constraintTop_toBottomOf="@id/currentTimeTextView"
+                                tools:text="Current Time" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

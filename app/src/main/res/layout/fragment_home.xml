@@ -59,6 +59,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/bidFab"
+            isScrolling="@{viewModel.isScrolling}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@id/viewPager"
@@ -74,6 +75,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/adminFabLayout"
+            isScrolling="@{viewModel.isScrolling}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="100dp"

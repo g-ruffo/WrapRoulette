@@ -47,13 +47,37 @@ class SummaryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        setupScrollingListener()
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.poolTotalBets.collect {
-                    Log.i(TAG, "onViewCreated: ${it}")
                     setupRecyclerView(it.toMemberItem())
                 }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i(TAG, "onPause:")
+        _viewModel.setIsScrolling()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (binding.summaryScrollView.scrollY > 100) {
+            _viewModel.setIsScrolling(true)
+        }
+    }
+
+    private fun setupScrollingListener() {
+        binding.summaryScrollView.setOnScrollChangeListener { _, _, scrollY, _, s ->
+            Log.i(TAG, "setupScrollingListener: $s")
+            if (scrollY < 100) {
+                _viewModel.setIsScrolling()
+            } else {
+                _viewModel.setIsScrolling(true)
             }
         }
     }

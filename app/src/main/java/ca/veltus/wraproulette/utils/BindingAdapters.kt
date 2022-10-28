@@ -3,9 +3,11 @@ package ca.veltus.wraproulette.utils
 import android.content.res.ColorStateList
 import android.util.Patterns
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.data.objects.Member
@@ -120,8 +122,7 @@ object BindingAdapters {
     }
 
     @BindingAdapter(
-        value = ["calculatePoolPotSizePrice", "calculatePoolPotSizeList"],
-        requireAll = true
+        value = ["calculatePoolPotSizePrice", "calculatePoolPotSizeList"], requireAll = true
     )
     @JvmStatic
     fun calculatePoolPotSize(view: TextView, bidPrice: String?, list: MutableList<Member>) {
@@ -142,18 +143,15 @@ object BindingAdapters {
         } else {
             view.animate().cancel()
             if (visible == true) {
-                if (view.visibility == View.GONE)
-                    view.fadeIn()
+                if (view.visibility == View.GONE) view.fadeIn()
             } else {
-                if (view.visibility == View.VISIBLE)
-                    view.fadeOut()
+                if (view.visibility == View.VISIBLE) view.fadeOut()
             }
         }
     }
 
     @BindingAdapter(
-        value = ["setExpandableFabVisibleState", "setExpandableFabEnabledState"],
-        requireAll = true
+        value = ["setExpandableFabVisibleState", "setExpandableFabEnabledState"], requireAll = true
     )
     @JvmStatic
     fun setExpandableFabViews(view: FloatingActionButton, visible: Boolean, enabled: Boolean) {
@@ -182,14 +180,11 @@ object BindingAdapters {
     }
 
     @BindingAdapter(
-        value = ["setExpandableFabState", "setExpandableFabAdminState"],
-        requireAll = true
+        value = ["setExpandableFabState", "setExpandableFabAdminState"], requireAll = true
     )
     @JvmStatic
     fun setExpandableFabState(
-        view: ExtendedFloatingActionButton,
-        isClicked: Boolean,
-        isAdmin: Boolean
+        view: ExtendedFloatingActionButton, isClicked: Boolean, isAdmin: Boolean
     ) {
         if (isAdmin) {
             view.visibility = View.VISIBLE
@@ -202,6 +197,21 @@ object BindingAdapters {
         } else {
             view.visibility = View.GONE
             view.isEnabled = false
+        }
+    }
+
+
+    @BindingAdapter("isScrolling")
+    @JvmStatic
+    fun setIsScrolling(view: View, isScrolling: Boolean) {
+        if (view.isVisible) {
+            if (isScrolling) {
+                view.animate().translationX(400f).alpha(0f).setDuration(200)
+                    .setInterpolator(AccelerateInterpolator()).start()
+            } else {
+                view.animate().translationX(0F).alpha(1f).setDuration(200)
+                    .setInterpolator(AccelerateInterpolator()).start()
+            }
         }
     }
 }
