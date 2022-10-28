@@ -21,8 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: AuthenticationRepository,
-    private val app: Application
+    private val repository: AuthenticationRepository, private val app: Application
 ) : BaseViewModel(app) {
     companion object {
         private const val TAG = "HomeViewModel"
@@ -68,9 +67,14 @@ class HomeViewModel @Inject constructor(
 
     val timeWorkedDate = liveData {
         while (true) {
-            val time = Calendar.getInstance().time.time - poolStartTime.value.time
-            emit(time)
-            delay(1000)
+            if (poolEndTime.value != null) {
+                emit(poolEndTime.value!!.time - poolStartTime.value.time)
+                delay(1000)
+            } else {
+                val time = Calendar.getInstance().time.time - poolStartTime.value.time
+                emit(time)
+                delay(1000)
+            }
         }
     }
 
@@ -146,6 +150,11 @@ class HomeViewModel @Inject constructor(
                             isPoolAdmin.emit(false)
                             _actionbarTitle.emit(pool.production)
                         }
+                        if (pool.endTime != null) {
+                            isPoolActive.emit(false)
+                        } else {
+                            isPoolActive.emit(true)
+                        }
                         showLoading.postValue(false)
                     }
                 }
@@ -204,8 +213,7 @@ class HomeViewModel @Inject constructor(
     fun setWrapTime(wrapTime: Date?, isConfirmed: Boolean = false) {
         if (isConfirmed) {
             viewModelScope.launch {
-                FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
-                }
+                FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {}
             }
         }
     }
