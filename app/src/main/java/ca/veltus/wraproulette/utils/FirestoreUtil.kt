@@ -129,10 +129,17 @@ object FirestoreUtil {
                 onComplete()
             }
     }
+
     fun setPoolWrapTime(poolId: String, wrapTime: Date?, onComplete: () -> Unit) {
         poolsCollectionReference.document(poolId).update("endTime", wrapTime).addOnSuccessListener {
-                onComplete()
-            }
+            onComplete()
+        }
+    }
+
+    fun setPoolWinner(poolId: String, winner: Member, onComplete: () -> Unit) {
+        poolsCollectionReference.document(poolId).update("winner", winner).addOnSuccessListener {
+            onComplete()
+        }
     }
 
     private fun addPoolToUser(poolId: String) {
