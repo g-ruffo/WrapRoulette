@@ -28,15 +28,23 @@ class HomeViewModel @Inject constructor(
         private const val TAG = "HomeViewModel"
     }
 
+    val isPoolActive = MutableStateFlow<Boolean>(false)
     val isBettingOpen = MutableStateFlow<Boolean>(false)
     val isPoolAdmin = MutableStateFlow<Boolean>(false)
     val isFabClicked = MutableStateFlow<Boolean>(false)
     val userMessageEditText = MutableStateFlow<String?>(null)
-    val currentPool = MutableStateFlow<Pool?>(null)
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolEndTime = MutableStateFlow<Date?>(null)
+
+    private val _actionbarTitle = MutableStateFlow<String>("Home")
+    val actionbarTitle: StateFlow<String>
+        get() = _actionbarTitle
+
+    private val _currentPool = MutableStateFlow<Pool?>(null)
+    val currentPool: StateFlow<Pool?>
+        get() = _currentPool
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
@@ -127,14 +135,16 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 launch {
                     FirestoreUtil.getPoolData(activePool).collect { pool ->
-                        currentPool.emit(pool)
+                        _currentPool.emit(pool)
                         poolStartTime.emit(pool!!.startTime!!)
                         poolRemainingBetTime.emit(pool.lockTime!!)
                         poolEndTime.emit(pool.endTime)
                         if (pool.adminUid == _userAccount.value!!.uid) {
                             isPoolAdmin.emit(true)
+                            _actionbarTitle.emit(pool.production + " (Admin)")
                         } else {
                             isPoolAdmin.emit(false)
+                            _actionbarTitle.emit(pool.production)
                         }
                         showLoading.postValue(false)
                     }

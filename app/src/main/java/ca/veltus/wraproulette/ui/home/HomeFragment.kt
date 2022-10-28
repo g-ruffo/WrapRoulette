@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,7 +39,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         binding.viewModel = _viewModel
@@ -70,7 +70,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        setupViewPagerListener()
+        setupViewPagerListenerAndToolbar()
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -88,7 +88,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
     }
 
 
-    private fun setupViewPagerListener() {
+    private fun setupViewPagerListenerAndToolbar() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -116,9 +116,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
                         _viewModel.isPoolAdmin.collectLatest {
                             if (it) {
                                 activity?.addMenuProvider(
-                                    this@HomeFragment,
-                                    viewLifecycleOwner,
-                                    Lifecycle.State.RESUMED
+                                    this@HomeFragment, viewLifecycleOwner, Lifecycle.State.RESUMED
                                 )
                                 Log.i(TAG, "addMenuProvider: called")
                             }
@@ -128,20 +126,23 @@ class HomeFragment : BaseFragment(), MenuProvider {
                             }
                             if (position == 2) {
                                 binding.tabLayout.getTabAt(2)!!.removeBadge()
-                                fabView.animate().translationX(400f).alpha(0f)
-                                    .setDuration(200).setInterpolator(AccelerateInterpolator())
-                                    .withEndAction {
+                                fabView.animate().translationX(400f).alpha(0f).setDuration(200)
+                                    .setInterpolator(AccelerateInterpolator()).withEndAction {
                                         fabView.visibility = View.GONE
                                     }.start()
 
                             } else {
                                 if (fabView.visibility == View.GONE) {
                                     fabView.visibility = View.VISIBLE
-                                    fabView.animate().translationX(0F).alpha(1f)
-                                        .setDuration(200)
+                                    fabView.animate().translationX(0F).alpha(1f).setDuration(200)
                                         .setInterpolator(AccelerateInterpolator()).start()
                                 }
                             }
+                        }
+                    }
+                    launch {
+                        _viewModel.actionbarTitle.collect {
+                            (activity as AppCompatActivity).supportActionBar?.title = it
                         }
                     }
                 }
@@ -152,29 +153,25 @@ class HomeFragment : BaseFragment(), MenuProvider {
     private fun launchStartTimePickerDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance().time
         var submitButtonText = "Bet"
-        val timePickerListener =
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                time.hours = hourOfDay
-                time.minutes = minute
-                time.seconds = 0
+        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            time.hours = hourOfDay
+            time.minutes = minute
+            time.seconds = 0
 
-                if (time.before(_viewModel.poolStartTime.value)) {
-                    time.date = time.date + 1
-                }
+            if (time.before(_viewModel.poolStartTime.value)) {
+                time.date = time.date + 1
+            }
 
-                if (setWrapTime) {
-                    launchConfirmationDialog(time)
-                } else {
-                    FirestoreUtil.getCurrentUser { user ->
-                        FirestoreUtil.setUserPoolBet(
-                            user.activePool!!,
-                            user.uid,
-                            time
-                        ) {
-                        }
-                    }
+            if (setWrapTime) {
+                launchConfirmationDialog(time)
+            } else {
+                FirestoreUtil.getCurrentUser { user ->
+                    FirestoreUtil.setUserPoolBet(
+                        user.activePool!!, user.uid, time
+                    ) {}
                 }
             }
+        }
 
         val timePickerDialog = TimePickerDialog(
             requireContext(),
@@ -187,8 +184,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         if (setWrapTime) {
             submitButtonText = "Set Wrap Time"
             timePickerDialog.setButton(
-                DialogInterface.BUTTON_NEUTRAL,
-                "Clear"
+                DialogInterface.BUTTON_NEUTRAL, "Clear"
             ) { _, _ ->
                 Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_NEUTRAL")
                 launchConfirmationDialog(null)
@@ -196,15 +192,13 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
 
         timePickerDialog.setButton(
-            DialogInterface.BUTTON_POSITIVE,
-            submitButtonText
+            DialogInterface.BUTTON_POSITIVE, submitButtonText
         ) { _, _ ->
             Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_POSITIVE")
         }
 
         timePickerDialog.setButton(
-            DialogInterface.BUTTON_NEGATIVE,
-            "Cancel"
+            DialogInterface.BUTTON_NEGATIVE, "Cancel"
         ) { _, _ ->
             Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_NEGATIVE")
         }
@@ -219,8 +213,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         } else {
             "Please confirm the selected wrap time is correct: ${format.format(time)}"
         }
-        MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?")
-            .setMessage(message)
+        MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?").setMessage(message)
             .setPositiveButton("Yes") { _, _ ->
                 _viewModel.showToast.value = "true"
                 _viewModel.setWrapTime(time, true)
