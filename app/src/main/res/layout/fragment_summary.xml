@@ -35,8 +35,6 @@
                 android:visibility="@{viewModel.showNoData == true ? View.GONE : View.VISIBLE}">
 
 
-
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/detailsCardView"
                     android:layout_width="match_parent"
@@ -57,23 +55,23 @@
                         android:layout_margin="12dp">
 
                         <TextView
+                            android:id="@+id/detailsTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="Pool Details"
+                            android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:textSize="20sp"
-                            android:text="Pool Details"
-                            android:id="@+id/detailsTitle"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/poolHostTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:text="Pool Host:"
                             android:textSize="18sp"
-                            android:layout_marginTop="8dp"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/detailsTitle" />
@@ -147,10 +145,10 @@
 
                         <TextView
                             android:id="@+id/poolDateTextView"
+                            convertDateToSummaryTitle="@{viewModel.currentPool.date}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            convertDateToSummaryTitle="@{viewModel.currentPool.date}"
                             android:textSize="18sp"
                             app:layout_constraintBaseline_toBaselineOf="@+id/poolDateTitle"
                             app:layout_constraintHorizontal_bias="0.5"
@@ -266,7 +264,6 @@
 
 
                 </androidx.cardview.widget.CardView>
-
 
 
                 <androidx.cardview.widget.CardView
