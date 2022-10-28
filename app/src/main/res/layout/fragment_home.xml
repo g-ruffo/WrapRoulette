@@ -122,33 +122,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/setWrapAdminFab"
                 app:layout_constraintTop_toTopOf="@+id/setWrapAdminFab" />
 
-            <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--                android:id="@+id/addMemberAdminFab"-->
-            <!--                setExpandableFabEnabledState="@{viewModel.isFabClicked}"-->
-            <!--                setExpandableFabVisibleState="@{viewModel.isPoolAdmin}"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginBottom="24dp"-->
-            <!--                android:backgroundTint="@color/purple_200"-->
-            <!--                app:fabSize="normal"-->
-            <!--                app:layout_constraintBottom_toTopOf="@+id/setWrapAdminFab"-->
-            <!--                app:layout_constraintEnd_toEndOf="@+id/setWrapAdminFab"-->
-            <!--                app:layout_constraintStart_toStartOf="@+id/setWrapAdminFab"-->
-            <!--                app:srcCompat="@drawable/ic_baseline_person_24" />-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/addMemberAdminFabTextView"-->
-            <!--                setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"-->
-            <!--                setExpandableFabVisibleTextViewsState="@{viewModel.isPoolAdmin}"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginEnd="8dp"-->
-            <!--                android:text="Add Member"-->
-            <!--                android:textStyle="bold"-->
-            <!--                app:layout_constraintBottom_toBottomOf="@+id/addMemberAdminFab"-->
-            <!--                app:layout_constraintEnd_toStartOf="@+id/addMemberAdminFab"-->
-            <!--                app:layout_constraintTop_toTopOf="@+id/addMemberAdminFab" />-->
-
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/bitAdminFab"
                 setExpandableFabEnabledState="@{viewModel.isFabClicked}"
