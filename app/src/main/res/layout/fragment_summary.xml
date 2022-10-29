@@ -10,7 +10,6 @@
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
 
         <import type="android.view.View" />
-
     </data>
 
     <ScrollView
@@ -187,6 +186,17 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
+                            <include
+                                android:id="@+id/winner_member_item"
+                                layout="@layout/winner_member_item"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:visibility="@{viewModel.isPoolActive == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintBottom_toTopOf="@id/currentTimeTitle"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
                             <TextView
                                 android:id="@+id/currentTimeTextView"
                                 currentTimeFromDateToString="@{viewModel.currentTimeDate}"
@@ -197,6 +207,7 @@
                                 android:textSize="38sp"
                                 android:textStyle="bold"
                                 android:visibility="@{viewModel.isPoolActive == true ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintBottom_toTopOf="@id/currentTimeTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -213,7 +224,6 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/currentTimeTextView"
                                 tools:text="Current Time" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
