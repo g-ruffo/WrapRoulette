@@ -10,13 +10,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
+import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import ca.veltus.wraproulette.utils.toMemberItem
+import com.bumptech.glide.Glide
 import com.xwray.groupie.GroupieAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -51,8 +55,21 @@ class SummaryFragment : BaseFragment() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                _viewModel.poolTotalBets.collect {
-                    setupRecyclerView(it.toMemberItem())
+                launch {
+                    _viewModel.poolTotalBets.collect {
+                        setupRecyclerView(it.toMemberItem())
+                    }
+                }
+                launch {
+                    _viewModel.poolWinningMember.collectLatest {
+                        if (it != null) {
+                            binding.winnerMemberItem.member = it
+                            Glide.with(this@SummaryFragment).load(
+                                FirebaseStorageUtil.pathToReference(it.profilePicturePath!!)).placeholder(
+                                R.drawable.ic_baseline_person_24).into(binding.winnerMemberItem.profilePictureImageView)
+
+                        }
+                    }
                 }
             }
         }

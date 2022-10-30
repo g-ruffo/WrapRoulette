@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -37,6 +38,7 @@ class HomeViewModel @Inject constructor(
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolEndTime = MutableStateFlow<Date?>(null)
+    val poolWinningMember = MutableStateFlow<Member?>(null)
 
     private val _actionbarTitle = MutableStateFlow<String>("Home")
     val actionbarTitle: StateFlow<String>
@@ -71,6 +73,9 @@ class HomeViewModel @Inject constructor(
             if (poolEndTime.value != null) {
                 emit(poolEndTime.value!!.time - poolStartTime.value.time)
                 delay(1000)
+            } else if (showNoData.value) {
+                emit(0)
+                delay(1000)
             } else {
                 val time = Calendar.getInstance().time.time - poolStartTime.value.time
                 emit(time)
@@ -85,6 +90,9 @@ class HomeViewModel @Inject constructor(
             if (time > 0) {
                 emit(time)
                 isBettingOpen.emit(true)
+                delay(1000)
+            } else if (showNoData.value) {
+                emit(0)
                 delay(1000)
             } else {
                 isBettingOpen.emit(false)
@@ -102,14 +110,15 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        showLoading.postValue(true)
+        showLoading.value = true
         viewModelScope.launch {
             repository.getCurrentUserProfile().collectLatest {
                 _userAccount.value = it
                 if (it != null && !it.activePool.isNullOrEmpty()) {
                     getPoolData(it.activePool)
                 } else {
-                    showLoading.postValue(false)
+                    showLoading.emit(false)
+                    showNoData.emit(true)
                 }
             }
         }
@@ -140,23 +149,30 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 launch {
                     FirestoreUtil.getPoolData(activePool).collect { pool ->
-                        _currentPool.emit(pool)
-                        poolStartTime.emit(pool!!.startTime!!)
-                        poolRemainingBetTime.emit(pool.lockTime!!)
-                        poolEndTime.emit(pool.endTime)
-                        if (pool.adminUid == _userAccount.value!!.uid) {
-                            isPoolAdmin.emit(true)
-                            _actionbarTitle.emit(pool.production + " (Admin)")
+                        if (pool != null) {
+                            _currentPool.emit(pool)
+                            poolStartTime.emit(pool.startTime!!)
+                            poolRemainingBetTime.emit(pool.lockTime!!)
+                            poolEndTime.emit(pool.endTime)
+                            poolWinningMember.emit(pool.winner)
+                            showNoData.emit(false)
+                            if (pool.adminUid == _userAccount.value!!.uid) {
+                                isPoolAdmin.emit(true)
+                                _actionbarTitle.emit(pool.production + " (Admin)")
+                            } else {
+                                isPoolAdmin.emit(false)
+                                _actionbarTitle.emit(pool.production)
+                            }
+                            if (pool.endTime != null) {
+                                isPoolActive.emit(false)
+
+                            } else {
+                                isPoolActive.emit(true)
+                            }
                         } else {
-                            isPoolAdmin.emit(false)
-                            _actionbarTitle.emit(pool.production)
+                            showNoData.emit(true)
                         }
-                        if (pool.endTime != null) {
-                            isPoolActive.emit(false)
-                        } else {
-                            isPoolActive.emit(true)
-                        }
-                        showLoading.postValue(false)
+                        showLoading.emit(false)
                     }
                 }
 
@@ -179,7 +195,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
-            showLoading.postValue(false)
+            showLoading.value = false
         } else return
     }
 
@@ -214,15 +230,51 @@ class HomeViewModel @Inject constructor(
     fun setWrapTime(wrapTime: Date?, isConfirmed: Boolean = false) {
         if (isConfirmed) {
             viewModelScope.launch {
-                FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {}
+                FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
+                    if (wrapTime != null) {
+                        setWinningMember(wrapTime)
+                    }
+                }
             }
         }
     }
 
     fun setIsScrolling(isScrolled: Boolean = false) {
         viewModelScope.launch {
-
             isScrolling.emit(isScrolled)
+        }
+    }
+
+    // TODO -> Replace filter function
+    private fun setWinningMember(wrapTime: Date) {
+        val winnersTimeList = mutableListOf<Long>()
+
+        _poolTotalBets.value.forEach {
+            if (it.bidTime != null) {
+                winnersTimeList.add(it.bidTime.time)
+            }
+        }
+
+        val numbers = mutableListOf(23, 12, 20, 47, 36, 55)
+
+        val target = wrapTime.time
+
+        val answer = winnersTimeList.fold(0L) { acc: Long?, num ->
+            if (num <= target && (acc == null || num > acc)) num
+            else acc
+        }
+
+        val winner: Member? = _poolTotalBets.value.firstOrNull { it.bidTime!!.time == answer!! }
+
+        Log.i(
+            TAG,
+            "setWinningMember: $winner $answer ${_poolTotalBets.value[1].bidTime!!.time.toInt()} ${winnersTimeList[0]}"
+        )
+
+        viewModelScope.launch {
+            FirestoreUtil.setPoolWinner(winner!!.poolId, winner) {
+                poolWinningMember.value = winner
+            }
         }
     }
 }
