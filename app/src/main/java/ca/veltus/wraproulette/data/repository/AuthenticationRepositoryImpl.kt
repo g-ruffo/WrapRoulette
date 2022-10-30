@@ -1,16 +1,20 @@
 package ca.veltus.wraproulette.data.repository
 
-import ca.veltus.wraproulette.data.Resource
+import android.util.Log
+import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.utils.await
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
@@ -27,16 +31,20 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUserProfile(): Flow<User?> {
         return firestore.collection("users").document(currentUser!!.uid).snapshots()
-            .map { it.toObject() }
+            .map<DocumentSnapshot, User?> { it.toObject() }.onCompletion {
+                Log.i(TAG, "getCurrentUserProfile: $it")
+            }.catch {
+                Log.e(TAG, "getCurrentUserProfile: $it")
+            }
     }
 
-    override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
+    override suspend fun login(email: String, password: String): Result<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            Resource.Success(result.user!!)
+            Result.Success(result.user!!)
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            Result.Failure(e)
         }
     }
 
@@ -44,16 +52,16 @@ class AuthenticationRepositoryImpl @Inject constructor(
         name: String,
         email: String,
         password: String
-    ): Resource<FirebaseUser> {
+    ): Result<FirebaseUser> {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             result?.user?.updateProfile(
                 UserProfileChangeRequest.Builder().setDisplayName(name).build()
             )?.await()
-            Resource.Success(result.user!!)
+            Result.Success(result.user!!)
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Failure(e)
+            Result.Failure(e)
         }
     }
 

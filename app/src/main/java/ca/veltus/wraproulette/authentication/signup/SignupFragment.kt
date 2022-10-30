@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.base.BaseFragment
-import ca.veltus.wraproulette.data.Resource
+import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentSignupBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.FirestoreUtil
@@ -75,7 +75,7 @@ class SignupFragment : BaseFragment() {
         lifecycleScope.launchWhenStarted {
             _viewModel.signupFlow.collectLatest {
                 when (it) {
-                    is Resource.Success -> {
+                    is Result.Success -> {
                         Log.i(TAG, "observeSignup = Resource.Success")
 //                        databaseReference = FirebaseFirestore.getInstance()
 //                        databaseReference.collection("Users").document(_viewModel.currentUser!!.uid)
@@ -90,11 +90,11 @@ class SignupFragment : BaseFragment() {
                         }
 
                     }
-                    is Resource.Loading -> {
+                    is Result.Loading -> {
                         Log.i(TAG, "observeSignup = Resource.Loading")
                         CircularProgressIndicator(requireContext())
                     }
-                    is Resource.Failure -> {
+                    is Result.Failure -> {
                         // If Firebase cannot create account with provided details show helper text with task exception message.
                         Log.i(TAG, "observeSignup = Resource.Failure")
                         when (it.exception) {

@@ -15,11 +15,13 @@ import ca.veltus.wraproulette.BuildConfig
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.base.BaseFragment
-import ca.veltus.wraproulette.data.Resource
+import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentLoginBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -71,7 +73,7 @@ class LoginFragment : BaseFragment() {
         lifecycleScope.launchWhenStarted {
             _viewModel.loginFlow.collectLatest {
                 when (it) {
-                    is Resource.Success -> {
+                    is Result.Success -> {
                         Log.i(TAG, "observeLogin = Resource.Success")
                         startActivity(
                             Intent(requireContext(), WrapRouletteActivity::class.java)
@@ -79,11 +81,11 @@ class LoginFragment : BaseFragment() {
                         )
                         requireActivity().finish()
                     }
-                    is Resource.Loading -> {
+                    is Result.Loading -> {
                         Log.i(TAG, "observeLogin = Resource.Loading")
                         CircularProgressIndicator(requireContext())
                     }
-                    is Resource.Failure -> {
+                    is Result.Failure -> {
                         Log.i(TAG, "observeLogin = Resource.Failure")
                         when (it.exception) {
                             is FirebaseAuthInvalidCredentialsException -> {
