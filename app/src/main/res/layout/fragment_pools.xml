@@ -8,6 +8,7 @@
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
+        <import type="android.view.View"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,6 +103,20 @@
                 app:layout_constraintEnd_toStartOf="@+id/joinPoolFab"
                 app:layout_constraintTop_toTopOf="@+id/joinPoolFab" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No Saved Pools"
+            android:textSize="22sp"
+            android:visibility="@{viewModel.showNoData == true ? View.VISIBLE : View.GONE}"
+            app:drawableTopCompat="@drawable/ic_baseline_monetization_on_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -62,9 +62,12 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
-    fun fetchPoolList(uid: String) {
+    private fun fetchPoolList(uid: String) {
         viewModelScope.launch {
             FirestoreUtil.getPoolsList(uid).collect {
+                if (it.isNullOrEmpty()) {
+                    showNoData.emit(true)
+                }
                 Log.i(TAG, "fetchPoolList: $it")
                 _pools.emit(it)
                 showLoading.emit(false)
