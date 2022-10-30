@@ -70,7 +70,16 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        setupViewPagerListenerAndToolbar()
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.showNoData.collectLatest {
+                    if (!it) {
+                        setupViewPagerListenerAndToolbar()
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -186,22 +195,15 @@ class HomeFragment : BaseFragment(), MenuProvider {
             timePickerDialog.setButton(
                 DialogInterface.BUTTON_NEUTRAL, "Clear"
             ) { _, _ ->
-                Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_NEUTRAL")
                 launchConfirmationDialog(null)
             }
         }
-
         timePickerDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, submitButtonText
-        ) { _, _ ->
-            Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_POSITIVE")
-        }
-
+        ) { _, _ -> }
         timePickerDialog.setButton(
             DialogInterface.BUTTON_NEGATIVE, "Cancel"
-        ) { _, _ ->
-            Log.i(TAG, "launchStartTImePickerDialog: DialogInterface.BUTTON_NEGATIVE")
-        }
+        ) { _, _ -> }
         timePickerDialog.show()
     }
 
