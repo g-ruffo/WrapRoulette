@@ -57,8 +57,12 @@ class PoolsFragment : BaseFragment() {
 
     private fun setupRecyclerView(items: List<PoolItem>) {
         val groupieAdapter = GroupieAdapter().apply {
-            addAll(items)
+            val list = mutableListOf<PoolItem>()
+            items.forEach { list.add(it) }
+            list.sortByDescending { it.pool.startTime }
+            addAll(list)
         }
+
         binding.poolsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
