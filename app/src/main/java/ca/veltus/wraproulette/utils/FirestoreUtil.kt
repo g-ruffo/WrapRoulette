@@ -6,16 +6,11 @@ import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import java.util.*
 
 
@@ -176,7 +171,11 @@ object FirestoreUtil {
         return db.collection("pools")
             .document(poolId)
             .collection("members")
-            .snapshots().map { querySnapshot -> querySnapshot.toObjects() }
+            .snapshots().map<QuerySnapshot, List<Member>> { querySnapshot -> querySnapshot.toObjects() }.onCompletion {
+                Log.e(TAG, "getPoolData: $it", )
+            }.catch {
+                Log.e(TAG, "getPoolData: $it", )
+            }
     }
 
     fun getPoolData(poolId: String): Flow<Pool?> {
@@ -186,13 +185,21 @@ object FirestoreUtil {
         val db = FirebaseFirestore.getInstance()
         return db.collection("pools")
             .document(poolId).snapshots()
-            .map { querySnapshot -> querySnapshot.toObject<Pool?>() }
+            .map { querySnapshot -> querySnapshot.toObject<Pool?>() }.onCompletion {
+                Log.e(TAG, "getPoolData: $it", )
+            }.catch {
+                Log.e(TAG, "getPoolData: $it", )
+            }
     }
 
     fun getPoolsList(userUid: String): Flow<List<Pool>> {
         return poolsCollectionReference.whereEqualTo(
             "users.$userUid", true
-        ).snapshots().map { querySnapshot -> querySnapshot.toObjects() }
+        ).snapshots().map<QuerySnapshot, List<Pool>> { querySnapshot -> querySnapshot.toObjects() }.onCompletion {
+            Log.e(TAG, "getPoolData: $it", )
+        }.catch {
+            Log.e(TAG, "getPoolData: $it", )
+        }
     }
 
     fun sendChatMessage(activePool: String, message: Message, onComplete: () -> Unit) {
@@ -208,6 +215,10 @@ object FirestoreUtil {
     fun getChatList(activePool: String): Flow<List<Message>> {
         return messagesCollectionReference.document(activePool).collection("chat")
             .orderBy("time", Query.Direction.ASCENDING).snapshots()
-            .map { querySnapshot -> querySnapshot.toObjects() }
+            .map<QuerySnapshot, List<Message>> { querySnapshot -> querySnapshot.toObjects() }.onCompletion {
+                Log.e(TAG, "getPoolData: $it", )
+            }.catch {
+                Log.e(TAG, "getPoolData: $it", )
+            }
     }
 }
