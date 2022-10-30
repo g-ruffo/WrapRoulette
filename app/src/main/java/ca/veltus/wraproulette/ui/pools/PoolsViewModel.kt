@@ -48,7 +48,7 @@ class PoolsViewModel @Inject constructor(
     val isFabClicked = MutableStateFlow<Boolean>(false)
 
     init {
-        showLoading.postValue(true)
+        showLoading.value = true
         viewModelScope.launch {
             repository.getCurrentUserProfile().collectLatest {
                 _userAccount.emit(it)
@@ -56,7 +56,7 @@ class PoolsViewModel @Inject constructor(
                 if (it != null && !it.uid.isNullOrEmpty()) {
                     fetchPoolList(it.uid)
                 } else {
-                    showLoading.postValue(false)
+                    showLoading.emit(false)
                 }
             }
         }
@@ -67,7 +67,7 @@ class PoolsViewModel @Inject constructor(
             FirestoreUtil.getPoolsList(uid).collect {
                 Log.i(TAG, "fetchPoolList: $it")
                 _pools.emit(it)
-                showLoading.postValue(false)
+                showLoading.emit(false)
             }
         }
     }
@@ -114,6 +114,7 @@ class PoolsViewModel @Inject constructor(
             poolMargin.value!!,
             poolBetLockTime.value!!,
             poolStartTime.value!!,
+            null,
             null,
             mutableMapOf()
         )

@@ -41,8 +41,6 @@ class WrapRouletteActivity : AppCompatActivity() {
         binding = ActivityWrapRouletteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
-
         setupNavigationAndToolbar()
 
     }
@@ -56,6 +54,8 @@ class WrapRouletteActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        setSupportActionBar(binding.appBarMain.toolbar)
 
         drawerToggle = ActionBarDrawerToggle(
             this,
