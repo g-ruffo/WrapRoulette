@@ -2,11 +2,9 @@ package ca.veltus.wraproulette.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -35,7 +33,6 @@ class WrapRouletteActivity : AppCompatActivity() {
     private val viewModel: LoginSignupViewModel by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityWrapRouletteBinding
     private lateinit var drawerLayout: DrawerLayout
 
@@ -54,7 +51,6 @@ class WrapRouletteActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Log.i(TAG, "onBackPressed: $drawerToggle.")
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
         } else {
@@ -69,15 +65,6 @@ class WrapRouletteActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        drawerToggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            binding.appBarMain.toolbar,
-            R.string.open,
-            R.string.close
-        )
-        drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
