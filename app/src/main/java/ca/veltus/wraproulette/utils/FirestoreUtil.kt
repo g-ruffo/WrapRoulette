@@ -95,11 +95,12 @@ object FirestoreUtil {
     }
 
     fun updatePool(pool: Pool, onComplete: () -> Unit) {
-        poolsCollectionReference.document(pool.docId).set(pool, SetOptions.merge()).addOnSuccessListener {
-            onComplete()
-        }.addOnFailureListener {
-            Log.e(TAG, "createPool: $it")
-        }
+        poolsCollectionReference.document(pool.docId).set(pool, SetOptions.merge())
+            .addOnSuccessListener {
+                onComplete()
+            }.addOnFailureListener {
+                Log.e(TAG, "createPool: $it")
+            }
     }
 
     fun joinPool(production: String, password: String, date: String, onComplete: () -> Unit) {
@@ -181,10 +182,12 @@ object FirestoreUtil {
         return db.collection("pools")
             .document(poolId)
             .collection("members")
-            .snapshots().map<QuerySnapshot, List<Member>> { querySnapshot -> querySnapshot.toObjects() }.onCompletion {
-                Log.i(TAG, "getPoolMemberList OnCompletion: $it", )
+            .snapshots()
+            .map<QuerySnapshot, List<Member>> { querySnapshot -> querySnapshot.toObjects() }
+            .onCompletion {
+                Log.i(TAG, "getPoolMemberList OnCompletion: $it")
             }.catch {
-                Log.e(TAG, "getPoolMemberList: $it", )
+                Log.e(TAG, "getPoolMemberList: $it")
             }
     }
 
@@ -196,15 +199,37 @@ object FirestoreUtil {
         return db.collection("pools")
             .document(poolId).snapshots()
             .map { querySnapshot -> querySnapshot.toObject<Pool?>() }.onCompletion {
-                Log.i(TAG, "getPoolData OnCompletion: $it", )
+                Log.i(TAG, "getPoolData OnCompletion: $it")
             }.catch {
-                Log.e(TAG, "getPoolData Catch: ${it.message}  Caused: ${it.cause}", )
+                Log.e(TAG, "getPoolData Catch: ${it.message}  Caused: ${it.cause}")
             }
     }
 
-    fun getEditPool(poolId: String, onComplete: (Pool?) -> Unit){
+    fun getEditPool(poolId: String, onComplete: (Pool?) -> Unit) {
         poolsCollectionReference.document(poolId).get().addOnSuccessListener {
             onComplete(it.toObject(Pool::class.java))
+        }.addOnFailureListener {
+            Log.e(TAG, "getEditPool: $it")
+        }
+    }
+
+    fun deletePool(poolUid: String, onComplete: () -> Unit) {
+        poolsCollectionReference.document(poolUid).delete().addOnSuccessListener {
+            deletePoolFromUser(poolUid) {
+                onComplete()
+            }
+        }.addOnFailureListener {
+            Log.e(TAG, "getEditPool: $it")
+        }
+    }
+
+    fun deletePoolFromUser(poolUid: String, onComplete: () -> Unit) {
+        currentUserDocReference.update("activePool", null).addOnSuccessListener {
+            currentUserDocReference.update("pools.$poolUid", false).addOnSuccessListener {
+                onComplete()
+            }.addOnFailureListener {
+                Log.e(TAG, "getEditPool: $it")
+            }
         }.addOnFailureListener {
             Log.e(TAG, "getEditPool: $it")
         }
@@ -214,11 +239,12 @@ object FirestoreUtil {
     fun getPoolsList(userUid: String): Flow<List<Pool>> {
         return poolsCollectionReference.whereEqualTo(
             "users.$userUid", true
-        ).snapshots().map<QuerySnapshot, List<Pool>> { querySnapshot -> querySnapshot.toObjects() }.onCompletion {
-            Log.i(TAG, "getPoolsList: $it", )
-        }.catch {
-            Log.e(TAG, "getPoolsList: $it", )
-        }
+        ).snapshots().map<QuerySnapshot, List<Pool>> { querySnapshot -> querySnapshot.toObjects() }
+            .onCompletion {
+                Log.i(TAG, "getPoolsList: $it")
+            }.catch {
+                Log.e(TAG, "getPoolsList: $it")
+            }
     }
 
     fun sendChatMessage(activePool: String, message: Message, onComplete: () -> Unit) {
@@ -234,10 +260,11 @@ object FirestoreUtil {
     fun getChatList(activePool: String): Flow<List<Message>> {
         return messagesCollectionReference.document(activePool).collection("chat")
             .orderBy("time", Query.Direction.ASCENDING).snapshots()
-            .map<QuerySnapshot, List<Message>> { querySnapshot -> querySnapshot.toObjects() }.onCompletion {
-                Log.i(TAG, "getChatList: $it", )
+            .map<QuerySnapshot, List<Message>> { querySnapshot -> querySnapshot.toObjects() }
+            .onCompletion {
+                Log.i(TAG, "getChatList: $it")
             }.catch {
-                Log.e(TAG, "getChatList: $it", )
+                Log.e(TAG, "getChatList: $it")
             }
     }
 }
