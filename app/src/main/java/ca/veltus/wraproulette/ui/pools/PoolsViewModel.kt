@@ -9,6 +9,7 @@ import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
+import ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragmentDirections
 import ca.veltus.wraproulette.utils.FirestoreUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,9 +77,10 @@ class PoolsViewModel @Inject constructor(
             FirestoreUtil.getPoolsList(uid).collect {
                 if (it.isNullOrEmpty()) {
                     showNoData.emit(true)
+                } else {
+                    _pools.emit(it)
+                    showNoData.emit(false)
                 }
-                Log.i(TAG, "fetchPoolList: $it")
-                _pools.emit(it)
                 showLoading.emit(false)
             }
         }
@@ -155,7 +157,7 @@ class PoolsViewModel @Inject constructor(
             }
         } else {
             FirestoreUtil.createPool(pool) {
-                navigateBack()
+                navigateToHomeFragment()
             }
         }
     }
@@ -200,5 +202,9 @@ class PoolsViewModel @Inject constructor(
 
     fun navigateToJoinPoolFragment() {
         navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToJoinPoolFragment()))
+    }
+
+    fun navigateToHomeFragment() {
+        navigationCommand.postValue(NavigationCommand.To(AddPoolFragmentDirections.actionAddPoolFragmentToNavHome()))
     }
 }
