@@ -260,7 +260,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="24dp"
                 android:backgroundTint="@color/purpleLogoDark"
-                android:onClick="@{() -> viewModel.deletePool()}"
                 android:src="@drawable/ic_baseline_delete_24"
                 android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"

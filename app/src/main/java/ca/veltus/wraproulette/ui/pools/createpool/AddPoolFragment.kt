@@ -1,13 +1,14 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
-import android.app.AlertDialog.BUTTON_NEUTRAL
-import android.app.AlertDialog.THEME_HOLO_DARK
+import android.app.AlertDialog.*
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -80,9 +81,9 @@ class AddPoolFragment : BaseFragment() {
         binding.selectBettingCloseTimeAutoComplete.setOnClickListener {
             launchBetLockTimePickerDialog()
         }
-//        binding.selectBetAmountAutoComplete.setOnClickListener {
-//            launchBetAmountNumberDialog()
-//        }
+        binding.deletePoolFab.setOnClickListener {
+            launchDeletePoolAlert()
+        }
 
     }
 
@@ -97,6 +98,19 @@ class AddPoolFragment : BaseFragment() {
         } else {
             (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Create Pool"
         }
+    }
+
+    private fun launchDeletePoolAlert() {
+        val dialog = AlertDialog.Builder(requireActivity())
+        dialog.setTitle("Are You Sure?")
+        dialog.setMessage("You are about to delete this pool. Click Yes to continue or No to cancel")
+        dialog.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            _viewModel.deletePool()
+        })
+        dialog.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+        })
+        dialog.show()
     }
 
     private fun launchBetLockTimePickerDialog() {
