@@ -9,6 +9,8 @@
             name="viewModel"
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
 
+        <import type="android.view.View" />
+
     </data>
 
     <ScrollView
@@ -238,9 +240,9 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createButton"
-                android:layout_width="347dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="106dp"
                 android:layout_marginTop="64dp"
                 android:background="@drawable/rounded_corners_button"
                 android:onClick="@{() -> viewModel.createUpdatePool()}"
@@ -251,6 +253,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/selectBetAmountTextInputLayout" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/deletePoolFab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:backgroundTint="@color/purpleLogoDark"
+                android:onClick="@{() -> viewModel.deletePool()}"
+                android:src="@drawable/ic_baseline_delete_24"
+                android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tint="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
