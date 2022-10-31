@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.util.Patterns
 import android.view.View
 import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -91,12 +92,16 @@ object BindingAdapters {
 
     @BindingAdapter("getTimeStringFromLong")
     @JvmStatic
-    fun getTimeStringFromLong(view: TextView, time: Long) {
-        val seconds = (time / 1000) % 60
-        val minutes = (time / (1000 * 60) % 60)
-        val hours = (time / (1000 * 60 * 60) % 24)
+    fun getTimeStringFromLong(view: TextView, time: Long?) {
+        if (time == null) {
+            view.text = "Time Not Set"
+        } else {
+            val seconds = (time / 1000) % 60
+            val minutes = (time / (1000 * 60) % 60)
+            val hours = (time / (1000 * 60 * 60) % 24)
 
-        view.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            view.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
     }
 
     @BindingAdapter("convertDateToSummaryTitle")
@@ -210,7 +215,7 @@ object BindingAdapters {
                     .setInterpolator(AccelerateInterpolator()).start()
             } else {
                 view.animate().translationX(0F).alpha(1f).setDuration(200)
-                    .setInterpolator(AccelerateInterpolator()).start()
+                    .setInterpolator(DecelerateInterpolator()).start()
             }
         }
     }
