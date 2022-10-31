@@ -243,7 +243,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="64dp"
                 android:background="@drawable/rounded_corners_button"
-                android:onClick="@{() -> viewModel.createPool()}"
+                android:onClick="@{() -> viewModel.createUpdatePool()}"
                 android:text="Create"
                 android:textColor="@color/white"
                 android:textStyle="bold"

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
+import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
@@ -36,6 +37,14 @@ class PoolsViewModel @Inject constructor(
     val poolMargin = MutableStateFlow<String?>(null)
     val poolBetLockTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date?>(null)
+
+    val poolDocUid = MutableStateFlow<String?>(null)
+    val poolAdminUid = MutableStateFlow<String?>(null)
+    val poolAdminName = MutableStateFlow<String?>(null)
+    val poolWinner = MutableStateFlow<Member?>(null)
+    val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
+    val poolEndTime = MutableStateFlow<Date?>(null)
+
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
@@ -84,24 +93,25 @@ class PoolsViewModel @Inject constructor(
         poolStartTime.value = time
     }
 
-    fun setPoolBetLockTime(time: Date) {
+    fun setPoolBetLockTime(time: Date?) {
         poolBetLockTime.value = time
+        Log.i(TAG, "setPoolBetLockTime: ${poolBetLockTime.value}")
     }
 
-    fun createPool() {
-        if(poolProduction.value.isNullOrEmpty()) {
+    fun createUpdatePool() {
+        if (poolProduction.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Production Name"
             return
         }
-        if(poolPassword.value.isNullOrEmpty()) {
+        if (poolPassword.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Pool Password"
             return
         }
-        if(poolDate.value.isNullOrEmpty()) {
+        if (poolDate.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Pool Date"
             return
         }
-        if(poolStartTime.value == null) {
+        if (poolStartTime.value == null) {
             showToast.value = "Please Enter Pool Start Time"
             return
         }
@@ -125,23 +135,52 @@ class PoolsViewModel @Inject constructor(
         }
 
         val pool = Pool(
-            "",
-            "",
-            "",
+            poolDocUid.value ?: "",
+            poolAdminUid.value ?: "",
+            poolAdminName.value ?: "",
             poolProduction.value!!.trim(),
             poolPassword.value!!.trim(),
             poolDate.value!!,
             poolBetAmount.value ?: "0",
             poolMargin.value ?: "0",
             betLockTime,
-            poolStartTime.value!!,
-            null,
-            null,
-            mutableMapOf()
+            startTime,
+            poolEndTime.value,
+            poolWinner.value,
+            poolUsers.value
         )
-        Log.i(TAG, "createPool: $pool")
-        FirestoreUtil.createPool(pool) {
-            navigateBack()
+        if (!poolDocUid.value.isNullOrEmpty()) {
+            FirestoreUtil.updatePool(pool) {
+                navigateBack()
+            }
+        } else {
+            FirestoreUtil.createPool(pool) {
+                navigateBack()
+            }
+        }
+    }
+
+    fun loadEditPool(poolId: String) {
+        showLoading.value = true
+        FirestoreUtil.getEditPool(poolId) { pool ->
+            viewModelScope.launch {
+                if (pool != null) {
+                    poolDocUid.emit(poolId)
+                    poolProduction.emit(pool.production)
+                    poolPassword.emit(pool.password)
+                    poolDate.emit(pool.date)
+                    poolBetAmount.emit(pool.betAmount)
+                    poolMargin.emit(pool.margin)
+                    poolBetLockTime.emit(pool.lockTime)
+                    poolStartTime.emit(pool.startTime)
+                    poolAdminName.emit(pool.adminName)
+                    poolAdminUid.emit(pool.adminUid)
+                    poolWinner.emit(pool.winner)
+                    poolUsers.emit(pool.users)
+                    poolEndTime.emit(pool.endTime)
+                }
+                showLoading.emit(false)
+            }
         }
     }
 

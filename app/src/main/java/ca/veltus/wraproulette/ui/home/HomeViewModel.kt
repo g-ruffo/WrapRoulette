@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
+import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.Pool
@@ -36,7 +37,7 @@ class HomeViewModel @Inject constructor(
     val userMessageEditText = MutableStateFlow<String?>(null)
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-    val poolRemainingBetTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolRemainingBetTime = MutableStateFlow<Date?>(null)
     val poolEndTime = MutableStateFlow<Date?>(null)
     val poolWinningMember = MutableStateFlow<Member?>(null)
 
@@ -85,19 +86,25 @@ class HomeViewModel @Inject constructor(
     }
 
     val betTimeRemainingDate = liveData {
-        while (true) {
-            val time = poolRemainingBetTime.value.time - Calendar.getInstance().time.time
-            if (time > 0) {
-                emit(time)
-                isBettingOpen.emit(true)
-                delay(1000)
-            } else if (showNoData.value) {
-                emit(0)
-                delay(1000)
-            } else {
-                isBettingOpen.emit(false)
-                emit(0)
-                delay(1000)
+        if (poolRemainingBetTime.value == null) {
+            isBettingOpen.emit(true)
+            emit(null)
+            delay(1000)
+        } else {
+            while (true) {
+                val time = poolRemainingBetTime.value!!.time - Calendar.getInstance().time.time
+                if (time > 0) {
+                    emit(time)
+                    isBettingOpen.emit(true)
+                    delay(1000)
+                } else if (showNoData.value) {
+                    emit(0)
+                    delay(1000)
+                } else {
+                    isBettingOpen.emit(false)
+                    emit(0)
+                    delay(1000)
+                }
             }
         }
     }
@@ -152,7 +159,7 @@ class HomeViewModel @Inject constructor(
                         if (pool != null) {
                             _currentPool.emit(pool)
                             poolStartTime.emit(pool.startTime!!)
-                            poolRemainingBetTime.emit(pool.lockTime!!)
+                            poolRemainingBetTime.emit(pool.lockTime)
                             poolEndTime.emit(pool.endTime)
                             poolWinningMember.emit(pool.winner)
                             showNoData.emit(false)
@@ -275,6 +282,16 @@ class HomeViewModel @Inject constructor(
             FirestoreUtil.setPoolWinner(winner!!.poolId, winner) {
                 poolWinningMember.value = winner
             }
+        }
+    }
+
+    fun navigateToEditPool() {
+        if (isPoolAdmin.value && currentPool.value != null) {
+            val action = HomeFragmentDirections.actionNavHomeToAddPoolFragment()
+            action.poolId = currentPool.value!!.docId
+            navigationCommand.postValue(NavigationCommand.To(action))
+        } else {
+            showToast.postValue("You Are Unable To Edit This Pool")
         }
     }
 }
