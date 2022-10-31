@@ -89,22 +89,40 @@ class PoolsViewModel @Inject constructor(
     }
 
     fun createPool() {
+        if(poolProduction.value.isNullOrEmpty()) {
+            showToast.value = "Please Enter Production Name"
+            return
+        }
+        if(poolPassword.value.isNullOrEmpty()) {
+            showToast.value = "Please Enter Pool Password"
+            return
+        }
+        if(poolDate.value.isNullOrEmpty()) {
+            showToast.value = "Please Enter Pool Date"
+            return
+        }
+        if(poolStartTime.value == null) {
+            showToast.value = "Please Enter Pool Start Time"
+            return
+        }
+
         val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val dateObject = parsedDate.parse(poolDate.value)
+
         val startTime = poolStartTime.value
-        val betLockTime = poolBetLockTime.value
-        betLockTime!!.year = dateObject.year
-        betLockTime.month = dateObject.month
-        betLockTime.date = dateObject.date
         startTime!!.year = dateObject.year
         startTime.month = dateObject.month
         startTime.date = dateObject.date
 
-        if (betLockTime.before(startTime)) {
-            betLockTime.date += 1
+        val betLockTime = poolBetLockTime.value
+        if (betLockTime != null) {
+            betLockTime.year = dateObject.year
+            betLockTime.month = dateObject.month
+            betLockTime.date = dateObject.date
+            if (betLockTime.before(startTime)) {
+                betLockTime.date += 1
+            }
         }
-        Log.i(TAG, "createPool: $startTime")
-        Log.i(TAG, "createPool: $betLockTime")
 
         val pool = Pool(
             "",
@@ -113,14 +131,15 @@ class PoolsViewModel @Inject constructor(
             poolProduction.value!!.trim(),
             poolPassword.value!!.trim(),
             poolDate.value!!,
-            poolBetAmount.value!!,
-            poolMargin.value!!,
-            poolBetLockTime.value!!,
+            poolBetAmount.value ?: "0",
+            poolMargin.value ?: "0",
+            betLockTime,
             poolStartTime.value!!,
             null,
             null,
             mutableMapOf()
         )
+        Log.i(TAG, "createPool: $pool")
         FirestoreUtil.createPool(pool) {
             navigateBack()
         }
