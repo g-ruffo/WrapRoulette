@@ -184,6 +184,12 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
+    fun deletePool() {
+        FirestoreUtil.deletePool(poolDocUid.value!!) {
+            navigateBack()
+        }
+    }
+
     fun toggleFabButton() {
         isFabClicked.value = !isFabClicked.value
     }
