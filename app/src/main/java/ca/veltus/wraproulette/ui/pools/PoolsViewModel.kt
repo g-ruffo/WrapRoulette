@@ -157,7 +157,12 @@ class PoolsViewModel @Inject constructor(
             }
         } else {
             FirestoreUtil.createPool(pool) {
-                navigateToHomeFragment()
+                if (it.isNullOrEmpty()) {
+                    navigateToHomeFragment()
+                } else {
+                    showToast.postValue(it)
+                    return@createPool
+                }
             }
         }
     }

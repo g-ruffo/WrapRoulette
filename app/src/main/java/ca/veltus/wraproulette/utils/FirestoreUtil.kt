@@ -78,20 +78,31 @@ object FirestoreUtil {
             }
     }
 
-    fun createPool(pool: Pool, onComplete: () -> Unit) {
+    fun createPool(pool: Pool, onComplete: (String?) -> Unit) {
         val docId: String = poolsCollectionReference.document().id
         val currentUser = FirebaseAuth.getInstance().currentUser
         pool.adminUid = currentUser!!.uid
         pool.adminName = currentUser.displayName!!
         pool.users = mutableMapOf(currentUser.uid to true)
         pool.docId = docId
-        poolsCollectionReference.document(docId).set(pool).addOnSuccessListener {
-            addPoolToUser(docId)
-            addMemberToPool(docId, currentUser.uid)
-            onComplete()
-        }.addOnFailureListener {
-            Log.e(TAG, "createPool: $it")
-        }
+
+        poolsCollectionReference.whereEqualTo("production", pool.production)
+            .whereEqualTo("password", pool.password)
+            .whereEqualTo("date", pool.date)
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty) {
+                    poolsCollectionReference.document(docId).set(pool).addOnSuccessListener {
+                        addPoolToUser(docId)
+                        addMemberToPool(docId, currentUser.uid)
+                        onComplete(null)
+                    }.addOnFailureListener {
+                        Log.e(TAG, "createPool: $it")
+                    }
+                } else {
+                    onComplete("Pool already exists")
+                }
+            }
     }
 
     fun updatePool(pool: Pool, onComplete: () -> Unit) {
