@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -35,6 +36,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     private lateinit var binding: FragmentHomeBinding
     override val _viewModel by viewModels<HomeViewModel>()
+    private lateinit var menuHost: MenuHost
+    private lateinit var fabView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -46,6 +49,13 @@ class HomeFragment : BaseFragment(), MenuProvider {
         val adapter = ViewPagerAdapter(this)
 
         binding.viewPager.adapter = adapter
+
+        menuHost = requireActivity()
+
+        menuHost.addMenuProvider(
+            this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
+        )
+
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = ViewPagerAdapter.fragmentTitle[position]
@@ -70,6 +80,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        fabView = binding.bidFab
+        checkAdminStatus()
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -84,16 +96,45 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main, menu)
+
+    }
+
+    override fun onPrepareMenu(menu: Menu) {
+        super.onPrepareMenu(menu)
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return true
+        Log.i(TAG, "onMenuItemSelected: ${menuItem.itemId}")
+
+        return when (menuItem.itemId) {
+            R.id.actionEditPool -> {
+                _viewModel.navigateToEditPool()
+                true
+            }
+            else -> {
+                false
+            }
+        }
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy: called")
+    }
+
+    private fun checkAdminStatus() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.isPoolAdmin.collectLatest {
+                    Log.i(TAG, "addMenuProvider: called $it")
+                    fabView = when (it) {
+                        true -> binding.adminFabLayout
+                        false -> binding.bidFab
+                    }
+                }
+            }
+        }
     }
 
 
@@ -120,43 +161,34 @@ class HomeFragment : BaseFragment(), MenuProvider {
                         }
                     }
                 }
-                binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
-                    launch {
-                        _viewModel.isPoolAdmin.collectLatest {
-                            if (it) {
-                                activity?.addMenuProvider(
-                                    this@HomeFragment, viewLifecycleOwner, Lifecycle.State.RESUMED
-                                )
-                                Log.i(TAG, "addMenuProvider: called")
-                            }
-                            val fabView = when (it) {
-                                true -> binding.adminFabLayout
-                                false -> binding.bidFab
-                            }
-                            if (position == 2) {
-                                binding.tabLayout.getTabAt(2)!!.removeBadge()
-                                fabView.animate().translationX(400f).alpha(0f).setDuration(200)
-                                    .setInterpolator(AccelerateInterpolator()).withEndAction {
-                                        fabView.visibility = View.GONE
-                                    }.start()
+                launch {
+                    _viewModel.actionbarTitle.collect {
+                        (activity as AppCompatActivity).supportActionBar?.title = it
+                    }
+                }
 
-                            } else {
-                                if (fabView.visibility == View.GONE) {
-                                    fabView.visibility = View.VISIBLE
-                                    fabView.animate().translationX(0F).alpha(1f).setDuration(200)
-                                        .setInterpolator(AccelerateInterpolator()).start()
-                                }
-                            }
-                        }
-                    }
-                    launch {
-                        _viewModel.actionbarTitle.collect {
-                            (activity as AppCompatActivity).supportActionBar?.title = it
-                        }
-                    }
+            }
+
+        }
+        binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
+
+            if (position == 2) {
+                binding.tabLayout.getTabAt(2)!!.removeBadge()
+                fabView.animate().translationX(400f).alpha(0f).setDuration(200)
+                    .setInterpolator(AccelerateInterpolator()).withEndAction {
+                        fabView.visibility = View.GONE
+                    }.start()
+
+            } else {
+                if (fabView.visibility == View.GONE) {
+                    fabView.visibility = View.VISIBLE
+                    fabView.animate().translationX(0F).alpha(1f).setDuration(200)
+                        .setInterpolator(AccelerateInterpolator()).start()
                 }
             }
         }
+
+
     }
 
     private fun launchStartTimePickerDialog(setWrapTime: Boolean = false) {
