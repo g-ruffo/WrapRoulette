@@ -9,6 +9,7 @@ import java.util.*
 
 data class Member(
     val uid: String?,
+    var tempMemberUid: String?,
     val poolId: String,
     val displayName: String,
     val email: String?,
@@ -16,15 +17,19 @@ data class Member(
     val bidTime: Date?,
     val profilePicturePath: String?
 ) {
-    constructor() : this("", "", "", "", null, null, null)
+    constructor() : this("", null, "", "", "", null, null, null)
 }
 
 class MemberItem(
-    val member: Member
+    val member: Member,
+    val userUid: String
 ) : BindableItem<MemberListItemBinding>() {
 
     override fun bind(viewBinding: MemberListItemBinding, position: Int) {
         viewBinding.member = member
+        if (userUid != member.uid) {
+            viewBinding.mainLayout.removeView(viewBinding.memberAddBetImageButton)
+        }
         if (member.profilePicturePath != null) {
             Glide.with(viewBinding.root)
                 .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))

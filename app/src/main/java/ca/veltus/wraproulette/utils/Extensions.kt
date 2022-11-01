@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
@@ -49,9 +48,9 @@ fun View.fadeOut() {
 }
 
 
-fun List<Member>.toMemberItem(): List<MemberItem> {
+fun List<Member>.toMemberItem(userUid: String): List<MemberItem> {
     return this.map {
-        MemberItem(it)
+        MemberItem(it, userUid)
     }
 }
 
