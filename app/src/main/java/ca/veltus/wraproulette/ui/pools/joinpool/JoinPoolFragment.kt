@@ -47,17 +47,6 @@ class JoinPoolFragment : BaseFragment() {
 
         binding.viewModel = _viewModel
 
-        binding.joinButton.setOnClickListener {
-            Log.i(TAG, "onCreateView: ${_viewModel.poolProduction.value!!}")
-            FirestoreUtil.joinPool(
-                _viewModel.poolProduction.value!!,
-                _viewModel.poolPassword.value!!,
-                _viewModel.poolDate.value!!
-            ) {
-                _viewModel.navigateBack()
-            }
-        }
-
         return binding.root
     }
 

@@ -10,6 +10,7 @@ import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragmentDirections
+import ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragmentDirections
 import ca.veltus.wraproulette.utils.FirestoreUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +46,6 @@ class PoolsViewModel @Inject constructor(
     val poolWinner = MutableStateFlow<Member?>(null)
     val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
     val poolEndTime = MutableStateFlow<Date?>(null)
-
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
@@ -100,15 +100,40 @@ class PoolsViewModel @Inject constructor(
         Log.i(TAG, "setPoolBetLockTime: ${poolBetLockTime.value}")
     }
 
+    fun joinPool() {
+        val production = poolProduction.value
+        val password = poolPassword.value
+        val date = poolDate.value
+
+        if (production.isNullOrEmpty()) {
+            showToast.value = "Please Enter Production Name"
+            return
+        }
+
+        if (date.isNullOrEmpty()) {
+            showToast.value = "Please Enter Pool Date"
+            return
+        }
+
+        FirestoreUtil.joinPool(
+            production.trim(),
+            password?.trim() ?: "",
+            date.trim()
+        ) {
+            if (it.isNullOrEmpty()) {
+                navigateJoinPoolToHomeFragment()
+            } else {
+                showToast.value = it
+            }
+        }
+    }
+
     fun createUpdatePool() {
         if (poolProduction.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Production Name"
             return
         }
-        if (poolPassword.value.isNullOrEmpty()) {
-            showToast.value = "Please Enter Pool Password"
-            return
-        }
+
         if (poolDate.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Pool Date"
             return
@@ -141,7 +166,7 @@ class PoolsViewModel @Inject constructor(
             poolAdminUid.value ?: "",
             poolAdminName.value ?: "",
             poolProduction.value!!.trim(),
-            poolPassword.value!!.trim(),
+            poolPassword.value?.trim() ?: "",
             poolDate.value!!,
             poolBetAmount.value ?: "0",
             poolMargin.value ?: "0",
@@ -158,7 +183,7 @@ class PoolsViewModel @Inject constructor(
         } else {
             FirestoreUtil.createPool(pool) {
                 if (it.isNullOrEmpty()) {
-                    navigateToHomeFragment()
+                    navigateAddPoolToHomeFragment()
                 } else {
                     showToast.postValue(it)
                     return@createPool
@@ -209,7 +234,11 @@ class PoolsViewModel @Inject constructor(
         navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToJoinPoolFragment()))
     }
 
-    fun navigateToHomeFragment() {
+    fun navigateJoinPoolToHomeFragment() {
+        navigationCommand.postValue(NavigationCommand.To(JoinPoolFragmentDirections.actionJoinPoolFragmentToNavHome()))
+    }
+
+    fun navigateAddPoolToHomeFragment() {
         navigationCommand.postValue(NavigationCommand.To(AddPoolFragmentDirections.actionAddPoolFragmentToNavHome()))
     }
 }

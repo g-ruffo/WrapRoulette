@@ -114,22 +114,46 @@ object FirestoreUtil {
             }
     }
 
-    fun joinPool(production: String, password: String, date: String, onComplete: () -> Unit) {
+    fun joinPool(
+        production: String,
+        password: String,
+        date: String,
+        onComplete: (String?) -> Unit
+    ) {
         poolsCollectionReference.whereEqualTo("production", production)
             .whereEqualTo("password", password)
             .whereEqualTo("date", date)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                Log.i(TAG, "joinPool: $querySnapshot")
-                querySnapshot.documents.forEach {
-                    Log.i(TAG, "joinPool: $it")
-                    val pool = it.toObject(Pool::class.java)
-                    addPoolToUser(pool!!.docId)
-                    addUserToPool(pool.docId, FirebaseAuth.getInstance().currentUser!!.uid)
-                    addMemberToPool(pool.docId, FirebaseAuth.getInstance().currentUser!!.uid)
-
+                if (querySnapshot.isEmpty) {
+                    Log.i(TAG, "querySnapshot.isEmpty: $querySnapshot")
+                    onComplete("No Pool Found Matching Credentials")
+                } else {
+                    querySnapshot.documents.forEach {
+                        Log.i(TAG, "joinPool: $it")
+                        val pool = it.toObject(Pool::class.java)
+                        currentUserDocReference.get().addOnSuccessListener { user ->
+                            if (user.contains("pools.${pool!!.docId}")) {
+                                onComplete("You are already a member of this pool")
+                            } else {
+                                addPoolToUser(pool.docId)
+                                addUserToPool(
+                                    pool.docId,
+                                    FirebaseAuth.getInstance().currentUser!!.uid
+                                )
+                                addMemberToPool(
+                                    pool.docId,
+                                    FirebaseAuth.getInstance().currentUser!!.uid
+                                )
+                                onComplete(null)
+                            }
+                        }.addOnFailureListener { exception ->
+                            onComplete(exception.message)
+                        }
+                    }
                 }
-                onComplete()
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
             }
     }
 

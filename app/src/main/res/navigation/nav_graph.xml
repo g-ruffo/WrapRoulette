@@ -60,6 +60,11 @@
         android:id="@+id/joinPoolFragment"
         android:name="ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragment"
         android:label="JoinPoolFragment"
-        tools:layout="@layout/fragment_join_pool"/>
+        tools:layout="@layout/fragment_join_pool">
+        <action
+            android:id="@+id/action_joinPoolFragment_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_pools" />
+    </fragment>
 
 </navigation>
