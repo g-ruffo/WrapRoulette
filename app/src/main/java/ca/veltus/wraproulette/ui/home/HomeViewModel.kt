@@ -220,6 +220,7 @@ class HomeViewModel @Inject constructor(
         val memberDepartment = newMemberDepartment.value
         var memberEmail = newMemberEmail.value
         val poolUid = _currentPool.value!!.docId
+        val ownerUid = _userAccount.value!!.uid
 
         if (memberName.isNullOrEmpty()) {
             showToast.value = "Please Enter Members Name"
@@ -243,6 +244,7 @@ class HomeViewModel @Inject constructor(
         }
         val newMember =
             Member(
+                ownerUid,
                 null,
                 poolUid,
                 memberName.trim(),
