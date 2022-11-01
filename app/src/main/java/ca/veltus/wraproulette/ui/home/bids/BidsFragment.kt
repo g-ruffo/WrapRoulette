@@ -1,5 +1,8 @@
 package ca.veltus.wraproulette.ui.home.bids
 
+import android.app.AlertDialog
+import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,10 +17,13 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.databinding.FragmentBidsBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
+import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.toMemberItem
 import com.xwray.groupie.GroupieAdapter
+import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.*
 
 @AndroidEntryPoint
 class BidsFragment : BaseFragment() {
@@ -31,6 +37,12 @@ class BidsFragment : BaseFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val onItemClick = OnItemClickListener { item, view ->
+        if (item is MemberItem && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty()) {
+            launchSetMemberBetDialog(item)
+        }
+    }
 
 
     override fun onCreateView(
@@ -79,10 +91,48 @@ class BidsFragment : BaseFragment() {
     private fun setupRecyclerView(items: List<MemberItem>) {
         val groupieAdapter = GroupieAdapter().apply {
             addAll(items)
+            setOnItemClickListener(onItemClick)
         }
         binding.poolsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
         }
+    }
+
+    private fun launchSetMemberBetDialog(memberItem: MemberItem) {
+        val time = Calendar.getInstance().time
+        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            time.hours = hourOfDay
+            time.minutes = minute
+            time.seconds = 0
+
+            if (time.before(_viewModel.poolStartTime.value)) {
+                time.date = time.date + 1
+            }
+            FirestoreUtil.setMemberPoolBet(
+                memberItem, time
+            ) {
+                if (!it.isNullOrEmpty()) {
+                    _viewModel.showToast.value = it
+                }
+            }
+        }
+
+        val timePickerDialog = TimePickerDialog(
+            requireContext(),
+            AlertDialog.THEME_HOLO_LIGHT,
+            timePickerListener,
+            time.hours,
+            time.minutes,
+            true
+        )
+        timePickerDialog.setTitle(memberItem.member.displayName)
+        timePickerDialog.setButton(
+            DialogInterface.BUTTON_POSITIVE, "Bet"
+        ) { _, _ -> }
+        timePickerDialog.setButton(
+            DialogInterface.BUTTON_NEGATIVE, "Cancel"
+        ) { _, _ -> }
+        timePickerDialog.show()
     }
 }
