@@ -110,6 +110,16 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.i(TAG, "onPause: called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -120,16 +130,19 @@ class HomeFragment : BaseFragment(), MenuProvider {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.isPoolAdmin.collectLatest {
-                    Log.i(TAG, "addMenuProvider: called $it")
                     when (it) {
                         true -> {
                             fabView = binding.adminFabLayout
                             if (!::menuHost.isInitialized) {
+                                Log.i(TAG, "addMenuProvider: isNotInitialized")
                                 menuHost = requireActivity()
-                                menuHost.addMenuProvider(
-                                    this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
-                                )
+
                             }
+                            menuHost.removeMenuProvider(this@HomeFragment)
+                            menuHost.invalidateMenu()
+                            menuHost.addMenuProvider(
+                                this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
+                            )
                         }
                         false -> {
                             fabView = binding.bidFab
