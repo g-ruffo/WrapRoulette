@@ -228,7 +228,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     private fun launchStartTimePickerDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance().time
-        var submitButtonText = "Bet"
+        var submitButtonText = when (setWrapTime) {
+            true -> "Set Wrap"
+            false -> "Bet"
+        }
         val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             time.hours = hourOfDay
             time.minutes = minute
@@ -257,12 +260,18 @@ class HomeFragment : BaseFragment(), MenuProvider {
             time.minutes,
             true
         )
-        if (setWrapTime) {
-            submitButtonText = "Set Wrap Time"
-            timePickerDialog.setButton(
-                DialogInterface.BUTTON_NEUTRAL, "Clear"
-            ) { _, _ ->
+
+        timePickerDialog.setButton(
+            DialogInterface.BUTTON_NEUTRAL, "Clear"
+        ) { _, _ ->
+            if (setWrapTime) {
                 launchConfirmationDialog(null)
+            } else {
+                FirestoreUtil.getCurrentUser { user ->
+                    FirestoreUtil.setUserPoolBet(
+                        user.activePool!!, user.uid, null
+                    ) {}
+                }
             }
         }
         timePickerDialog.setButton(
@@ -284,10 +293,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
         MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?").setMessage(message)
             .setPositiveButton("Yes") { _, _ ->
-                _viewModel.showToast.value = "true"
                 _viewModel.setWrapTime(time, true)
             }.setNegativeButton("No") { _, _ ->
-                _viewModel.showToast.value = "false"
                 _viewModel.setWrapTime(time, false)
             }.show()
     }

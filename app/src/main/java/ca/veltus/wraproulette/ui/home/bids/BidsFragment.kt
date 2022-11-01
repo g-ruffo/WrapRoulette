@@ -109,8 +109,8 @@ class BidsFragment : BaseFragment() {
             if (time.before(_viewModel.poolStartTime.value)) {
                 time.date = time.date + 1
             }
-            FirestoreUtil.setMemberPoolBet(
-                memberItem, time
+            FirestoreUtil.setUserPoolBet(
+                memberItem.member.poolId, memberItem.member.tempMemberUid!!, time
             ) {
                 if (!it.isNullOrEmpty()) {
                     _viewModel.showToast.value = it
@@ -127,6 +127,14 @@ class BidsFragment : BaseFragment() {
             true
         )
         timePickerDialog.setTitle(memberItem.member.displayName)
+
+        timePickerDialog.setButton(
+            DialogInterface.BUTTON_NEUTRAL, "Clear"
+        ) { _, _ ->
+            FirestoreUtil.setUserPoolBet(
+                memberItem.member.poolId, memberItem.member.tempMemberUid!!, null
+            ) {}
+        }
         timePickerDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, "Bet"
         ) { _, _ -> }
