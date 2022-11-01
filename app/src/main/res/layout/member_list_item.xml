@@ -8,6 +8,8 @@
         <variable
             name="member"
             type="ca.veltus.wraproulette.data.objects.Member" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -18,6 +20,7 @@
         android:elevation="12dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -57,6 +60,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="11:05" />
+
+            <ImageButton
+                android:id="@+id/memberAddBetImageButton"
+                setTempMemberBetTimeVisibility="@{member.bidTime}"
+                setTempMemberUidVisibility="@{member.tempMemberUid}"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/earningsGreen" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
