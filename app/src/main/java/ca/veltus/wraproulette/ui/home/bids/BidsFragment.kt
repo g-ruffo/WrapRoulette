@@ -65,7 +65,7 @@ class BidsFragment : BaseFragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.bids.collect {
                     Log.i(TAG, "onViewCreated: $it")
-                    setupRecyclerView(it.toMemberItem())
+                    setupRecyclerView(it.toMemberItem(_viewModel.userAccount.value?.uid ?: ""))
                 }
             }
         }

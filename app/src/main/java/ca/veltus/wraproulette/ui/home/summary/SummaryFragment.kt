@@ -57,7 +57,7 @@ class SummaryFragment : BaseFragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     _viewModel.poolTotalBets.collect {
-                        setupRecyclerView(it.toMemberItem())
+                        setupRecyclerView(it.toMemberItem(_viewModel.userAccount.value?.uid ?: ""))
                     }
                 }
                 launch {
@@ -65,8 +65,10 @@ class SummaryFragment : BaseFragment() {
                         if (it != null) {
                             binding.winnerMemberItem.member = it
                             Glide.with(this@SummaryFragment).load(
-                                FirebaseStorageUtil.pathToReference(it.profilePicturePath!!)).placeholder(
-                                R.drawable.ic_baseline_person_24).into(binding.winnerMemberItem.profilePictureImageView)
+                                FirebaseStorageUtil.pathToReference(it.profilePicturePath!!)
+                            ).placeholder(
+                                R.drawable.ic_baseline_person_24
+                            ).into(binding.winnerMemberItem.profilePictureImageView)
 
                         }
                     }
