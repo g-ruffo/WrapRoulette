@@ -1,10 +1,7 @@
 package ca.veltus.wraproulette.utils
 
 import android.util.Log
-import ca.veltus.wraproulette.data.objects.Member
-import ca.veltus.wraproulette.data.objects.Message
-import ca.veltus.wraproulette.data.objects.Pool
-import ca.veltus.wraproulette.data.objects.User
+import ca.veltus.wraproulette.data.objects.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.snapshots
@@ -196,6 +193,9 @@ object FirestoreUtil {
     }
 
     fun addNewMemberToPool(member: Member, onComplete: (String?) -> Unit) {
+        val tempMemberUid: String =
+            poolsCollectionReference.document(member.poolId).collection("members").document().id
+        member.tempMemberUid = tempMemberUid
         poolsCollectionReference.document(member.poolId).collection("members")
             .whereEqualTo("displayName", member.displayName)
             .whereEqualTo("department", member.department)
@@ -203,7 +203,7 @@ object FirestoreUtil {
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     poolsCollectionReference.document(member.poolId).collection("members")
-                        .document()
+                        .document(tempMemberUid)
                         .set(member).addOnSuccessListener {
                             onComplete(null)
                         }.addOnFailureListener { exception ->
@@ -215,10 +215,20 @@ object FirestoreUtil {
             }
     }
 
+    fun setMemberPoolBet(member: MemberItem, bid: Date, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(member.member.poolId).collection("members").document(member.member.tempMemberUid!!)
+            .update("bidTime", bid).addOnSuccessListener {
+                onComplete(null)
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+            }
+    }
+
     private fun addMemberToPool(poolId: String, uid: String) {
         getCurrentUser { user ->
             val member = Member(
                 uid,
+                null,
                 poolId,
                 user.displayName,
                 user.email,
