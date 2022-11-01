@@ -52,13 +52,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
         binding.viewPager.adapter = adapter
 
-        menuHost = requireActivity()
-
-        menuHost.addMenuProvider(
-            this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
-        )
-
-
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = ViewPagerAdapter.fragmentTitle[position]
         }.attach()
@@ -101,10 +94,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     }
 
-    override fun onPrepareMenu(menu: Menu) {
-        super.onPrepareMenu(menu)
-    }
-
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
@@ -132,9 +121,23 @@ class HomeFragment : BaseFragment(), MenuProvider {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.isPoolAdmin.collectLatest {
                     Log.i(TAG, "addMenuProvider: called $it")
-                    fabView = when (it) {
-                        true -> binding.adminFabLayout
-                        false -> binding.bidFab
+                    when (it) {
+                        true -> {
+                            fabView = binding.adminFabLayout
+                            if (!::menuHost.isInitialized) {
+                                menuHost = requireActivity()
+                                menuHost.addMenuProvider(
+                                    this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
+                                )
+                            }
+                        }
+                        false -> {
+                            fabView = binding.bidFab
+                            if (::menuHost.isInitialized) {
+                                menuHost.removeMenuProvider(this@HomeFragment)
+                                menuHost.invalidateMenu()
+                            }
+                        }
                     }
                 }
             }
@@ -170,9 +173,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
                         (activity as AppCompatActivity).supportActionBar?.title = it
                     }
                 }
-
             }
-
         }
         binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
 

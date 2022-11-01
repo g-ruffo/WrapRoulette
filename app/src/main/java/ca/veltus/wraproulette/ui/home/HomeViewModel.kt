@@ -182,6 +182,7 @@ class HomeViewModel @Inject constructor(
                             }
                         } else {
                             showNoData.emit(true)
+                            _actionbarTitle.emit("Home")
                         }
                         showLoading.emit(false)
                     }
