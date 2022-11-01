@@ -41,6 +41,10 @@ class HomeViewModel @Inject constructor(
     val poolEndTime = MutableStateFlow<Date?>(null)
     val poolWinningMember = MutableStateFlow<Member?>(null)
 
+    val newMemberName = MutableStateFlow<String?>(null)
+    val newMemberDepartment = MutableStateFlow<String?>(null)
+    val newMemberEmail = MutableStateFlow<String?>(null)
+
     private val _actionbarTitle = MutableStateFlow<String>("Home")
     val actionbarTitle: StateFlow<String>
         get() = _actionbarTitle
@@ -86,12 +90,12 @@ class HomeViewModel @Inject constructor(
     }
 
     val betTimeRemainingDate = liveData {
-        if (poolRemainingBetTime.value == null) {
-            isBettingOpen.emit(true)
-            emit(null)
-            delay(1000)
-        } else {
-            while (true) {
+        while (true) {
+            if (poolRemainingBetTime.value == null) {
+                isBettingOpen.emit(true)
+                emit(null)
+                delay(1000)
+            } else {
                 val time = poolRemainingBetTime.value!!.time - Calendar.getInstance().time.time
                 if (time > 0) {
                     emit(time)
@@ -196,7 +200,7 @@ class HomeViewModel @Inject constructor(
                         addBidMemberToList(members)
                         members.forEach {
                             if (it.uid == userAccount.value!!.uid && it.bidTime != null) {
-                                setUserBetTime(it.bidTime)
+                                setUserBetTime(it.bidTime!!)
                             }
                         }
                     }
@@ -208,6 +212,54 @@ class HomeViewModel @Inject constructor(
 
     private fun setUserBetTime(date: Date) {
         userBetTime.value = date
+    }
+
+    fun createNewPoolMember(): Boolean {
+        val memberName = newMemberName.value
+        val memberDepartment = newMemberDepartment.value
+        var memberEmail = newMemberEmail.value
+        val poolUid = _currentPool.value!!.docId
+
+        if (memberName.isNullOrEmpty()) {
+            showToast.value = "Please Enter Members Name"
+            return false
+        }
+        if (memberDepartment.isNullOrEmpty()) {
+            showToast.value = "Please Enter Members Department"
+            return false
+        }
+        if (!memberEmail.isNullOrEmpty()) {
+            memberEmail = memberEmail.trim()
+        }
+
+        if (poolUid.isNullOrEmpty()) {
+            showToast.value = "Unable To Find Pool"
+            return false
+        }
+        if (!isPoolAdmin.value) {
+            showToast.value = "You Do Not Have Permission"
+            return false
+        }
+        val newMember =
+            Member(
+                null,
+                poolUid,
+                memberName.trim(),
+                memberEmail,
+                memberDepartment.trim(),
+                null,
+                null
+            )
+        FirestoreUtil.addNewMemberToPool(newMember) {
+            if (!it.isNullOrEmpty()) {
+                showToast.value = "$it"
+            } else {
+                newMemberName.value = null
+                newMemberDepartment.value = null
+                newMemberEmail.value = null
+            }
+        }
+        return true
     }
 
     private fun addBidMemberToList(members: List<Member>) {
@@ -258,7 +310,7 @@ class HomeViewModel @Inject constructor(
 
         _poolTotalBets.value.forEach {
             if (it.bidTime != null) {
-                winnersTimeList.add(it.bidTime.time)
+                winnersTimeList.add(it.bidTime!!.time)
             }
         }
 

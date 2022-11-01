@@ -96,8 +96,8 @@ object FirestoreUtil {
                         addPoolToUser(docId)
                         addMemberToPool(docId, currentUser.uid)
                         onComplete(null)
-                    }.addOnFailureListener {
-                        Log.e(TAG, "createPool: $it")
+                    }.addOnFailureListener { exception ->
+                        Log.e(TAG, "createPool: $exception")
                     }
                 } else {
                     onComplete("Pool already exists")
@@ -169,6 +169,26 @@ object FirestoreUtil {
     private fun addUserToPool(poolId: String, uid: String) {
         val newMap = mutableMapOf<String, Any>("users.$uid" to true)
         poolsCollectionReference.document(poolId).update(newMap)
+    }
+
+    fun addNewMemberToPool(member: Member, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(member.poolId).collection("members")
+            .whereEqualTo("displayName", member.displayName)
+            .whereEqualTo("department", member.department)
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty) {
+                    poolsCollectionReference.document(member.poolId).collection("members")
+                        .document()
+                        .set(member).addOnSuccessListener {
+                            onComplete(null)
+                        }.addOnFailureListener { exception ->
+                            onComplete(exception.message)
+                        }
+                } else {
+                    onComplete("Member already exists")
+                }
+            }
     }
 
     private fun addMemberToPool(poolId: String, uid: String) {

@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
+import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
 import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.onPageSelected
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(), MenuProvider {
@@ -104,11 +106,13 @@ class HomeFragment : BaseFragment(), MenuProvider {
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        Log.i(TAG, "onMenuItemSelected: ${menuItem.itemId}")
-
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
                 _viewModel.navigateToEditPool()
+                true
+            }
+            R.id.actionAddMember -> {
+                launchAddMemberDialog()
                 true
             }
             else -> {
@@ -189,6 +193,23 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
 
 
+    }
+
+    private fun launchAddMemberDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val dialogBinding = FragmentAddMemberDialogBinding.inflate(LayoutInflater.from(context))
+        dialogBinding.viewModel = _viewModel
+        builder.setView(dialogBinding.root)
+        val dialog: AlertDialog = builder.show()
+
+        dialogBinding.addMemberButton.setOnClickListener {
+            if (_viewModel.createNewPoolMember()) {
+                dialog.dismiss()
+            }
+        }
+        dialogBinding.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     private fun launchStartTimePickerDialog(setWrapTime: Boolean = false) {

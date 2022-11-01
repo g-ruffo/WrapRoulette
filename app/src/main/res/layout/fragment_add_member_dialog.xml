@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.dialog.AddMemberDialogFragment">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:background="@drawable/rounded_corners">
+
+            <TextView
+                android:id="@+id/addMemberTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Add Member"
+                android:textSize="28sp"
+                app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameEditTextLayout"
+                style="@style/LoginTextInputOuterFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/emailEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addMemberTitle"
+                app:layout_constraintVertical_bias="0.5"
+                app:startIconDrawable="@drawable/ic_baseline_person_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameInputEditText"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM "
+                    android:hint="Member name"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.newMemberName}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailEditTextLayout"
+                style="@style/LoginTextInputOuterFieldStyle"
+                emailHelperTextColorSwitcher="@{String.valueOf(viewModel.newMemberEmail)}"
+                emailTextInputEditTextStatus="@{emailInputEditText}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/departmentEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout"
+                app:layout_constraintVertical_bias="0.5"
+                app:startIconDrawable="@drawable/ic_baseline_email_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailInputEditText"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Member email"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.newMemberEmail}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/departmentEditTextLayout"
+                style="@style/LoginTextInputOuterFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                app:boxStrokeColor="@color/purpleLogoLight"
+                app:hintTextColor="@color/purpleLogoLight"
+                app:layout_constraintBottom_toTopOf="@+id/addMemberButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
+                app:layout_constraintVertical_bias="0.5"
+                app:startIconDrawable="@drawable/ic_baseline_work_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/departmentInputEditText"
+                    style="@style/LoginTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="abcdefghijklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM "
+                    android:hint="Member department"
+                    android:inputType="textCapWords"
+                    android:text="@={viewModel.newMemberDepartment}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/addMemberButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/rounded_corners_button"
+                android:text="Add"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cancelButton"
+                app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancelButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/rounded_corners_button"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/addMemberButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/addMemberButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</layout>

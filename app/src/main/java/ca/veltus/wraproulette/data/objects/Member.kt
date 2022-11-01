@@ -8,10 +8,10 @@ import com.xwray.groupie.databinding.BindableItem
 import java.util.*
 
 data class Member(
-    val uid: String,
+    val uid: String?,
     val poolId: String,
     val displayName: String,
-    val email: String,
+    val email: String?,
     val department: String?,
     val bidTime: Date?,
     val profilePicturePath: String?
