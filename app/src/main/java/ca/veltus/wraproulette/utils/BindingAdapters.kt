@@ -6,6 +6,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.AutoCompleteTextView
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -116,6 +117,20 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter(
+        value = ["setTempMemberUidVisibility", "setTempMemberBetTimeVisibility"],
+        requireAll = false
+    )
+    @JvmStatic
+    fun setTempMemberButtonVisibility(view: ImageButton, tempMemberUid: String?, betTime: Date?) {
+        if (tempMemberUid != null && betTime == null) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+
+        }
+    }
+
     @BindingAdapter("getTimeFromDate")
     @JvmStatic
     fun getTimeFromDate(view: AutoCompleteTextView, date: Date?) {
@@ -123,6 +138,8 @@ object BindingAdapters {
             val parsedDate = SimpleDateFormat("HH:mm", Locale.ENGLISH)
             val time = parsedDate.format(date)
             view.setText(time)
+        } else {
+            view.text.clear()
         }
     }
 
