@@ -124,6 +124,23 @@ object BindingAdapters {
     }
 
     @BindingAdapter(
+        value = ["setCurrentTimeTitleIsActive", "setCurrentTimeTitleWinners"], requireAll = true
+    )
+    @JvmStatic
+    fun setCurrentTimeTitle(view: TextView, isActive: Boolean, list: List<Member>) {
+        if (isActive) {
+            view.text = "Current Time"
+        }
+        if (!isActive && list.isEmpty()) {
+            view.text = "No Winners"
+        } else if (!isActive && list.size < 2) {
+            view.text = "Winner"
+        } else {
+            view.text = "Winners"
+        }
+    }
+
+    @BindingAdapter(
         value = ["setTempMemberUidVisibility", "setTempMemberBetTimeVisibility"], requireAll = false
     )
     @JvmStatic
