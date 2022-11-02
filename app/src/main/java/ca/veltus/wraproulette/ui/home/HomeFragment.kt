@@ -58,15 +58,15 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
 
         binding.bidFab.setOnClickListener {
-            launchStartTimePickerDialog()
+            launchBetAndWrapDialog()
         }
 
         binding.bitAdminFab.setOnClickListener {
-            launchStartTimePickerDialog()
+            launchBetAndWrapDialog()
         }
 
         binding.setWrapAdminFab.setOnClickListener {
-            launchStartTimePickerDialog(true)
+            launchBetAndWrapDialog(true)
         }
 
         return binding.root
@@ -101,7 +101,12 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 true
             }
             R.id.actionAddMember -> {
-                launchAddMemberDialog()
+                if (_viewModel.isPoolActive.value) {
+                    launchAddMemberDialog()
+                } else {
+                    _viewModel.showSnackBar.value =
+                        "Pool has finished, you are unable to add anymore members."
+                }
                 true
             }
             else -> {
@@ -226,7 +231,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
-    private fun launchStartTimePickerDialog(setWrapTime: Boolean = false) {
+    private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance().time
         var submitButtonText = when (setWrapTime) {
             true -> "Set Wrap"

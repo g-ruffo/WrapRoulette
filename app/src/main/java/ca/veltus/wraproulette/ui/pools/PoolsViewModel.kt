@@ -43,7 +43,7 @@ class PoolsViewModel @Inject constructor(
     val poolDocUid = MutableStateFlow<String?>(null)
     val poolAdminUid = MutableStateFlow<String?>(null)
     val poolAdminName = MutableStateFlow<String?>(null)
-    val poolWinner = MutableStateFlow<Member?>(null)
+    val poolWinners = MutableStateFlow<List<Member>>(listOf())
     val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
     val poolEndTime = MutableStateFlow<Date?>(null)
 
@@ -173,7 +173,7 @@ class PoolsViewModel @Inject constructor(
             betLockTime,
             startTime,
             poolEndTime.value,
-            poolWinner.value,
+            poolWinners.value,
             poolUsers.value
         )
         if (!poolDocUid.value.isNullOrEmpty()) {
@@ -207,7 +207,7 @@ class PoolsViewModel @Inject constructor(
                     poolStartTime.emit(pool.startTime)
                     poolAdminName.emit(pool.adminName)
                     poolAdminUid.emit(pool.adminUid)
-                    poolWinner.emit(pool.winner)
+                    poolWinners.emit(pool.winners)
                     poolUsers.emit(pool.users)
                     poolEndTime.emit(pool.endTime)
                 }

@@ -61,15 +61,14 @@ class SummaryFragment : BaseFragment() {
                     }
                 }
                 launch {
-                    _viewModel.poolWinningMember.collectLatest {
-                        if (it != null) {
-                            binding.winnerMemberItem.member = it
+                    _viewModel.poolWinningMembers.collectLatest {
+                        if (it.isNotEmpty()) {
+                            binding.winnerMemberItem.member = it[0]
                             Glide.with(this@SummaryFragment).load(
-                                FirebaseStorageUtil.pathToReference(it.profilePicturePath!!)
+                                FirebaseStorageUtil.pathToReference(it[0].profilePicturePath!!)
                             ).placeholder(
                                 R.drawable.ic_baseline_person_24
                             ).into(binding.winnerMemberItem.profilePictureImageView)
-
                         }
                     }
                 }

@@ -22,10 +22,24 @@ data class Pool(
     var lockTime: Date?,
     var startTime: Date?,
     var endTime: Date?,
-    var winner: Member?,
+    var winners: List<Member> = listOf(),
     var users: MutableMap<String, Any> = mutableMapOf()
 ) {
-    constructor() : this("", "", "", "", "", "", null, null, null, null, null, null, mutableMapOf())
+    constructor() : this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        null,
+        null,
+        null,
+        null,
+        null,
+        listOf(),
+        mutableMapOf()
+    )
 }
 
 class PoolItem(
@@ -35,17 +49,18 @@ class PoolItem(
 
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {
         viewBinding.pool = pool
-            if (pool.docId == user.activePool) {
-                viewBinding.cardView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        viewBinding.root.context,
-                        R.color.selectedPoolCardView
-                    )
+
+        if (pool.docId == user.activePool) {
+            viewBinding.cardView.setBackgroundColor(
+                ContextCompat.getColor(
+                    viewBinding.root.context,
+                    R.color.selectedPoolCardView
                 )
-            } else {
-                viewBinding.cardView.setBackgroundColor(Color.WHITE)
-            }
-            user.activePool
+            )
+        } else {
+            viewBinding.cardView.setBackgroundColor(Color.WHITE)
+        }
+        user.activePool
 
         viewBinding.cardView.setOnClickListener {
             FirestoreUtil.setActivePool(pool.docId) {
