@@ -180,7 +180,7 @@ object FirestoreUtil {
     }
 
     fun setPoolWinner(poolId: String, winners: List<Member>, onComplete: (String?) -> Unit) {
-        poolsCollectionReference.document(poolId).update("winner", winners).addOnSuccessListener {
+        poolsCollectionReference.document(poolId).update("winners", winners).addOnSuccessListener {
             onComplete(null)
         }.addOnFailureListener { exception ->
             onComplete(exception.message)
