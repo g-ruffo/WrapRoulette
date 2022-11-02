@@ -1,5 +1,6 @@
 package ca.veltus.wraproulette.ui.home.summary
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import ca.veltus.wraproulette.ui.home.HomeViewModel
 import ca.veltus.wraproulette.utils.toMemberItem
 import ca.veltus.wraproulette.utils.toWinnerMemberItem
 import com.xwray.groupie.GroupieAdapter
+import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,6 +36,12 @@ class SummaryFragment : BaseFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val onItemClick = OnItemClickListener { item, view ->
+        if (item is WinnerMemberItem) {
+            launchViewWinnerEmailDialog(item)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -105,10 +113,25 @@ class SummaryFragment : BaseFragment() {
     private fun setupWinnersRecyclerView(items: List<WinnerMemberItem>) {
         val groupieAdapter = GroupieAdapter().apply {
             addAll(items)
+            setOnItemClickListener(onItemClick)
         }
         binding.winnersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
+        }
+    }
+
+    private fun launchViewWinnerEmailDialog(memberItem: WinnerMemberItem) {
+        val email = memberItem.member.email
+        if (email.isNullOrEmpty()) {
+            _viewModel.showSnackBar.value = "No email found"
+            return
+        } else {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("${memberItem.member.displayName}'s Email:")
+            builder.setMessage(memberItem.member.email)
+            builder.setPositiveButton("Close") { _, _ -> }
+            builder.show()
         }
     }
 }
