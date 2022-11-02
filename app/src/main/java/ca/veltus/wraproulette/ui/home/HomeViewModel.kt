@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -254,17 +253,16 @@ class HomeViewModel @Inject constructor(
             showToast.value = "You Do Not Have Permission"
             return false
         }
-        val newMember =
-            Member(
-                ownerUid,
-                null,
-                poolUid,
-                memberName.trim(),
-                memberEmail,
-                memberDepartment.trim(),
-                null,
-                null
-            )
+        val newMember = Member(
+            ownerUid,
+            null,
+            poolUid,
+            memberName.trim(),
+            memberEmail,
+            memberDepartment.trim(),
+            null,
+            null
+        )
         FirestoreUtil.addNewMemberToPool(newMember) {
             if (!it.isNullOrEmpty()) {
                 showToast.value = "$it"

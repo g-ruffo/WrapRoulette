@@ -186,9 +186,8 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <include
-                                android:id="@+id/winner_member_item"
-                                layout="@layout/winner_member_item"
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/winnersRecyclerView"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:visibility="@{viewModel.isPoolActive == false ? View.VISIBLE : View.GONE}"

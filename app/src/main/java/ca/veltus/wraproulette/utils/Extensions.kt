@@ -48,9 +48,15 @@ fun View.fadeOut() {
 }
 
 
-fun List<Member>.toMemberItem(userUid: String): List<MemberItem> {
+fun List<Member>.toMemberItem(userUid: String = ""): List<MemberItem> {
     return this.map {
         MemberItem(it, userUid)
+    }
+}
+
+fun List<Member>.toWinnerMemberItem(): List<WinnerMemberItem> {
+    return this.map {
+        WinnerMemberItem(it)
     }
 }
 

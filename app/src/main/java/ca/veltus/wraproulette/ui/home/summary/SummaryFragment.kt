@@ -10,14 +10,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
+import ca.veltus.wraproulette.data.objects.WinnerMemberItem
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
-import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import ca.veltus.wraproulette.utils.toMemberItem
-import com.bumptech.glide.Glide
+import ca.veltus.wraproulette.utils.toWinnerMemberItem
 import com.xwray.groupie.GroupieAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -37,9 +36,7 @@ class SummaryFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSummaryBinding.inflate(inflater, container, false)
 
@@ -57,18 +54,13 @@ class SummaryFragment : BaseFragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     _viewModel.poolTotalBets.collect {
-                        setupRecyclerView(it.toMemberItem(_viewModel.userAccount.value?.uid ?: ""))
+                        setupBidsRecyclerView(it.toMemberItem())
                     }
                 }
                 launch {
                     _viewModel.poolWinningMembers.collectLatest {
                         if (it.isNotEmpty()) {
-                            binding.winnerMemberItem.member = it[0]
-                            Glide.with(this@SummaryFragment).load(
-                                FirebaseStorageUtil.pathToReference(it[0].profilePicturePath!!)
-                            ).placeholder(
-                                R.drawable.ic_baseline_person_24
-                            ).into(binding.winnerMemberItem.profilePictureImageView)
+                            setupWinnersRecyclerView(it.toWinnerMemberItem())
                         }
                     }
                 }
@@ -101,11 +93,21 @@ class SummaryFragment : BaseFragment() {
     }
 
 
-    private fun setupRecyclerView(items: List<MemberItem>) {
+    private fun setupBidsRecyclerView(items: List<MemberItem>) {
         val groupieAdapter = GroupieAdapter().apply {
             addAll(items.sortedBy { it.member.bidTime })
         }
         binding.memberBidsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = groupieAdapter
+        }
+    }
+
+    private fun setupWinnersRecyclerView(items: List<WinnerMemberItem>) {
+        val groupieAdapter = GroupieAdapter().apply {
+            addAll(items)
+        }
+        binding.winnersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
         }
