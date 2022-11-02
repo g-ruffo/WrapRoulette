@@ -186,15 +186,29 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
+
+                            <TextView
+                                android:id="@+id/currentTimeTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="@{viewModel.isPoolActive == true ? `Current Time` : `Winners`}"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="Current Time" />
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/winnersRecyclerView"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="12dp"
                                 android:visibility="@{viewModel.isPoolActive == false ? View.VISIBLE : View.GONE}"
-                                app:layout_constraintBottom_toTopOf="@id/currentTimeTitle"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toBottomOf="@id/currentTimeTitle" />
 
                             <TextView
                                 android:id="@+id/currentTimeTextView"
@@ -206,24 +220,12 @@
                                 android:textSize="38sp"
                                 android:textStyle="bold"
                                 android:visibility="@{viewModel.isPoolActive == true ? View.VISIBLE : View.GONE}"
-                                app:layout_constraintBottom_toTopOf="@id/currentTimeTitle"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.0"
-                                tools:text="18:14:01" />
-
-                            <TextView
-                                android:id="@+id/currentTimeTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="@{viewModel.isPoolActive == true ? `Current Time` : `Winner`}"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                tools:text="Current Time" />
+                                app:layout_constraintTop_toBottomOf="@id/currentTimeTitle"
+                                app:layout_constraintVertical_bias="0.0"
+                                tools:text="18:14:01" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
