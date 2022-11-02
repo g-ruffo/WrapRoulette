@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="member"
             type="ca.veltus.wraproulette.data.objects.Member" />
+
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
@@ -16,12 +18,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="20dp"
-        android:padding="8dp">
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePictureImageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
             android:src="@drawable/ic_baseline_person_24"
             app:civ_border_color="@color/earningsGreen"
             app:civ_border_width="1dp"
@@ -57,11 +61,12 @@
             android:id="@+id/memberBidTimeCardView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/memberEarningsCardView"
-            app:layout_constraintHorizontal_bias="0.83"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/memberNameTextView"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -79,8 +84,9 @@
             android:id="@+id/memberEarningsCardView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
+            app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -90,6 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:text="@{`$` + member.winnings}"
                 android:textSize="16sp"
                 tools:text="$20.00" />
         </androidx.cardview.widget.CardView>
