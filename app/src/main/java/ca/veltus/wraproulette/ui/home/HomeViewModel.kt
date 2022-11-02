@@ -11,6 +11,7 @@ import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
+import ca.veltus.wraproulette.utils.Constants
 import ca.veltus.wraproulette.utils.FirestoreUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -38,16 +40,19 @@ class HomeViewModel @Inject constructor(
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolRemainingBetTime = MutableStateFlow<Date?>(null)
     val poolEndTime = MutableStateFlow<Date?>(null)
-    val poolWinningMember = MutableStateFlow<Member?>(null)
 
     val newMemberName = MutableStateFlow<String?>(null)
     val newMemberDepartment = MutableStateFlow<String?>(null)
     val newMemberEmail = MutableStateFlow<String?>(null)
 
+    private val _poolWinningMembers = MutableStateFlow<List<Member>>(listOf())
+    val poolWinningMembers: StateFlow<List<Member>>
+        get() = _poolWinningMembers
+
+
     private val _isPoolActive = MutableStateFlow<Boolean>(false)
     val isPoolActive: StateFlow<Boolean>
         get() = _isPoolActive
-
 
     private val _actionbarTitle = MutableStateFlow<String>("Home")
     val actionbarTitle: StateFlow<String>
@@ -173,7 +178,7 @@ class HomeViewModel @Inject constructor(
                             poolStartTime.emit(pool.startTime!!)
                             poolRemainingBetTime.emit(pool.lockTime)
                             poolEndTime.emit(pool.endTime)
-                            poolWinningMember.emit(pool.winner)
+                            _poolWinningMembers.emit(pool.winners)
                             showNoData.emit(false)
                             if (pool.adminUid == _userAccount.value!!.uid) {
                                 isPoolAdmin.emit(true)
@@ -314,35 +319,33 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    // TODO -> Replace filter function
     private fun setWinningMember(wrapTime: Date) {
-        val winnersTimeList = mutableListOf<Long>()
+        val totalBetList = mutableListOf<Member>()
+        val winnersList = mutableListOf<Member>()
 
         _poolTotalBets.value.forEach {
             if (it.bidTime != null) {
-                winnersTimeList.add(it.bidTime!!.time)
+                totalBetList.add(it)
             }
         }
 
-        val numbers = mutableListOf(23, 12, 20, 47, 36, 55)
+        if (totalBetList.isNotEmpty()) {
+            totalBetList.sortBy { abs(wrapTime.time - it.bidTime!!.time) }
 
-        val target = wrapTime.time
-
-        val answer = winnersTimeList.fold(0L) { acc: Long?, num ->
-            if (num <= target && (acc == null || num > acc)) num
-            else acc
+            for (i in totalBetList.indices) {
+                if (abs(wrapTime.time - totalBetList[i].bidTime!!.time) <= Constants.MINUTE) {
+                    winnersList.add(totalBetList[i])
+                }
+            }
         }
 
-        val winner: Member? = _poolTotalBets.value.firstOrNull { it.bidTime!!.time == answer!! }
-
-        Log.i(
-            TAG,
-            "setWinningMember: $winner $answer ${_poolTotalBets.value[1].bidTime!!.time.toInt()} ${winnersTimeList[0]}"
-        )
-
         viewModelScope.launch {
-            FirestoreUtil.setPoolWinner(winner!!.poolId, winner) {
-                poolWinningMember.value = winner
+            FirestoreUtil.setPoolWinner(currentPool.value!!.docId, winnersList) {
+                if (it.isNullOrEmpty()) {
+                    _poolWinningMembers.value = winnersList
+                } else {
+                    showToast.postValue(it)
+                }
             }
         }
     }

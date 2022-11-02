@@ -179,9 +179,11 @@ object FirestoreUtil {
         }
     }
 
-    fun setPoolWinner(poolId: String, winner: Member, onComplete: () -> Unit) {
-        poolsCollectionReference.document(poolId).update("winner", winner).addOnSuccessListener {
-            onComplete()
+    fun setPoolWinner(poolId: String, winners: List<Member>, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(poolId).update("winner", winners).addOnSuccessListener {
+            onComplete(null)
+        }.addOnFailureListener { exception ->
+            onComplete(exception.message)
         }
     }
 
