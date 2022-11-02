@@ -304,9 +304,7 @@ class HomeViewModel @Inject constructor(
         if (isConfirmed) {
             viewModelScope.launch {
                 FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
-                    if (wrapTime != null) {
-                        setWinningMember(wrapTime)
-                    }
+                    setWinningMember(wrapTime)
                 }
             }
         }
@@ -318,35 +316,36 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setWinningMember(wrapTime: Date) {
+    private fun setWinningMember(wrapTime: Date?) {
         val totalBetList = mutableListOf<Member>()
         val winnersList = mutableListOf<Member>()
         val numberOfBets = poolTotalBets.value.size
         val bidPrice = currentPool.value?.betAmount?.toInt() ?: 0
         val memberWinnings = numberOfBets * bidPrice
 
-        _poolTotalBets.value.forEach {
-            if (it.bidTime != null) {
-                totalBetList.add(it)
+        if (wrapTime != null) {
+            _poolTotalBets.value.forEach {
+                if (it.bidTime != null) {
+                    totalBetList.add(it)
+                }
             }
-        }
 
-        if (totalBetList.isNotEmpty()) {
-            totalBetList.sortBy { abs(wrapTime.time - it.bidTime!!.time) }
+            if (totalBetList.isNotEmpty()) {
+                totalBetList.sortBy { abs(wrapTime.time - it.bidTime!!.time) }
 
-            for (i in totalBetList.indices) {
-                if (abs(wrapTime.time - totalBetList[i].bidTime!!.time) <= Constants.MINUTE) {
-                    winnersList.add(totalBetList[i])
+                for (i in totalBetList.indices) {
+                    if (abs(wrapTime.time - totalBetList[i].bidTime!!.time) <= Constants.MINUTE) {
+                        winnersList.add(totalBetList[i])
+                    }
+                }
+            }
+            winnersList.forEach {
+                it.winnings = when (numberOfBets) {
+                    0 -> memberWinnings
+                    else -> memberWinnings / winnersList.size
                 }
             }
         }
-        winnersList.forEach {
-            it.winnings = when (numberOfBets) {
-                0 -> memberWinnings
-                else -> memberWinnings / winnersList.size
-            }
-        }
-
         viewModelScope.launch {
             FirestoreUtil.setPoolWinner(currentPool.value!!.docId, winnersList) {
                 if (it.isNullOrEmpty()) {

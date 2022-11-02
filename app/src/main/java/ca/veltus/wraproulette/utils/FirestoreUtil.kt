@@ -73,8 +73,8 @@ object FirestoreUtil {
 
     fun getCurrentUser(onComplete: (User) -> Unit) {
         currentUserDocReference.get().addOnSuccessListener {
-                onComplete(it.toObject(User::class.java)!!)
-            }
+            onComplete(it.toObject(User::class.java)!!)
+        }
     }
 
     fun createPool(pool: Pool, onComplete: (String?) -> Unit) {

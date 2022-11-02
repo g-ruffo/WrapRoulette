@@ -23,10 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PoolsViewModel @Inject constructor(
-    private val repository: AuthenticationRepository,
-    app: Application
-) :
-    BaseViewModel(app) {
+    private val repository: AuthenticationRepository, app: Application
+) : BaseViewModel(app) {
 
     companion object {
         private const val TAG = "PoolsViewModel"
@@ -116,9 +114,7 @@ class PoolsViewModel @Inject constructor(
         }
 
         FirestoreUtil.joinPool(
-            production.trim(),
-            password?.trim() ?: "",
-            date.trim()
+            production.trim(), password?.trim() ?: "", date.trim()
         ) {
             if (it.isNullOrEmpty()) {
                 navigateJoinPoolToHomeFragment()
@@ -141,6 +137,11 @@ class PoolsViewModel @Inject constructor(
         if (poolStartTime.value == null) {
             showToast.value = "Please Enter Pool Start Time"
             return
+        }
+
+        var bidPrice = poolBetAmount.value
+        if (bidPrice.isNullOrEmpty()) {
+            bidPrice = "0"
         }
 
         val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -168,7 +169,7 @@ class PoolsViewModel @Inject constructor(
             poolProduction.value!!.trim(),
             poolPassword.value?.trim() ?: "",
             poolDate.value!!,
-            poolBetAmount.value ?: "0",
+            bidPrice,
             poolMargin.value ?: "0",
             betLockTime,
             startTime,

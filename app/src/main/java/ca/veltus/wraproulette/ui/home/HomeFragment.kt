@@ -97,7 +97,12 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
-                _viewModel.navigateToEditPool()
+                if (_viewModel.isPoolActive.value) {
+                    _viewModel.navigateToEditPool()
+                } else {
+                    _viewModel.showSnackBar.value =
+                        "Pool has finished, you are unable to edit details."
+                }
                 true
             }
             R.id.actionAddMember -> {
@@ -122,7 +127,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onResume() {
         super.onResume()
-
     }
 
     override fun onDestroy() {
