@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.utils
 
 import android.content.res.ColorStateList
+import android.text.TextUtils
 import android.util.Patterns
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -110,16 +111,20 @@ object BindingAdapters {
     fun convertDateToDetail(view: TextView, date: String?) {
         if (date != null) {
             val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val dateFormatter = SimpleDateFormat("EEEE MMM d, yyyy", Locale.ENGLISH)
+            val dateFormatter = SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.ENGLISH)
             val dateObject = parsedDate.parse(date)
             val convertedDate = dateFormatter.format(dateObject!!)
             view.text = convertedDate
+            view.isSelected = true
+            view.ellipsize = TextUtils.TruncateAt.MARQUEE
+            view.isSingleLine = true
+            view.marqueeRepeatLimit = -1
         }
+
     }
 
     @BindingAdapter(
-        value = ["setTempMemberUidVisibility", "setTempMemberBetTimeVisibility"],
-        requireAll = false
+        value = ["setTempMemberUidVisibility", "setTempMemberBetTimeVisibility"], requireAll = false
     )
     @JvmStatic
     fun setTempMemberButtonVisibility(view: ImageButton, tempMemberUid: String?, betTime: Date?) {
@@ -148,10 +153,12 @@ object BindingAdapters {
     )
     @JvmStatic
     fun calculatePoolPotSize(view: TextView, bidPrice: String?, list: MutableList<Member>) {
-        if (bidPrice != null) {
+        if (!bidPrice.isNullOrEmpty()) {
             val price = bidPrice.toInt()
             val total = "$${(price * list.size)}"
             view.text = total
+        } else {
+            view.text = "$0"
         }
     }
 
