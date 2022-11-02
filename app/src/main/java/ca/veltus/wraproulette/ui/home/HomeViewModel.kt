@@ -29,7 +29,6 @@ class HomeViewModel @Inject constructor(
         private const val TAG = "HomeViewModel"
     }
 
-    val isPoolActive = MutableStateFlow<Boolean>(false)
     val isBettingOpen = MutableStateFlow<Boolean>(false)
     val isPoolAdmin = MutableStateFlow<Boolean>(false)
     val isFabClicked = MutableStateFlow<Boolean>(false)
@@ -44,6 +43,11 @@ class HomeViewModel @Inject constructor(
     val newMemberName = MutableStateFlow<String?>(null)
     val newMemberDepartment = MutableStateFlow<String?>(null)
     val newMemberEmail = MutableStateFlow<String?>(null)
+
+    private val _isPoolActive = MutableStateFlow<Boolean>(false)
+    val isPoolActive: StateFlow<Boolean>
+        get() = _isPoolActive
+
 
     private val _actionbarTitle = MutableStateFlow<String>("Home")
     val actionbarTitle: StateFlow<String>
@@ -92,9 +96,13 @@ class HomeViewModel @Inject constructor(
     val betTimeRemainingDate = liveData {
         while (true) {
             if (poolRemainingBetTime.value == null) {
-                isBettingOpen.emit(true)
                 emit(null)
                 delay(1000)
+                if (isPoolActive.value) {
+                    isBettingOpen.emit(true)
+                } else {
+                    isBettingOpen.emit(false)
+                }
             } else {
                 val time = poolRemainingBetTime.value!!.time - Calendar.getInstance().time.time
                 if (time > 0) {
@@ -175,10 +183,9 @@ class HomeViewModel @Inject constructor(
                                 _actionbarTitle.emit(pool.production)
                             }
                             if (pool.endTime != null) {
-                                isPoolActive.emit(false)
-
+                                _isPoolActive.emit(false)
                             } else {
-                                isPoolActive.emit(true)
+                                _isPoolActive.emit(true)
                             }
                         } else {
                             showNoData.emit(true)

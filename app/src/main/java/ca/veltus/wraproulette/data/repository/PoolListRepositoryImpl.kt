@@ -104,6 +104,7 @@ class PoolListRepositoryImpl @Inject constructor(
         FirestoreUtil.getCurrentUser { user ->
             val member = Member(
                 uid,
+                null,
                 poolId,
                 user.displayName,
                 user.email,

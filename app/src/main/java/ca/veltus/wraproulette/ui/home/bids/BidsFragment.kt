@@ -39,7 +39,7 @@ class BidsFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private val onItemClick = OnItemClickListener { item, view ->
-        if (item is MemberItem && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty()) {
+        if (item is MemberItem && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty() && _viewModel.isPoolActive.value) {
             launchSetMemberBetDialog(item)
         }
     }
@@ -90,7 +90,7 @@ class BidsFragment : BaseFragment() {
 
     private fun setupRecyclerView(items: List<MemberItem>) {
         val groupieAdapter = GroupieAdapter().apply {
-            addAll(items)
+            addAll(items.sortedByDescending { it.member.bidTime })
             setOnItemClickListener(onItemClick)
         }
         binding.poolsRecyclerView.apply {
