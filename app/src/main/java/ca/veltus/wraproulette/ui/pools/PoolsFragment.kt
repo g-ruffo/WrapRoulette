@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
@@ -29,11 +31,9 @@ class PoolsFragment : BaseFragment() {
     private lateinit var binding: FragmentPoolsBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
 
         binding.viewModel = _viewModel
 
@@ -45,11 +45,13 @@ class PoolsFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         lifecycleScope.launch {
-            _viewModel.userAccount.zip(_viewModel.pools) { user, pools ->
-                Pair(pools, user)
-            }.collect {
-                if (it.second != null) {
-                    setupRecyclerView(it.first.toPoolItem(it.second!!))
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.userAccount.zip(_viewModel.pools) { user, pools ->
+                    Pair(pools, user)
+                }.collect {
+                    if (it.second != null) {
+                        setupRecyclerView(it.first.toPoolItem(it.second!!))
+                    }
                 }
             }
         }

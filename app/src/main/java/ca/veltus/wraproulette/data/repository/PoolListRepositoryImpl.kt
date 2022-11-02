@@ -15,8 +15,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PoolListRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val firebaseAuth: FirebaseAuth, private val firestore: FirebaseFirestore
 ) : PoolListRepository {
 
     companion object {
@@ -49,15 +48,10 @@ class PoolListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun joinPool(
-        production: String,
-        password: String,
-        date: String,
-        onComplete: () -> Unit
+        production: String, password: String, date: String, onComplete: () -> Unit
     ) {
         firestore.collection("pools").whereEqualTo("production", production)
-            .whereEqualTo("password", password)
-            .whereEqualTo("date", date)
-            .get()
+            .whereEqualTo("password", password).whereEqualTo("date", date).get()
             .addOnSuccessListener { querySnapshot ->
                 Log.i(TAG, "joinPool: $querySnapshot")
                 querySnapshot.documents.forEach {
@@ -65,12 +59,10 @@ class PoolListRepositoryImpl @Inject constructor(
                     val pool = it.toObject(Pool::class.java)
                     addPoolToUser(pool!!.docId) {
                         addUserToPool(
-                            pool.docId,
-                            FirebaseAuth.getInstance().currentUser!!.uid
+                            pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
                         ) {
                             addMemberToPool(
-                                pool.docId,
-                                FirebaseAuth.getInstance().currentUser!!.uid
+                                pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
                             ) {
                                 onComplete()
                             }
@@ -91,8 +83,7 @@ class PoolListRepositoryImpl @Inject constructor(
     override fun addPoolToUser(poolId: String, onComplete: () -> Unit) {
         val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
         firestore.collection("users").document(currentUser!!.uid).update(newMap)
-        setActivePool(poolId) {
-        }
+        setActivePool(poolId) {}
     }
 
     override fun addUserToPool(poolId: String, uid: String, onComplete: () -> Unit) {
@@ -110,10 +101,10 @@ class PoolListRepositoryImpl @Inject constructor(
                 user.email,
                 user.department,
                 null,
-                user.profilePicturePath
+                user.profilePicturePath,
+                null
             )
-            firestore.collection("pools").document(poolId).collection("members")
-                .document(uid)
+            firestore.collection("pools").document(poolId).collection("members").document(uid)
                 .set(member)
         }
     }

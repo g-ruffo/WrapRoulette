@@ -44,11 +44,8 @@ class BidsFragment : BaseFragment() {
         }
     }
 
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBidsBinding.inflate(inflater, container, false)
 

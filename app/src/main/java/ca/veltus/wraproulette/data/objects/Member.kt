@@ -16,9 +16,10 @@ data class Member(
     val email: String?,
     val department: String?,
     val bidTime: Date?,
-    val profilePicturePath: String?
+    val profilePicturePath: String?,
+    var winnings: Int?
 ) {
-    constructor() : this("", null, "", "", "", null, null, null)
+    constructor() : this("", null, "", "", "", null, null, null, null)
 }
 
 class MemberItem(

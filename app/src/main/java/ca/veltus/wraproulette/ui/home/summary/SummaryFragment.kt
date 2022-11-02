@@ -83,7 +83,6 @@ class SummaryFragment : BaseFragment() {
 
     private fun setupScrollingListener() {
         binding.summaryScrollView.setOnScrollChangeListener { _, _, scrollY, _, s ->
-            Log.i(TAG, "setupScrollingListener: $s")
             if (scrollY < 100) {
                 _viewModel.setIsScrolling()
             } else {

@@ -72,8 +72,7 @@ object FirestoreUtil {
     }
 
     fun getCurrentUser(onComplete: (User) -> Unit) {
-        currentUserDocReference.get()
-            .addOnSuccessListener {
+        currentUserDocReference.get().addOnSuccessListener {
                 onComplete(it.toObject(User::class.java)!!)
             }
     }
@@ -87,9 +86,7 @@ object FirestoreUtil {
         pool.docId = docId
 
         poolsCollectionReference.whereEqualTo("production", pool.production)
-            .whereEqualTo("password", pool.password)
-            .whereEqualTo("date", pool.date)
-            .get()
+            .whereEqualTo("password", pool.password).whereEqualTo("date", pool.date).get()
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     poolsCollectionReference.document(docId).set(pool).addOnSuccessListener {
@@ -115,15 +112,10 @@ object FirestoreUtil {
     }
 
     fun joinPool(
-        production: String,
-        password: String,
-        date: String,
-        onComplete: (String?) -> Unit
+        production: String, password: String, date: String, onComplete: (String?) -> Unit
     ) {
         poolsCollectionReference.whereEqualTo("production", production)
-            .whereEqualTo("password", password)
-            .whereEqualTo("date", date)
-            .get()
+            .whereEqualTo("password", password).whereEqualTo("date", date).get()
             .addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) {
                     Log.i(TAG, "querySnapshot.isEmpty: $querySnapshot")
@@ -138,12 +130,10 @@ object FirestoreUtil {
                             } else {
                                 addPoolToUser(pool.docId)
                                 addUserToPool(
-                                    pool.docId,
-                                    FirebaseAuth.getInstance().currentUser!!.uid
+                                    pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
                                 )
                                 addMemberToPool(
-                                    pool.docId,
-                                    FirebaseAuth.getInstance().currentUser!!.uid
+                                    pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
                                 )
                                 onComplete(null)
                             }
@@ -190,8 +180,7 @@ object FirestoreUtil {
     private fun addPoolToUser(poolId: String) {
         val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
         currentUserDocReference.update(newMap)
-        setActivePool(poolId) {
-        }
+        setActivePool(poolId) {}
     }
 
     private fun addUserToPool(poolId: String, uid: String) {
@@ -205,13 +194,10 @@ object FirestoreUtil {
         member.tempMemberUid = tempMemberUid
         poolsCollectionReference.document(member.poolId).collection("members")
             .whereEqualTo("displayName", member.displayName)
-            .whereEqualTo("department", member.department)
-            .get()
-            .addOnSuccessListener {
+            .whereEqualTo("department", member.department).get().addOnSuccessListener {
                 if (it.isEmpty) {
                     poolsCollectionReference.document(member.poolId).collection("members")
-                        .document(tempMemberUid)
-                        .set(member).addOnSuccessListener {
+                        .document(tempMemberUid).set(member).addOnSuccessListener {
                             onComplete(null)
                         }.addOnFailureListener { exception ->
                             onComplete(exception.message)
@@ -233,7 +219,8 @@ object FirestoreUtil {
                 user.email,
                 user.department,
                 null,
-                user.profilePicturePath
+                user.profilePicturePath,
+                null
             )
             poolsCollectionReference.document(poolId).collection("members").document(uid)
                 .set(member)
@@ -243,10 +230,7 @@ object FirestoreUtil {
 
     fun getPoolMemberList(poolId: String): Flow<List<Member>> {
         val db = FirebaseFirestore.getInstance()
-        return db.collection("pools")
-            .document(poolId)
-            .collection("members")
-            .snapshots()
+        return db.collection("pools").document(poolId).collection("members").snapshots()
             .map<QuerySnapshot, List<Member>> { querySnapshot -> querySnapshot.toObjects() }
             .onCompletion {
                 Log.i(TAG, "getPoolMemberList OnCompletion: $it")
@@ -260,8 +244,7 @@ object FirestoreUtil {
             return flowOf()
         }
         val db = FirebaseFirestore.getInstance()
-        return db.collection("pools")
-            .document(poolId).snapshots()
+        return db.collection("pools").document(poolId).snapshots()
             .map { querySnapshot -> querySnapshot.toObject<Pool?>() }.onCompletion {
                 Log.i(TAG, "getPoolData OnCompletion: $it")
             }.catch {

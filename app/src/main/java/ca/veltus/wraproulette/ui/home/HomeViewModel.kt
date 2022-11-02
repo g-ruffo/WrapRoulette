@@ -261,6 +261,7 @@ class HomeViewModel @Inject constructor(
             memberEmail,
             memberDepartment.trim(),
             null,
+            null,
             null
         )
         FirestoreUtil.addNewMemberToPool(newMember) {
@@ -320,6 +321,9 @@ class HomeViewModel @Inject constructor(
     private fun setWinningMember(wrapTime: Date) {
         val totalBetList = mutableListOf<Member>()
         val winnersList = mutableListOf<Member>()
+        val numberOfBets = poolTotalBets.value.size
+        val bidPrice = currentPool.value?.betAmount?.toInt() ?: 0
+        val memberWinnings = numberOfBets * bidPrice
 
         _poolTotalBets.value.forEach {
             if (it.bidTime != null) {
@@ -334,6 +338,12 @@ class HomeViewModel @Inject constructor(
                 if (abs(wrapTime.time - totalBetList[i].bidTime!!.time) <= Constants.MINUTE) {
                     winnersList.add(totalBetList[i])
                 }
+            }
+        }
+        winnersList.forEach {
+            it.winnings = when (numberOfBets) {
+                0 -> memberWinnings
+                else -> memberWinnings / winnersList.size
             }
         }
 

@@ -125,7 +125,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy: called")
