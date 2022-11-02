@@ -100,17 +100,19 @@ class BidsFragment : BaseFragment() {
     }
 
     private fun launchSetMemberBetDialog(memberItem: MemberItem) {
-        val time = Calendar.getInstance().time
+        val time = Calendar.getInstance()
         val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            time.hours = hourOfDay
-            time.minutes = minute
-            time.seconds = 0
+            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            time.set(Calendar.MINUTE, minute)
+            time.set(Calendar.SECOND, 0)
+            time.set(Calendar.MILLISECOND, 0)
 
-            if (time.before(_viewModel.poolStartTime.value)) {
-                time.date = time.date + 1
+            if (time.time.before(_viewModel.poolStartTime.value)) {
+                time.add(Calendar.DATE, 1)
             }
+
             FirestoreUtil.setUserPoolBet(
-                memberItem.member.poolId, memberItem.member.tempMemberUid!!, time
+                memberItem.member.poolId, memberItem.member.tempMemberUid!!, time.time
             ) {
                 if (!it.isNullOrEmpty()) {
                     _viewModel.showToast.value = it
@@ -122,8 +124,8 @@ class BidsFragment : BaseFragment() {
             requireContext(),
             AlertDialog.THEME_HOLO_LIGHT,
             timePickerListener,
-            time.hours,
-            time.minutes,
+            time.get(Calendar.HOUR_OF_DAY),
+            time.get(Calendar.MINUTE),
             true
         )
         timePickerDialog.setTitle(memberItem.member.displayName)

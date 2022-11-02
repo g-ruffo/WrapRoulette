@@ -139,9 +139,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
                         true -> {
                             fabView = binding.adminFabLayout
                             if (!::menuHost.isInitialized) {
-                                Log.i(TAG, "addMenuProvider: isNotInitialized")
                                 menuHost = requireActivity()
-
                             }
                             menuHost.removeMenuProvider(this@HomeFragment)
                             menuHost.invalidateMenu()
@@ -232,26 +230,28 @@ class HomeFragment : BaseFragment(), MenuProvider {
     }
 
     private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
-        val time = Calendar.getInstance().time
-        var submitButtonText = when (setWrapTime) {
+        val time = Calendar.getInstance()
+
+        val submitButtonText = when (setWrapTime) {
             true -> "Set Wrap"
             false -> "Bet"
         }
         val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            time.hours = hourOfDay
-            time.minutes = minute
-            time.seconds = 0
+            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            time.set(Calendar.MINUTE, minute)
+            time.set(Calendar.SECOND, 0)
+            time.set(Calendar.MILLISECOND, 0)
 
-            if (time.before(_viewModel.poolStartTime.value)) {
-                time.date = time.date + 1
+            if (time.time.before(_viewModel.poolStartTime.value)) {
+                time.add(Calendar.DATE, 1)
             }
 
             if (setWrapTime) {
-                launchConfirmationDialog(time)
+                launchConfirmationDialog(time.time)
             } else {
                 FirestoreUtil.getCurrentUser { user ->
                     FirestoreUtil.setUserPoolBet(
-                        user.activePool!!, user.uid, time
+                        user.activePool!!, user.uid, time.time
                     ) {}
                 }
             }
@@ -261,8 +261,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
             requireContext(),
             AlertDialog.THEME_HOLO_LIGHT,
             timePickerListener,
-            time.hours,
-            time.minutes,
+            time.get(Calendar.HOUR_OF_DAY),
+            time.get(Calendar.MINUTE),
             true
         )
 

@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
-import android.app.AlertDialog.*
+import android.app.AlertDialog.BUTTON_NEUTRAL
+import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
@@ -64,11 +65,6 @@ class AddPoolFragment : BaseFragment() {
                 v.performClick()
             }
         }
-//        binding.selectBetAmountAutoComplete.setOnFocusChangeListener { v, hasFocus ->
-//            if (hasFocus) {
-//                v.performClick()
-//            }
-//        }
 
         binding.selectDateAutoComplete.setOnClickListener {
             launchDatePickerDialog()
@@ -115,14 +111,13 @@ class AddPoolFragment : BaseFragment() {
 
     private fun launchBetLockTimePickerDialog() {
         val time = Calendar.getInstance()
-        var selectedHour = time.get(Calendar.HOUR_OF_DAY)
-        var selectedMinute = time.get(Calendar.MINUTE)
 
         val timePickerListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 time.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 time.set(Calendar.MINUTE, minute)
                 time.set(Calendar.SECOND, 0)
+                time.set(Calendar.MILLISECOND, 0)
 
                 _viewModel.setPoolBetLockTime(Date(time.timeInMillis))
             }
@@ -131,8 +126,8 @@ class AddPoolFragment : BaseFragment() {
             requireContext(),
             THEME_HOLO_DARK,
             timePickerListener,
-            selectedHour,
-            selectedMinute,
+            time.get(Calendar.HOUR_OF_DAY),
+            time.get(Calendar.MINUTE),
             true
         )
         dialog.setButton(BUTTON_NEUTRAL, "Clear") { _, _ ->
@@ -143,14 +138,13 @@ class AddPoolFragment : BaseFragment() {
 
     private fun launchStartTImePickerDialog() {
         val time = Calendar.getInstance()
-        var selectedHour = time.get(Calendar.HOUR_OF_DAY)
-        var selectedMinute = time.get(Calendar.MINUTE)
 
         val timePickerListener =
             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 time.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 time.set(Calendar.MINUTE, minute)
                 time.set(Calendar.SECOND, 0)
+                time.set(Calendar.MILLISECOND, 0)
 
                 _viewModel.setPoolStartTime(Date(time.timeInMillis))
             }
@@ -159,8 +153,8 @@ class AddPoolFragment : BaseFragment() {
             requireContext(),
             THEME_HOLO_DARK,
             timePickerListener,
-            selectedHour,
-            selectedMinute,
+            time.get(Calendar.HOUR_OF_DAY),
+            time.get(Calendar.MINUTE),
             true
         ).show()
     }
@@ -168,9 +162,6 @@ class AddPoolFragment : BaseFragment() {
     // Launch date dialog and listen for its result.
     private fun launchDatePickerDialog() {
         val calendar = Calendar.getInstance()
-        var selectedYear = calendar.get(Calendar.YEAR)
-        var selectedMonth = calendar.get(Calendar.MONTH)
-        var selectedDay = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerListener =
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
@@ -189,10 +180,9 @@ class AddPoolFragment : BaseFragment() {
             requireContext(),
             THEME_HOLO_DARK,
             datePickerListener,
-            selectedYear,
-            selectedMonth,
-            selectedDay
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DATE)
         ).show()
     }
-
 }
