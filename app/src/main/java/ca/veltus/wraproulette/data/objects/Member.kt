@@ -17,9 +17,10 @@ data class Member(
     val department: String?,
     val bidTime: Date?,
     val profilePicturePath: String?,
-    var winnings: Int?
+    var winnings: Int?,
+    var activeMember: Boolean
 ) {
-    constructor() : this("", null, "", "", "", null, null, null, null)
+    constructor() : this("", null, "", "", "", null, null, null, null, true)
 }
 
 class MemberItem(
@@ -31,6 +32,10 @@ class MemberItem(
         if (userUid != member.uid) {
             viewBinding.mainLayout.removeView(viewBinding.memberAddBetImageButton)
         }
+        if (!member.activeMember) {
+            viewBinding.mainLayout.alpha = 0.5f
+        }
+
         if (member.profilePicturePath != null) {
             Glide.with(viewBinding.root)
                 .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))

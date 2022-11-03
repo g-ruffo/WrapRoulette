@@ -102,7 +102,8 @@ class PoolListRepositoryImpl @Inject constructor(
                 user.department,
                 null,
                 user.profilePicturePath,
-                null
+                null,
+                true
             )
             firestore.collection("pools").document(poolId).collection("members").document(uid)
                 .set(member)

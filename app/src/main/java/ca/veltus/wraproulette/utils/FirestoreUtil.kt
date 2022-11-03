@@ -223,7 +223,8 @@ object FirestoreUtil {
                 user.department,
                 null,
                 user.profilePicturePath,
-                null
+                null,
+                true
             )
             poolsCollectionReference.document(poolId).collection("members").document(uid)
                 .set(member)
@@ -232,8 +233,7 @@ object FirestoreUtil {
 
 
     fun getPoolMemberList(poolId: String): Flow<List<Member>> {
-        val db = FirebaseFirestore.getInstance()
-        return db.collection("pools").document(poolId).collection("members").snapshots()
+        return poolsCollectionReference.document(poolId).collection("members").snapshots()
             .map<QuerySnapshot, List<Member>> { querySnapshot -> querySnapshot.toObjects() }
             .onCompletion {
                 Log.i(TAG, "getPoolMemberList OnCompletion: $it")
@@ -277,9 +277,15 @@ object FirestoreUtil {
     fun leavePool(poolUid: String, userUid: String, onComplete: (String?) -> Unit) {
         poolsCollectionReference.document(poolUid).update("users.$userUid", false)
             .addOnSuccessListener {
-                deletePoolFromUser(poolUid) {
-                    onComplete(null)
-                }
+                poolsCollectionReference.document(poolUid).collection("members").document(userUid)
+                    .update("activeMember", false).addOnSuccessListener {
+                        deletePoolFromUser(poolUid) {
+                            onComplete(null)
+                        }
+                    }.addOnFailureListener { exception ->
+                        onComplete(exception.message)
+                        Log.e(TAG, "getEditPool: $exception")
+                    }
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
                 Log.e(TAG, "getEditPool: $exception")
