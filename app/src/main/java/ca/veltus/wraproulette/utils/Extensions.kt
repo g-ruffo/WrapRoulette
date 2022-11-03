@@ -66,10 +66,17 @@ fun List<Pool>.toPoolItem(user: User): List<PoolItem> {
     }
 }
 
+fun intToStringOrdinal(i: Int): String {
+    val suffixes = arrayOf("th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th")
+    return when (i % 100) {
+        11, 12, 13 -> i.toString() + "th"
+        else -> i.toString() + suffixes[i % 10]
+    }
+}
+
 
 inline fun ViewPager2.onPageSelected(
-    lifecycleOwner: LifecycleOwner,
-    crossinline listener: (position: Int) -> Unit
+    lifecycleOwner: LifecycleOwner, crossinline listener: (position: Int) -> Unit
 ) {
     object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) = listener(position)
@@ -89,7 +96,6 @@ fun getTimeStringFromLong(time: Long): String {
 }
 
 fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
-    return (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
-        .getRunningServices(Integer.MAX_VALUE)
+    return (getSystemService(ACTIVITY_SERVICE) as ActivityManager).getRunningServices(Integer.MAX_VALUE)
         .any { it -> it.service.className == service.name }
 }

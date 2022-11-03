@@ -18,6 +18,7 @@ import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.data.objects.WinnerMemberItem
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
+import ca.veltus.wraproulette.utils.intToStringOrdinal
 import ca.veltus.wraproulette.utils.toMemberItem
 import ca.veltus.wraproulette.utils.toWinnerMemberItem
 import com.xwray.groupie.GroupieAdapter
@@ -108,14 +109,22 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
-
     private fun setupBidsRecyclerView(items: List<MemberItem>) {
+        setPositionTextView(items)
         val groupieAdapter = GroupieAdapter().apply {
             addAll(items)
         }
         binding.memberBidsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
+        }
+    }
+
+    private fun setPositionTextView(items: List<MemberItem>) {
+        for (i in items.indices) {
+            if (items[i].member.uid == _viewModel.userAccount.value!!.uid && items[i].member.displayName == _viewModel.userAccount.value!!.displayName) {
+                binding.positionTextView.text = intToStringOrdinal(i + 1)
+            }
         }
     }
 

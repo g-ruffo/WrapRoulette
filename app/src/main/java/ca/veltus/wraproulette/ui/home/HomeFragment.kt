@@ -255,7 +255,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 FirestoreUtil.getCurrentUser { user ->
                     FirestoreUtil.setUserPoolBet(
                         user.activePool!!, user.uid, time.time
-                    ) {}
+                    ) {
+                        if (!it.isNullOrEmpty()) {
+                            _viewModel.showToast.value = it
+                        }
+                    }
                 }
             }
         }
@@ -278,7 +282,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 FirestoreUtil.getCurrentUser { user ->
                     FirestoreUtil.setUserPoolBet(
                         user.activePool!!, user.uid, null
-                    ) {}
+                    ) {
+                        if (!it.isNullOrEmpty()) {
+                            _viewModel.showToast.value = it
+                        }
+                    }
                 }
             }
         }

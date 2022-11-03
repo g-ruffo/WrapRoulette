@@ -65,7 +65,7 @@ class HomeViewModel @Inject constructor(
     val userAccount: StateFlow<User?>
         get() = _userAccount
 
-    val _poolTotalBets = MutableStateFlow<List<Member>>(listOf())
+    private val _poolTotalBets = MutableStateFlow<List<Member>>(listOf())
     val poolTotalBets: StateFlow<List<Member>>
         get() = _poolTotalBets
 
@@ -126,7 +126,7 @@ class HomeViewModel @Inject constructor(
     }
 
     val currentTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-    val currentTimeDate = liveData {
+    val currentTimeDate = liveData<Date> {
         while (true) {
             emit(Calendar.getInstance().time)
             currentTime.emit(Calendar.getInstance().time)
@@ -213,8 +213,8 @@ class HomeViewModel @Inject constructor(
                         _bids.emit(members)
                         addBidMemberToList(members)
                         members.forEach {
-                            if (it.uid == userAccount.value!!.uid && it.bidTime != null) {
-                                setUserBetTime(it.bidTime!!)
+                            if (it.uid == userAccount.value!!.uid) {
+                                setUserBetTime(it.bidTime)
                             }
                         }
                     }
@@ -224,7 +224,7 @@ class HomeViewModel @Inject constructor(
         } else return
     }
 
-    private fun setUserBetTime(date: Date) {
+    private fun setUserBetTime(date: Date?) {
         userBetTime.value = date
     }
 

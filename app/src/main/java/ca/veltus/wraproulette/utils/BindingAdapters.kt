@@ -57,6 +57,8 @@ object BindingAdapters {
             val parsedDate = SimpleDateFormat("HH:mm", Locale.ENGLISH)
             val time = parsedDate.format(date)
             view.text = time
+        } else {
+            view.text = "No Bet"
         }
     }
 
