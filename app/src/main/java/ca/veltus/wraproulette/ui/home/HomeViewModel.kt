@@ -168,7 +168,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getPoolData(activePool: String?) {
+    private fun getPoolData(activePool: String?) {
         if (!activePool.isNullOrEmpty()) {
             viewModelScope.launch {
                 launch {
@@ -231,6 +231,7 @@ class HomeViewModel @Inject constructor(
         FirestoreUtil.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
             showLoading.value = false
             if (!it.isNullOrEmpty()) showToast.value = it
+            else _actionbarTitle.value = "Home"
         }
     }
 
@@ -270,7 +271,8 @@ class HomeViewModel @Inject constructor(
             memberDepartment.trim(),
             null,
             null,
-            null
+            null,
+            true
         )
         FirestoreUtil.addNewMemberToPool(newMember) {
             if (!it.isNullOrEmpty()) {
