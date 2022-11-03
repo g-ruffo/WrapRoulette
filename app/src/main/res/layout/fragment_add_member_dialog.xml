@@ -8,13 +8,18 @@
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
+
+        <variable
+            name="member"
+            type="ca.veltus.wraproulette.data.objects.Member" />
+
+        <import type="android.view.View" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.home.dialog.AddMemberDialogFragment">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -27,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="Add Member"
+                android:text="@{member == null ? `Add Member` : `Edit Member`}"
                 android:textSize="28sp"
                 app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +105,7 @@
                 android:layout_marginHorizontal="16dp"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:hintTextColor="@color/purpleLogoLight"
-                app:layout_constraintBottom_toTopOf="@+id/addMemberButton"
+                app:layout_constraintBottom_toTopOf="@+id/buttonLinearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
@@ -118,37 +123,55 @@
                     android:text="@={viewModel.newMemberDepartment}" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/addMemberButton"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/buttonLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="32dp"
-                android:background="@drawable/rounded_corners_button"
-                android:text="Add"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cancelButton"
-                app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout"
-                app:layout_constraintVertical_bias="0.5" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/cancelButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/rounded_corners_button"
-                android:text="Cancel"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/addMemberButton"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/addMemberButton" />
+                app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout">
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/deleteButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corners_button"
+                    android:enabled="@{member == null ? false : true}"
+                    android:text="Delete"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="@{member == null ? View.GONE : View.VISIBLE}" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/cancelButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corners_button"
+                    android:text="Cancel"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/addMemberButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corners_button"
+                    android:text="@{member == null ? `Add` : `Update`}"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintVertical_bias="0.5" />
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
