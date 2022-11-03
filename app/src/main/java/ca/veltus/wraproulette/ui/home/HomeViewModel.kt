@@ -48,7 +48,6 @@ class HomeViewModel @Inject constructor(
     val poolWinningMembers: StateFlow<List<Member>>
         get() = _poolWinningMembers
 
-
     private val _isPoolActive = MutableStateFlow<Boolean>(false)
     val isPoolActive: StateFlow<Boolean>
         get() = _isPoolActive
@@ -226,6 +225,13 @@ class HomeViewModel @Inject constructor(
 
     private fun setUserBetTime(date: Date?) {
         userBetTime.value = date
+    }
+
+    fun leavePool() {
+        FirestoreUtil.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
+            showLoading.value = false
+            if (!it.isNullOrEmpty()) showToast.value = it
+        }
     }
 
     fun createNewPoolMember(): Boolean {
