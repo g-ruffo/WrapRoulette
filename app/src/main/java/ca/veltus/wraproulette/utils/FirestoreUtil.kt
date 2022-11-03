@@ -125,10 +125,13 @@ object FirestoreUtil {
                         Log.i(TAG, "joinPool: $it")
                         val pool = it.toObject(Pool::class.java)
                         currentUserDocReference.get().addOnSuccessListener { user ->
-                            if (user.contains("pools.${pool!!.docId}")) {
+                            val account = user.toObject(User::class.java)
+                            if (account!!.pools.any { entry -> entry.key == pool!!.docId && entry.value == true }) {
                                 onComplete("You are already a member of this pool")
+                            } else if (account.pools.any { entry -> entry.key == pool!!.docId && entry.value == false }) {
+                                onComplete("You have left this pool")
                             } else {
-                                addPoolToUser(pool.docId)
+                                addPoolToUser(pool!!.docId)
                                 addUserToPool(
                                     pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
                                 )
@@ -260,25 +263,40 @@ object FirestoreUtil {
         }
     }
 
-    fun deletePool(poolUid: String, onComplete: () -> Unit) {
+    fun deletePool(poolUid: String, onComplete: (String?) -> Unit) {
         poolsCollectionReference.document(poolUid).delete().addOnSuccessListener {
             deletePoolFromUser(poolUid) {
-                onComplete()
+                onComplete(null)
             }
-        }.addOnFailureListener {
-            Log.e(TAG, "getEditPool: $it")
+        }.addOnFailureListener { exception ->
+            onComplete(exception.message)
+            Log.e(TAG, "getEditPool: $exception")
         }
     }
 
-    fun deletePoolFromUser(poolUid: String, onComplete: () -> Unit) {
+    fun leavePool(poolUid: String, userUid: String, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(poolUid).update("users.$userUid", false)
+            .addOnSuccessListener {
+                deletePoolFromUser(poolUid) {
+                    onComplete(null)
+                }
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+                Log.e(TAG, "getEditPool: $exception")
+            }
+    }
+
+    private fun deletePoolFromUser(poolUid: String, onComplete: (String?) -> Unit) {
         currentUserDocReference.update("activePool", null).addOnSuccessListener {
             currentUserDocReference.update("pools.$poolUid", false).addOnSuccessListener {
-                onComplete()
-            }.addOnFailureListener {
-                Log.e(TAG, "getEditPool: $it")
+                onComplete(null)
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+                Log.e(TAG, "getEditPool: $exception")
             }
-        }.addOnFailureListener {
-            Log.e(TAG, "getEditPool: $it")
+        }.addOnFailureListener { exception ->
+            onComplete(exception.message)
+            Log.e(TAG, "getEditPool: $exception")
         }
     }
 
