@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.data.objects.WinnerMemberItem
@@ -22,7 +24,9 @@ import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class SummaryFragment : BaseFragment() {
@@ -61,8 +65,13 @@ class SummaryFragment : BaseFragment() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    _viewModel.poolTotalBets.collect {
-                        setupBidsRecyclerView(it.toMemberItem())
+                    _viewModel.poolTotalBets.combine(_viewModel.currentTime) { bets, time ->
+                        Pair(bets, time)
+                    }.collectLatest {
+                        val list = it.first
+                        val time = it.second
+                        setupBidsRecyclerView(list.toMemberItem()
+                            .sortedBy { member -> abs(time.time - member.member.bidTime!!.time) })
                     }
                 }
                 launch {
@@ -102,7 +111,7 @@ class SummaryFragment : BaseFragment() {
 
     private fun setupBidsRecyclerView(items: List<MemberItem>) {
         val groupieAdapter = GroupieAdapter().apply {
-            addAll(items.sortedBy { it.member.bidTime })
+            addAll(items)
         }
         binding.memberBidsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -118,6 +127,8 @@ class SummaryFragment : BaseFragment() {
         binding.winnersRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
+            layoutAnimation =
+                AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation)
         }
     }
 

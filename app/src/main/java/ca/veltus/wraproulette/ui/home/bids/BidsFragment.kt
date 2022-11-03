@@ -90,6 +90,7 @@ class BidsFragment : BaseFragment() {
             addAll(items.sortedByDescending { it.member.bidTime })
             setOnItemClickListener(onItemClick)
         }
+
         binding.poolsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter

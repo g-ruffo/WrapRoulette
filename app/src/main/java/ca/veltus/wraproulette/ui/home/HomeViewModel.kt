@@ -125,9 +125,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    val currentTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val currentTimeDate = liveData {
         while (true) {
             emit(Calendar.getInstance().time)
+            currentTime.emit(Calendar.getInstance().time)
             delay(1000)
         }
     }

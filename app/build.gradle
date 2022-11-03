@@ -85,7 +85,7 @@ dependencies {
     implementation 'com.github.lisawray.groupie:groupie-databinding:2.10.1'
     implementation "com.github.lisawray.groupie:groupie-kotlin-android-extensions:2.10.1"
 
-
+    // Circle ImageView Dependency
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     // Unit Testing Dependencies
