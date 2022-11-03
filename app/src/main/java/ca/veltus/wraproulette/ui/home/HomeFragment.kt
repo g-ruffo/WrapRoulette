@@ -231,7 +231,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         val dialog: AlertDialog = builder.show()
 
         dialogBinding.addMemberButton.setOnClickListener {
-            if (_viewModel.createNewPoolMember()) {
+            if (_viewModel.createUpdateTempMember()) {
                 dialog.dismiss()
             }
         }
@@ -281,23 +281,26 @@ class HomeFragment : BaseFragment(), MenuProvider {
             true
         )
 
-        timePickerDialog.setButton(
-            DialogInterface.BUTTON_NEUTRAL, "Clear"
-        ) { _, _ ->
-            if (setWrapTime) {
-                launchConfirmationDialog(null)
-            } else {
+        if (_viewModel.userBetTime.value != null && !setWrapTime) {
+            timePickerDialog.setButton(
+                DialogInterface.BUTTON_NEUTRAL, "Clear"
+            ) { _, _ ->
                 FirestoreUtil.getCurrentUser { user ->
                     FirestoreUtil.setUserPoolBet(
                         user.activePool!!, user.uid, null
                     ) {
-                        if (!it.isNullOrEmpty()) {
-                            _viewModel.showToast.value = it
-                        }
+                        if (!it.isNullOrEmpty()) _viewModel.showToast.value = it
                     }
                 }
             }
         }
+
+        if (setWrapTime && _viewModel.poolEndTime.value != null) {
+            timePickerDialog.setButton(
+                DialogInterface.BUTTON_NEUTRAL, "Clear"
+            ) { _, _ -> launchConfirmationDialog(null) }
+        }
+
         timePickerDialog.setButton(
             DialogInterface.BUTTON_POSITIVE, submitButtonText
         ) { _, _ -> }
