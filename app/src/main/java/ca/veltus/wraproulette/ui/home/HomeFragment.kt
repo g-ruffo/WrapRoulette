@@ -111,20 +111,26 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
-                if (_viewModel.isPoolActive.value) {
-                    _viewModel.navigateToEditPool()
-                } else {
-                    _viewModel.showSnackBar.value =
-                        "Pool has finished, you are unable to edit details."
-                }
+                if (_viewModel.isPoolActive.value) _viewModel.navigateToEditPool()
+                else _viewModel.showSnackBar.value =
+                    "Pool has finished, you are unable to edit details."
                 true
             }
             R.id.actionAddMember -> {
-                if (_viewModel.isPoolActive.value) {
-                    launchAddMemberDialog()
-                } else {
+                if (_viewModel.isPoolActive.value) launchAddMemberDialog()
+                else _viewModel.showSnackBar.value =
+                    "Pool has finished, you are unable to add anymore members."
+                true
+            }
+            R.id.actionLeavePool -> {
+                if ((!_viewModel.isPoolAdmin.value && _viewModel.userBetTime.value == null) || (_viewModel.poolEndTime.value != null && !_viewModel.isPoolActive.value && !_viewModel.isPoolAdmin.value)) {
+                    launchConfirmationDialog(null, true)
+                } else if (!_viewModel.isBettingOpen.value && _viewModel.isPoolActive.value) {
                     _viewModel.showSnackBar.value =
-                        "Pool has finished, you are unable to add anymore members."
+                        "Betting has locked and pool is still active, you are unable to leave at this time."
+                } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
+                    _viewModel.showSnackBar.value =
+                        "You need to clear your bet before leaving this pool"
                 }
                 true
             }
@@ -215,8 +221,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 }
             }
         }
-
-
     }
 
     private fun launchAddMemberDialog() {
@@ -303,19 +307,23 @@ class HomeFragment : BaseFragment(), MenuProvider {
         timePickerDialog.show()
     }
 
-    private fun launchConfirmationDialog(time: Date?) {
+    private fun launchConfirmationDialog(time: Date?, isLeavePool: Boolean = false) {
         val format = SimpleDateFormat("HH:mm MMM d, yyyy", Locale.ENGLISH)
         var message = ""
-        message = if (time == null) {
+        message = if (time == null && !isLeavePool) {
             "Are you sure you want to clear the set wrap time?"
-        } else {
+        } else if (time != null && !isLeavePool) {
             "Please confirm the selected wrap time is correct: ${format.format(time)}"
+        } else {
+            "Are you sure you want to leave this pool?"
         }
         MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?").setMessage(message)
             .setPositiveButton("Yes") { _, _ ->
-                _viewModel.setWrapTime(time, true)
-            }.setNegativeButton("No") { _, _ ->
-                _viewModel.setWrapTime(time, false)
-            }.show()
+                if (!isLeavePool) _viewModel.setWrapTime(time, true)
+                else {
+                    _viewModel.showLoading.value = true
+                    _viewModel.leavePool()
+                }
+            }.setNegativeButton("No") { _, _ -> }.show()
     }
 }
