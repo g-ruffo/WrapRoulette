@@ -23,4 +23,5 @@
     <string name="account">Account</string>
     <string name="add_member">Add Member</string>
     <string name="edit_pool">Edit Pool</string>
+    <string name="leave_pool">Leave Pool</string>
 </resources>

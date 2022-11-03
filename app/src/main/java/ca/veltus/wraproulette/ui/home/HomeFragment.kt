@@ -56,6 +56,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
             tab.text = ViewPagerAdapter.fragmentTitle[position]
         }.attach()
 
+        setupMenuOptions()
 
         binding.bidFab.setOnClickListener {
             launchBetAndWrapDialog()
@@ -94,6 +95,19 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     }
 
+    override fun onPrepareMenu(menu: Menu) {
+        super.onPrepareMenu(menu)
+        if (_viewModel.isPoolAdmin.value) {
+            menu.findItem(R.id.actionLeavePool).isVisible = false
+            menu.findItem(R.id.actionEditPool).isVisible = true
+            menu.findItem(R.id.actionAddMember).isVisible = true
+        } else {
+            menu.findItem(R.id.actionEditPool).isVisible = false
+            menu.findItem(R.id.actionAddMember).isVisible = false
+            menu.findItem(R.id.actionLeavePool).isVisible = true
+        }
+    }
+
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
@@ -122,7 +136,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onPause() {
         super.onPause()
-        Log.i(TAG, "onPause: called")
     }
 
     override fun onResume() {
@@ -138,29 +151,20 @@ class HomeFragment : BaseFragment(), MenuProvider {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.isPoolAdmin.collectLatest {
-                    when (it) {
-                        true -> {
-                            fabView = binding.adminFabLayout
-                            if (!::menuHost.isInitialized) {
-                                menuHost = requireActivity()
-                            }
-                            menuHost.removeMenuProvider(this@HomeFragment)
-                            menuHost.invalidateMenu()
-                            menuHost.addMenuProvider(
-                                this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
-                            )
-                        }
-                        false -> {
-                            fabView = binding.bidFab
-                            if (::menuHost.isInitialized) {
-                                menuHost.removeMenuProvider(this@HomeFragment)
-                                menuHost.invalidateMenu()
-                            }
-                        }
+                    fabView = when (it) {
+                        true -> binding.adminFabLayout
+                        false -> binding.bidFab
                     }
                 }
             }
         }
+    }
+
+    private fun setupMenuOptions() {
+        menuHost = requireActivity()
+        menuHost.addMenuProvider(
+            this@HomeFragment, viewLifecycleOwner, Lifecycle.State.STARTED
+        )
     }
 
 
