@@ -19,28 +19,16 @@ data class Pool(
     var startTime: Date?,
     var endTime: Date?,
     var winners: List<Member> = listOf(),
-    var users: MutableMap<String, Any> = mutableMapOf()
+    var users: MutableMap<String, Any> = mutableMapOf(),
+    var pIRRulesEnabled: Boolean = false
 ) {
     constructor() : this(
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        null,
-        null,
-        null,
-        null,
-        null,
-        listOf(),
-        mutableMapOf()
+        "", "", "", "", "", "", null, null, null, null, null, listOf(), mutableMapOf(), false
     )
 }
 
 class PoolItem(
-    val pool: Pool,
-    val user: User
+    val pool: Pool, val user: User
 ) : BindableItem<PoolListItemBinding>() {
 
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {

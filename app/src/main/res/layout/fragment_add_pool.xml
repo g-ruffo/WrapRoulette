@@ -238,16 +238,26 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/pIRCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:checked="@={viewModel.poolPISRulesEnabled}"
+                android:text="Price Is Right Rules"
+                app:layout_constraintBottom_toTopOf="@id/buttonLinearLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selectBetAmountTextInputLayout" />
+
             <LinearLayout
                 android:id="@+id/buttonLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="44dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selectBetAmountTextInputLayout">
+                app:layout_constraintTop_toBottomOf="@+id/pIRCheckbox">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/deleteButton"

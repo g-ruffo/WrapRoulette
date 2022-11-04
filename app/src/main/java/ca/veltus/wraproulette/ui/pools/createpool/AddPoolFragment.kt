@@ -69,7 +69,7 @@ class AddPoolFragment : BaseFragment() {
         }
 
         binding.selectStartTimeAutoComplete.setOnClickListener {
-            launchStartTImePickerDialog()
+            launchStartTimePickerDialog()
         }
 
         binding.selectBettingCloseTimeAutoComplete.setOnClickListener {
@@ -133,7 +133,7 @@ class AddPoolFragment : BaseFragment() {
         dialog.show()
     }
 
-    private fun launchStartTImePickerDialog() {
+    private fun launchStartTimePickerDialog() {
         val time = Calendar.getInstance()
 
         val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->

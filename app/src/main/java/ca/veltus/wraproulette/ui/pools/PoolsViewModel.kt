@@ -37,6 +37,7 @@ class PoolsViewModel @Inject constructor(
     val poolMargin = MutableStateFlow<String?>(null)
     val poolBetLockTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date?>(null)
+    val poolPISRulesEnabled = MutableStateFlow<Boolean>(false)
 
     val poolDocUid = MutableStateFlow<String?>(null)
     val poolAdminUid = MutableStateFlow<String?>(null)
@@ -129,15 +130,18 @@ class PoolsViewModel @Inject constructor(
         showLoading.value = true
         if (poolProduction.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Production Name"
+            showLoading.value = false
             return
         }
 
         if (poolDate.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Pool Date"
+            showLoading.value = false
             return
         }
         if (poolStartTime.value == null) {
             showToast.value = "Please Enter Pool Start Time"
+            showLoading.value = false
             return
         }
 
@@ -177,7 +181,9 @@ class PoolsViewModel @Inject constructor(
             startTime,
             poolEndTime.value,
             poolWinners.value,
-            poolUsers.value
+            poolUsers.value,
+            poolPISRulesEnabled.value
+
         )
         if (!poolDocUid.value.isNullOrEmpty()) {
             FirestoreUtil.updatePool(pool) {
