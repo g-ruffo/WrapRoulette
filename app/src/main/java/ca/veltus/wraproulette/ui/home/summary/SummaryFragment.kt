@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.ui.home.summary
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -90,10 +91,14 @@ class SummaryFragment : BaseFragment() {
         super.onPause()
         Log.i(TAG, "onPause:")
         _viewModel.setIsScrolling()
+        binding.poolDateTextView.ellipsize = null
+
     }
 
     override fun onResume() {
         super.onResume()
+        Log.i(TAG, "onResume: ")
+        binding.poolDateTextView.ellipsize = TextUtils.TruncateAt.MARQUEE
         if (binding.summaryScrollView.scrollY > 100) {
             _viewModel.setIsScrolling(true)
         }

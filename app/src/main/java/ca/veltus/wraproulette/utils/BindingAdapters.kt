@@ -121,8 +121,8 @@ object BindingAdapters {
             view.ellipsize = TextUtils.TruncateAt.MARQUEE
             view.isSingleLine = true
             view.marqueeRepeatLimit = -1
+            view.setHorizontallyScrolling(true)
         }
-
     }
 
     @BindingAdapter(
