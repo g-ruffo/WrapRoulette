@@ -129,7 +129,12 @@ object FirestoreUtil {
                             if (account!!.pools.any { entry -> entry.key == pool!!.docId && entry.value == true }) {
                                 onComplete("You are already a member of this pool")
                             } else if (account.pools.any { entry -> entry.key == pool!!.docId && entry.value == false }) {
-                                onComplete("You have left this pool")
+                                rejoinPool(
+                                    pool!!.docId, FirebaseAuth.getInstance().currentUser!!.uid
+                                ) { response ->
+                                    if (response.isNullOrEmpty()) onComplete(null)
+                                    else onComplete(response)
+                                }
                             } else {
                                 addPoolToUser(pool!!.docId)
                                 addUserToPool(
@@ -282,6 +287,25 @@ object FirestoreUtil {
                         deletePoolFromUser(poolUid) {
                             onComplete(null)
                         }
+                    }.addOnFailureListener { exception ->
+                        onComplete(exception.message)
+                        Log.e(TAG, "getEditPool: $exception")
+                    }
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+                Log.e(TAG, "getEditPool: $exception")
+            }
+    }
+
+    private fun rejoinPool(poolUid: String, userUid: String, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(poolUid).update("users.$userUid", true)
+            .addOnSuccessListener {
+                poolsCollectionReference.document(poolUid).collection("members").document(userUid)
+                    .update("activeMember", true).addOnSuccessListener {
+                        addPoolToUser(poolUid)
+                        addUserToPool(
+                            poolUid, userUid
+                        )
                     }.addOnFailureListener { exception ->
                         onComplete(exception.message)
                         Log.e(TAG, "getEditPool: $exception")
