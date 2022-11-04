@@ -90,9 +90,11 @@ object FirestoreUtil {
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     poolsCollectionReference.document(docId).set(pool).addOnSuccessListener {
-                        addPoolToUser(docId)
-                        addMemberToPool(docId, currentUser.uid)
-                        onComplete(null)
+                        addPoolToUser(docId) {
+                            addMemberToPool(docId, currentUser.uid) {
+                                onComplete(null)
+                            }
+                        }
                     }.addOnFailureListener { exception ->
                         Log.e(TAG, "createPool: $exception")
                     }
@@ -118,7 +120,6 @@ object FirestoreUtil {
             .whereEqualTo("password", password).whereEqualTo("date", date).get()
             .addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) {
-                    Log.i(TAG, "querySnapshot.isEmpty: $querySnapshot")
                     onComplete("No Pool Found Matching Credentials")
                 } else {
                     querySnapshot.documents.forEach {
@@ -130,35 +131,44 @@ object FirestoreUtil {
                                 onComplete("You are already a member of this pool")
                             } else if (account.pools.any { entry -> entry.key == pool!!.docId && entry.value == false }) {
                                 rejoinPool(
-                                    pool!!.docId, FirebaseAuth.getInstance().currentUser!!.uid
+                                    pool!!.docId,
+                                    FirebaseAuth.getInstance().currentUser!!.uid
                                 ) { response ->
                                     if (response.isNullOrEmpty()) onComplete(null)
                                     else onComplete(response)
                                 }
                             } else {
-                                addPoolToUser(pool!!.docId)
-                                addUserToPool(
-                                    pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
-                                )
-                                addMemberToPool(
-                                    pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
-                                )
-                                onComplete(null)
+                                addPoolToUser(pool!!.docId) {
+                                    addUserToPool(
+                                        pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
+                                    ) {
+                                        addMemberToPool(
+                                            pool.docId, FirebaseAuth.getInstance().currentUser!!.uid
+                                        ) {
+                                            onComplete(null)
+                                        }
+                                    }
+                                }
                             }
                         }.addOnFailureListener { exception ->
                             onComplete(exception.message)
+                            Log.e(TAG, "setActivePool: ${exception.message}")
                         }
                     }
                 }
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
+                Log.e(TAG, "setActivePool: ${exception.message}")
             }
     }
 
-    fun setActivePool(poolId: String, onComplete: () -> Unit) {
+    fun setActivePool(poolId: String, onComplete: (String?) -> Unit) {
         val newMap = mutableMapOf<String, Any>("activePool" to poolId)
         currentUserDocReference.set(newMap, SetOptions.merge()).addOnSuccessListener {
-            onComplete()
+            onComplete(null)
+        }.addOnFailureListener { exception ->
+            onComplete(exception.message)
+            Log.e(TAG, "setActivePool: ${exception.message}")
         }
     }
 
@@ -168,6 +178,7 @@ object FirestoreUtil {
                 onComplete(null)
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
+                Log.e(TAG, "setUserPoolBet: ${exception.message}")
             }
     }
 
@@ -182,18 +193,28 @@ object FirestoreUtil {
             onComplete(null)
         }.addOnFailureListener { exception ->
             onComplete(exception.message)
+            Log.e(TAG, "setPoolWinner: ${exception.message}")
         }
     }
 
-    private fun addPoolToUser(poolId: String) {
+    private fun addPoolToUser(poolId: String, onComplete: (String?) -> Unit) {
         val newMap = mutableMapOf<String, Any>("pools.$poolId" to true)
-        currentUserDocReference.update(newMap)
-        setActivePool(poolId) {}
+        currentUserDocReference.update(newMap).addOnSuccessListener {
+            setActivePool(poolId) {
+                onComplete(null)
+            }
+        }.addOnFailureListener { exception ->
+            Log.e(TAG, "addPoolToUser: ${exception.message}")
+        }
     }
 
-    private fun addUserToPool(poolId: String, uid: String) {
+    private fun addUserToPool(poolId: String, uid: String, onComplete: (String?) -> Unit) {
         val newMap = mutableMapOf<String, Any>("users.$uid" to true)
-        poolsCollectionReference.document(poolId).update(newMap)
+        poolsCollectionReference.document(poolId).update(newMap).addOnSuccessListener {
+            onComplete(null)
+        }.addOnFailureListener { exception ->
+            Log.e(TAG, "addPoolToUser: ${exception.message}")
+        }
     }
 
     fun addNewMemberToPool(member: Member, onComplete: (String?) -> Unit) {
@@ -222,6 +243,7 @@ object FirestoreUtil {
                 onComplete(null)
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
+                Log.e(TAG, "updateTempPoolMember: ${exception.message}")
             }
     }
 
@@ -231,10 +253,11 @@ object FirestoreUtil {
                 onComplete(null)
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
+                Log.e(TAG, "deleteTempPoolMember: ${exception.message}")
             }
     }
 
-    private fun addMemberToPool(poolId: String, uid: String) {
+    private fun addMemberToPool(poolId: String, uid: String, onComplete: (String?) -> Unit) {
         getCurrentUser { user ->
             val member = Member(
                 uid,
@@ -249,10 +272,13 @@ object FirestoreUtil {
                 true
             )
             poolsCollectionReference.document(poolId).collection("members").document(uid)
-                .set(member)
+                .set(member).addOnCompleteListener {
+                    onComplete(null)
+                }.addOnFailureListener { exception ->
+                    onComplete(exception.message)
+                }
         }
     }
-
 
     fun getPoolMemberList(poolId: String): Flow<List<Member>> {
         return poolsCollectionReference.document(poolId).collection("members").snapshots()
@@ -292,7 +318,7 @@ object FirestoreUtil {
             }
         }.addOnFailureListener { exception ->
             onComplete(exception.message)
-            Log.e(TAG, "getEditPool: $exception")
+            Log.e(TAG, "deletePool: $exception")
         }
     }
 
@@ -306,11 +332,11 @@ object FirestoreUtil {
                         }
                     }.addOnFailureListener { exception ->
                         onComplete(exception.message)
-                        Log.e(TAG, "getEditPool: $exception")
+                        Log.e(TAG, "leavePool: $exception")
                     }
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
-                Log.e(TAG, "getEditPool: $exception")
+                Log.e(TAG, "leavePool: $exception")
             }
     }
 
@@ -319,17 +345,18 @@ object FirestoreUtil {
             .addOnSuccessListener {
                 poolsCollectionReference.document(poolUid).collection("members").document(userUid)
                     .update("activeMember", true).addOnSuccessListener {
-                        addPoolToUser(poolUid)
-                        addUserToPool(
-                            poolUid, userUid
-                        )
+                        addPoolToUser(poolUid) {
+                            addUserToPool(poolUid, userUid) {
+                                onComplete(null)
+                            }
+                        }
                     }.addOnFailureListener { exception ->
                         onComplete(exception.message)
-                        Log.e(TAG, "getEditPool: $exception")
+                        Log.e(TAG, "rejoinPool: $exception")
                     }
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
-                Log.e(TAG, "getEditPool: $exception")
+                Log.e(TAG, "rejoinPool: $exception")
             }
     }
 
@@ -339,11 +366,11 @@ object FirestoreUtil {
                 onComplete(null)
             }.addOnFailureListener { exception ->
                 onComplete(exception.message)
-                Log.e(TAG, "getEditPool: $exception")
+                Log.e(TAG, "deletePoolFromUser: $exception")
             }
         }.addOnFailureListener { exception ->
             onComplete(exception.message)
-            Log.e(TAG, "getEditPool: $exception")
+            Log.e(TAG, "deletePoolFromUser: $exception")
         }
     }
 
@@ -359,13 +386,16 @@ object FirestoreUtil {
             }
     }
 
-    fun sendChatMessage(activePool: String, message: Message, onComplete: () -> Unit) {
+    fun sendChatMessage(activePool: String, message: Message, onComplete: (String?) -> Unit) {
         val docId =
             messagesCollectionReference.document(activePool).collection("chat").document().id
         message.messageUid = docId
         messagesCollectionReference.document(activePool).collection("chat").document(docId)
             .set(message).addOnSuccessListener {
-                onComplete()
+                onComplete(null)
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+                Log.e(TAG, "sendChatMessage: $exception")
             }
     }
 
