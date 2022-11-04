@@ -46,5 +46,9 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/color_states_material_button</item>
+    </style>
+
 
 </resources>

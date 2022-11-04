@@ -21,4 +21,8 @@
     <color name="timerNotRunningYellow">#20FFFF00</color>
     <color name="timerRunningGreen">#2000D905</color>
     <color name="selectedPoolCardView">#2000FF00</color>
+
+    <color name="colorEnabled">#3D0340</color>
+    <color name="colorDisabled">#806B406E</color>
+
 </resources>
