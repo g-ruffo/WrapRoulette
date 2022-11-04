@@ -216,6 +216,23 @@ object FirestoreUtil {
             }
     }
 
+    fun updateTempPoolMember(member: Member, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(member.poolId).collection("members")
+            .document(member.tempMemberUid!!).set(member, SetOptions.merge()).addOnSuccessListener {
+                onComplete(null)
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+            }
+    }
+
+    fun deleteTempPoolMember(member: Member, onComplete: (String?) -> Unit) {
+        poolsCollectionReference.document(member.poolId).collection("members")
+            .document(member.tempMemberUid!!).delete().addOnSuccessListener {
+                onComplete(null)
+            }.addOnFailureListener { exception ->
+                onComplete(exception.message)
+            }
+    }
 
     private fun addMemberToPool(poolId: String, uid: String) {
         getCurrentUser { user ->
@@ -247,7 +264,7 @@ object FirestoreUtil {
             }
     }
 
-    fun getPoolData(poolId: String): Flow<Pool?> {
+    fun getPoolData(poolId: String?): Flow<Pool?> {
         if (poolId.isNullOrBlank()) {
             return flowOf()
         }
