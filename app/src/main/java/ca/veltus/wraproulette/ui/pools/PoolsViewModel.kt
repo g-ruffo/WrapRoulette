@@ -84,7 +84,6 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
-
     fun setPoolDate(date: String) {
         poolDate.value = date
     }
@@ -233,6 +232,10 @@ class PoolsViewModel @Inject constructor(
 
     fun navigateToAddPoolFragment() {
         navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToAddPoolFragment()))
+    }
+
+    fun navigatePoolsToHomeFragment() {
+        navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToNavHome()))
     }
 
     fun navigateToJoinPoolFragment() {

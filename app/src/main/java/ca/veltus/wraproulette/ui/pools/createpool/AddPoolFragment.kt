@@ -33,11 +33,9 @@ class AddPoolFragment : BaseFragment() {
     private lateinit var binding: FragmentAddPoolBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
 
         binding.viewModel = _viewModel
 
@@ -77,7 +75,7 @@ class AddPoolFragment : BaseFragment() {
         binding.selectBettingCloseTimeAutoComplete.setOnClickListener {
             launchBetLockTimePickerDialog()
         }
-        binding.deletePoolFab.setOnClickListener {
+        binding.deleteButton.setOnClickListener {
             launchDeletePoolAlert()
         }
 
@@ -112,15 +110,14 @@ class AddPoolFragment : BaseFragment() {
     private fun launchBetLockTimePickerDialog() {
         val time = Calendar.getInstance()
 
-        val timePickerListener =
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                time.set(Calendar.MINUTE, minute)
-                time.set(Calendar.SECOND, 0)
-                time.set(Calendar.MILLISECOND, 0)
+        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            time.set(Calendar.MINUTE, minute)
+            time.set(Calendar.SECOND, 0)
+            time.set(Calendar.MILLISECOND, 0)
 
-                _viewModel.setPoolBetLockTime(Date(time.timeInMillis))
-            }
+            _viewModel.setPoolBetLockTime(Date(time.timeInMillis))
+        }
 
         val dialog = TimePickerDialog(
             requireContext(),
@@ -139,15 +136,14 @@ class AddPoolFragment : BaseFragment() {
     private fun launchStartTImePickerDialog() {
         val time = Calendar.getInstance()
 
-        val timePickerListener =
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                time.set(Calendar.MINUTE, minute)
-                time.set(Calendar.SECOND, 0)
-                time.set(Calendar.MILLISECOND, 0)
+        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            time.set(Calendar.MINUTE, minute)
+            time.set(Calendar.SECOND, 0)
+            time.set(Calendar.MILLISECOND, 0)
 
-                _viewModel.setPoolStartTime(Date(time.timeInMillis))
-            }
+            _viewModel.setPoolStartTime(Date(time.timeInMillis))
+        }
 
         TimePickerDialog(
             requireContext(),

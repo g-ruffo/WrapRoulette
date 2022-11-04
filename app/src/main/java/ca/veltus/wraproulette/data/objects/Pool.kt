@@ -1,12 +1,8 @@
 package ca.veltus.wraproulette.data.objects
 
-import android.graphics.Color
-import androidx.core.content.ContextCompat
-import androidx.navigation.Navigation
+import android.view.View
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.PoolListItemBinding
-import ca.veltus.wraproulette.ui.pools.PoolsFragmentDirections
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import com.xwray.groupie.databinding.BindableItem
 import java.util.*
 
@@ -49,30 +45,10 @@ class PoolItem(
 
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {
         viewBinding.pool = pool
-
         if (pool.docId == user.activePool) {
-            viewBinding.cardView.setBackgroundColor(
-                ContextCompat.getColor(
-                    viewBinding.root.context,
-                    R.color.selectedPoolCardView
-                )
-            )
+            viewBinding.activePoolIcon.visibility = View.VISIBLE
         } else {
-            viewBinding.cardView.setBackgroundColor(Color.WHITE)
-        }
-        user.activePool
-
-        viewBinding.cardView.setOnClickListener {
-            FirestoreUtil.setActivePool(pool.docId) {
-                viewBinding.cardView.setBackgroundColor(
-                    ContextCompat.getColor(
-                        viewBinding.root.context,
-                        R.color.selectedPoolCardView
-                    )
-                )
-                Navigation.findNavController(viewBinding.root)
-                    .navigate(PoolsFragmentDirections.actionNavPoolsToNavHome())
-            }
+            viewBinding.activePoolIcon.visibility = View.GONE
         }
     }
 

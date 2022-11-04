@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,8 +15,10 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.PoolItem
 import ca.veltus.wraproulette.databinding.FragmentPoolsBinding
+import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.toPoolItem
 import com.xwray.groupie.GroupieAdapter
+import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -29,6 +32,30 @@ class PoolsFragment : BaseFragment() {
     override val _viewModel by viewModels<PoolsViewModel>()
 
     private lateinit var binding: FragmentPoolsBinding
+    private val groupieAdapter = GroupieAdapter()
+
+    private val onItemClick = OnItemClickListener { item, view ->
+        if (item is PoolItem) {
+            binding.poolsRecyclerView.isClickable = false
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    _viewModel.showLoading.emit(true)
+                    view.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.selectedPoolCardView
+                        )
+                    )
+                    FirestoreUtil.setActivePool(item.pool.docId) {
+                        if (!it.isNullOrEmpty()) _viewModel.showToast.postValue(it)
+                        else _viewModel.navigatePoolsToHomeFragment()
+
+                        _viewModel.showLoading.value = false
+                        binding.poolsRecyclerView.isClickable = true
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,13 +85,10 @@ class PoolsFragment : BaseFragment() {
     }
 
     private fun setupRecyclerView(items: List<PoolItem>) {
-        val groupieAdapter = GroupieAdapter().apply {
-            val list = mutableListOf<PoolItem>()
-            items.forEach { list.add(it) }
-            list.sortByDescending { it.pool.startTime }
-            addAll(list)
+        groupieAdapter.apply {
+            addAll(items.sortedByDescending { it.pool.startTime })
+            setOnItemClickListener(onItemClick)
         }
-
         binding.poolsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
