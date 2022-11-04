@@ -121,8 +121,8 @@ class PoolsViewModel @Inject constructor(
                 navigateJoinPoolToHomeFragment()
             } else {
                 showToast.value = it
+                showLoading.value = false
             }
-            showLoading.value = false
         }
     }
 
@@ -191,9 +191,8 @@ class PoolsViewModel @Inject constructor(
                     navigateAddPoolToHomeFragment()
                 } else {
                     showToast.postValue(it)
-                    return@createPool
+                    showLoading.value = false
                 }
-                showLoading.value = false
             }
         }
     }
@@ -240,11 +239,13 @@ class PoolsViewModel @Inject constructor(
         navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToJoinPoolFragment()))
     }
 
-    fun navigateJoinPoolToHomeFragment() {
+    private fun navigateJoinPoolToHomeFragment() {
         navigationCommand.postValue(NavigationCommand.To(JoinPoolFragmentDirections.actionJoinPoolFragmentToNavHome()))
+        showLoading.value = false
     }
 
-    fun navigateAddPoolToHomeFragment() {
+    private fun navigateAddPoolToHomeFragment() {
         navigationCommand.postValue(NavigationCommand.To(AddPoolFragmentDirections.actionAddPoolFragmentToNavHome()))
+        showLoading.value = false
     }
 }

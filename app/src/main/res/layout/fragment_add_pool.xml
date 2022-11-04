@@ -195,7 +195,7 @@
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:endIconMode="clear_text"
                 app:hintTextColor="@color/purpleLogoLight"
-                app:layout_constraintBottom_toTopOf="@+id/createButton"
+                app:layout_constraintBottom_toTopOf="@+id/buttonLinearLayout"
                 app:layout_constraintEnd_toStartOf="@id/selectMarginTextInputLayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextInputLayout"
@@ -238,36 +238,49 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/createButton"
-                style="@style/MaterialButtonStyle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/buttonLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:enabled="@{!viewModel.showLoading.booleanValue()}"
-                android:onClick="@{() -> viewModel.createUpdatePool()}"
-                android:padding="12dp"
-                android:paddingStart="64dp"
-                android:paddingEnd="64dp"
-                android:text="Create"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:layout_marginTop="44dp"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selectBetAmountTextInputLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/selectBetAmountTextInputLayout">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/deletePoolFab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:backgroundTint="@color/purpleLogoDark"
-                android:src="@drawable/ic_baseline_delete_24"
-                android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:tint="@color/white" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/deleteButton"
+                    style="@style/MaterialButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="44dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_weight="1"
+                    android:enabled="@{!viewModel.showLoading.booleanValue()}"
+                    android:padding="12dp"
+                    android:text="Delete"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/createButton"
+                    style="@style/MaterialButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="44dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_weight="1"
+                    android:enabled="@{!viewModel.showLoading.booleanValue()}"
+                    android:onClick="@{() -> viewModel.createUpdatePool()}"
+                    android:padding="12dp"
+                    android:text="Create"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
