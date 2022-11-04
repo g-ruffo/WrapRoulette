@@ -5,10 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
-import ca.veltus.wraproulette.data.objects.Member
-import ca.veltus.wraproulette.data.objects.Message
-import ca.veltus.wraproulette.data.objects.Pool
-import ca.veltus.wraproulette.data.objects.User
+import ca.veltus.wraproulette.data.objects.*
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.Constants
 import ca.veltus.wraproulette.utils.FirestoreUtil
@@ -235,11 +232,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun createNewPoolMember(): Boolean {
+    fun loadTempMemberValues(member: Member?) {
+        newMemberName.value = member?.displayName
+        newMemberDepartment.value = member?.department
+        newMemberEmail.value = member?.email
+    }
+
+    fun createUpdateTempMember(memberItem: MemberItem? = null): Boolean {
         val memberName = newMemberName.value
         val memberDepartment = newMemberDepartment.value
         var memberEmail = newMemberEmail.value
-        val poolUid = _currentPool.value!!.docId
+        val poolUid = _currentPool.value?.docId
         val ownerUid = _userAccount.value!!.uid
 
         if (memberName.isNullOrEmpty()) {
@@ -264,26 +267,50 @@ class HomeViewModel @Inject constructor(
         }
         val newMember = Member(
             ownerUid,
-            null,
+            memberItem?.member?.tempMemberUid,
             poolUid,
             memberName.trim(),
             memberEmail,
             memberDepartment.trim(),
-            null,
+            memberItem?.member?.bidTime,
             null,
             null,
             true
         )
-        FirestoreUtil.addNewMemberToPool(newMember) {
-            if (!it.isNullOrEmpty()) {
-                showToast.value = "$it"
-            } else {
-                newMemberName.value = null
-                newMemberDepartment.value = null
-                newMemberEmail.value = null
+        if (memberItem == null) {
+            FirestoreUtil.addNewMemberToPool(newMember) {
+                if (!it.isNullOrEmpty()) {
+                    showToast.value = "$it"
+                } else {
+                    newMemberName.value = null
+                    newMemberDepartment.value = null
+                    newMemberEmail.value = null
+                }
+            }
+            return true
+        } else {
+            FirestoreUtil.updateTempPoolMember(newMember) {
+                if (!it.isNullOrEmpty()) {
+                    showToast.value = "$it"
+                } else {
+                    newMemberName.value = null
+                    newMemberDepartment.value = null
+                    newMemberEmail.value = null
+                }
+            }
+            return true
+        }
+    }
+
+    fun deleteTempMember(memberItem: MemberItem) {
+        if (!isPoolAdmin.value) {
+            showToast.value = "You Do Not Have Permission"
+            return
+        } else {
+            FirestoreUtil.deleteTempPoolMember(memberItem.member) {
+
             }
         }
-        return true
     }
 
     private fun addBidMemberToList(members: List<Member>) {
