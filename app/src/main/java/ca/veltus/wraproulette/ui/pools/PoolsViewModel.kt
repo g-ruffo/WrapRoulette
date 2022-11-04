@@ -220,6 +220,7 @@ class PoolsViewModel @Inject constructor(
                     poolWinners.emit(pool.winners)
                     poolUsers.emit(pool.users)
                     poolEndTime.emit(pool.endTime)
+                    poolPISRulesEnabled.emit(pool.pIRRulesEnabled)
                 }
                 showLoading.emit(false)
             }
