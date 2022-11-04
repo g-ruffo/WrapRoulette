@@ -99,6 +99,7 @@ class PoolsViewModel @Inject constructor(
     }
 
     fun joinPool() {
+        showLoading.value = true
         val production = poolProduction.value
         val password = poolPassword.value
         val date = poolDate.value
@@ -121,10 +122,12 @@ class PoolsViewModel @Inject constructor(
             } else {
                 showToast.value = it
             }
+            showLoading.value = false
         }
     }
 
     fun createUpdatePool() {
+        showLoading.value = true
         if (poolProduction.value.isNullOrEmpty()) {
             showToast.value = "Please Enter Production Name"
             return
@@ -180,6 +183,7 @@ class PoolsViewModel @Inject constructor(
         if (!poolDocUid.value.isNullOrEmpty()) {
             FirestoreUtil.updatePool(pool) {
                 navigateBack()
+                showLoading.value = false
             }
         } else {
             FirestoreUtil.createPool(pool) {
@@ -189,6 +193,7 @@ class PoolsViewModel @Inject constructor(
                     showToast.postValue(it)
                     return@createPool
                 }
+                showLoading.value = false
             }
         }
     }
