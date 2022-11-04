@@ -238,14 +238,17 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/createButton"
-                android:layout_width="match_parent"
+                style="@style/MaterialButtonStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="106dp"
                 android:layout_marginTop="64dp"
-                android:background="@drawable/rounded_corners_button"
+                android:enabled="@{!viewModel.showLoading.booleanValue()}"
                 android:onClick="@{() -> viewModel.createUpdatePool()}"
+                android:padding="12dp"
+                android:paddingStart="64dp"
+                android:paddingEnd="64dp"
                 android:text="Create"
                 android:textColor="@color/white"
                 android:textStyle="bold"
@@ -265,6 +268,25 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:tint="@color/white" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="8dp"
+                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+                android:gravity="center"
+                android:indeterminate="true"
+                android:secondaryProgressTint="@color/black"
+                android:visibility="gone"
+                app:indicatorColor="@color/earningsGreen"
+                app:indicatorSize="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackColor="@color/purpleLogoLight"
+                app:trackThickness="15dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
