@@ -101,10 +101,13 @@ class HomeFragment : BaseFragment(), MenuProvider {
             menu.findItem(R.id.actionLeavePool).isVisible = false
             menu.findItem(R.id.actionEditPool).isVisible = true
             menu.findItem(R.id.actionAddMember).isVisible = true
+            menu.findItem(R.id.actionEditPool).isEnabled = !_viewModel.showNoData.value
+            menu.findItem(R.id.actionAddMember).isEnabled = !_viewModel.showNoData.value
         } else {
             menu.findItem(R.id.actionEditPool).isVisible = false
             menu.findItem(R.id.actionAddMember).isVisible = false
             menu.findItem(R.id.actionLeavePool).isVisible = true
+            menu.findItem(R.id.actionLeavePool).isEnabled = !_viewModel.showNoData.value
         }
     }
 
