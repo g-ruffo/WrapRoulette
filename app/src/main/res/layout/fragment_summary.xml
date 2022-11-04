@@ -125,9 +125,31 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:text="@{viewModel.currentPool.margin + ` Minutes`}"
+                            android:text="@{viewModel.poolMargin + ` Minutes`}"
                             android:textSize="18sp"
                             app:layout_constraintBaseline_toBaselineOf="@+id/poolMarginTitle"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/poolBetAmountTitle"
+                            tools:text="15 Minutes" />
+
+                        <TextView
+                            android:id="@+id/poolPIRTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PIR Rules:"
+                            android:textSize="18sp"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/poolMarginTitle" />
+
+                        <TextView
+                            android:id="@+id/poolPIRTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="@{viewModel.poolPIREnabled == true ? `Yes` : `No`}"
+                            android:textSize="18sp"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/poolPIRTitle"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/poolBetAmountTitle"
                             tools:text="15 Minutes" />
@@ -140,7 +162,7 @@
                             android:textSize="18sp"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/poolMarginTitle" />
+                            app:layout_constraintTop_toBottomOf="@id/poolPIRTitle" />
 
                         <TextView
                             android:id="@+id/poolDateTextView"

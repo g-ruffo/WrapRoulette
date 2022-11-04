@@ -36,6 +36,8 @@ class HomeViewModel @Inject constructor(
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val poolRemainingBetTime = MutableStateFlow<Date?>(null)
     val poolEndTime = MutableStateFlow<Date?>(null)
+    val poolMargin = MutableStateFlow<String?>(null)
+    val poolPIREnabled = MutableStateFlow<Boolean>(false)
 
     val newMemberName = MutableStateFlow<String?>(null)
     val newMemberDepartment = MutableStateFlow<String?>(null)
@@ -176,6 +178,8 @@ class HomeViewModel @Inject constructor(
                             poolRemainingBetTime.emit(pool.lockTime)
                             poolEndTime.emit(pool.endTime)
                             _poolWinningMembers.emit(pool.winners)
+                            poolMargin.emit(pool.margin)
+                            poolPIREnabled.emit(pool.pIRRulesEnabled)
                             showNoData.emit(false)
                             if (pool.adminUid == _userAccount.value!!.uid) {
                                 isPoolAdmin.emit(true)
