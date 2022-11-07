@@ -126,15 +126,20 @@ object BindingAdapters {
     }
 
     @BindingAdapter(
-        value = ["setCurrentTimeTitleIsActive", "setCurrentTimeTitleWinners"], requireAll = true
+        value = ["setCurrentTimeTitleIsActive", "setCurrentTimeTitleWinners", "setCurrentTimeTitleWrapTime"],
+        requireAll = true
     )
     @JvmStatic
-    fun setCurrentTimeTitle(view: TextView, isActive: Boolean, list: List<Member>) {
+    fun setCurrentTimeTitle(
+        view: TextView, isActive: Boolean, list: List<Member>, wrapTime: Date?
+    ) {
         if (isActive) {
             view.text = "Current Time"
         }
-        if (!isActive && list.isEmpty()) {
+        if (!isActive && list.isEmpty() && wrapTime != null) {
             view.text = "No Winners"
+        } else if (!isActive && wrapTime == null) {
+            view.text = "Error, Wrap Time Not Set"
         } else if (!isActive && list.size < 2) {
             view.text = "Winner"
         } else {

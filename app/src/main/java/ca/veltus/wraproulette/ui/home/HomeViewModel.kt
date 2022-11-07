@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -9,6 +10,7 @@ import ca.veltus.wraproulette.data.objects.*
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.Constants
 import ca.veltus.wraproulette.utils.FirestoreUtil
+import ca.veltus.wraproulette.utils.calculateWinners
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -84,7 +85,7 @@ class HomeViewModel @Inject constructor(
             if (poolEndTime.value != null) {
                 emit(poolEndTime.value!!.time - poolStartTime.value.time)
                 delay(1000)
-            } else if (showNoData.value) {
+            } else if (showNoData.value || time > Constants.DAY) {
                 emit(0)
                 delay(1000)
             } else {

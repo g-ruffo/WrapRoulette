@@ -114,7 +114,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
-                if (_viewModel.isPoolActive.value) _viewModel.navigateToEditPool()
+                if (_viewModel.isPoolActive.value || _viewModel.poolEndTime.value == null) _viewModel.navigateToEditPool()
                 else _viewModel.showSnackBar.value =
                     "Pool has finished, you are unable to edit details."
                 true
