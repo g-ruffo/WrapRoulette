@@ -229,4 +229,18 @@ class PoolListRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun setActivePool(poolId: String, onComplete: (String?) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val newMap = mutableMapOf<String, Any>("activePool" to poolId)
+                currentUserDocReference.set(newMap, SetOptions.merge()).await()
+                onComplete(null)
+
+            } catch (e: FirebaseFirestoreException) {
+                onComplete(e.message)
+
+            }
+        }
+    }
 }
