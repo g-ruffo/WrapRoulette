@@ -3,7 +3,6 @@ package ca.veltus.wraproulette.data.repository
 import android.util.Log
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.data.objects.User
-import ca.veltus.wraproulette.utils.await
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
