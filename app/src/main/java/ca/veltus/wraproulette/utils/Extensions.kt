@@ -9,24 +9,8 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import ca.veltus.wraproulette.data.objects.*
-import com.google.android.gms.tasks.Task
-import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.*
-import kotlin.coroutines.resumeWithException
 import kotlin.math.abs
-
-// Firebase Authentication extension function
-suspend fun <T> Task<T>.await(): T {
-    return suspendCancellableCoroutine { cont ->
-        addOnCompleteListener {
-            if (it.exception != null) {
-                cont.resumeWithException(it.exception!!)
-            } else {
-                cont.resume(it.result, null)
-            }
-        }
-    }
-}
 
 // Animate changing the view visibility
 fun View.fadeIn() {
