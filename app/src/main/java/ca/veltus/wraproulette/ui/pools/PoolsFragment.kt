@@ -15,7 +15,6 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.PoolItem
 import ca.veltus.wraproulette.databinding.FragmentPoolsBinding
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.toPoolItem
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.OnItemClickListener
@@ -37,22 +36,13 @@ class PoolsFragment : BaseFragment() {
     private val onItemClick = OnItemClickListener { item, view ->
         if (item is PoolItem) {
             binding.poolsRecyclerView.isClickable = false
-            lifecycleScope.launch {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    _viewModel.showLoading.emit(true)
-                    view.setBackgroundColor(
-                        ContextCompat.getColor(
-                            requireContext(), R.color.selectedPoolCardView
-                        )
-                    )
-                    FirestoreUtil.setActivePool(item.pool.docId) {
-                        if (!it.isNullOrEmpty()) _viewModel.showToast.postValue(it)
-                        else _viewModel.navigatePoolsToHomeFragment()
-
-                        _viewModel.showLoading.value = false
-                        binding.poolsRecyclerView.isClickable = true
-                    }
-                }
+            view.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(), R.color.selectedPoolCardView
+                )
+            )
+            _viewModel.setUsersActivePool(item.pool.docId) {
+                binding.poolsRecyclerView.isClickable = true
             }
         }
     }

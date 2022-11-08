@@ -3,7 +3,6 @@ package ca.veltus.wraproulette.ui.pools.joinpool
 import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,6 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentJoinPoolBinding
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
-import ca.veltus.wraproulette.utils.FirestoreUtil
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,9 +23,6 @@ class JoinPoolFragment : BaseFragment() {
     }
 
     override val _viewModel by viewModels<PoolsViewModel>()
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var databaseReference: FirebaseFirestore
-
     private var _binding: FragmentJoinPoolBinding? = null
 
     // This property is only valid between onCreateView and
@@ -37,13 +30,9 @@ class JoinPoolFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_join_pool, container, false)
-
-        databaseReference = FirebaseFirestore.getInstance()
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_pool, container, false)
 
         binding.viewModel = _viewModel
 
@@ -74,9 +63,9 @@ class JoinPoolFragment : BaseFragment() {
     // Launch date dialog and listen for its result.
     private fun launchDatePickerDialog() {
         val calendar = Calendar.getInstance()
-        var selectedYear = calendar.get(Calendar.YEAR)
-        var selectedMonth = calendar.get(Calendar.MONTH)
-        var selectedDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val selectedYear = calendar.get(Calendar.YEAR)
+        val selectedMonth = calendar.get(Calendar.MONTH)
+        val selectedDay = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerListener =
             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->

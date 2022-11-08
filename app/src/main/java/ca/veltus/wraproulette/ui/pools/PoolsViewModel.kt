@@ -8,10 +8,9 @@ import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
-import ca.veltus.wraproulette.data.repository.AuthenticationRepository
+import ca.veltus.wraproulette.data.repository.PoolListRepository
 import ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragmentDirections
 import ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragmentDirections
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PoolsViewModel @Inject constructor(
-    private val repository: AuthenticationRepository, app: Application
+    private val repository: PoolListRepository, app: Application
 ) : BaseViewModel(app) {
 
     companion object {
@@ -73,7 +72,7 @@ class PoolsViewModel @Inject constructor(
 
     private fun fetchPoolList(uid: String) {
         viewModelScope.launch {
-            FirestoreUtil.getPoolsList(uid).collect {
+            repository.getPoolsList(uid).collect {
                 if (it.isNullOrEmpty()) {
                     showNoData.emit(true)
                 } else {
@@ -113,15 +112,16 @@ class PoolsViewModel @Inject constructor(
             showToast.value = "Please Enter Pool Date"
             return
         }
-
-        FirestoreUtil.joinPool(
-            production.trim(), password?.trim() ?: "", date.trim()
-        ) {
-            if (it.isNullOrEmpty()) {
-                navigateJoinPoolToHomeFragment()
-            } else {
-                showToast.value = it
-                showLoading.value = false
+        viewModelScope.launch {
+            repository.joinPool(
+                production.trim(), password?.trim() ?: "", date.trim()
+            ) {
+                if (it.isNullOrEmpty()) {
+                    navigateJoinPoolToHomeFragment()
+                } else {
+                    showToast.value = it
+                    showLoading.value = false
+                }
             }
         }
     }
@@ -186,17 +186,21 @@ class PoolsViewModel @Inject constructor(
 
         )
         if (!poolDocUid.value.isNullOrEmpty()) {
-            FirestoreUtil.updatePool(pool) {
-                navigateBack()
-                showLoading.value = false
+            viewModelScope.launch {
+                repository.updatePool(pool) {
+                    navigateBack()
+                    showLoading.value = false
+                }
             }
         } else {
-            FirestoreUtil.createPool(pool) {
-                if (it.isNullOrEmpty()) {
-                    navigateAddPoolToHomeFragment()
-                } else {
-                    showToast.postValue(it)
-                    showLoading.value = false
+            viewModelScope.launch {
+                repository.createPool(pool) {
+                    if (it.isNullOrEmpty()) {
+                        navigateAddPoolToHomeFragment()
+                    } else {
+                        showToast.postValue(it)
+                        showLoading.value = false
+                    }
                 }
             }
         }
@@ -204,32 +208,48 @@ class PoolsViewModel @Inject constructor(
 
     fun loadEditPool(poolId: String) {
         showLoading.value = true
-        FirestoreUtil.getEditPool(poolId) { pool ->
-            viewModelScope.launch {
+        viewModelScope.launch {
+            repository.getEditPool(poolId) { pool ->
                 if (pool != null) {
-                    poolDocUid.emit(poolId)
-                    poolProduction.emit(pool.production)
-                    poolPassword.emit(pool.password)
-                    poolDate.emit(pool.date)
-                    poolBetAmount.emit(pool.betAmount)
-                    poolMargin.emit(pool.margin)
-                    poolBetLockTime.emit(pool.lockTime)
-                    poolStartTime.emit(pool.startTime)
-                    poolAdminName.emit(pool.adminName)
-                    poolAdminUid.emit(pool.adminUid)
-                    poolWinners.emit(pool.winners)
-                    poolUsers.emit(pool.users)
-                    poolEndTime.emit(pool.endTime)
-                    poolPISRulesEnabled.emit(pool.pIRRulesEnabled)
+                    poolDocUid.value = poolId
+                    poolProduction.value = pool.production
+                    poolPassword.value = pool.password
+                    poolDate.value = pool.date
+                    poolBetAmount.value = pool.betAmount
+                    poolMargin.value = pool.margin
+                    poolBetLockTime.value = pool.lockTime
+                    poolStartTime.value = pool.startTime
+                    poolAdminName.value = pool.adminName
+                    poolAdminUid.value = pool.adminUid
+                    poolWinners.value = pool.winners
+                    poolUsers.value = pool.users
+                    poolEndTime.value = pool.endTime
+                    poolPISRulesEnabled.value = pool.pIRRulesEnabled
                 }
-                showLoading.emit(false)
+                showLoading.value = false
+            }
+
+
+        }
+    }
+
+    fun setUsersActivePool(poolId: String, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            showLoading.emit(true)
+            repository.setActivePool(poolId) {
+                if (!it.isNullOrEmpty()) showToast.postValue(it)
+                else navigatePoolsToHomeFragment()
+                showLoading.value = false
+                onComplete()
             }
         }
     }
 
     fun deletePool() {
-        FirestoreUtil.deletePool(poolDocUid.value!!) {
-            navigateBack()
+        viewModelScope.launch {
+            repository.deletePool(poolDocUid.value!!) {
+                navigateBack()
+            }
         }
     }
 
