@@ -133,10 +133,10 @@ object BindingAdapters {
     fun setCurrentTimeTitle(
         view: TextView, isActive: Boolean, list: List<Member>, wrapTime: Date?
     ) {
-        if (isActive) {
+        if (isActive && wrapTime == null) {
             view.text = "Current Time"
         }
-        if (!isActive && list.isEmpty() && wrapTime != null) {
+        else if (!isActive && list.isEmpty() && wrapTime != null) {
             view.text = "No Winners"
         } else if (!isActive && wrapTime == null) {
             view.text = "Error, Wrap Time Not Set"
