@@ -11,7 +11,9 @@ import androidx.viewpager2.widget.ViewPager2
 import ca.veltus.wraproulette.data.objects.*
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.util.*
 import kotlin.coroutines.resumeWithException
+import kotlin.math.abs
 
 // Firebase Authentication extension function
 suspend fun <T> Task<T>.await(): T {
@@ -98,4 +100,47 @@ fun getTimeStringFromLong(time: Long): String {
 fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
     return (getSystemService(ACTIVITY_SERVICE) as ActivityManager).getRunningServices(Integer.MAX_VALUE)
         .any { it -> it.service.className == service.name }
+}
+
+fun List<Member>.calculateWinners(
+    numberOfBets: Int, bidPrice: Int, margin: String, pIREnabled: Boolean, wrapTime: Date
+): List<Member> {
+    val totalBetList = mutableListOf<Member>()
+    val winnersList = mutableListOf<Member>()
+    val marginInt = margin.toInt()
+    val memberWinnings = numberOfBets * bidPrice
+
+    if (this.isNotEmpty()) {
+        this.forEach { if (it.bidTime != null) totalBetList.add(it) }
+        when (pIREnabled) {
+            true -> {
+                totalBetList.sortBy { wrapTime.time - it.bidTime!!.time }
+                totalBetList.removeAll { (wrapTime.time - it.bidTime!!.time) + ((marginInt / 2) * Constants.MINUTE) < 0 }
+                val minimumDistance = abs(wrapTime.time - totalBetList[0].bidTime!!.time)
+                for (i in totalBetList.indices) {
+                    if (abs((wrapTime.time - totalBetList[i].bidTime!!.time)) <= minimumDistance + ((marginInt / 2) * Constants.MINUTE)) {
+                        winnersList.add(totalBetList[i])
+                    }
+                }
+            }
+            false -> {
+                totalBetList.sortBy { abs(wrapTime.time - it.bidTime!!.time) }
+                val minimumDistance = abs(wrapTime.time - totalBetList[0].bidTime!!.time)
+                for (i in totalBetList.indices) {
+                    if (abs((wrapTime.time - totalBetList[i].bidTime!!.time)) <= minimumDistance + ((marginInt / 2) * Constants.MINUTE)) {
+                        winnersList.add(totalBetList[i])
+                    }
+                }
+            }
+        }
+    }
+
+    winnersList.forEach {
+        it.winnings = when (numberOfBets) {
+            0 -> memberWinnings
+            else -> memberWinnings / winnersList.size
+        }
+    }
+
+    return winnersList
 }
