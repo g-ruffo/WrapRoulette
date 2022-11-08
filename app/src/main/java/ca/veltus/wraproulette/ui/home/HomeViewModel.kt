@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -82,6 +81,7 @@ class HomeViewModel @Inject constructor(
 
     val timeWorkedDate = liveData {
         while (true) {
+            val time = Calendar.getInstance().time.time - poolStartTime.value.time
             if (poolEndTime.value != null) {
                 emit(poolEndTime.value!!.time - poolStartTime.value.time)
                 delay(1000)
@@ -89,7 +89,7 @@ class HomeViewModel @Inject constructor(
                 emit(0)
                 delay(1000)
             } else {
-                val time = Calendar.getInstance().time.time - poolStartTime.value.time
+                time
                 emit(time)
                 delay(1000)
             }
@@ -189,7 +189,7 @@ class HomeViewModel @Inject constructor(
                                 isPoolAdmin.emit(false)
                                 _actionbarTitle.emit(pool.production)
                             }
-                            if (pool.endTime != null) {
+                            if (pool.endTime != null || (Calendar.getInstance().time.time - poolStartTime.value.time) > Constants.DAY) {
                                 _isPoolActive.emit(false)
                             } else {
                                 _isPoolActive.emit(true)
