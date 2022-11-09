@@ -18,7 +18,6 @@ import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentBidsBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.toMemberItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xwray.groupie.GroupieAdapter
@@ -159,13 +158,10 @@ class BidsFragment : BaseFragment() {
                 time.add(Calendar.DATE, 1)
             }
 
-            FirestoreUtil.setUserPoolBet(
+            _viewModel.setMemberPoolBet(
                 memberItem.member.poolId, memberItem.member.tempMemberUid!!, time.time
-            ) {
-                if (!it.isNullOrEmpty()) {
-                    _viewModel.showToast.value = it
-                }
-            }
+            )
+
         }
 
         val timePickerDialog = TimePickerDialog(
@@ -180,11 +176,9 @@ class BidsFragment : BaseFragment() {
             timePickerDialog.setButton(
                 DialogInterface.BUTTON_NEUTRAL, "Clear"
             ) { _, _ ->
-                FirestoreUtil.setUserPoolBet(
+                _viewModel.setMemberPoolBet(
                     memberItem.member.poolId, memberItem.member.tempMemberUid!!, null
-                ) {
-                    if (!it.isNullOrEmpty()) _viewModel.showToast.value = it
-                }
+                )
             }
         }
         timePickerDialog.setTitle(memberItem.member.displayName)

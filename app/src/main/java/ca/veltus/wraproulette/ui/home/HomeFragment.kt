@@ -18,7 +18,6 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.onPageSelected
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -256,23 +255,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
             time.set(Calendar.SECOND, 0)
             time.set(Calendar.MILLISECOND, 0)
 
-            if (time.time.before(_viewModel.poolStartTime.value)) {
-                time.add(Calendar.DATE, 1)
-            }
+            if (time.time.before(_viewModel.poolStartTime.value)) time.add(Calendar.DATE, 1)
+            if (setWrapTime) launchConfirmationDialog(time.time)
+            else _viewModel.setUserPoolBet(time.time)
 
-            if (setWrapTime) {
-                launchConfirmationDialog(time.time)
-            } else {
-                FirestoreUtil.getCurrentUser { user ->
-                    FirestoreUtil.setUserPoolBet(
-                        user.activePool!!, user.uid, time.time
-                    ) {
-                        if (!it.isNullOrEmpty()) {
-                            _viewModel.showToast.value = it
-                        }
-                    }
-                }
-            }
         }
 
         val timePickerDialog = TimePickerDialog(
@@ -287,15 +273,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         if (_viewModel.userBetTime.value != null && !setWrapTime) {
             timePickerDialog.setButton(
                 DialogInterface.BUTTON_NEUTRAL, "Clear"
-            ) { _, _ ->
-                FirestoreUtil.getCurrentUser { user ->
-                    FirestoreUtil.setUserPoolBet(
-                        user.activePool!!, user.uid, null
-                    ) {
-                        if (!it.isNullOrEmpty()) _viewModel.showToast.value = it
-                    }
-                }
-            }
+            ) { _, _ -> _viewModel.setUserPoolBet(null) }
         }
 
         if (setWrapTime && _viewModel.poolEndTime.value != null) {

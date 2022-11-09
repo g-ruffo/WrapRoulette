@@ -6,9 +6,8 @@ import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.objects.*
-import ca.veltus.wraproulette.data.repository.AuthenticationRepository
+import ca.veltus.wraproulette.data.repository.HomeRepository
 import ca.veltus.wraproulette.utils.Constants
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import ca.veltus.wraproulette.utils.calculateWinners
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -21,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: AuthenticationRepository, private val app: Application
+    private val repository: HomeRepository, private val app: Application
 ) : BaseViewModel(app) {
     companion object {
         private const val TAG = "HomeViewModel"
@@ -149,30 +148,31 @@ class HomeViewModel @Inject constructor(
     }
 
     fun sendChatMessage(onComplete: () -> Unit) {
-        FirestoreUtil.getCurrentUser { user ->
+        viewModelScope.launch {
             val message = Message(
                 userMessageEditText.value!!,
                 Date(Calendar.getInstance().time.time),
-                user.uid,
-                user.displayName,
-                user.profilePicturePath,
+                userAccount.value!!.uid,
+                userAccount.value!!.displayName,
+                userAccount.value?.profilePicturePath,
                 ""
             )
-            FirestoreUtil.sendChatMessage(user.activePool!!, message) {
+            repository.sendChatMessage(userAccount.value!!.activePool!!, message) {
                 viewModelScope.launch {
-                    userMessageEditText.emit(null)
-                    onComplete()
+                    if (it.isNullOrEmpty()) {
+                        userMessageEditText.emit(null)
+                        onComplete()
+                    } else showToast.value = it
                 }
             }
         }
     }
 
-
     private fun getPoolData(activePool: String?) {
         if (!activePool.isNullOrEmpty()) {
             viewModelScope.launch {
                 launch {
-                    FirestoreUtil.getPoolData(activePool).collect { pool ->
+                    repository.getPoolData(activePool).collect { pool ->
                         if (pool != null) {
                             _currentPool.emit(pool)
                             poolStartTime.emit(pool.startTime!!)
@@ -203,14 +203,14 @@ class HomeViewModel @Inject constructor(
                 }
 
                 launch {
-                    FirestoreUtil.getChatList(activePool).collect {
+                    repository.getChatList(activePool).collect {
                         _chatList.emit(it)
                         markMessagesAsRead(true)
                     }
                 }
 
                 launch {
-                    FirestoreUtil.getPoolMemberList(activePool).collect { members ->
+                    repository.getPoolMemberList(activePool).collect { members ->
                         _bids.emit(members)
                         addBidMemberToList(members)
                         members.forEach {
@@ -230,10 +230,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun leavePool() {
-        FirestoreUtil.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
-            showLoading.value = false
-            if (!it.isNullOrEmpty()) showToast.value = it
-            else _actionbarTitle.value = "Home"
+        viewModelScope.launch {
+            repository.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
+                showLoading.value = false
+                if (!it.isNullOrEmpty()) showToast.value = it
+                else _actionbarTitle.value = "Home"
+            }
         }
     }
 
@@ -283,24 +285,28 @@ class HomeViewModel @Inject constructor(
             true
         )
         if (memberItem == null) {
-            FirestoreUtil.addNewMemberToPool(newMember) {
-                if (!it.isNullOrEmpty()) {
-                    showToast.value = "$it"
-                } else {
-                    newMemberName.value = null
-                    newMemberDepartment.value = null
-                    newMemberEmail.value = null
+            viewModelScope.launch {
+                repository.addNewMemberToPool(newMember) {
+                    if (!it.isNullOrEmpty()) {
+                        showToast.value = "$it"
+                    } else {
+                        newMemberName.value = null
+                        newMemberDepartment.value = null
+                        newMemberEmail.value = null
+                    }
                 }
             }
             return true
         } else {
-            FirestoreUtil.updateTempPoolMember(newMember) {
-                if (!it.isNullOrEmpty()) {
-                    showToast.value = "$it"
-                } else {
-                    newMemberName.value = null
-                    newMemberDepartment.value = null
-                    newMemberEmail.value = null
+            viewModelScope.launch {
+                repository.updateTempPoolMember(newMember) {
+                    if (!it.isNullOrEmpty()) {
+                        showToast.value = "$it"
+                    } else {
+                        newMemberName.value = null
+                        newMemberDepartment.value = null
+                        newMemberEmail.value = null
+                    }
                 }
             }
             return true
@@ -312,8 +318,10 @@ class HomeViewModel @Inject constructor(
             showToast.value = "You Do Not Have Permission"
             return
         } else {
-            FirestoreUtil.deleteTempPoolMember(memberItem.member) {
-
+            viewModelScope.launch {
+                repository.deleteTempPoolMember(memberItem.member) {
+                    if (!it.isNullOrEmpty()) showToast.value = it
+                }
             }
         }
     }
@@ -345,8 +353,9 @@ class HomeViewModel @Inject constructor(
     fun setWrapTime(wrapTime: Date?, isConfirmed: Boolean = false) {
         if (isConfirmed) {
             viewModelScope.launch {
-                FirestoreUtil.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
-                    setWinningMember(wrapTime)
+                repository.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
+                    if (it.isNullOrEmpty()) setWinningMember(wrapTime)
+                    else showToast.value = it
                 }
             }
         }
@@ -369,13 +378,30 @@ class HomeViewModel @Inject constructor(
             )
 
             viewModelScope.launch {
-                FirestoreUtil.setPoolWinner(currentPool.value!!.docId, winnersList) {
-                    if (it.isNullOrEmpty()) {
-                        _poolWinningMembers.value = winnersList
-                    } else {
-                        showToast.postValue(it)
-                    }
+                repository.setPoolWinner(currentPool.value!!.docId, winnersList) {
+                    if (it.isNullOrEmpty()) _poolWinningMembers.value = winnersList
+                    else showToast.postValue(it)
                 }
+            }
+        }
+    }
+
+    fun setUserPoolBet(time: Date?) {
+        viewModelScope.launch {
+            repository.setUserPoolBet(
+                userAccount.value!!.activePool!!, userAccount.value!!.uid, time
+            ) {
+                if (!it.isNullOrEmpty()) showToast.value = it
+            }
+        }
+    }
+
+    fun setMemberPoolBet(poolId: String, tempMemberUid: String, time: Date?) {
+        viewModelScope.launch {
+            repository.setUserPoolBet(
+                poolId, tempMemberUid, time
+            ) {
+                if (!it.isNullOrEmpty()) showToast.value = it
             }
         }
     }
