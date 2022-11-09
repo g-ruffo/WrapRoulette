@@ -17,7 +17,6 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentSignupBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
-import ca.veltus.wraproulette.utils.FirestoreUtil
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -36,15 +35,11 @@ class SignupFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSignupBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var databaseReference: FirebaseFirestore
-
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
 
         binding.viewModel = _viewModel
 
@@ -76,20 +71,16 @@ class SignupFragment : BaseFragment() {
             _viewModel.signupFlow.collectLatest {
                 when (it) {
                     is Result.Success -> {
-                        Log.i(TAG, "observeSignup = Resource.Success")
-//                        databaseReference = FirebaseFirestore.getInstance()
-//                        databaseReference.collection("Users").document(_viewModel.currentUser!!.uid)
-//                            .set(_viewModel.buildHashMap())
-
-                        FirestoreUtil.initCurrentUserIfFirstTime(_viewModel.getDepartmentString()) {
+                        _viewModel.initCurrentUserIfFirstTime() {
                             startActivity(
-                                Intent(requireContext(), WrapRouletteActivity::class.java)
-                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                Intent(requireContext(), WrapRouletteActivity::class.java).addFlags(
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    )
                             )
                             requireActivity().finish()
                         }
-
                     }
+
                     is Result.Loading -> {
                         Log.i(TAG, "observeSignup = Resource.Loading")
                         CircularProgressIndicator(requireContext())
@@ -104,8 +95,7 @@ class SignupFragment : BaseFragment() {
                                 binding.passwordEditTextLayout.setHelperTextColor(
                                     ColorStateList.valueOf(
                                         ContextCompat.getColor(
-                                            requireContext(),
-                                            R.color.warningRed
+                                            requireContext(), R.color.warningRed
                                         )
                                     )
                                 )
@@ -116,8 +106,7 @@ class SignupFragment : BaseFragment() {
                                 binding.emailEditTextLayout.setHelperTextColor(
                                     ColorStateList.valueOf(
                                         ContextCompat.getColor(
-                                            requireContext(),
-                                            R.color.warningRed
+                                            requireContext(), R.color.warningRed
                                         )
                                     )
                                 )

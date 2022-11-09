@@ -11,5 +11,9 @@ interface AuthenticationRepository {
     suspend fun signup(name: String, email: String, password: String): Result<FirebaseUser>
     fun logout()
     suspend fun getCurrentUserProfile(): Flow<User?>
-
+    suspend fun initCurrentUserIfFirstTime(department: String, onComplete: (String?) -> Unit)
+    suspend fun getCurrentUser(onComplete: (User) -> Unit)
+    suspend fun updateCurrentUser(
+        updateUserFieldMap: MutableMap<String, Any>, onComplete: (String?) -> Unit
+    )
 }
