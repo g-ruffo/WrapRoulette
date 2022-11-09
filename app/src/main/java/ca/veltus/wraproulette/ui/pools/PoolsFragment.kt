@@ -31,7 +31,6 @@ class PoolsFragment : BaseFragment() {
     override val _viewModel by viewModels<PoolsViewModel>()
 
     private lateinit var binding: FragmentPoolsBinding
-    private val groupieAdapter = GroupieAdapter()
 
     private val onItemClick = OnItemClickListener { item, view ->
         if (item is PoolItem) {
@@ -75,7 +74,7 @@ class PoolsFragment : BaseFragment() {
     }
 
     private fun setupRecyclerView(items: List<PoolItem>) {
-        groupieAdapter.apply {
+        val groupieAdapter = GroupieAdapter().apply {
             addAll(items.sortedByDescending { it.pool.startTime })
             setOnItemClickListener(onItemClick)
         }
