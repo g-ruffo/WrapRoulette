@@ -82,7 +82,7 @@ class LoginSignupViewModel @Inject constructor(
         viewModelScope.launch {
             repository.initCurrentUserIfFirstTime(department.value ?: "") {
                 if (it == null) onComplete()
-                else showToast.value = it
+                else showToast.postValue(it)
             }
         }
     }
