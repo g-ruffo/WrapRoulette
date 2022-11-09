@@ -88,7 +88,6 @@ class HomeViewModel @Inject constructor(
                 emit(0)
                 delay(1000)
             } else {
-                time
                 emit(time)
                 delay(1000)
             }
@@ -162,7 +161,7 @@ class HomeViewModel @Inject constructor(
                     if (it.isNullOrEmpty()) {
                         userMessageEditText.emit(null)
                         onComplete()
-                    } else showToast.value = it
+                    } else showToast.postValue(it)
                 }
             }
         }
@@ -233,7 +232,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             repository.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
                 showLoading.value = false
-                if (!it.isNullOrEmpty()) showToast.value = it
+                if (!it.isNullOrEmpty()) showToast.postValue(it)
                 else _actionbarTitle.value = "Home"
             }
         }
@@ -288,7 +287,7 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 repository.addNewMemberToPool(newMember) {
                     if (!it.isNullOrEmpty()) {
-                        showToast.value = "$it"
+                        showToast.postValue(it)
                     } else {
                         newMemberName.value = null
                         newMemberDepartment.value = null
@@ -301,7 +300,7 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 repository.updateTempPoolMember(newMember) {
                     if (!it.isNullOrEmpty()) {
-                        showToast.value = "$it"
+                        showToast.postValue(it)
                     } else {
                         newMemberName.value = null
                         newMemberDepartment.value = null
@@ -320,7 +319,7 @@ class HomeViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 repository.deleteTempPoolMember(memberItem.member) {
-                    if (!it.isNullOrEmpty()) showToast.value = it
+                    if (!it.isNullOrEmpty()) showToast.postValue(it)
                 }
             }
         }
@@ -355,7 +354,7 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 repository.setPoolWrapTime(currentPool.value!!.docId, wrapTime) {
                     if (it.isNullOrEmpty()) setWinningMember(wrapTime)
-                    else showToast.value = it
+                    else showToast.postValue(it)
                 }
             }
         }
@@ -391,7 +390,7 @@ class HomeViewModel @Inject constructor(
             repository.setUserPoolBet(
                 userAccount.value!!.activePool!!, userAccount.value!!.uid, time
             ) {
-                if (!it.isNullOrEmpty()) showToast.value = it
+                if (!it.isNullOrEmpty()) showToast.postValue(it)
             }
         }
     }
@@ -401,7 +400,8 @@ class HomeViewModel @Inject constructor(
             repository.setUserPoolBet(
                 poolId, tempMemberUid, time
             ) {
-                if (!it.isNullOrEmpty()) showToast.value = it
+                if (!it.isNullOrEmpty()) showToast.postValue(it)
+
             }
         }
     }

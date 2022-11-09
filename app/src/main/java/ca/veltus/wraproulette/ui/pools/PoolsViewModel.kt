@@ -119,7 +119,7 @@ class PoolsViewModel @Inject constructor(
                 if (it.isNullOrEmpty()) {
                     navigateJoinPoolToHomeFragment()
                 } else {
-                    showToast.value = it
+                    showToast.postValue(it)
                     showLoading.value = false
                 }
             }
