@@ -87,11 +87,8 @@ class WrapRouletteActivity : AppCompatActivity() {
                         navView.getHeaderView(0)
                             .findViewById<TextView>(R.id.userNameHeaderTextView).text =
                             it.displayName
-                        navView.getHeaderView(0)
-                            .findViewById<TextView>(R.id.userEmailHeaderTextView).text = it.email
-
                         if (it.profilePicturePath != null) {
-                            Glide.with(this@WrapRouletteActivity)
+                            Glide.with(this@WrapRouletteActivity).asBitmap()
                                 .load(FirebaseStorageUtil.pathToReference(it.profilePicturePath))
                                 .placeholder(R.drawable.ic_baseline_account_circle_24).into(
                                     navView.getHeaderView(0)
@@ -102,14 +99,11 @@ class WrapRouletteActivity : AppCompatActivity() {
                 }
             }
         }
-
-
-        navView.menu.findItem(R.id.logoutMenu).setOnMenuItemClickListener {
+        binding.logout.setOnClickListener {
             viewModel.logout()
             startActivity(
                 Intent(
-                    this,
-                    LoginSignupActivity::class.java
+                    this, LoginSignupActivity::class.java
                 ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
             finish()
