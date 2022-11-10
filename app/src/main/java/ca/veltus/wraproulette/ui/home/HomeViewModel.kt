@@ -382,7 +382,7 @@ class HomeViewModel @Inject constructor(
                     else showToast.postValue(it)
                 }
             }
-        } else _poolWinningMembers.value = listOf()
+        }
     }
 
     fun setUserPoolBet(time: Date?) {

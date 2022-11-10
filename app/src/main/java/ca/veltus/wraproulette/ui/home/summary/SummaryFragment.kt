@@ -78,9 +78,7 @@ class SummaryFragment : BaseFragment() {
                 }
                 launch {
                     _viewModel.poolWinningMembers.collectLatest {
-                        if (it.isNotEmpty()) {
-                            setupWinnersRecyclerView(it.toWinnerMemberItem())
-                        }
+                        setupWinnersRecyclerView(it.toWinnerMemberItem())
                     }
                 }
             }
