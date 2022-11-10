@@ -17,7 +17,7 @@
         android:layout_margin="4dp"
         android:background="@color/poolItemIconTint"
         android:clipToPadding="false"
-        android:elevation="24dp"
+        app:cardElevation="2dp"
         app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
-                android:elevation="12dp"
+                app:cardElevation="2dp"
                 app:cardCornerRadius="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,8 +112,9 @@
                 android:layout_marginEnd="6dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
-                android:elevation="12dp"
+                app:cardElevation="2dp"
                 app:cardCornerRadius="14dp"
+                android:minWidth="66dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
