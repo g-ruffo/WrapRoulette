@@ -12,131 +12,296 @@
         <import type="android.view.View" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context=".ui.pools.PoolsFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/poolsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent">-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/adminFabLayout"
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="100dp"
-            tools:ignore="HardcodedText">
+            android:clipToPadding="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/expandFab"
-                setExpandableFabAdminState="@{true}"
-                setExpandableFabState="@{viewModel.isFabClicked}"
+            <View
+                android:id="@+id/headerImage"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:background="@drawable/rounded_corners_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/totalWinningsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/purple_200"
-                android:onClick="@{() -> viewModel.toggleFabButton()}"
-                android:text="Actions"
-                app:icon="@drawable/ic_baseline_add_24"
+                android:text="Total Winnings"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/totalWinningsText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/totalWinningsText"
+                calculateTotalWinningsList="@{viewModel.pools}"
+                calculateTotalWinningsUid="@{viewModel.userAccount.uid}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/headerImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/totalWinningsTitle"
+                tools:text="$150.00" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/totalPoolsCardView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="6dp"
+                app:layout_constraintBottom_toBottomOf="@id/totalBetsCardView"
+                app:layout_constraintEnd_toStartOf="@id/totalBetsCardView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/totalWinningsText">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp">
+
+                    <TextView
+                        android:id="@+id/totalPoolsTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Total Pools"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/totalPoolsText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.valueOf(viewModel.pools.size())}"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalPoolsTitle"
+                        tools:text="3" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/totalBetsCardView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="6dp"
+                app:layout_constraintBottom_toBottomOf="@id/totalPoolsCardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/totalPoolsCardView"
+                app:layout_constraintTop_toBottomOf="@id/totalWinningsText">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp">
+
+                    <TextView
+                        android:id="@+id/totalBetsTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Total Bets"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/totalBetsText"
+                        calculateTotalPoolBetsList="@{viewModel.pools}"
+                        calculateTotalPoolBetsUid="@{viewModel.userAccount.uid}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalBetsTitle"
+                        tools:text="8" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/poolsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:clipToPadding="false"
+                android:paddingTop="44dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/headerImage" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/newPoolFab"
-                setExpandableFabEnabledState="@{viewModel.isFabClicked}"
-                setExpandableFabVisibleState="@{true}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/purple_200"
-                android:onClick="@{() -> viewModel.navigateToAddPoolFragment()}"
-                app:fabSize="normal"
-                app:layout_constraintBottom_toTopOf="@+id/expandFab"
-                app:layout_constraintEnd_toEndOf="@+id/expandFab"
-                app:srcCompat="@drawable/ic_baseline_edit_24" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/adminFabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="100dp"
+                tools:ignore="HardcodedText"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/expandFab"
+                    setExpandableFabAdminState="@{true}"
+                    setExpandableFabState="@{viewModel.isFabClicked}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/purple_200"
+                    android:onClick="@{() -> viewModel.toggleFabButton()}"
+                    android:text="Actions"
+                    app:icon="@drawable/ic_baseline_add_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/newPoolFab"
+                    setExpandableFabEnabledState="@{viewModel.isFabClicked}"
+                    setExpandableFabVisibleState="@{true}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:backgroundTint="@color/purple_200"
+                    android:onClick="@{() -> viewModel.navigateToAddPoolFragment()}"
+                    app:fabSize="normal"
+                    app:layout_constraintBottom_toTopOf="@+id/expandFab"
+                    app:layout_constraintEnd_toEndOf="@+id/expandFab"
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+                <TextView
+                    android:id="@+id/newPoolFabTextView"
+                    setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
+                    setExpandableFabVisibleTextViewsState="@{true}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Create Pool"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/newPoolFab"
+                    app:layout_constraintEnd_toStartOf="@+id/newPoolFab"
+                    app:layout_constraintTop_toTopOf="@+id/newPoolFab" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/joinPoolFab"
+                    setExpandableFabEnabledState="@{viewModel.isFabClicked}"
+                    setExpandableFabVisibleState="@{true}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:backgroundTint="@color/purple_200"
+                    android:onClick="@{() -> viewModel.navigateToJoinPoolFragment()}"
+                    app:fabSize="normal"
+                    app:layout_constraintBottom_toTopOf="@+id/newPoolFab"
+                    app:layout_constraintEnd_toEndOf="@+id/newPoolFab"
+                    app:layout_constraintStart_toStartOf="@+id/newPoolFab"
+                    app:srcCompat="@drawable/ic_baseline_group_add_24" />
+
+                <TextView
+                    android:id="@+id/joinPoolFabTextView"
+                    setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
+                    setExpandableFabVisibleTextViewsState="@{true}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Join Pool"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/joinPoolFab"
+                    app:layout_constraintEnd_toStartOf="@+id/joinPoolFab"
+                    app:layout_constraintTop_toTopOf="@+id/joinPoolFab" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/newPoolFabTextView"
-                setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
-                setExpandableFabVisibleTextViewsState="@{true}"
+                android:id="@+id/noDataTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Create Pool"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/newPoolFab"
-                app:layout_constraintEnd_toStartOf="@+id/newPoolFab"
-                app:layout_constraintTop_toTopOf="@+id/newPoolFab" />
+                android:gravity="center"
+                android:text="No Saved Pools"
+                android:textSize="22sp"
+                android:visibility="@{viewModel.showNoData == true ? View.VISIBLE : View.GONE}"
+                app:drawableTopCompat="@drawable/ic_baseline_monetization_on_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/joinPoolFab"
-                setExpandableFabEnabledState="@{viewModel.isFabClicked}"
-                setExpandableFabVisibleState="@{true}"
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/purple_200"
-                android:onClick="@{() -> viewModel.navigateToJoinPoolFragment()}"
-                app:fabSize="normal"
-                app:layout_constraintBottom_toTopOf="@+id/newPoolFab"
-                app:layout_constraintEnd_toEndOf="@+id/newPoolFab"
-                app:layout_constraintStart_toStartOf="@+id/newPoolFab"
-                app:srcCompat="@drawable/ic_baseline_group_add_24" />
+                android:elevation="8dp"
+                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+                android:gravity="center"
+                android:indeterminate="true"
+                android:secondaryProgressTint="@color/black"
+                android:visibility="gone"
+                app:indicatorColor="@color/earningsGreen"
+                app:indicatorSize="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackColor="@color/purpleLogoLight"
+                app:trackThickness="15dp" />
 
-            <TextView
-                android:id="@+id/joinPoolFabTextView"
-                setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
-                setExpandableFabVisibleTextViewsState="@{true}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Join Pool"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/joinPoolFab"
-                app:layout_constraintEnd_toStartOf="@+id/joinPoolFab"
-                app:layout_constraintTop_toTopOf="@+id/joinPoolFab" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/noDataTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="No Saved Pools"
-            android:textSize="22sp"
-            android:visibility="@{viewModel.showNoData == true ? View.VISIBLE : View.GONE}"
-            app:drawableTopCompat="@drawable/ic_baseline_monetization_on_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="8dp"
-            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-            android:gravity="center"
-            android:indeterminate="true"
-            android:secondaryProgressTint="@color/black"
-            android:visibility="gone"
-            app:indicatorColor="@color/earningsGreen"
-            app:indicatorSize="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:trackColor="@color/purpleLogoLight"
-            app:trackThickness="15dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -217,6 +217,44 @@ object BindingAdapters {
         view.text = "$total"
     }
 
+    @BindingAdapter(
+        value = ["calculateTotalPoolBetsList", "calculateTotalPoolBetsUid"], requireAll = true
+    )
+    @JvmStatic
+    fun calculateTotalPoolBets(view: TextView, pools: List<Pool>?, uid: String?) {
+        val totalBets = mutableListOf<String>()
+        if (pools != null && uid != null) {
+            pools.forEach {
+                it.bets.forEach { bet ->
+                    if (bet.value != null && bet.key == uid) totalBets.add(
+                        bet.value.toString()
+                    )
+                }
+            }
+        }
+        view.text = totalBets.size.toString()
+    }
+
+    @BindingAdapter(
+        value = ["calculateTotalWinningsList", "calculateTotalWinningsUid"], requireAll = true
+    )
+    @JvmStatic
+    fun calculateTotalWinnings(view: TextView, pools: List<Pool>?, uid: String?) {
+        val totalBets = mutableListOf<Int>()
+        val formatter = DecimalFormat("$###0.00")
+        if (pools != null && uid != null) {
+            pools.forEach { pool ->
+                pool.winners.forEach { winner ->
+                    if (winner.uid == uid && winner.tempMemberUid == null) totalBets.add(
+                        winner.winnings ?: 0
+                    )
+                }
+            }
+        }
+
+        view.text = formatter.format(totalBets.sum())
+    }
+
     // Use this binding adapter to show and hide the views using boolean variables.
     @BindingAdapter("android:fadeVisible")
     @JvmStatic
