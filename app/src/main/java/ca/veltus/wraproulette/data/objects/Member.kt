@@ -1,5 +1,6 @@
 package ca.veltus.wraproulette.data.objects
 
+import android.view.View
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.MemberListItemBinding
 import ca.veltus.wraproulette.databinding.WinnerMemberItemBinding
@@ -29,8 +30,11 @@ class MemberItem(
 
     override fun bind(viewBinding: MemberListItemBinding, position: Int) {
         viewBinding.member = member
-        if (userUid != member.uid) {
-            viewBinding.mainLayout.removeView(viewBinding.editMemberIcon)
+
+        if (userUid != member.uid || member.tempMemberUid == null) {
+            viewBinding.editMemberIcon.visibility = View.GONE
+            viewBinding.cardView.isClickable = false
+            viewBinding.cardView.isFocusable = false
         }
         if (!member.activeMember) {
             viewBinding.mainLayout.alpha = 0.5f
