@@ -40,8 +40,10 @@ class BidsFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private val onItemClick = OnItemClickListener { item, view ->
-        if (item is MemberItem && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty() && _viewModel.isPoolActive.value) {
-            launchTempMemberOptionsDialog(item)
+        if (item is MemberItem && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty()) {
+            if (!_viewModel.isPoolActive.value) _viewModel.showSnackBar.value =
+                "This pool has finished, you are unable to make changes at this time."
+            else launchTempMemberOptionsDialog(item)
         }
     }
 
