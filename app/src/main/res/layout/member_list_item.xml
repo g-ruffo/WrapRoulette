@@ -17,63 +17,136 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:elevation="12dp">
+        android:background="@color/poolItemIconTint"
+        android:clipToPadding="false"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:clipToPadding="false"
+            android:padding="4dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/memberProfileImageView"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/memberProfileImageCardView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_account_circle_24"
+                android:layout_height="0dp"
+                android:background="@color/poolItemIconTint"
+                android:clipToPadding="false"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true">
+
+                    <ImageView
+                        android:id="@+id/memberTempIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="top|start"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginBottom="22dp"
+                        android:src="@drawable/ic_baseline_new_releases_24"
+                        app:tint="@color/memberItemTempIconTint" />
+
+                    <ImageView
+                        android:id="@+id/memberProfileImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:clipToPadding="false"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/no_profile_image_member"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </FrameLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/memberNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
                 android:text="@{member.displayName}"
-                app:layout_constraintStart_toEndOf="@id/memberProfileImageView"
+                android:textColor="@color/purpleLogoLight"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/memberDepartmentTextView"
+                app:layout_constraintStart_toEndOf="@id/memberProfileImageCardView"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="John Doe" />
 
             <TextView
-                android:id="@+id/dateTextView"
+                android:id="@+id/memberDepartmentTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{member.department}"
-                app:layout_constraintStart_toEndOf="@id/memberProfileImageView"
-                app:layout_constraintTop_toBottomOf="@id/memberNameTextView"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/memberNameTextView"
+                app:layout_constraintTop_toBottomOf="@+id/memberNameTextView"
                 tools:text="Grip" />
 
-            <TextView
-                dateToStringConverter="@{member.bidTime}"
+            <ImageView
+                android:id="@+id/editMemberIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginBottom="2dp"
+                android:adjustViewBounds="true"
+                android:elevation="28dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_edit_24"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/memberItemEditIconTint" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/betTimeCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/poolItemIconTint"
+                android:clipToPadding="false"
+                android:elevation="12dp"
+                app:cardCornerRadius="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:id="@+id/betTimeTextView"
+                    dateToStringConverter="@{member.bidTime}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="12dp"
+                    tools:text="11:05" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="11:05" />
-
-            <ImageButton
-                android:id="@+id/memberAddBetImageButton"
-                setTempMemberBetTimeVisibility="@{member.bidTime}"
-                setTempMemberUidVisibility="@{member.tempMemberUid}"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_add_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/earningsGreen" />
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

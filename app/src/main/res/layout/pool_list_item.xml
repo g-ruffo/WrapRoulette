@@ -18,7 +18,7 @@
         android:background="@color/poolItemIconTint"
         android:clipToPadding="false"
         android:elevation="24dp"
-        app:cardCornerRadius="12dp">
+        app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -56,7 +56,7 @@
 
                     <ImageView
                         android:id="@+id/poolItemImageAdmin"
-                        android:layout_width="match_parent"
+                        android:layout_width="24dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom|end"
                         android:layout_marginStart="22dp"

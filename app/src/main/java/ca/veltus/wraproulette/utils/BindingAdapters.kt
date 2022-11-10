@@ -62,7 +62,7 @@ object BindingAdapters {
             val time = parsedDate.format(date)
             view.text = time
         } else {
-            view.text = "No Bet"
+            view.text = "--:--"
         }
     }
 

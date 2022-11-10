@@ -30,7 +30,7 @@ class MemberItem(
     override fun bind(viewBinding: MemberListItemBinding, position: Int) {
         viewBinding.member = member
         if (userUid != member.uid) {
-            viewBinding.mainLayout.removeView(viewBinding.memberAddBetImageButton)
+            viewBinding.mainLayout.removeView(viewBinding.editMemberIcon)
         }
         if (!member.activeMember) {
             viewBinding.mainLayout.alpha = 0.5f
@@ -39,7 +39,7 @@ class MemberItem(
         if (member.profilePicturePath != null) {
             Glide.with(viewBinding.root)
                 .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))
-                .placeholder(R.drawable.ic_baseline_account_circle_24)
+                .placeholder(R.drawable.no_profile_image_member)
                 .into(viewBinding.memberProfileImageView)
         }
     }

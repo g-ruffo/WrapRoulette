@@ -28,6 +28,8 @@
     <color name="poolItemIconTint">#FAFAFA</color>
     <color name="poolItemAdminTint">#333333</color>
     <color name="poolItemIsActiveTint">#9900D905</color>
+    <color name="memberItemTempIconTint">#F1C800</color>
+    <color name="memberItemEditIconTint">#424242</color>
 
 
     <color name="colorEnabled">#3D0340</color>
