@@ -20,10 +20,12 @@ data class Pool(
     var endTime: Date?,
     var winners: List<Member> = listOf(),
     var users: MutableMap<String, Any> = mutableMapOf(),
-    var pIRRulesEnabled: Boolean = false
-) {
+    var pIRRulesEnabled: Boolean = false,
+    var bets: MutableMap<String, Any> = mutableMapOf(),
+
+    ) {
     constructor() : this(
-        "", "", "", "", "", "", null, null, null, null, null, listOf(), mutableMapOf(), false
+        "", "", "", "", "", "", null, null, null, null, null, listOf(), mutableMapOf(), false, mutableMapOf()
     )
 }
 
@@ -33,11 +35,12 @@ class PoolItem(
 
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {
         viewBinding.pool = pool
-        if (pool.docId == user.activePool) {
-            viewBinding.activePoolIcon.visibility = View.VISIBLE
-        } else {
-            viewBinding.activePoolIcon.visibility = View.GONE
-        }
+        if (pool.docId == user.activePool) viewBinding.activePoolIcon.visibility = View.VISIBLE
+         else viewBinding.activePoolIcon.visibility = View.GONE
+
+        if (pool.adminUid == user.uid) viewBinding.poolItemImageAdmin.visibility = View.VISIBLE
+        else viewBinding.poolItemImageAdmin.visibility = View.GONE
+
     }
 
     override fun getLayout(): Int {

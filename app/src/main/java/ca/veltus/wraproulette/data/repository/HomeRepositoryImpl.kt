@@ -101,6 +101,8 @@ class HomeRepositoryImpl @Inject constructor(
             try {
                 poolsCollectionReference.document(poolId).collection("members").document(userUid)
                     .update("bidTime", bid).await()
+                // Save bet to pools mutable map
+                poolsCollectionReference.document(poolId).update("bets.$userUid", bid).await()
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "setUserPoolBet: ${e.message}")
