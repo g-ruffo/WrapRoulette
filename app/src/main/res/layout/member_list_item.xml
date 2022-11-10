@@ -12,7 +12,7 @@
         <import type="android.view.View" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:background="@color/poolItemIconTint"
         android:clipToPadding="false"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        app:cardElevation="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainLayout"
@@ -30,14 +30,15 @@
             android:clipToPadding="false"
             android:padding="4dp">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/memberProfileImageCardView"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
                 app:cardCornerRadius="14dp"
-                app:cardElevation="4dp"
+                app:cardElevation="2dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +55,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="top|start"
                         android:layout_marginStart="22dp"
+                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
                         android:layout_marginBottom="22dp"
                         android:src="@drawable/ic_baseline_new_releases_24"
                         app:tint="@color/memberItemTempIconTint" />
@@ -74,7 +76,7 @@
                 </FrameLayout>
 
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/memberNameTextView"
@@ -101,26 +103,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/memberNameTextView"
                 tools:text="Grip" />
 
-            <ImageView
-                android:id="@+id/editMemberIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginBottom="2dp"
-                android:adjustViewBounds="true"
-                android:elevation="28dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_edit_24"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@id/guideline"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/memberItemEditIconTint" />
 
-            <androidx.cardview.widget.CardView
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/betTimeCardView"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
+                android:minWidth="70dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
                 android:elevation="12dp"
@@ -134,20 +123,35 @@
                     android:id="@+id/betTimeTextView"
                     dateToStringConverter="@{member.bidTime}"
                     android:layout_width="wrap_content"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="12dp"
+                    android:textSize="16sp"
                     tools:text="11:05" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
+            <ImageView
+                android:id="@+id/editMemberIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:elevation="28dp"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/betTimeCardView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/memberItemEditIconTint" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
+                app:barrierDirection="end"
+                android:orientation="vertical"
+                app:constraint_referenced_ids="editMemberIcon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
