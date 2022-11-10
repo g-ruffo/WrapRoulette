@@ -20,7 +20,15 @@
     <color name="calendarBlue">#0000FF</color>
     <color name="timerNotRunningYellow">#20FFFF00</color>
     <color name="timerRunningGreen">#2000D905</color>
-    <color name="selectedPoolCardView">#2000FF00</color>
+    <color name="selectedPoolCardView">#80b3ffb3</color>
+
+    <color name="poolItemCompleteGreen">#8000D905</color>
+    <color name="poolItemErrorRed">#80FF0000</color>
+    <color name="poolItemProgressBlue">#800000FF</color>
+    <color name="poolItemIconTint">#FAFAFA</color>
+    <color name="poolItemAdminTint">#333333</color>
+    <color name="poolItemIsActiveTint">#9900D905</color>
+
 
     <color name="colorEnabled">#3D0340</color>
     <color name="colorDisabled">#806B406E</color>

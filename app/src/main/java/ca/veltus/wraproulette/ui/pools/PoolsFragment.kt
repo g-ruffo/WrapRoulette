@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -35,11 +34,6 @@ class PoolsFragment : BaseFragment() {
     private val onItemClick = OnItemClickListener { item, view ->
         if (item is PoolItem) {
             binding.poolsRecyclerView.isClickable = false
-            view.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(), R.color.selectedPoolCardView
-                )
-            )
             _viewModel.setUsersActivePool(item.pool.docId) {
                 binding.poolsRecyclerView.isClickable = true
             }

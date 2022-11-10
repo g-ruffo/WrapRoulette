@@ -10,50 +10,135 @@
             type="ca.veltus.wraproulette.data.objects.Pool" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:elevation="12dp">
+        android:clipToPadding="false"
+        android:elevation="24dp"
+        app:cardCornerRadius="12dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:clipToPadding="false"
+            android:padding="4dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/poolItemImageCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:clipToPadding="false"
+                android:elevation="12dp"
+                app:cardCornerRadius="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true">
+
+                    <ImageView
+                        android:id="@+id/poolItemImage"
+                        setPoolItemImage="@{pool}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:background="@color/poolItemProgressBlue"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_baseline_verified_24"
+                        app:tint="@color/poolItemIconTint" />
+
+                    <ImageView
+                        android:id="@+id/poolItemImageAdmin"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginTop="22dp"
+                        android:src="@drawable/ic_baseline_account_circle_24"
+                        app:tint="@color/poolItemAdminTint" />
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/productionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
                 android:text="@{pool.production}"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/purpleLogoLight"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/poolItemImageCardView"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Production Name" />
 
             <TextView
                 android:id="@+id/dateTextView"
+                convertDateToPoolItem="@{pool.date}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{pool.date}"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@id/productionTextView"
                 app:layout_constraintTop_toBottomOf="@id/productionTextView"
-                tools:text="Date" />
+                tools:text="Monday Oct, 07 2022" />
 
             <ImageView
                 android:id="@+id/activePoolIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_margin="4dp"
+                android:layout_marginBottom="2dp"
                 android:adjustViewBounds="true"
+                android:elevation="28dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_check_circle_24"
-                android:visibility="gone"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/poolItemIsActiveTint" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/potSizeCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="6dp"
+                android:background="@color/poolItemIconTint"
+                android:clipToPadding="false"
+                android:elevation="12dp"
+                app:cardCornerRadius="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:id="@+id/totalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:calculatePoolItemPotSize="@{pool}"
+                    android:padding="12dp"
+                    tools:text="$10.00" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

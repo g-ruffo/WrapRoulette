@@ -8,16 +8,20 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.data.objects.Member
+import ca.veltus.wraproulette.data.objects.Pool
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -125,6 +129,23 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter("convertDateToPoolItem")
+    @JvmStatic
+    fun convertDateToPoolItem(view: TextView, date: String?) {
+        if (date != null) {
+            val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
+            val dateObject = parsedDate.parse(date)
+            val convertedDate = dateFormatter.format(dateObject!!)
+            view.text = convertedDate
+            view.isSelected = true
+            view.ellipsize = TextUtils.TruncateAt.MARQUEE
+            view.isSingleLine = true
+            view.marqueeRepeatLimit = -1
+            view.setHorizontallyScrolling(true)
+        }
+    }
+
     @BindingAdapter(
         value = ["setCurrentTimeTitleIsActive", "setCurrentTimeTitleWinners", "setCurrentTimeTitleWrapTime"],
         requireAll = true
@@ -135,8 +156,7 @@ object BindingAdapters {
     ) {
         if (isActive && wrapTime == null) {
             view.text = "Current Time"
-        }
-        else if (!isActive && list.isEmpty() && wrapTime != null) {
+        } else if (!isActive && list.isEmpty() && wrapTime != null) {
             view.text = "No Winners"
         } else if (!isActive && wrapTime == null) {
             view.text = "Error, Wrap Time Not Set"
@@ -184,6 +204,17 @@ object BindingAdapters {
         } else {
             view.text = "$0"
         }
+    }
+
+    @BindingAdapter("android:calculatePoolItemPotSize")
+    @JvmStatic
+    fun calculatePoolItemPotSize(view: TextView, pool: Pool) {
+        val totalBets = mutableListOf<String>()
+        pool.bets.forEach { if (it.value != null) totalBets.add(it.key) }
+        val formatter = DecimalFormat("$###0.00")
+        val bidAmount = pool.betAmount?.toInt() ?: 0
+        val total = formatter.format(bidAmount * totalBets.size)
+        view.text = "$total"
     }
 
     // Use this binding adapter to show and hide the views using boolean variables.
@@ -266,6 +297,38 @@ object BindingAdapters {
                     .setInterpolator(DecelerateInterpolator()).start()
             }
         }
+    }
+
+    @BindingAdapter("setPoolItemImage")
+    @JvmStatic
+    fun setPoolItemImage(view: ImageView, pool: Pool) {
+        val context = view.context
+        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val dateObject = parsedDate.parse(pool.date)
+
+        if (pool.endTime != null) {
+            view.setBackgroundColor(getColor(context, R.color.poolItemCompleteGreen))
+            view.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context, R.drawable.ic_baseline_verified_24
+                )
+            )
+        } else if (pool.startTime == null || (Calendar.getInstance().time.time - dateObject.time) < (Constants.DAY * 2)) {
+            view.setBackgroundColor(getColor(context, R.color.poolItemProgressBlue))
+            view.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context, R.drawable.ic_baseline_pending_24
+                )
+            )
+        } else {
+            view.setBackgroundColor(getColor(context, R.color.poolItemErrorRed))
+            view.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context, R.drawable.ic_baseline_new_releases_24
+                )
+            )
+        }
+
     }
 }
 
