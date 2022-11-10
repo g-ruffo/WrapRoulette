@@ -117,6 +117,9 @@ class HomeRepositoryImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 poolsCollectionReference.document(poolId).update("endTime", wrapTime).await()
+                if (wrapTime == null) {
+                    poolsCollectionReference.document(poolId).update("winners", listOf<Member>()).await()
+                }
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "setPoolWrapTime: ${e.message}")
