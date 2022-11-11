@@ -30,6 +30,8 @@
     <color name="poolItemIsActiveTint">#9900D905</color>
     <color name="memberItemTempIconTint">#F1C800</color>
     <color name="memberItemEditIconTint">#99424242</color>
+    <color name="fabTextColor">#262626</color>
+    <color name="fabIconTint">#f2f2f2</color>
 
 
     <color name="colorEnabled">#3D0340</color>

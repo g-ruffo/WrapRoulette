@@ -51,5 +51,20 @@
         <item name="backgroundTint">@color/color_states_material_button</item>
     </style>
 
+    <style name="FabButton">
+        <item name="maxImageSize">28dp</item>
+        <item name="backgroundTint">@color/purpleLogoDark</item>
+        <item name="tint">@color/fabIconTint</item>
+        <item name="fabSize">normal</item>
+        <item name="iconTint">@color/fabIconTint</item>
+        <item name="android:textColor">@color/fabIconTint</item>
+    </style>
+
+    <style name="FabText">
+        <item name="elevation">42dp</item>
+        <item name="android:textColor">@color/fabTextColor</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>

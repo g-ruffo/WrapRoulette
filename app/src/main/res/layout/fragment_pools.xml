@@ -198,6 +198,7 @@
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/expandFab"
+                    style="@style/FabButton"
                     setExpandableFabAdminState="@{true}"
                     setExpandableFabState="@{viewModel.isFabClicked}"
                     android:layout_width="wrap_content"
@@ -205,7 +206,6 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:backgroundTint="@color/purple_200"
                     android:onClick="@{() -> viewModel.toggleFabButton()}"
                     android:text="Actions"
                     app:icon="@drawable/ic_baseline_add_24"
@@ -214,41 +214,39 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/newPoolFab"
+                    style="@style/FabButton"
                     setExpandableFabEnabledState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleState="@{true}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:backgroundTint="@color/purple_200"
                     android:onClick="@{() -> viewModel.navigateToAddPoolFragment()}"
-                    app:fabSize="normal"
                     app:layout_constraintBottom_toTopOf="@+id/expandFab"
                     app:layout_constraintEnd_toEndOf="@+id/expandFab"
                     app:srcCompat="@drawable/ic_baseline_edit_24" />
 
                 <TextView
                     android:id="@+id/newPoolFabTextView"
+                    style="@style/FabText"
                     setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleTextViewsState="@{true}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="Create Pool"
-                    android:textStyle="bold"
+                    android:text="New"
                     app:layout_constraintBottom_toBottomOf="@+id/newPoolFab"
                     app:layout_constraintEnd_toStartOf="@+id/newPoolFab"
                     app:layout_constraintTop_toTopOf="@+id/newPoolFab" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/joinPoolFab"
+                    style="@style/FabButton"
                     setExpandableFabEnabledState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleState="@{true}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:backgroundTint="@color/purple_200"
                     android:onClick="@{() -> viewModel.navigateToJoinPoolFragment()}"
-                    app:fabSize="normal"
                     app:layout_constraintBottom_toTopOf="@+id/newPoolFab"
                     app:layout_constraintEnd_toEndOf="@+id/newPoolFab"
                     app:layout_constraintStart_toStartOf="@+id/newPoolFab"
@@ -256,13 +254,13 @@
 
                 <TextView
                     android:id="@+id/joinPoolFabTextView"
+                    style="@style/FabText"
                     setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleTextViewsState="@{true}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="Join Pool"
-                    android:textStyle="bold"
+                    android:text="Join"
                     app:layout_constraintBottom_toBottomOf="@+id/joinPoolFab"
                     app:layout_constraintEnd_toStartOf="@+id/joinPoolFab"
                     app:layout_constraintTop_toTopOf="@+id/joinPoolFab" />
