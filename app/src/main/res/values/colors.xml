@@ -6,6 +6,12 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
 
+    <color name="bluePrimary">#233b5d</color>
+    <color name="blueLight">#50658a</color>
+    <color name="blueDark">#001533</color>
+    <color name="blueInputBoxColor">#2d4970</color>
+    <color name="blueInputHintTextColor">#6f99d1</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="warningRed">#FF0000</color>
@@ -32,7 +38,8 @@
     <color name="memberItemEditIconTint">#99424242</color>
     <color name="fabTextColor">#262626</color>
     <color name="fabIconTint">#f2f2f2</color>
-
+    <color name="cardViewTitleColor">#404040</color>
+    <color name="cardBackgroundWhite">#F8F8F8</color>
 
     <color name="colorEnabled">#3D0340</color>
     <color name="colorDisabled">#906B406E</color>

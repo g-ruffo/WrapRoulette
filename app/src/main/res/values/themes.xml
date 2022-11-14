@@ -13,6 +13,12 @@
         <!-- Customize your theme here. -->
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
         <item name="android:statusBarColor">@color/purpleLogoDark</item>
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowActionBarOverlay">true</item>-->
+<!--        <item name="android:windowActionBarOverlay">true</item>-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+<!--        <item name="android:fitsSystemWindows">true</item>-->
 
     </style>
 
@@ -24,6 +30,14 @@
     <style name="Theme.WrapRoulette.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+<!--        <item name="android:fitsSystemWindows">true</item>-->
+
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:textColorSecondary">@color/white</item>
+
     </style>
 
     <style name="Theme.WrapRoulette.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -35,7 +49,23 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginBottom">15dp</item>
+        <item name="boxCornerRadiusBottomEnd">24dp</item>
+        <item name="boxCornerRadiusTopEnd">24dp</item>
+        <item name="boxCornerRadiusBottomStart">24dp</item>
+        <item name="boxBackgroundColor">@color/blueInputBoxColor</item>
+        <item name="startIconTint">@color/white</item>
+        <item name="android:textColorHint">@color/blueInputHintTextColor</item>
+        <item name="counterTextColor">@color/blueInputHintTextColor</item>
+        <item name="passwordToggleTint">@color/white</item>
+        <item name="android:textColor">@color/blueInputHintTextColor</item>
+
+        <item name="boxCornerRadiusTopStart">24dp</item>
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+
     </style>
+
 
     <style name="LoginTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
@@ -53,7 +83,7 @@
 
     <style name="FabButton">
         <item name="maxImageSize">28dp</item>
-        <item name="backgroundTint">@color/purpleLogoDark</item>
+        <item name="backgroundTint">@color/color_states_material_button</item>
         <item name="tint">@color/fabIconTint</item>
         <item name="fabSize">normal</item>
         <item name="iconTint">@color/fabIconTint</item>
