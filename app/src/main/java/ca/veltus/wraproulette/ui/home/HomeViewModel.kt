@@ -183,7 +183,7 @@ class HomeViewModel @Inject constructor(
                             showNoData.emit(false)
                             if (pool.adminUid == _userAccount.value!!.uid) {
                                 isPoolAdmin.emit(true)
-                                _actionbarTitle.emit(pool.production + " (Admin)")
+                                _actionbarTitle.emit(pool.production)
                             } else {
                                 isPoolAdmin.emit(false)
                                 _actionbarTitle.emit(pool.production)

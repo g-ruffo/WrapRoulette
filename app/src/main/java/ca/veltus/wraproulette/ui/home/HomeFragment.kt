@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -18,6 +17,7 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.onPageSelected
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -37,6 +37,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     private lateinit var binding: FragmentHomeBinding
     override val _viewModel by viewModels<HomeViewModel>()
+    private val activityCast by lazy { activity as WrapRouletteActivity }
     private lateinit var menuHost: MenuHost
     private lateinit var fabView: View
 
@@ -61,7 +62,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
             launchBetAndWrapDialog()
         }
 
-        binding.bitAdminFab.setOnClickListener {
+        binding.betAdminFab.setOnClickListener {
             launchBetAndWrapDialog()
         }
 
@@ -144,6 +145,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onPause() {
         super.onPause()
+        activityCast.supportActionBar?.subtitle = null
     }
 
     override fun onResume() {
@@ -159,9 +161,14 @@ class HomeFragment : BaseFragment(), MenuProvider {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.isPoolAdmin.collectLatest {
-                    fabView = when (it) {
-                        true -> binding.adminFabLayout
-                        false -> binding.bidFab
+                    when (it) {
+                        true -> {
+                            fabView = binding.adminFabLayout
+                            activityCast.supportActionBar?.subtitle = "Admin"
+                        }
+                        false -> {
+                            fabView = binding.bidFab
+                        }
                     }
                 }
             }
@@ -201,7 +208,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 }
                 launch {
                     _viewModel.actionbarTitle.collect {
-                        (activity as AppCompatActivity).supportActionBar?.title = it
+                        activityCast.supportActionBar?.title = it
                     }
                 }
             }
@@ -241,6 +248,45 @@ class HomeFragment : BaseFragment(), MenuProvider {
             dialog.dismiss()
         }
     }
+
+//    private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
+//        val time = Calendar.getInstance()
+//
+//        val submitButtonText = when (setWrapTime) {
+//            true -> "Set Wrap"
+//            false -> "Bet"
+//        }
+//
+//        val timePickerDialog = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H)
+//            .setHour(Calendar.HOUR_OF_DAY).setMinute(Calendar.MINUTE)
+//
+//        if (_viewModel.userBetTime.value != null && !setWrapTime || setWrapTime && _viewModel.poolEndTime.value != null) {
+//            timePickerDialog.setNegativeButtonText("Clear")
+//        } else timePickerDialog.setNegativeButtonText("Cancel")
+//
+//        timePickerDialog.setPositiveButtonText(submitButtonText)
+//
+//        timePickerDialog.build().apply {
+//            addOnPositiveButtonClickListener {
+//                time.set(Calendar.HOUR_OF_DAY, hour)
+//                time.set(Calendar.MINUTE, minute)
+//                time.set(Calendar.SECOND, 0)
+//                time.set(Calendar.MILLISECOND, 0)
+//
+//                if (time.time.before(_viewModel.poolStartTime.value)) time.add(Calendar.DATE, 1)
+//                if (setWrapTime) launchConfirmationDialog(time.time)
+//                else _viewModel.setUserPoolBet(time.time)
+//            }
+//            addOnNegativeButtonClickListener {
+//                if (_viewModel.userBetTime.value != null && !setWrapTime) _viewModel.setUserPoolBet(
+//                    null
+//                )
+//                if (setWrapTime && _viewModel.poolEndTime.value != null) launchConfirmationDialog(
+//                    null
+//                )
+//            }
+//        }.show(activityCast.supportFragmentManager, "TimePickerDialog")
+//    }
 
     private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance()
