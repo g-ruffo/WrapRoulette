@@ -93,9 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
                 android:layout_marginTop="42dp"
-                app:boxStrokeColor="@color/purpleLogoLight"
                 app:helperTextEnabled="true"
-                app:hintTextColor="@color/purpleLogoLight"
                 app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -120,19 +118,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
                 android:layout_marginTop="12dp"
-                app:boxStrokeColor="@color/purpleLogoLight"
                 app:counterEnabled="true"
                 app:counterMaxLength="24"
-                app:helperTextTextColor="@color/fabIconTint"
-                app:hintTextColor="@color/purpleLogoLight"
                 app:layout_constraintBottom_toTopOf="@+id/forgotPasswordTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
                 app:passwordToggleEnabled="true"
-                app:startIconDrawable="@drawable/ic_outline_lock_24"
-                app:startIconTint="@color/white">
+                app:startIconDrawable="@drawable/ic_outline_lock_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordInputEditText"

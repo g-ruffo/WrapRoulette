@@ -13,41 +13,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/bluePrimary"
         android:fillViewport="true"
         tools:context=".authentication.signup.SignupFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/wave_login"
-                android:elevation="1dp"
-                android:rotation="180"
-                app:layout_constraintBottom_toBottomOf="@id/signUpTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/backButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="Back button"
-                android:elevation="84dp"
-                android:onClick="@{() -> viewModel.navigateBack()}"
-                android:src="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintBottom_toTopOf="@+id/signUpTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.06"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.42000002"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:tint="@color/optionalGrey" />
 
 
             <TextView
@@ -56,18 +28,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:text="Sign Up"
+                android:textColor="@color/white"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toTopOf="@+id/signUpSubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.15"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/backButton" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
                 android:id="@+id/signUpSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Enter your details to register"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,14 +58,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
                 android:layout_marginTop="44dp"
-                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:hintTextColor="@color/purpleLogoLight"
                 app:layout_constraintBottom_toTopOf="@+id/emailEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signUpSubtitle"
-                app:startIconDrawable="@drawable/ic_baseline_person_24">
+                app:startIconDrawable="@drawable/ic_baseline_person_outline_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameInputEditText"
@@ -111,7 +85,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
-                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:helperTextEnabled="true"
                 app:hintTextColor="@color/purpleLogoLight"
@@ -119,7 +92,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout"
-                app:startIconDrawable="@drawable/ic_baseline_email_24">
+                app:startIconDrawable="@drawable/ic_outline_email_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailInputEditText"
@@ -137,14 +110,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
-                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:hintTextColor="@color/purpleLogoLight"
                 app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
-                app:startIconDrawable="@drawable/ic_baseline_work_24">
+                app:startIconDrawable="@drawable/ic_outline_work_outline_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/departmentInputEditText"
@@ -163,7 +135,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
-                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/purpleLogoLight"
                 app:counterEnabled="true"
                 app:counterMaxLength="24"
@@ -173,7 +144,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout"
                 app:passwordToggleEnabled="true"
-                app:startIconDrawable="@drawable/ic_baseline_lock_24">
+                app:startIconDrawable="@drawable/ic_outline_lock_24">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordInputEditText"
@@ -193,9 +164,9 @@
                 android:layout_marginHorizontal="100dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/rounded_corners_button"
+                android:background="@drawable/rounded_corners_button_login"
                 android:text="Sign Up"
-                android:textColor="@color/white"
+                android:textColor="@color/bluePrimary"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

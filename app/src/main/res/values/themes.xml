@@ -49,20 +49,33 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginBottom">15dp</item>
-        <item name="boxCornerRadiusBottomEnd">24dp</item>
-        <item name="boxCornerRadiusTopEnd">24dp</item>
-        <item name="boxCornerRadiusBottomStart">24dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
         <item name="boxBackgroundColor">@color/blueInputBoxColor</item>
         <item name="startIconTint">@color/white</item>
         <item name="android:textColorHint">@color/blueInputHintTextColor</item>
         <item name="counterTextColor">@color/blueInputHintTextColor</item>
         <item name="passwordToggleTint">@color/white</item>
         <item name="android:textColor">@color/blueInputHintTextColor</item>
-
-        <item name="boxCornerRadiusTopStart">24dp</item>
+        <item name="helperTextTextColor">@color/fabIconTint</item>
+        <item name="colorAccent">@color/fabIconTint</item>
+        <item name="colorControlNormal">@color/fabIconTint</item>
+        <item name="colorControlActivated">@color/fabIconTint</item>
         <item name="boxBackgroundMode">filled</item>
+        <item name="colorPrimary">@color/fabIconTint</item>
+        <item name="colorOnSurface">@color/fabIconTint</item>
+        <item name="hintTextColor">@color/blueInputHintTextColor</item>
         <item name="boxStrokeWidth">0dp</item>
+        <item name="android:textColorPrimary">@color/fabIconTint</item>
+        <item name="android:titleTextColor">@color/fabIconTint</item>
+        <item name="editTextColor">@color/fabIconTint</item>
+        <item name="textFillColor">@color/fabIconTint</item>
+        <item name="android:editTextColor">@color/fabIconTint</item>
+        <item name="android:textCursorDrawable">@color/fabIconTint</item>
         <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="colorOnSecondary">@color/fabIconTint</item>
 
     </style>
 
