@@ -117,7 +117,7 @@ object BindingAdapters {
     fun convertDateToDetail(view: TextView, date: String?) {
         if (date != null) {
             val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val dateFormatter = SimpleDateFormat("EEEE MMMM dd, yyyy", Locale.ENGLISH)
+            val dateFormatter = SimpleDateFormat("EEEE MMM dd, yyyy", Locale.ENGLISH)
             val dateObject = parsedDate.parse(date)
             val convertedDate = dateFormatter.format(dateObject!!)
             view.text = convertedDate

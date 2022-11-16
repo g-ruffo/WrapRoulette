@@ -44,19 +44,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/totalWinningsText"
+                    android:id="@+id/totalPotText"
                     calculatePoolPotSizeList="@{viewModel.poolTotalBets}"
                     calculatePoolPotSizePrice="@{viewModel.currentPool.betAmount}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="28sp"
+                    android:textSize="42sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/totalPotTitle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.3"
+                    app:layout_constraintStart_toStartOf="@id/poolDateText"
+                    app:layout_constraintTop_toTopOf="@id/totalBetsCardView"
+                    app:layout_constraintVertical_bias="0.52"
                     app:layout_constraintVertical_chainStyle="packed"
                     tools:text="$150.00" />
 
@@ -66,99 +65,335 @@
                     android:layout_height="wrap_content"
                     android:text="Total Pot"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/headerImage"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/totalWinningsText"
+                    app:layout_constraintBottom_toTopOf="@+id/poolDateText"
+                    app:layout_constraintStart_toStartOf="@id/totalPotText"
+                    app:layout_constraintTop_toBottomOf="@id/totalPotText"
                     app:layout_constraintVertical_bias="0.25"
                     app:layout_constraintVertical_chainStyle="packed" />
 
-                <ImageView
-                    android:id="@+id/totalMembersIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_person_24"
-                    app:layout_constraintBottom_toBottomOf="@id/totalMembersText"
-                    app:layout_constraintEnd_toStartOf="@id/totalMembersText"
-                    app:layout_constraintStart_toStartOf="@id/totalMemberTitle"
-                    app:layout_constraintTop_toTopOf="@id/totalMembersText"
-                    app:tint="@color/white" />
-
                 <TextView
-                    android:id="@+id/totalMembersText"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/poolDateText"
+                    convertDateToSummaryTitle="@{viewModel.currentPool.date}"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(viewModel.bids.size)}"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="32dp"
+                    android:textColor="@color/poolItemIconTint"
+                    android:textSize="12sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/totalMemberTitle"
-                    app:layout_constraintEnd_toEndOf="@id/totalMemberTitle"
-                    app:layout_constraintStart_toEndOf="@id/totalMembersIcon"
-                    app:layout_constraintTop_toBottomOf="@id/totalPotTitle"
-                    app:layout_constraintVertical_bias="0.3"
-                    app:layout_constraintVertical_chainStyle="packed"
-                    tools:text="8" />
-
-                <TextView
-                    android:id="@+id/totalMemberTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="44dp"
-                    android:layout_marginBottom="44dp"
-                    android:text="Members"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/headerImage"
-                    app:layout_constraintEnd_toStartOf="@id/totalBetsTitle"
-                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintBottom_toBottomOf="@id/totalMembersCardView"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/totalMembersText"
-                    app:layout_constraintVertical_bias="0.25"
-                    app:layout_constraintVertical_chainStyle="packed" />
-
-                <ImageView
-                    android:id="@+id/totalBetsIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_casino_24"
-                    app:layout_constraintBottom_toBottomOf="@id/totalBetsText"
-                    app:layout_constraintEnd_toStartOf="@id/totalBetsText"
-                    app:layout_constraintStart_toStartOf="@id/totalBetsTitle"
-                    app:layout_constraintTop_toTopOf="@id/totalBetsText"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:id="@+id/totalBetsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(viewModel.poolTotalBets.size)}"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/totalBetsTitle"
-                    app:layout_constraintEnd_toEndOf="@id/totalBetsTitle"
-                    app:layout_constraintStart_toEndOf="@id/totalBetsIcon"
                     app:layout_constraintTop_toBottomOf="@id/totalPotTitle"
-                    tools:text="4" />
+                    tools:text="Monday Oct 07, 2022" />
 
-                <TextView
-                    android:id="@+id/totalBetsTitle"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/totalMembersCardView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="44dp"
-                    android:layout_marginBottom="44dp"
-                    android:text="Bets"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:backgroundTint="#10ffffff"
+                    app:cardCornerRadius="@dimen/login_edit_text_radius"
+                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="@id/headerImage"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/totalMemberTitle"
-                    app:layout_constraintTop_toBottomOf="@id/totalBetsText" />
+                    app:layout_constraintTop_toBottomOf="@id/totalBetsCardView">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp">
+
+
+                        <ImageView
+                            android:id="@+id/totalMembersIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_person_24"
+                            app:layout_constraintBottom_toBottomOf="@id/totalMembersText"
+                            app:layout_constraintEnd_toStartOf="@id/totalMembersText"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/totalMembersText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(viewModel.bids.size)}"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@id/totalMemberTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/totalMembersIcon"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="8" />
+
+                        <TextView
+                            android:id="@+id/totalMemberTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Members"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/totalBetsCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#10ffffff"
+                    app:cardCornerRadius="@dimen/login_edit_text_radius"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toTopOf="@id/totalMembersCardView"
+                    app:layout_constraintEnd_toEndOf="@id/totalMembersCardView"
+                    app:layout_constraintStart_toStartOf="@id/totalMembersCardView"
+                    app:layout_constraintTop_toTopOf="@id/headerImage"
+                    app:layout_constraintVertical_bias="0.19"
+                    app:layout_constraintVertical_chainStyle="packed">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp">
+
+                        <ImageView
+                            android:id="@+id/totalBetsIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:src="@drawable/ic_baseline_casino_24"
+                            app:layout_constraintBottom_toBottomOf="@id/totalBetsText"
+                            app:layout_constraintEnd_toStartOf="@id/totalBetsText"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/totalBetsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(viewModel.poolTotalBets.size)}"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@id/totalBetsTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/totalBetsIcon"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="4" />
+
+                        <TextView
+                            android:id="@+id/totalBetsTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bets"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/totalBetsText" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/betAmountCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="16dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toStartOf="@id/adminCardView"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/totalMembersCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp">
+
+                        <TextView
+                            android:id="@+id/bidAmountText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{`$` + viewModel.currentPool.betAmount}"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toTopOf="@id/bidAmountTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="$10" />
+
+                        <TextView
+                            android:id="@+id/bidAmountTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bid"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/bidAmountText" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/adminCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintBottom_toBottomOf="@id/betAmountCardView"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toStartOf="@id/marginCardView"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/betAmountCardView"
+                    app:layout_constraintTop_toTopOf="@id/betAmountCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp">
+
+                        <ImageView
+                            android:id="@+id/adminImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_person_24"
+                            android:textSize="32sp"
+                            app:layout_constraintBottom_toTopOf="@id/adminTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/adminTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Admin"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/adminImage" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/marginCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintBottom_toBottomOf="@id/betAmountCardView"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toStartOf="@id/pirCardView"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/adminCardView"
+                    app:layout_constraintTop_toTopOf="@id/betAmountCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp">
+
+                        <TextView
+                            android:id="@+id/marginText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.poolMargin}"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toTopOf="@id/marginTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="15" />
+
+                        <TextView
+                            android:id="@+id/marginTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Margin"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/marginText" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/pirCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="12dp"
+                    app:cardElevation="6dp"
+                    app:layout_constraintBottom_toBottomOf="@id/betAmountCardView"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/marginCardView"
+                    app:layout_constraintTop_toTopOf="@id/betAmountCardView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="12dp">
+
+                        <ImageView
+                            android:id="@+id/pirImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_person_24"
+                            app:layout_constraintBottom_toTopOf="@id/pirTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/pirTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.poolPIREnabled == true ? `Yes` : `No`}"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/pirImage"
+                            tools:text="Yes" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
 
                 <!--                <androidx.cardview.widget.CardView-->
                 <!--                    android:id="@+id/totalPoolsCardView"-->
@@ -272,7 +507,7 @@
                     app:cardElevation="4dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/headerImage">
+                    app:layout_constraintTop_toBottomOf="@id/adminCardView">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
