@@ -10,6 +10,7 @@ data class Pool(
     var docId: String,
     var adminUid: String,
     var adminName: String,
+    var adminProfileImage: String?,
     var production: String,
     var password: String,
     var date: String,
@@ -25,7 +26,22 @@ data class Pool(
 
     ) {
     constructor() : this(
-        "", "", "", "", "", "", null, null, null, null, null, listOf(), mutableMapOf(), false, mutableMapOf()
+        "",
+        "",
+        "",
+        null,
+        "",
+        "",
+        "",
+        null,
+        null,
+        null,
+        null,
+        null,
+        listOf(),
+        mutableMapOf(),
+        false,
+        mutableMapOf()
     )
 }
 
@@ -36,7 +52,7 @@ class PoolItem(
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {
         viewBinding.pool = pool
         if (pool.docId == user.activePool) viewBinding.activePoolIcon.visibility = View.VISIBLE
-         else viewBinding.activePoolIcon.visibility = View.GONE
+        else viewBinding.activePoolIcon.visibility = View.GONE
 
         if (pool.adminUid == user.uid) viewBinding.poolItemImageAdmin.visibility = View.VISIBLE
         else viewBinding.poolItemImageAdmin.visibility = View.GONE

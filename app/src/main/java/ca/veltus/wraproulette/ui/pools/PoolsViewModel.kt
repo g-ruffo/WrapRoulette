@@ -41,6 +41,7 @@ class PoolsViewModel @Inject constructor(
     val poolDocUid = MutableStateFlow<String?>(null)
     val poolAdminUid = MutableStateFlow<String?>(null)
     val poolAdminName = MutableStateFlow<String?>(null)
+    val poolAdminProfileImage = MutableStateFlow<String?>(null)
     val poolWinners = MutableStateFlow<List<Member>>(listOf())
     val poolBets = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
     val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
@@ -173,6 +174,7 @@ class PoolsViewModel @Inject constructor(
             poolDocUid.value ?: "",
             poolAdminUid.value ?: "",
             poolAdminName.value ?: "",
+            _userAccount.value?.profilePicturePath ?: poolAdminProfileImage.value,
             poolProduction.value!!.trim(),
             poolPassword.value?.trim() ?: "",
             poolDate.value!!,
@@ -223,6 +225,7 @@ class PoolsViewModel @Inject constructor(
                     poolStartTime.value = pool.startTime
                     poolAdminName.value = pool.adminName
                     poolAdminUid.value = pool.adminUid
+                    poolAdminProfileImage.value = pool.adminProfileImage
                     poolWinners.value = pool.winners
                     poolUsers.value = pool.users
                     poolEndTime.value = pool.endTime
