@@ -19,9 +19,16 @@ import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.data.objects.WinnerMemberItem
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
+import ca.veltus.wraproulette.utils.Constants.ADMIN_DIALOG
+import ca.veltus.wraproulette.utils.Constants.BID_DIALOG
+import ca.veltus.wraproulette.utils.Constants.MARGIN_DIALOG
+import ca.veltus.wraproulette.utils.Constants.PIR_DIALOG
+import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import ca.veltus.wraproulette.utils.intToStringOrdinal
 import ca.veltus.wraproulette.utils.toMemberItem
 import ca.veltus.wraproulette.utils.toWinnerMemberItem
+import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,6 +71,11 @@ class SummaryFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         setupScrollingListener()
 
+        binding.betAmountCardView.setOnClickListener { showPoolDetailDialog(BID_DIALOG) }
+        binding.adminCardView.setOnClickListener { showPoolDetailDialog(ADMIN_DIALOG) }
+        binding.marginCardView.setOnClickListener { showPoolDetailDialog(MARGIN_DIALOG) }
+        binding.pirCardView.setOnClickListener { showPoolDetailDialog(PIR_DIALOG) }
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -79,6 +91,14 @@ class SummaryFragment : BaseFragment() {
                 launch {
                     _viewModel.poolWinningMembers.collectLatest {
                         setupWinnersRecyclerView(it.toWinnerMemberItem())
+                    }
+                }
+                launch {
+                    _viewModel.poolAdminProfileImage.collectLatest {
+                        if (!it.isNullOrEmpty()) Glide.with(requireContext()).asBitmap()
+                            .load(FirebaseStorageUtil.pathToReference(it))
+                            .placeholder(R.drawable.no_profile_image_member)
+                            .into(binding.adminImage)
                     }
                 }
             }
@@ -100,6 +120,50 @@ class SummaryFragment : BaseFragment() {
         if (binding.summaryScrollView.scrollY > 100) {
             _viewModel.setIsScrolling(true)
         }
+
+        if (_viewModel.poolAdminProfileImage != null) {
+            Glide.with(requireContext()).asBitmap()
+                .load(FirebaseStorageUtil.pathToReference(_viewModel.poolAdminProfileImage.value!!))
+                .placeholder(R.drawable.no_profile_image_member).into(binding.adminImage)
+        }
+    }
+
+    private fun showPoolDetailDialog(dialog: Int) {
+        if (_viewModel.currentPool.value == null) {
+            _viewModel.showToast.value = "The pool has not loaded yet."
+        } else {
+            var title: String = ""
+            var description: String = ""
+            when (dialog) {
+                BID_DIALOG -> {
+                    title = "Bid Amount"
+                    description =
+                        "The admin has set the bid price as $${_viewModel.currentPool.value!!.betAmount} for this pool."
+                }
+                ADMIN_DIALOG -> {
+                    title = "Pool Administrator"
+                    description =
+                        "The creator and admin for this pool is ${_viewModel.currentPool.value!!.adminName}. They are responsible for adding temporary members, declaring rules and setting the wrap time."
+                }
+                MARGIN_DIALOG -> {
+                    title = "Betting Margin"
+                    description =
+                        "The current margin is ${_viewModel.currentPool.value!!.margin} minutes for this pool. This time is added to any bets made."
+                }
+                PIR_DIALOG -> {
+                    title = "Price Is Right Rules"
+                    description =
+                        "The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over. For this pool the admin has set this to ${_viewModel.currentPool.value!!.pIRRulesEnabled}."
+                }
+
+            }
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+            dialog.setTitle(title).setMessage(description).setPositiveButton("Close") { int, view ->
+
+            }
+            dialog.show()
+        }
+
     }
 
     private fun setupScrollingListener() {
