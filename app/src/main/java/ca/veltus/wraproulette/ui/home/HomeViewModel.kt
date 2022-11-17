@@ -46,6 +46,10 @@ class HomeViewModel @Inject constructor(
     val poolWinningMembers: StateFlow<List<Member>>
         get() = _poolWinningMembers
 
+    private val _poolAdminProfileImage = MutableStateFlow<String?>(null)
+    val poolAdminProfileImage: StateFlow<String?>
+        get() = _poolAdminProfileImage
+
     private val _isPoolActive = MutableStateFlow<Boolean>(false)
     val isPoolActive: StateFlow<Boolean>
         get() = _isPoolActive
@@ -174,6 +178,7 @@ class HomeViewModel @Inject constructor(
                     repository.getPoolData(activePool).collect { pool ->
                         if (pool != null) {
                             _currentPool.emit(pool)
+                            _poolAdminProfileImage.emit(pool.adminProfileImage)
                             poolStartTime.emit(pool.startTime!!)
                             poolRemainingBetTime.emit(pool.lockTime)
                             poolEndTime.emit(pool.endTime)
