@@ -10,107 +10,124 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/blueLight"
         android:fillViewport="true"
         tools:context=".ui.account.AccountFragment">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profilePictureImageView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/ic_baseline_account_circle_24"
-                app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:srcCompat="@drawable/ic_baseline_account_circle_24" />
-
-            <ImageView
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:elevation="222dp"
-                android:shadowColor="@color/white"
-                android:src="@drawable/ic_baseline_add_circle_24"
-                app:layout_constraintBottom_toBottomOf="@id/profilePictureImageView"
-                app:layout_constraintEnd_toEndOf="@id/profilePictureImageView"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@id/profilePictureImageView"
-                app:layout_constraintTop_toTopOf="@id/profilePictureImageView"
-                app:layout_constraintVertical_bias="1.0"
-                app:tint="@color/blueLight" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nameEditTextLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/departmentEditTextLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView"
-                app:layout_constraintVertical_bias="0.025">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/nameInputEditText"
-                    style="@style/LoginTextInputInnerFieldStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Type your name"
-                    android:inputType="textCapWords" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/departmentEditTextLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:maxHeight="150dp"
-                app:layout_constraintBottom_toTopOf="@+id/saveButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout"
-                app:layout_constraintVertical_bias="0.042">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/departmentInputEditText"
-                    style="@style/LoginTextInputInnerFieldStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter your department"
-                    android:inputType="textCapWords" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="84dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="?attr/colorAccent"
-                android:text="Save"
+                android:layout_marginHorizontal="12dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout"
-                app:layout_constraintVertical_bias="0.982" />
+                app:layout_constraintTop_toTopOf="parent">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="22dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profilePictureImageView"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:background="@drawable/ic_baseline_account_circle_24"
+                        app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:elevation="22dp"
+                        android:shadowColor="@color/white"
+                        android:src="@drawable/ic_baseline_add_circle_24"
+                        app:layout_constraintBottom_toBottomOf="@id/profilePictureImageView"
+                        app:layout_constraintEnd_toEndOf="@id/profilePictureImageView"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@id/profilePictureImageView"
+                        app:layout_constraintTop_toTopOf="@id/profilePictureImageView"
+                        app:layout_constraintVertical_bias="1.0"
+                        app:tint="@color/bluePrimary" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/nameEditTextLayout"
+                        style="@style/AccountTextInputOuterFieldStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/departmentEditTextLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView"
+                        app:layout_constraintVertical_bias="0.025">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/nameInputEditText"
+                            style="@style/AccountTextInputInnerFieldStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Name"
+                            android:inputType="textCapWords" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/departmentEditTextLayout"
+                        style="@style/AccountTextInputOuterFieldStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/departmentInputEditText"
+                            style="@style/AccountTextInputInnerFieldStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Department"
+                            android:inputType="textCapWords" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="68dp"
+                        android:layout_marginTop="60dp"
+                        android:background="@drawable/rounded_corners_button_login"
+                        android:text="Save"
+                        android:textColor="@color/fabIconTint"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/bluePrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </ScrollView>
 
