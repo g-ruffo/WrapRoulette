@@ -44,7 +44,7 @@
     <color name="cardStartTimeBackground">#99ff99</color>
 
 
-    <color name="colorEnabled">#3D0340</color>
-    <color name="colorDisabled">#906B406E</color>
+    <color name="colorEnabled">#233b5d</color>
+    <color name="colorDisabled">#9050658a</color>
 
 </resources>
