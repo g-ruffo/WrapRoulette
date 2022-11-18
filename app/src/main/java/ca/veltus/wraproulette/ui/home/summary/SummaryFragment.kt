@@ -2,7 +2,6 @@ package ca.veltus.wraproulette.ui.home.summary
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
-import ca.veltus.wraproulette.data.objects.MemberItem
+import ca.veltus.wraproulette.data.objects.MemberBidItem
 import ca.veltus.wraproulette.data.objects.WinnerMemberItem
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
 import ca.veltus.wraproulette.ui.home.HomeViewModel
@@ -25,7 +24,7 @@ import ca.veltus.wraproulette.utils.Constants.MARGIN_DIALOG
 import ca.veltus.wraproulette.utils.Constants.PIR_DIALOG
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import ca.veltus.wraproulette.utils.intToStringOrdinal
-import ca.veltus.wraproulette.utils.toMemberItem
+import ca.veltus.wraproulette.utils.toMemberBidItem
 import ca.veltus.wraproulette.utils.toWinnerMemberItem
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -84,7 +83,8 @@ class SummaryFragment : BaseFragment() {
                     }.collectLatest {
                         val list = it.first
                         val time = it.second
-                        setupBidsRecyclerView(list.toMemberItem()
+                        // TODO -> Only update if values are different
+                        setupBidsRecyclerView(list.toMemberBidItem()
                             .sortedBy { member -> abs(time.time - member.member.bidTime!!.time) })
                     }
                 }
@@ -109,14 +109,11 @@ class SummaryFragment : BaseFragment() {
         super.onPause()
         Log.i(TAG, "onPause:")
         _viewModel.setIsScrolling()
-        binding.poolDateTextView.ellipsize = null
-
     }
 
     override fun onResume() {
         super.onResume()
         Log.i(TAG, "onResume: ")
-        binding.poolDateTextView.ellipsize = TextUtils.TruncateAt.MARQUEE
         if (binding.summaryScrollView.scrollY > 100) {
             _viewModel.setIsScrolling(true)
         }
@@ -176,7 +173,7 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
-    private fun setupBidsRecyclerView(items: List<MemberItem>) {
+    private fun setupBidsRecyclerView(items: List<MemberBidItem>) {
         setPositionTextView(items)
         val groupieAdapter = GroupieAdapter().apply {
             addAll(items)
@@ -187,7 +184,7 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
-    private fun setPositionTextView(items: List<MemberItem>) {
+    private fun setPositionTextView(items: List<MemberBidItem>) {
         for (i in items.indices) {
             if (items[i].member.uid == _viewModel.userAccount.value!!.uid && items[i].member.displayName == _viewModel.userAccount.value!!.displayName) {
                 binding.positionTextView.text = intToStringOrdinal(i + 1)

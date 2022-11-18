@@ -57,6 +57,39 @@ class MemberItem(
     }
 }
 
+class MemberBidItem(
+    val member: Member, val userUid: String
+) : BindableItem<MemberListItemBinding>() {
+
+    override fun bind(viewBinding: MemberListItemBinding, position: Int) {
+        viewBinding.member = member
+
+        if (userUid != member.uid || member.tempMemberUid == null) {
+            viewBinding.editMemberIcon.visibility = View.GONE
+            viewBinding.cardView.isClickable = false
+            viewBinding.cardView.isFocusable = false
+        }
+        if (!member.activeMember) {
+            viewBinding.mainLayout.alpha = 0.5f
+        }
+
+        if (member.profilePicturePath != null) {
+            Glide.with(viewBinding.root)
+                .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))
+                .placeholder(R.drawable.no_profile_image_member)
+                .into(viewBinding.memberProfileImageView)
+        }
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.member_list_item
+    }
+
+    companion object {
+        private const val TAG = "Member"
+    }
+}
+
 class WinnerMemberItem(
     val member: Member
 ) : BindableItem<WinnerMemberItemBinding>() {

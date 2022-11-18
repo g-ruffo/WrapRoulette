@@ -5,9 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
-import android.text.TextUtils
 import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import ca.veltus.wraproulette.data.objects.*
@@ -40,6 +38,12 @@ fun View.fadeOut() {
 fun List<Member>.toMemberItem(userUid: String = ""): List<MemberItem> {
     return this.map {
         MemberItem(it, userUid)
+    }
+}
+
+fun List<Member>.toMemberBidItem(userUid: String = ""): List<MemberBidItem> {
+    return this.map {
+        MemberBidItem(it, userUid)
     }
 }
 
@@ -89,7 +93,7 @@ fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
         .any { it -> it.service.className == service.name }
 }
 
-fun String.convertDateToDetail() : String {
+fun String.convertDateToDetail(): String {
     return if (this != null) {
         val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
