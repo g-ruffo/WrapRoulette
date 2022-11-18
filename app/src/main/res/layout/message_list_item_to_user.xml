@@ -16,31 +16,31 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp">
 
-        <TextView
-            android:id="@+id/messageSentDateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="4dp"
-            dateToStringDayConverter="@{message.time}"
-            android:textColor="#C0C0C0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="December 01, 2022" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/messageSentDateTextView"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="32dp"-->
+        <!--            android:paddingStart="8dp"-->
+        <!--            android:paddingTop="4dp"-->
+        <!--            android:paddingEnd="8dp"-->
+        <!--            android:paddingBottom="4dp"-->
+        <!--            dateToStringDayConverter="@{message.time}"-->
+        <!--            android:textColor="#C0C0C0"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            tools:text="December 01, 2022" />-->
 
         <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profilePictureImageView"
+            android:id="@+id/profilePictureImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:contentDescription="User Icon"
             android:src="@drawable/ic_baseline_account_circle_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/messageSentDateTextView" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/sentByTextView"
@@ -48,20 +48,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{message.senderName}"
-            android:textSize="16sp"
+            android:textSize="13sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
-            app:layout_constraintTop_toBottomOf="@+id/messageSentDateTextView"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="John Doe" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/messageCardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="#eef1f6"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
             app:layout_constraintTop_toBottomOf="@+id/sentByTextView">
 
@@ -91,14 +93,16 @@
 
         <TextView
             android:id="@+id/timestampTextView"
+            dateToStringTimeConverter="@{message.time}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#C0C0C0"
-            tools:text="10:09"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/optionalGrey"
             android:textSize="10sp"
-            dateToStringTimeConverter="@{message.time}"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/messageCardView"
-            app:layout_constraintStart_toEndOf="@+id/messageCardView" />
+            app:layout_constraintStart_toEndOf="@+id/messageCardView"
+            tools:text="10:09" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,32 +15,32 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp">
 
-        <TextView
-            android:id="@+id/messageSentDateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="4dp"
-            dateToStringDayConverter="@{message.time}"
-            android:textColor="#C0C0C0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/messageSentDateTextView"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="32dp"-->
+        <!--            android:paddingStart="8dp"-->
+        <!--            android:paddingTop="4dp"-->
+        <!--            android:paddingEnd="8dp"-->
+        <!--            android:paddingBottom="4dp"-->
+        <!--            dateToStringDayConverter="@{message.time}"-->
+        <!--            android:textColor="#C0C0C0"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/messageCardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="#774df2"
+            app:cardBackgroundColor="@color/blueLight"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/messageSentDateTextView">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/messageLinearLayout"
@@ -67,14 +67,16 @@
 
         <TextView
             android:id="@+id/timestampTextView"
+            dateToStringTimeConverter="@{message.time}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="10:00"
-            dateToStringTimeConverter="@{message.time}"
-            android:textColor="#C0C0C0"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/optionalGrey"
             android:textSize="10sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/messageCardView"
-            app:layout_constraintEnd_toStartOf="@+id/messageCardView" />
+            app:layout_constraintEnd_toStartOf="@+id/messageCardView"
+            tools:text="10:00" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
