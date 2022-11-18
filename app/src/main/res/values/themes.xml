@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
-        <item name="android:statusBarColor">@color/purpleLogoDark</item>
+        <item name="android:statusBarColor">@color/blueDark</item>
 <!--        <item name="windowActionBar">false</item>-->
 <!--        <item name="windowActionBarOverlay">true</item>-->
 <!--        <item name="android:windowActionBarOverlay">true</item>-->

@@ -112,7 +112,7 @@
                 android:minWidth="70dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
-                android:elevation="12dp"
+                app:cardElevation="0dp"
                 app:cardCornerRadius="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
