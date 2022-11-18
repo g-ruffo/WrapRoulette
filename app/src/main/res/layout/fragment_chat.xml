@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
@@ -12,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/blueGrey"
         tools:context=".ui.home.chat.ChatFragment">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -19,58 +21,66 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp"
+            android:background="@color/blueGrey"
             app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@+id/text_gchat_indicator"
+            app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/text_gchat_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/view"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#e0e0e0"
-            app:layout_constraintBottom_toTopOf="@+id/layout_gchat_chatbox" />
-
-        <RelativeLayout
-            android:id="@+id/layout_gchat_chatbox"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sendMessageLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/blueGrey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-
-            <EditText
-                android:id="@+id/sendMessageEditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sendMessageTextInputLayout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="16dp"
-                android:layout_toStartOf="@+id/sendMessageButton"
-                android:background="@android:color/transparent"
-                android:hint="Enter Message"
-                android:inputType="text"
-                android:text="@={viewModel.userMessageEditText}"
-                android:maxLines="6"
-                tools:ignore="Autofill" />
+                android:layout_margin="6dp"
+                app:boxBackgroundColor="@color/white"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:helperTextEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/sendMessageButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <Button
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sendMessageTextEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Message"
+                    android:inputType="textCapSentences"
+                    android:maxLines="6"
+                    android:text="@={viewModel.userMessageEditText}"
+                    tools:ignore="Autofill" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendMessageButton"
-                android:layout_width="80dp"
-                android:layout_height="48dp"
-                android:layout_alignParentEnd="true"
-                android:background="?attr/selectableItemBackground"
-                android:text="Send"
-                android:textColor="@color/black" />
+                style="@style/FabButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="6dp"
+                android:adjustViewBounds="true"
+                android:backgroundTint="@color/bluePrimary"
+                android:color="@color/white"
+                android:src="@drawable/ic_baseline_send_24"
+                app:elevation="22dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="24dp" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
