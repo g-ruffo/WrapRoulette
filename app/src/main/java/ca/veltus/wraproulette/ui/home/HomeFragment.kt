@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -18,7 +20,9 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
+import ca.veltus.wraproulette.utils.convertDateToDetail
 import ca.veltus.wraproulette.utils.onPageSelected
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -164,7 +168,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
                     when (it) {
                         true -> {
                             fabView = binding.adminFabLayout
-                            activityCast.supportActionBar?.subtitle = "Admin"
                         }
                         false -> {
                             fabView = binding.bidFab
@@ -207,8 +210,9 @@ class HomeFragment : BaseFragment(), MenuProvider {
                     }
                 }
                 launch {
-                    _viewModel.actionbarTitle.collect {
+                    _viewModel.actionbarTitle.collectLatest {
                         activityCast.supportActionBar?.title = it
+                        activityCast.supportActionBar?.subtitle = _viewModel.currentPool.value?.date?.convertDateToDetail() ?: ""
                     }
                 }
             }
@@ -290,6 +294,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance()
+
+        Log.i(TAG, "launchBetAndWrapDialog: ${_viewModel.userBetTime.value}")
 
         val submitButtonText = when (setWrapTime) {
             true -> "Set Wrap"
