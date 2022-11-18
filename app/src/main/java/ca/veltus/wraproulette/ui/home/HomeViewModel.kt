@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -110,9 +111,13 @@ class HomeViewModel @Inject constructor(
                 }
             } else {
                 val time = poolRemainingBetTime.value!!.time - Calendar.getInstance().time.time
-                if (time > 0) {
+                if (time > 0 && currentPool.value!!.endTime == null) {
                     emit(time)
                     isBettingOpen.emit(true)
+                    delay(1000)
+                } else if (time > 0 && currentPool.value!!.endTime != null) {
+                    isBettingOpen.emit(false)
+                    emit(abs(poolRemainingBetTime.value!!.time - currentPool.value!!.endTime!!.time))
                     delay(1000)
                 } else if (showNoData.value) {
                     emit(0)
@@ -195,6 +200,7 @@ class HomeViewModel @Inject constructor(
                             }
                             if (pool.endTime != null || (Calendar.getInstance().time.time - poolStartTime.value.time) > Constants.DAY) {
                                 _isPoolActive.emit(false)
+                                isBettingOpen.value = false
                             } else {
                                 _isPoolActive.emit(true)
                             }
