@@ -5,10 +5,13 @@ import android.animation.AnimatorListenerAdapter
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
+import android.text.TextUtils
 import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
 import ca.veltus.wraproulette.data.objects.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 
@@ -84,6 +87,17 @@ fun getTimeStringFromLong(time: Long): String {
 fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
     return (getSystemService(ACTIVITY_SERVICE) as ActivityManager).getRunningServices(Integer.MAX_VALUE)
         .any { it -> it.service.className == service.name }
+}
+
+fun String.convertDateToDetail() : String {
+    return if (this != null) {
+        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
+        val dateObject = parsedDate.parse(this)
+        dateFormatter.format(dateObject!!)
+    } else {
+        "--:--"
+    }
 }
 
 fun List<Member>.calculateWinners(
