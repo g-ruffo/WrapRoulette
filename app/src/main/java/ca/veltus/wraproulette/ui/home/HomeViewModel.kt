@@ -218,7 +218,7 @@ class HomeViewModel @Inject constructor(
                         _bids.emit(members)
                         addBidMemberToList(members)
                         members.forEach {
-                            if (it.uid == userAccount.value!!.uid) {
+                            if (it.uid == userAccount.value!!.uid && it.tempMemberUid == null) {
                                 setUserBetTime(it.bidTime)
                             }
                         }
