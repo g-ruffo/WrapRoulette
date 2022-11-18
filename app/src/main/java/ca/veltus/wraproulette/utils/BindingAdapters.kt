@@ -84,17 +84,22 @@ object BindingAdapters {
             val time = parsedDate.format(date)
             view.text = time
         } else {
-            view.text = "NA"
+            view.text = "--:--"
         }
     }
 
-    @BindingAdapter("currentTimeFromDateToString")
+    @BindingAdapter(
+        value = ["currentTimeFromDateToString", "isPoolActiveTime"],
+        requireAll = false
+    )
     @JvmStatic
-    fun currentTimeFromDateToString(view: TextView, date: Date?) {
-        if (date != null) {
+    fun currentTimeFromDateToString(view: TextView, date: Date?, poolActive: Boolean = true) {
+        if (date != null && poolActive) {
             val parsedDate = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
             val time = parsedDate.format(date)
             view.text = time
+        } else {
+            view.text = "--:--"
         }
     }
 
@@ -102,7 +107,7 @@ object BindingAdapters {
     @JvmStatic
     fun getTimeStringFromLong(view: TextView, time: Long?) {
         if (time == null) {
-            view.text = "Time Not Set"
+            view.text = "--:--"
         } else {
             val seconds = (time / 1000) % 60
             val minutes = (time / (1000 * 60) % 60)
@@ -117,7 +122,7 @@ object BindingAdapters {
     fun convertDateToDetail(view: TextView, date: String?) {
         if (date != null) {
             val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val dateFormatter = SimpleDateFormat("EEEE MMM dd, yyyy", Locale.ENGLISH)
+            val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
             val dateObject = parsedDate.parse(date)
             val convertedDate = dateFormatter.format(dateObject!!)
             view.text = convertedDate
