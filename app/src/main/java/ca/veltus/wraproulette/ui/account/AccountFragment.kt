@@ -138,6 +138,8 @@ class AccountFragment : BaseFragment() {
 
             }
             saveButton.setOnClickListener {
+                it.isEnabled = false
+                _viewModel.showLoading.value = true
                 if (::selectedImageBytes.isInitialized) {
                     FirebaseStorageUtil.uploadProfilePhoto(selectedImageBytes) { imagePath ->
                         _viewModel.updateCurrentUser(

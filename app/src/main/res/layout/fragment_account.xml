@@ -109,15 +109,12 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/saveButton"
+                        style="@style/mainBlueButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="68dp"
                         android:layout_marginTop="60dp"
-                        android:background="@drawable/rounded_corners_button_login"
                         android:text="Save"
-                        android:textColor="@color/fabIconTint"
-                        android:textStyle="bold"
-                        app:backgroundTint="@color/bluePrimary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
