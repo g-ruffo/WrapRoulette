@@ -31,7 +31,7 @@ class PoolsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentPoolsBinding
 
-    private val onItemClick = OnItemClickListener { item, view ->
+    private val onItemClick = OnItemClickListener { item, _ ->
         if (item is PoolItem) {
             binding.poolsRecyclerView.isClickable = false
             _viewModel.setUsersActivePool(item.pool.docId) {

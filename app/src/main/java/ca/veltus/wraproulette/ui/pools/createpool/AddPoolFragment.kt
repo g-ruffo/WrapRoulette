@@ -10,12 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -31,6 +31,7 @@ class AddPoolFragment : BaseFragment() {
     override val _viewModel by viewModels<PoolsViewModel>()
 
     private lateinit var binding: FragmentAddPoolBinding
+    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -88,9 +89,9 @@ class AddPoolFragment : BaseFragment() {
             binding.createNewPoolTitle.text = "Edit Pool"
             binding.createButton.text = "Update"
             binding.createNewPoolSubtitle.text = "Make Changes to Your Pool"
-            (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Edit Pool"
+            activityCast.supportActionBar!!.title = "Edit Pool"
         } else {
-            (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Create Pool"
+            activityCast.supportActionBar!!.title = "Create Pool"
         }
     }
 
