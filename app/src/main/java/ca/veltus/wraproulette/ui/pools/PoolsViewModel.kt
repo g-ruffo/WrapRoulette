@@ -107,11 +107,13 @@ class PoolsViewModel @Inject constructor(
 
         if (production.isNullOrEmpty()) {
             showToast.value = "Please Enter Production Name"
+            showLoading.value = false
             return
         }
 
         if (date.isNullOrEmpty()) {
             showToast.value = "Please Enter Pool Date"
+            showLoading.value = false
             return
         }
         viewModelScope.launch {
