@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="ca.veltus.wraproulette.authentication.LoginSignupViewModel" />
+
     </data>
 
     <ScrollView
@@ -114,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="68dp"
                         android:layout_marginTop="60dp"
+                        android:enabled="@{!viewModel.showLoading.booleanValue()}"
                         android:text="Save"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -59,7 +59,7 @@ class AccountFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
+        binding.viewModel = _viewModel
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.userAccount.collectLatest {
@@ -138,7 +138,6 @@ class AccountFragment : BaseFragment() {
 
             }
             saveButton.setOnClickListener {
-                it.isEnabled = false
                 _viewModel.showLoading.value = true
                 if (::selectedImageBytes.isInitialized) {
                     FirebaseStorageUtil.uploadProfilePhoto(selectedImageBytes) { imagePath ->
