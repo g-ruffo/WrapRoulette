@@ -59,7 +59,7 @@
         <item name="counterTextColor">@color/blueInputHintTextColor</item>
         <item name="passwordToggleTint">@color/white</item>
         <item name="android:textColor">@color/blueInputHintTextColor</item>
-        <item name="helperTextTextColor">@color/fabIconTint</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
         <item name="colorAccent">@color/fabIconTint</item>
         <item name="colorControlNormal">@color/fabIconTint</item>
         <item name="colorControlActivated">@color/fabIconTint</item>
@@ -75,6 +75,8 @@
         <item name="android:editTextColor">@color/fabIconTint</item>
         <item name="android:textCursorDrawable">@color/fabIconTint</item>
         <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
         <item name="colorOnSecondary">@color/fabIconTint</item>
     </style>
 

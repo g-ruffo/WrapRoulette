@@ -87,29 +87,24 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
-    // Create HashMap of all saved entries in database.
-    fun buildHashMap(): HashMap<String, Any> {
-        val userHashMap = HashMap<String, Any>()
-        userHashMap["uid"] = currentUser!!.uid
-        userHashMap["userName"] = currentUser!!.displayName.toString()
-        userHashMap["email"] = currentUser!!.email.toString()
-        return userHashMap
-    }
-
     // Check to see if entered email is valid and matches correct format. If valid return true.
     fun resetPassword() {
+        showLoading.value = true
         emailAddress.value = emailAddress.value?.trim()
         if (TextUtils.isEmpty(emailAddress.value)) {
-            showToast.value = "Please Enter Your Email Address"
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString()).matches()) {
-            showToast.value = "Email Address Is Not Valid"
+            errorHelperText.value = "Please Enter Your Email Address"
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
+                .matches()
+        ) {
+            errorHelperText.value = "Email Address Is Not Valid"
         } else {
             viewModelScope.launch {
                 repository.resetPassword(emailAddress.value!!) {
+                    showLoading.value = false
                     if (it.isNullOrEmpty()) {
                         showToast.postValue("Password reset link has been sent to the entered email address.")
                         navigateBack()
-                    } else showSnackBar.postValue(it)
+                    } else errorHelperText.value = it
                 }
             }
         }

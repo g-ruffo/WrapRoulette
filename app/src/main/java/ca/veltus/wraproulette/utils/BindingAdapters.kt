@@ -89,8 +89,7 @@ object BindingAdapters {
     }
 
     @BindingAdapter(
-        value = ["currentTimeFromDateToString", "isPoolActiveTime"],
-        requireAll = false
+        value = ["currentTimeFromDateToString", "isPoolActiveTime"], requireAll = false
     )
     @JvmStatic
     fun currentTimeFromDateToString(view: TextView, date: Date?, poolActive: Boolean = true) {
@@ -275,6 +274,12 @@ object BindingAdapters {
                 if (view.visibility == View.VISIBLE) view.fadeOut()
             }
         }
+    }
+
+    @BindingAdapter("error")
+    @JvmStatic
+    internal fun TextInputLayout.setError(errorMessage: String?) {
+        error = errorMessage.takeUnless { it == null }
     }
 
     @BindingAdapter(

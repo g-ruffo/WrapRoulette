@@ -15,8 +15,13 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     val showToast: SingleLiveEvent<String> = SingleLiveEvent()
     val showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val errorHelperText: MutableStateFlow<String?> = MutableStateFlow(null)
 
     fun navigateBack() {
         navigationCommand.postValue(NavigationCommand.Back)
+    }
+
+    fun clearErrorHelperText() {
+        errorHelperText.value = null
     }
 }
