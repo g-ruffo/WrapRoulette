@@ -76,6 +76,16 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun resetPassword(email: String, onComplete: (String?) -> Unit) {
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onComplete(null)
+                } else {
+                    onComplete(task.exception!!.message)
+                }
+            }
+    }
+
     override fun logout() {
         firebaseAuth.signOut()
     }

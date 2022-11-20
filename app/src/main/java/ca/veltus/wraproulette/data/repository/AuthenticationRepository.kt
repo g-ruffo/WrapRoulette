@@ -9,6 +9,7 @@ interface AuthenticationRepository {
     val currentUser: FirebaseUser?
     suspend fun login(email: String, password: String): Result<FirebaseUser>
     suspend fun signup(name: String, email: String, password: String): Result<FirebaseUser>
+    suspend fun resetPassword(email: String, onComplete: (String?) -> Unit)
     fun logout()
     suspend fun getCurrentUserProfile(): Flow<User?>
     suspend fun initCurrentUserIfFirstTime(department: String, onComplete: (String?) -> Unit)

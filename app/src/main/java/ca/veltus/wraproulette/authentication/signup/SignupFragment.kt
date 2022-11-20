@@ -18,10 +18,8 @@ import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentSignupBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -34,7 +32,6 @@ class SignupFragment : BaseFragment() {
     override val _viewModel: LoginSignupViewModel by activityViewModels()
 
     private lateinit var binding: FragmentSignupBinding
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,8 +39,6 @@ class SignupFragment : BaseFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
 
         binding.viewModel = _viewModel
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         observeSignup()
 
@@ -74,8 +69,8 @@ class SignupFragment : BaseFragment() {
                         _viewModel.initCurrentUserIfFirstTime() {
                             startActivity(
                                 Intent(requireContext(), WrapRouletteActivity::class.java).addFlags(
-                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    )
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                )
                             )
                             requireActivity().finish()
                         }
@@ -118,5 +113,4 @@ class SignupFragment : BaseFragment() {
             }
         }
     }
-
 }

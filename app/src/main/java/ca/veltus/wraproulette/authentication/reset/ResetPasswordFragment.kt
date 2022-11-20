@@ -35,21 +35,11 @@ class ResetPasswordFragment : BaseFragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
-        binding.resetButton.setOnClickListener {
-
-        }
-    }
-
-    // If entered email and password is valid, create Firebase user and log result.
-    private fun launchEmailSignUp() {
-        _viewModel.validateEmailAndPassword(true)
 
     }
 }

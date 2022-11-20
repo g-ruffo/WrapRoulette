@@ -19,7 +19,6 @@ import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentLoginBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,18 +33,13 @@ class LoginFragment : BaseFragment() {
     override val _viewModel: LoginSignupViewModel by activityViewModels()
 
     private lateinit var binding: FragmentLoginBinding
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
         binding.viewModel = _viewModel
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         observeLogin()
 
@@ -60,7 +54,6 @@ class LoginFragment : BaseFragment() {
             launchEmailSignIn()
             Log.i(TAG, "onViewCreated: ${BuildConfig.FIRESTORE_CURRENT_KEY}")
         }
-
     }
 
     // If email and password are valid pass login values to Firebase and log success or failure response.
@@ -76,8 +69,9 @@ class LoginFragment : BaseFragment() {
                     is Result.Success -> {
                         Log.i(TAG, "observeLogin = Resource.Success")
                         startActivity(
-                            Intent(requireContext(), WrapRouletteActivity::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            Intent(requireContext(), WrapRouletteActivity::class.java).addFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                )
                         )
                         requireActivity().finish()
                     }
@@ -94,8 +88,7 @@ class LoginFragment : BaseFragment() {
                                 binding.passwordEditTextLayout.setHelperTextColor(
                                     ColorStateList.valueOf(
                                         ContextCompat.getColor(
-                                            requireContext(),
-                                            R.color.warningRed
+                                            requireContext(), R.color.warningRed
                                         )
                                     )
                                 )
@@ -106,8 +99,7 @@ class LoginFragment : BaseFragment() {
                                 binding.emailEditTextLayout.setHelperTextColor(
                                     ColorStateList.valueOf(
                                         ContextCompat.getColor(
-                                            requireContext(),
-                                            R.color.warningRed
+                                            requireContext(), R.color.warningRed
                                         )
                                     )
                                 )

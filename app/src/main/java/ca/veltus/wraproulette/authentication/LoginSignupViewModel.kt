@@ -96,6 +96,25 @@ class LoginSignupViewModel @Inject constructor(
         return userHashMap
     }
 
+    // Check to see if entered email is valid and matches correct format. If valid return true.
+    fun resetPassword() {
+        emailAddress.value = emailAddress.value?.trim()
+        if (TextUtils.isEmpty(emailAddress.value)) {
+            showToast.value = "Please Enter Your Email Address"
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString()).matches()) {
+            showToast.value = "Email Address Is Not Valid"
+        } else {
+            viewModelScope.launch {
+                repository.resetPassword(emailAddress.value!!) {
+                    if (it.isNullOrEmpty()) {
+                        showToast.postValue("Password reset link has been sent to the entered email address.")
+                        navigateBack()
+                    } else showSnackBar.postValue(it)
+                }
+            }
+        }
+    }
+
     // Check if entered email and password are valid and match correct format. If valid return true.
     fun validateEmailAndPassword(signUp: Boolean = false): Boolean {
         emailAddress.value = emailAddress.value?.trim()
@@ -146,7 +165,7 @@ class LoginSignupViewModel @Inject constructor(
     fun navigateToForgottenPassword() {
         navigationCommand.postValue(
             NavigationCommand.To(
-                LoginFragmentDirections.actionLoginFragmentToSignupFragment()
+                LoginFragmentDirections.actionLoginFragmentToResetPasswordFragment()
             )
         )
     }
