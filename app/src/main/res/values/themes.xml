@@ -146,6 +146,7 @@
         <item name="fabSize">normal</item>
         <item name="iconTint">@color/fabIconTint</item>
         <item name="android:textColor">@color/fabIconTint</item>
+        <item name="android:visibility">invisible</item>
     </style>
 
     <style name="FabText">

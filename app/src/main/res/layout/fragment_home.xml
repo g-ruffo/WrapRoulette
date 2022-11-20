@@ -80,7 +80,8 @@
                 android:src="@drawable/ic_baseline_currency_exchange_24"
                 android:visibility="@{viewModel.isPoolAdmin == false ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/adminFabLayout"
@@ -105,7 +106,8 @@
                     android:text="Actions"
                     app:icon="@drawable/ic_baseline_add_24"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:visibility="visible" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/setWrapAdminFab"
@@ -117,7 +119,8 @@
                     android:layout_marginBottom="24dp"
                     app:layout_constraintBottom_toTopOf="@+id/adminExpandableFab"
                     app:layout_constraintEnd_toEndOf="@+id/adminExpandableFab"
-                    app:srcCompat="@drawable/ic_outline_timer_off_24" />
+                    app:srcCompat="@drawable/ic_outline_timer_off_24"
+                    tools:visibility="visible" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/betAdminFab"
@@ -132,7 +135,8 @@
                     android:src="@drawable/ic_baseline_currency_exchange_24"
                     app:layout_constraintBottom_toTopOf="@+id/setWrapAdminFab"
                     app:layout_constraintEnd_toEndOf="@+id/setWrapAdminFab"
-                    app:layout_constraintStart_toStartOf="@+id/setWrapAdminFab">
+                    app:layout_constraintStart_toStartOf="@+id/setWrapAdminFab"
+                    tools:visibility="visible">
 
                 </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
