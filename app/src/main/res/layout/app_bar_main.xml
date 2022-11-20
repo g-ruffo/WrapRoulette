@@ -15,15 +15,21 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/Theme.WrapRoulette.AppBarOverlay">
+            android:background="@color/bluePrimary"
+            android:theme="@style/Theme.WrapRoulette.AppBarOverlay"
+            app:elevation="0dp"
+            android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/purpleLogoDark"
-                app:titleTextColor="@color/white"
-                app:popupTheme="@style/Theme.WrapRoulette.PopupOverlay" />
+                android:background="@android:color/transparent"
+                app:itemIconTint="@color/white"
+                app:popupTheme="@style/Theme.WrapRoulette.PopupOverlay"
+                app:subtitleCentered="true"
+                app:titleCentered="true"
+                app:titleTextColor="@color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
