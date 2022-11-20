@@ -3,12 +3,12 @@ package ca.veltus.wraproulette.ui.home
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -22,7 +22,6 @@ import ca.veltus.wraproulette.databinding.FragmentHomeBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.convertDateToDetail
 import ca.veltus.wraproulette.utils.onPageSelected
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -212,7 +211,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 launch {
                     _viewModel.actionbarTitle.collectLatest {
                         activityCast.supportActionBar?.title = it
-                        activityCast.supportActionBar?.subtitle = _viewModel.currentPool.value?.date?.convertDateToDetail() ?: ""
+                        activityCast.supportActionBar?.subtitle =
+                            _viewModel.currentPool.value?.date?.convertDateToDetail() ?: ""
                     }
                 }
             }
@@ -242,6 +242,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         dialogBinding.viewModel = _viewModel
         builder.setView(dialogBinding.root)
         val dialog: AlertDialog = builder.show()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialogBinding.addMemberButton.setOnClickListener {
             if (_viewModel.createUpdateTempMember()) {
