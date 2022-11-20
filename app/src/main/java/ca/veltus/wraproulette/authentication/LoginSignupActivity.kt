@@ -1,10 +1,11 @@
 package ca.veltus.wraproulette.authentication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import ca.veltus.wraproulette.databinding.ActivityLoginSignupBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,5 +32,11 @@ class LoginSignupActivity : AppCompatActivity() {
         )
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         supportActionBar?.hide()
+    }
+
+    fun hideKeyboard(view: View) {
+        val inputMethodManager: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

@@ -2,6 +2,8 @@ package ca.veltus.wraproulette.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -60,6 +62,12 @@ class WrapRouletteActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    fun hideKeyboard(view: View) {
+        val inputMethodManager: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun setupNavigationAndToolbar() {

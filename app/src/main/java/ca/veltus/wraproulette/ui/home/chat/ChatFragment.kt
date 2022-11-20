@@ -32,8 +32,7 @@ class ChatFragment : BaseFragment() {
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentChatBinding.inflate(inflater, container, false)
 
