@@ -14,8 +14,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        _viewModel.errorPasswordText.value = null
-        _viewModel.errorEmailText.value = null
+        _viewModel.clearErrorHelperText(null)
 
         _viewModel.showErrorMessage.observe(this, Observer {
             Toast.makeText(activity, it, Toast.LENGTH_LONG).show()

@@ -9,5 +9,8 @@ object Constants {
     const val ADMIN_DIALOG = 1
     const val MARGIN_DIALOG = 2
     const val PIR_DIALOG = 3
-
+    const val PASSWORD_ERROR = 0
+    const val EMAIL_ERROR = 1
+    const val DEPARTMENT_ERROR = 2
+    const val NAME_ERROR = 3
 }

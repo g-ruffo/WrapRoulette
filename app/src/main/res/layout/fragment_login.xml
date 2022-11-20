@@ -8,6 +8,8 @@
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.authentication.LoginSignupViewModel" />
+
+        <import type="ca.veltus.wraproulette.utils.Constants" />
     </data>
 
     <ScrollView
@@ -76,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Type your email"
                     android:inputType="textEmailAddress"
-                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(false)}"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.EMAIL_ERROR)}"
                     android:text="@={viewModel.emailAddress}" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Type your password"
                     android:inputType="textPassword"
-                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(true)}"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.PASSWORD_ERROR)}"
                     android:text="@={viewModel.password}" />
             </com.google.android.material.textfield.TextInputLayout>
 

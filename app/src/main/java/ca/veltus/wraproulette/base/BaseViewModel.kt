@@ -3,6 +3,7 @@ package ca.veltus.wraproulette.base
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import ca.veltus.wraproulette.data.ErrorMessage
+import ca.veltus.wraproulette.utils.Constants
 import ca.veltus.wraproulette.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -18,13 +19,25 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     val showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val errorPasswordText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorEmailText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
+    val errorDepartmentText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
+    val errorNameText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
 
     fun navigateBack() {
         navigationCommand.postValue(NavigationCommand.Back)
     }
 
-    fun clearErrorHelperText(isPassword: Boolean = true) {
-        if (isPassword) errorPasswordText.value = null
-        else errorEmailText.value = null
+    fun clearErrorHelperText(error: Int?) {
+        when (error) {
+            Constants.PASSWORD_ERROR -> errorPasswordText.value = null
+            Constants.EMAIL_ERROR -> errorEmailText.value = null
+            Constants.DEPARTMENT_ERROR -> errorDepartmentText.value = null
+            Constants.NAME_ERROR -> errorNameText.value = null
+            null -> {
+                errorPasswordText.value = null
+                errorEmailText.value = null
+                errorDepartmentText.value = null
+                errorNameText.value = null
+            }
+        }
     }
 }

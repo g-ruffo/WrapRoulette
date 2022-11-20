@@ -128,17 +128,28 @@ class LoginSignupViewModel @Inject constructor(
             showLoading.value = false
             return false
         }
-        return if (TextUtils.isEmpty(password.value)) {
+        if (TextUtils.isEmpty(password.value)) {
             errorPasswordText.value = ErrorMessage.ErrorText("Please enter a password")
             showLoading.value = false
-            false
+            return false
+        }
+        if (TextUtils.isEmpty(username.value)) {
+            errorNameText.value = ErrorMessage.ErrorText("Please enter your name")
+            showLoading.value = false
+            return false
+        }
+
+        if (TextUtils.isEmpty(department.value)) {
+            errorDepartmentText.value = ErrorMessage.ErrorText("Please enter your department")
+            showLoading.value = false
+            return false
         } else {
             if (signUp) {
                 signup(username.value!!, emailAddress.value!!, password.value!!)
             } else {
                 login(emailAddress.value!!, password.value!!)
             }
-            true
+            return true
         }
     }
 
