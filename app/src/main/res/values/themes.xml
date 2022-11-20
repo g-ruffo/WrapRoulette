@@ -92,6 +92,7 @@
     <style name="AccountTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="startIconTint">@color/blueLight</item>
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginBottom">15dp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
@@ -99,7 +100,6 @@
         <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
         <item name="boxBackgroundColor">@color/blueGrey</item>
-        <item name="startIconTint">@color/white</item>
         <item name="android:textColorHint">@color/cardViewTitleColor</item>
         <item name="android:textColor">@color/blueInputHintTextColor</item>
         <item name="helperTextTextColor">@color/fabIconTint</item>

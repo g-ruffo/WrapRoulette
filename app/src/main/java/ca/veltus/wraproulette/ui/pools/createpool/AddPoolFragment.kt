@@ -86,12 +86,10 @@ class AddPoolFragment : BaseFragment() {
         val args = AddPoolFragmentArgs.fromBundle(requireArguments()).poolId
         if (args != null) {
             _viewModel.loadEditPool(args)
-            binding.createNewPoolTitle.text = "Edit Pool"
             binding.createButton.text = "Update"
-            binding.createNewPoolSubtitle.text = "Make Changes to Your Pool"
             activityCast.supportActionBar!!.title = "Edit Pool"
         } else {
-            activityCast.supportActionBar!!.title = "Create Pool"
+            activityCast.supportActionBar!!.title = "New Pool"
         }
     }
 
