@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import ca.veltus.wraproulette.R
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -278,8 +279,30 @@ object BindingAdapters {
 
     @BindingAdapter("error")
     @JvmStatic
-    internal fun TextInputLayout.setError(errorMessage: String?) {
-        error = errorMessage.takeUnless { it == null }
+    internal fun TextInputLayout.setError(errorMessage: ErrorMessage<String>?) {
+        this.isErrorEnabled = errorMessage != null
+        this.isHelperTextEnabled = errorMessage != null
+
+        when (errorMessage) {
+            is ErrorMessage.HelperText -> {
+                helperText = errorMessage.message.takeUnless { it == null }
+                boxStrokeWidth = 0
+                this.isHelperTextEnabled = true
+            }
+            is ErrorMessage.ErrorText -> {
+                error = errorMessage.message.takeUnless { it == null }
+                boxStrokeWidth = 1
+                this.isErrorEnabled = true
+            }
+            else -> {
+                boxStrokeWidth = 0
+                this.isErrorEnabled = errorMessage != null
+                this.isHelperTextEnabled = false
+                this.isErrorEnabled = false
+            }
+        }
+
+        boxStrokeWidthFocused = boxStrokeWidth
     }
 
     @BindingAdapter(

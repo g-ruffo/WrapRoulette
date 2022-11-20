@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -15,13 +16,15 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     val showToast: SingleLiveEvent<String> = SingleLiveEvent()
     val showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
-    val errorHelperText: MutableStateFlow<String?> = MutableStateFlow(null)
+    val errorPasswordText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
+    val errorEmailText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
 
     fun navigateBack() {
         navigationCommand.postValue(NavigationCommand.Back)
     }
 
-    fun clearErrorHelperText() {
-        errorHelperText.value = null
+    fun clearErrorHelperText(isPassword: Boolean = true) {
+        if (isPassword) errorPasswordText.value = null
+        else errorEmailText.value = null
     }
 }

@@ -1,20 +1,18 @@
 package ca.veltus.wraproulette.authentication.login
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import ca.veltus.wraproulette.BuildConfig
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.base.BaseFragment
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentLoginBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
@@ -49,17 +47,6 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
-        binding.signInButton.setOnClickListener {
-            launchEmailSignIn()
-            Log.i(TAG, "onViewCreated: ${BuildConfig.FIRESTORE_CURRENT_KEY}")
-        }
-    }
-
-    // If email and password are valid pass login values to Firebase and log success or failure response.
-    private fun launchEmailSignIn() {
-        _viewModel.validateEmailAndPassword()
-
     }
 
     private fun observeLogin() {
@@ -70,8 +57,8 @@ class LoginFragment : BaseFragment() {
                         Log.i(TAG, "observeLogin = Resource.Success")
                         startActivity(
                             Intent(requireContext(), WrapRouletteActivity::class.java).addFlags(
-                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                )
+                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            )
                         )
                         requireActivity().finish()
                     }
@@ -83,29 +70,15 @@ class LoginFragment : BaseFragment() {
                         Log.i(TAG, "observeLogin = Resource.Failure")
                         when (it.exception) {
                             is FirebaseAuthInvalidCredentialsException -> {
-                                binding.passwordEditTextLayout.helperText =
-                                    it.exception.message.toString()
-                                binding.passwordEditTextLayout.setHelperTextColor(
-                                    ColorStateList.valueOf(
-                                        ContextCompat.getColor(
-                                            requireContext(), R.color.warningRed
-                                        )
-                                    )
-                                )
+                                _viewModel.errorPasswordText.value =
+                                    ErrorMessage.HelperText(it.exception.message.toString())
                             }
                             is FirebaseAuthInvalidUserException -> {
-                                binding.emailEditTextLayout.helperText =
-                                    it.exception.message.toString()
-                                binding.emailEditTextLayout.setHelperTextColor(
-                                    ColorStateList.valueOf(
-                                        ContextCompat.getColor(
-                                            requireContext(), R.color.warningRed
-                                        )
-                                    )
-                                )
+                                _viewModel.errorEmailText.value =
+                                    ErrorMessage.ErrorText(it.exception.message.toString())
                             }
                             else -> {
-                                _viewModel.showToast.value = it.exception.message
+                                _viewModel.showSnackBar.value = it.exception.message
                             }
                         }
                     }

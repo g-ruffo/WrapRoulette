@@ -63,7 +63,7 @@
         <item name="colorAccent">@color/fabIconTint</item>
         <item name="colorControlNormal">@color/fabIconTint</item>
         <item name="colorControlActivated">@color/fabIconTint</item>
-        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundMode">outline</item>
         <item name="colorPrimary">@color/fabIconTint</item>
         <item name="colorOnSurface">@color/fabIconTint</item>
         <item name="hintTextColor">@color/blueInputHintTextColor</item>
@@ -76,6 +76,7 @@
         <item name="android:textCursorDrawable">@color/fabIconTint</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
         <item name="errorIconTint">@color/warningRed</item>
         <item name="colorOnSecondary">@color/fabIconTint</item>
     </style>

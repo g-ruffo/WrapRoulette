@@ -56,13 +56,12 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailEditTextLayout"
                 style="@style/LoginTextInputOuterFieldStyle"
-                emailHelperTextColorSwitcher="@{String.valueOf(viewModel.emailAddress)}"
-                emailTextInputEditTextStatus="@{emailInputEditText}"
+                error="@{ viewModel.errorEmailText }"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
                 android:layout_marginTop="42dp"
-                app:helperTextEnabled="true"
+                app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -77,18 +76,21 @@
                     android:layout_height="wrap_content"
                     android:hint="Type your email"
                     android:inputType="textEmailAddress"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(false)}"
                     android:text="@={viewModel.emailAddress}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordEditTextLayout"
                 style="@style/LoginTextInputOuterFieldStyle"
+                error="@{ viewModel.errorPasswordText }"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="0dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="24"
+                app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/forgotPasswordTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -104,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Type your password"
                     android:inputType="textPassword"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(true)}"
                     android:text="@={viewModel.password}" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,6 +134,7 @@
                 android:layout_marginHorizontal="100dp"
                 android:layout_marginTop="48dp"
                 android:enabled="@{!viewModel.showLoading.booleanValue()}"
+                android:onClick="@{() -> viewModel.validateEmailAndPassword(false)}"
                 android:text="Sign In"
                 app:layout_constraintBottom_toTopOf="@+id/signUpTextView"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -2,12 +2,12 @@ package ca.veltus.wraproulette.authentication
 
 import android.app.Application
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.authentication.login.LoginFragmentDirections
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
@@ -63,19 +63,20 @@ class LoginSignupViewModel @Inject constructor(
         _loginFlow.value = Result.Loading
         val result = repository.login(email, password)
         _loginFlow.value = result
+        showLoading.value = false
     }
 
     fun signup(name: String, email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Result.Loading
         val result = repository.signup(name, email, password)
         _signupFlow.value = result
+        showLoading.value = false
     }
 
     fun logout() {
         repository.logout()
         _loginFlow.value = null
         _signupFlow.value = null
-        Log.d(TAG, "logout: ")
     }
 
     fun initCurrentUserIfFirstTime(onComplete: () -> Unit) {
@@ -92,19 +93,19 @@ class LoginSignupViewModel @Inject constructor(
         showLoading.value = true
         emailAddress.value = emailAddress.value?.trim()
         if (TextUtils.isEmpty(emailAddress.value)) {
-            errorHelperText.value = "Please Enter Your Email Address"
+            errorPasswordText.value = ErrorMessage.ErrorText("Please enter your email address")
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
                 .matches()
         ) {
-            errorHelperText.value = "Email Address Is Not Valid"
+            errorPasswordText.value = ErrorMessage.ErrorText("Email address is not valid")
         } else {
             viewModelScope.launch {
                 repository.resetPassword(emailAddress.value!!) {
                     showLoading.value = false
                     if (it.isNullOrEmpty()) {
-                        showToast.postValue("Password reset link has been sent to the entered email address.")
+                        showToast.postValue("Reset link has been sent to your email address.")
                         navigateBack()
-                    } else errorHelperText.value = it
+                    } else errorEmailText.value = ErrorMessage.ErrorText(it)
                 }
             }
         }
@@ -112,20 +113,24 @@ class LoginSignupViewModel @Inject constructor(
 
     // Check if entered email and password are valid and match correct format. If valid return true.
     fun validateEmailAndPassword(signUp: Boolean = false): Boolean {
+        showLoading.value = true
         emailAddress.value = emailAddress.value?.trim()
         password.value = password.value?.trim()
         username.value = username.value?.trim()
 
         if (TextUtils.isEmpty(emailAddress.value)) {
-            showToast.value = "Please Enter Your Email Address"
+            errorEmailText.value = ErrorMessage.ErrorText("Please enter your email address")
+            showLoading.value = false
             return false
         }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString()).matches()) {
-            showToast.value = "Email Address Is Not Valid"
+            errorEmailText.value = ErrorMessage.ErrorText("Email address is not a valid format")
+            showLoading.value = false
             return false
         }
         return if (TextUtils.isEmpty(password.value)) {
-            showToast.value = "Please Enter A Password"
+            errorPasswordText.value = ErrorMessage.ErrorText("Please enter a password")
+            showLoading.value = false
             false
         } else {
             if (signUp) {
