@@ -18,11 +18,6 @@
         android:fillViewport="true"
         tools:context=".ui.pools.PoolsFragment">
 
-
-        <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="match_parent">-->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
@@ -223,20 +218,7 @@
                     android:onClick="@{() -> viewModel.navigateToAddPoolFragment()}"
                     app:layout_constraintBottom_toTopOf="@+id/expandFab"
                     app:layout_constraintEnd_toEndOf="@+id/expandFab"
-                    app:srcCompat="@drawable/ic_baseline_edit_24" />
-
-                <TextView
-                    android:id="@+id/newPoolFabTextView"
-                    style="@style/FabText"
-                    setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
-                    setExpandableFabVisibleTextViewsState="@{true}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="New"
-                    app:layout_constraintBottom_toBottomOf="@+id/newPoolFab"
-                    app:layout_constraintEnd_toStartOf="@+id/newPoolFab"
-                    app:layout_constraintTop_toTopOf="@+id/newPoolFab" />
+                    app:srcCompat="@drawable/ic_outline_add_home_work_24" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/joinPoolFab"
@@ -252,18 +234,6 @@
                     app:layout_constraintStart_toStartOf="@+id/newPoolFab"
                     app:srcCompat="@drawable/ic_baseline_group_add_24" />
 
-                <TextView
-                    android:id="@+id/joinPoolFabTextView"
-                    style="@style/FabText"
-                    setExpandableFabEnabledTextViewsState="@{viewModel.isFabClicked}"
-                    setExpandableFabVisibleTextViewsState="@{true}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Join"
-                    app:layout_constraintBottom_toBottomOf="@+id/joinPoolFab"
-                    app:layout_constraintEnd_toStartOf="@+id/joinPoolFab"
-                    app:layout_constraintTop_toTopOf="@+id/joinPoolFab" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
