@@ -3,6 +3,8 @@ package ca.veltus.wraproulette.ui.home.bids
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -109,7 +111,6 @@ class BidsFragment : BaseFragment() {
         builder.setNeutralButton("Close") { _, _ -> }
         val dialog: AlertDialog = builder.create()
         dialog.show()
-
     }
 
     private fun launchUpdateTempMemberDialog(memberItem: MemberItem) {
@@ -120,6 +121,7 @@ class BidsFragment : BaseFragment() {
         builder.setView(dialogBinding.root)
         _viewModel.loadTempMemberValues(memberItem.member)
         val dialog: AlertDialog = builder.show()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialog.setOnDismissListener { _viewModel.loadTempMemberValues(null) }
 
