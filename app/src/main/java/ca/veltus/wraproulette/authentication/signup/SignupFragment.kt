@@ -1,19 +1,18 @@
 package ca.veltus.wraproulette.authentication.signup
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.base.BaseFragment
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentSignupBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
@@ -50,15 +49,6 @@ class SignupFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.signUpButton.setOnClickListener {
-            launchEmailSignUp()
-        }
-    }
-
-    // If entered email and password is valid, create Firebase user and log result.
-    private fun launchEmailSignUp() {
-        _viewModel.validateEmailAndPassword(true)
-
     }
 
     private fun observeSignup() {
@@ -85,28 +75,14 @@ class SignupFragment : BaseFragment() {
                         Log.i(TAG, "observeSignup = Resource.Failure")
                         when (it.exception) {
                             is FirebaseAuthWeakPasswordException -> {
-                                binding.passwordEditTextLayout.helperText =
-                                    it.exception.message.toString()
-                                binding.passwordEditTextLayout.setHelperTextColor(
-                                    ColorStateList.valueOf(
-                                        ContextCompat.getColor(
-                                            requireContext(), R.color.warningRed
-                                        )
-                                    )
-                                )
+                                _viewModel.errorPasswordText.value =
+                                    ErrorMessage.ErrorText(it.exception.message.toString())
                             }
                             is FirebaseAuthUserCollisionException -> {
-                                binding.emailEditTextLayout.helperText =
-                                    it.exception.message.toString()
-                                binding.emailEditTextLayout.setHelperTextColor(
-                                    ColorStateList.valueOf(
-                                        ContextCompat.getColor(
-                                            requireContext(), R.color.warningRed
-                                        )
-                                    )
-                                )
+                                _viewModel.errorEmailText.value =
+                                    ErrorMessage.ErrorText(it.exception.message.toString())
                             }
-                            else -> _viewModel.showToast.value = it.exception.message
+                            else -> _viewModel.showSnackBar.value = it.exception.message
                         }
                     }
                 }
