@@ -21,38 +21,6 @@
             android:layout_height="wrap_content"
             android:background="@color/bluePrimary">
 
-            <!--            <View-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="0dp"-->
-            <!--                android:background="@color/purpleLogoDark"-->
-            <!--                android:elevation="0dp"-->
-            <!--                android:rotation="0"-->
-            <!--                android:alpha=".96"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--            <com.google.android.material.card.MaterialCardView-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="20dp"-->
-            <!--                app:layout_constraintTop_toTopOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                android:layout_marginTop="40dp"-->
-            <!--                app:cardElevation="24dp"-->
-            <!--                app:cardBackgroundColor="@color/cardBackgroundWhite"-->
-            <!--                app:cardCornerRadius="24dp"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                android:id="@+id/cardView">-->
-
-            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_margin="20dp">-->
-
-
             <TextView
                 android:id="@+id/loginTitle"
                 android:layout_width="wrap_content"
@@ -66,7 +34,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.74"
+                app:layout_constraintVertical_bias="0.6"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
@@ -117,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/login_horizontal_margin"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="4dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="24"
                 app:layout_constraintBottom_toTopOf="@+id/forgotPasswordTextView"
@@ -142,7 +110,7 @@
                 android:id="@+id/forgotPasswordTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="6dp"
                 android:gravity="center"
                 android:onClick="@{() -> viewModel.navigateToForgottenPassword()}"
                 android:text="Forgot password?"
@@ -154,16 +122,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
                 app:layout_constraintVertical_bias="0.25" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/signInButton"
+                style="@style/loginButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="100dp"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/rounded_corners_button_login"
+                android:layout_marginTop="48dp"
+                android:enabled="@{!viewModel.showLoading.booleanValue()}"
                 android:text="Sign In"
-                android:textColor="@color/bluePrimary"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/signUpTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -185,12 +152,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/signInButton"
                 app:layout_constraintVertical_bias="1.0" />
-
-            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
-            <!--            </com.google.android.material.card.MaterialCardView>-->
-
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"

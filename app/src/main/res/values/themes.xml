@@ -159,4 +159,23 @@
         <item name="backgroundTint">@color/color_states_material_button</item>
     </style>
 
+    <style name="loginButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/rounded_corners_button_login</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:backgroundTint">@color/color_states_material_button_login</item>
+        <item name="backgroundTint">@color/color_states_material_button_login</item>
+    </style>
+
+    <style name="backButton">
+        <item name="android:elevation">12dp</item>
+        <item name="tint">@color/fabIconTint</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_width">@dimen/backButtonSize</item>
+        <item name="android:layout_height">@dimen/backButtonSize</item>
+        <item name="android:layout_margin">@dimen/backButtonLayoutMargin</item>
+    </style>
+
+
 </resources>

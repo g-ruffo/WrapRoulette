@@ -43,6 +43,7 @@
     <color name="cardBackgroundWhite">#F8F8F8</color>
     <color name="cardStartTimeBackground">#99ff99</color>
 
+    <color name="transparent">#00000000</color>
 
     <color name="colorEnabled">#233b5d</color>
     <color name="colorDisabled">#9050658a</color>

@@ -7,4 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="login_horizontal_margin">35dp</dimen>
     <dimen name="login_edit_text_radius">10dp</dimen>
+    <dimen name="backButtonSize">32dp</dimen>
+    <dimen name="backButtonLayoutMargin">24dp</dimen>
 </resources>
