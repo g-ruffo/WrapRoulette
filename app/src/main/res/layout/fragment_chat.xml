@@ -13,7 +13,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blueGrey"
+        android:background="@drawable/background_pattern"
+        android:backgroundTint="@color/backgroundBlueGrey"
+        android:backgroundTintMode="src_atop"
         tools:context=".ui.home.chat.ChatFragment">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -21,7 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="16dp"
-            android:background="@color/blueGrey"
+            android:background="@drawable/background_pattern"
+            android:backgroundTint="@color/backgroundBlueGrey"
+            android:backgroundTintMode="src_atop"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,15 +34,17 @@
             android:id="@+id/sendMessageLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blueGrey"
+            android:background="@drawable/background_pattern"
+            android:backgroundTint="@color/backgroundBlueGrey"
+            android:backgroundTintMode="src_atop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/sendMessageTextInputLayout"
+                style="@style/AccountTextInputOuterFieldStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                style="@style/AccountTextInputOuterFieldStyle"
                 android:layout_margin="6dp"
                 app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="30dp"
@@ -55,8 +61,8 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/sendMessageTextEditText"
-                    android:layout_width="match_parent"
                     style="@style/AccountTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Message"
                     android:inputType="textCapSentences"
@@ -75,6 +81,7 @@
                 android:backgroundTint="@color/bluePrimary"
                 android:color="@color/white"
                 android:src="@drawable/ic_baseline_send_24"
+                android:visibility="visible"
                 app:elevation="22dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"

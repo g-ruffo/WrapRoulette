@@ -167,14 +167,13 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-
-            <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/poolsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:background="@drawable/background_pattern"
+                android:backgroundTint="@color/backgroundBlueGrey"
+                android:backgroundTintMode="screen"
                 android:clipToPadding="false"
                 android:paddingTop="44dp"
                 app:layout_constraintBottom_toBottomOf="parent"

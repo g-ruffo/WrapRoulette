@@ -12,6 +12,8 @@
     <color name="blueInputBoxColor">#2d4970</color>
     <color name="blueInputHintTextColor">#6f99d1</color>
     <color name="blueGrey">#ECEFF1</color>
+    <color name="backgroundBlueGrey">#99ECEFF1</color>
+    <color name="backgroundBlueLight">#99233b5d</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
