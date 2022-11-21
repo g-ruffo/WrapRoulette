@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="message"
             type="ca.veltus.wraproulette.data.objects.Message" />
@@ -14,21 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp">
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/messageSentDateTextView"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="32dp"-->
-        <!--            android:paddingStart="8dp"-->
-        <!--            android:paddingTop="4dp"-->
-        <!--            android:paddingEnd="8dp"-->
-        <!--            android:paddingBottom="4dp"-->
-        <!--            dateToStringDayConverter="@{message.time}"-->
-        <!--            android:textColor="#C0C0C0"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/messageCardView"

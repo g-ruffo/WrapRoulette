@@ -92,9 +92,13 @@ class WrapRouletteActivity : AppCompatActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userAccount.collectLatest {
                     if (it != null) {
-                        navView.getHeaderView(0)
-                            .findViewById<TextView>(R.id.userNameHeaderTextView).text =
-                            it.displayName
+                        navView.getHeaderView(0).apply {
+                            findViewById<TextView>(R.id.userNameHeaderTextView).text =
+                                it.displayName
+                            findViewById<TextView>(R.id.userDepartmentHeaderTextView).text =
+                                it.department
+                        }
+
                         if (it.profilePicturePath != null) {
                             Glide.with(this@WrapRouletteActivity).asBitmap()
                                 .load(FirebaseStorageUtil.pathToReference(it.profilePicturePath))

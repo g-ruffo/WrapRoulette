@@ -7,12 +7,16 @@
     <color name="teal_700">#FF018786</color>
 
     <color name="bluePrimary">#233b5d</color>
-    <color name="blueLight">#50658a</color>
+    <color name="blueLight">#50658a</color>backgroundOrange
     <color name="blueDark">#001533</color>
+    <color name="backgroundOrange">#F7E3D4</color>
+    <color name="highlightOrange">#FC7307</color>
+    <color name="darkOrange">#E06100</color>
     <color name="blueInputBoxColor">#2d4970</color>
     <color name="blueInputHintTextColor">#6f99d1</color>
     <color name="blueGrey">#ECEFF1</color>
     <color name="backgroundBlueGrey">#99ECEFF1</color>
+    <color name="backgroundOrangeGrey">#99F7E3D4</color>
     <color name="backgroundBlueLight">#99233b5d</color>
 
     <color name="black">#FF000000</color>
