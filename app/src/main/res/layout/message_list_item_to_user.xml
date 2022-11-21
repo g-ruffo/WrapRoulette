@@ -16,15 +16,32 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profilePictureImageView"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/adminImageCardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:contentDescription="User Icon"
-            android:src="@drawable/ic_baseline_account_circle_24"
+            android:layout_marginStart="8dp"
+            android:background="@color/poolItemIconTint"
+            android:clipToPadding="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintDimensionRatio="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageView
+                android:id="@+id/profilePictureImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:clipToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/no_profile_image_member" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/sentByTextView"
@@ -34,7 +51,7 @@
             android:text="@{message.senderName}"
             android:textSize="13sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
+            app:layout_constraintStart_toEndOf="@+id/adminImageCardView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="John Doe" />
 
@@ -48,7 +65,7 @@
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
+            app:layout_constraintStart_toEndOf="@+id/adminImageCardView"
             app:layout_constraintTop_toBottomOf="@+id/sentByTextView">
 
             <LinearLayout

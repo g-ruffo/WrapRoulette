@@ -472,19 +472,38 @@
                         android:layout_height="match_parent"
                         android:layout_margin="8dp">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/adminImage"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/adminImageCardView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_baseline_person_24"
+                            android:background="@color/poolItemIconTint"
+                            android:clipToPadding="false"
+                            android:foreground="?android:attr/selectableItemBackground"
                             android:visibility="@{viewModel.poolAdminProfileImage == null ? View.GONE : View.VISIBLE}"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="4dp"
                             app:layout_constraintBottom_toTopOf="@id/adminTitle"
+                            app:layout_constraintDimensionRatio="1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.75"
-                            app:layout_constraintVertical_chainStyle="packed" />
+                            app:layout_constraintVertical_chainStyle="packed">
+
+                            <ImageView
+                                android:id="@+id/adminImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:adjustViewBounds="true"
+                                android:clipToPadding="false"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/no_profile_image_member"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </com.google.android.material.card.MaterialCardView>
 
                         <TextView
                             android:id="@+id/adminTitle"
@@ -498,7 +517,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/adminImage"
+                            app:layout_constraintTop_toBottomOf="@id/adminImageCardView"
                             app:layout_constraintVertical_bias="0.8" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

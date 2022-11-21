@@ -41,32 +41,46 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="22dp">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profilePictureImageView"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:background="@drawable/ic_baseline_account_circle_24"
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/adminImageCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginHorizontal="68dp"
+                        android:clipToPadding="false"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="12dp"
                         app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
+                        app:layout_constraintDimensionRatio="1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed"
-                        app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                        app:layout_constraintVertical_chainStyle="packed">
+
+                        <ImageView
+                            android:id="@+id/profilePictureImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:clipToPadding="false"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_baseline_person_24" />
+
+                    </com.google.android.material.card.MaterialCardView>
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:elevation="22dp"
-                        android:shadowColor="@color/white"
                         android:src="@drawable/ic_baseline_add_circle_24"
-                        app:layout_constraintBottom_toBottomOf="@id/profilePictureImageView"
-                        app:layout_constraintEnd_toEndOf="@id/profilePictureImageView"
+                        app:layout_constraintBottom_toBottomOf="@id/adminImageCardView"
+                        app:layout_constraintEnd_toEndOf="@id/adminImageCardView"
                         app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toStartOf="@id/profilePictureImageView"
-                        app:layout_constraintTop_toTopOf="@id/profilePictureImageView"
+                        app:layout_constraintStart_toStartOf="@id/adminImageCardView"
+                        app:layout_constraintTop_toTopOf="@id/adminImageCardView"
                         app:layout_constraintVertical_bias="1.0"
-                        app:tint="@color/bluePrimary" />
+                        app:tint="@color/highlightOrange" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/nameEditTextLayout"
@@ -78,7 +92,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/departmentEditTextLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/profilePictureImageView"
+                        app:layout_constraintTop_toBottomOf="@+id/adminImageCardView"
                         app:layout_constraintVertical_bias="0.025">
 
                         <com.google.android.material.textfield.TextInputEditText
