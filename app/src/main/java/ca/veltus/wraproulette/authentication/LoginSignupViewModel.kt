@@ -12,6 +12,7 @@ import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
+import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,13 @@ class LoginSignupViewModel @Inject constructor(
     val department = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
+    val updateUsername = MutableStateFlow<String?>(null)
+    val updateDepartment = MutableStateFlow<String?>(null)
+
+    private val _tempProfileImage = MutableStateFlow<ByteArray?>(null)
+    val tempProfileImage: StateFlow<ByteArray?>
+        get() = _tempProfileImage
+
     private val _loginFlow = MutableStateFlow<Result<FirebaseUser>?>(null)
     val loginFlow: StateFlow<Result<FirebaseUser>?>
         get() = _loginFlow
@@ -55,6 +63,9 @@ class LoginSignupViewModel @Inject constructor(
             viewModelScope.launch {
                 repository.getCurrentUserProfile().collectLatest {
                     _userAccount.emit(it)
+                    updateUsername.emit(it?.displayName)
+                    updateDepartment.emit(it?.department)
+                    Log.i(TAG, "update called: ")
                 }
             }
         }
@@ -153,24 +164,53 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
-    fun updateCurrentUser(editName: String?, editDepartment: String?, profilePicturePath: String?) {
-        if (editName.isNullOrEmpty()) showToast.value = "Please Enter Your Name"
-        else if (editDepartment.isNullOrEmpty()) showToast.value = "Please Enter Your Department"
-        else {
-            val userFieldMap = mutableMapOf<String, Any>()
-            if (!editName.isNullOrEmpty()) userFieldMap["displayName"] = editName.trim()
-            if (!editDepartment.isNullOrEmpty()) userFieldMap["department"] = editDepartment.trim()
-            if (profilePicturePath != null) userFieldMap["profilePicturePath"] = profilePicturePath
+    fun validateUpdateCurrentUser() {
+        showLoading.value = true
+        val username = updateUsername.value
+        val department = updateDepartment.value
+        val tempImage = tempProfileImage.value
+        if (username.isNullOrEmpty()) {
+            showToast.value = "Please Enter Your Name"
+            showLoading.value = false
+            return
+        } else if (department.isNullOrEmpty()) {
+            showToast.value = "Please Enter Your Department"
+            showLoading.value = false
+            return
+        } else {
             viewModelScope.launch {
-                repository.updateCurrentUser(userFieldMap) {
-                    if (it.isNullOrEmpty()) {
-                        showToast.postValue("Saved Successfully")
-                        navigateBack()
-                    } else showToast.postValue(it)
+                if (tempImage != null) {
+                    FirebaseStorageUtil.uploadProfilePhoto(tempImage) { imagePath ->
+                        updateUserProfile(username, department, imagePath)
+                    }
+                } else {
+                    updateUserProfile(username, department, null)
                 }
             }
         }
+    }
 
+    private fun updateUserProfile(username: String, department: String, tempImage: String? = null) {
+        viewModelScope.launch {
+            val userFieldMap = mutableMapOf<String, Any>()
+            if (!username.isNullOrEmpty()) userFieldMap["displayName"] = username.trim()
+            if (!department.isNullOrEmpty()) userFieldMap["department"] = department.trim()
+            if (tempImage != null) userFieldMap["profilePicturePath"] = tempImage
+
+            repository.updateCurrentUser(userFieldMap) {
+                if (it.isNullOrEmpty()) {
+                    showToast.postValue("Saved Successfully")
+                    navigateBack()
+                } else {
+                    showSnackBar.postValue(it)
+                }
+                showLoading.value = false
+            }
+        }
+    }
+
+    fun setTemporaryProfileImage(image: ByteArray) {
+        _tempProfileImage.value = image
     }
 
     fun navigateToForgottenPassword() {

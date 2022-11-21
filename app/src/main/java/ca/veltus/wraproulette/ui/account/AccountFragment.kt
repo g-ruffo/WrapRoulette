@@ -38,8 +38,6 @@ class AccountFragment : BaseFragment() {
 
     private val RC_SELECT_IMAGE = 2
     private lateinit var selectedImageBytes: ByteArray
-    private var pictureChange = false
-
     private var _binding: FragmentAccountBinding? = null
 
     // This property is only valid between onCreateView and
@@ -60,20 +58,26 @@ class AccountFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = _viewModel
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                _viewModel.userAccount.collectLatest {
-                    if (it != null) {
-                        if (this@AccountFragment.isVisible) {
-                            binding.nameInputEditText.setText(it.displayName)
-                            binding.departmentInputEditText.setText(it.department)
-
-                            if (!pictureChange && it.profilePicturePath != null) {
+                launch {
+                    _viewModel.userAccount.collectLatest {
+                        if (it != null) {
+                            if (it.profilePicturePath != null) {
                                 Glide.with(this@AccountFragment).asBitmap()
                                     .load(FirebaseStorageUtil.pathToReference(it.profilePicturePath))
                                     .placeholder(R.drawable.ic_baseline_account_circle_24)
                                     .into(binding.profilePictureImageView)
                             }
+                        }
+                    }
+                }
+                launch {
+                    _viewModel.tempProfileImage.collectLatest {
+                        if (it != null) {
+                            selectedImageBytes = it
+                            Glide.with(this@AccountFragment).asBitmap().load(selectedImageBytes)
+                                .into(binding.profilePictureImageView)
                         }
                     }
                 }
@@ -86,15 +90,10 @@ class AccountFragment : BaseFragment() {
         _binding = null
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     // TODO: Replace with ActivityResultContract
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        // TODO: Fix Photo Orientation
         if (requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val selectedImagePath = data.data
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
@@ -102,61 +101,34 @@ class AccountFragment : BaseFragment() {
             val cursor: Cursor = activity?.contentResolver!!.query(
                 selectedImagePath!!, filePathColumn, null, null, null
             )!!
+
             cursor.moveToFirst()
             val columnIndex: Int = cursor.getColumnIndex(filePathColumn[0])
             val picturePath: String = cursor.getString(columnIndex)
             cursor.close()
+
             val bitmap = BitmapFactory.decodeFile(picturePath)
-
             val rotatedBitmap = rotateBitmap(picturePath, bitmap)
-
             val outputStream = ByteArrayOutputStream()
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
             selectedImageBytes = outputStream.toByteArray()
-
-            Glide.with(this).asBitmap().load(selectedImageBytes)
-                .into(binding.profilePictureImageView)
-
-            pictureChange = true
+            _viewModel.setTemporaryProfileImage(selectedImageBytes)
         }
     }
 
     private fun setupOnClickListeners() {
-        binding.apply {
-            profilePictureImageView.setOnClickListener {
-                val intent = Intent().apply {
-                    type = "image/*"
-                    action = Intent.ACTION_PICK
-                    putExtra(
-                        Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/gif")
-                    )
-                }
-                // TODO: Replace with ActivityResultContract
-                startActivityForResult(
-                    Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE
+        binding.profilePictureImageView.setOnClickListener {
+            val intent = Intent().apply {
+                type = "image/*"
+                action = Intent.ACTION_PICK
+                putExtra(
+                    Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/gif")
                 )
-
             }
-            saveButton.setOnClickListener {
-                _viewModel.showLoading.value = true
-                if (::selectedImageBytes.isInitialized) {
-                    FirebaseStorageUtil.uploadProfilePhoto(selectedImageBytes) { imagePath ->
-                        _viewModel.updateCurrentUser(
-                            binding.nameInputEditText.text.toString(),
-                            binding.departmentInputEditText.text.toString(),
-                            imagePath
-                        )
-                    }
-                } else {
-                    _viewModel.updateCurrentUser(
-                        binding.nameInputEditText.text.toString(),
-                        binding.departmentInputEditText.text.toString(),
-                        null
-                    )
-
-                }
-            }
+            // TODO: Replace with ActivityResultContract
+            startActivityForResult(
+                Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE
+            )
         }
     }
-
 }
