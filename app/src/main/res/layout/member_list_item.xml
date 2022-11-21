@@ -36,9 +36,9 @@
                 android:layout_height="0dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="14dp"
                 app:cardElevation="2dp"
-                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,9 +55,9 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="top|start"
                         android:layout_marginStart="22dp"
-                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
                         android:layout_marginBottom="22dp"
                         android:src="@drawable/ic_baseline_new_releases_24"
+                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
                         app:tint="@color/memberItemTempIconTint" />
 
                     <ImageView
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:text="@{member.displayName}"
-                android:textColor="@color/purpleLogoLight"
+                android:textColor="@color/blueLight"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/memberDepartmentTextView"
@@ -104,16 +104,15 @@
                 tools:text="Grip" />
 
 
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/betTimeCardView"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:minWidth="70dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
-                app:cardElevation="0dp"
+                android:minWidth="70dp"
                 app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -123,11 +122,11 @@
                     android:id="@+id/betTimeTextView"
                     dateToStringConverter="@{member.bidTime}"
                     android:layout_width="wrap_content"
-                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="12dp"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     tools:text="11:05" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -148,8 +147,8 @@
                 android:id="@+id/barrier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:barrierDirection="end"
                 android:orientation="vertical"
+                app:barrierDirection="end"
                 app:constraint_referenced_ids="editMemberIcon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

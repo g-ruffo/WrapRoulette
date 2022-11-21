@@ -17,8 +17,8 @@
         android:layout_margin="4dp"
         android:background="@color/poolItemIconTint"
         android:clipToPadding="false"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -32,8 +32,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:clipToPadding="false"
-                app:cardElevation="2dp"
                 app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:text="@{pool.production}"
-                android:textColor="@color/purpleLogoLight"
+                android:textColor="@color/blueLight"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/poolItemImageCardView"
@@ -85,7 +85,7 @@
                 convertDateToPoolItem="@{pool.date}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@id/productionTextView"
                 app:layout_constraintTop_toBottomOf="@id/productionTextView"
                 tools:text="Monday Oct, 07 2022" />
@@ -112,9 +112,9 @@
                 android:layout_marginEnd="6dp"
                 android:background="@color/poolItemIconTint"
                 android:clipToPadding="false"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="14dp"
                 android:minWidth="66dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -127,6 +127,7 @@
                     android:layout_gravity="center"
                     android:calculatePoolItemPotSize="@{pool}"
                     android:padding="12dp"
+                    android:textStyle="bold"
                     tools:text="$10.00" />
 
             </androidx.cardview.widget.CardView>
