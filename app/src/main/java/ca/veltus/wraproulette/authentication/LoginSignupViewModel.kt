@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.authentication
 
 import android.app.Application
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.authentication.login.LoginFragmentDirections
@@ -133,13 +134,12 @@ class LoginSignupViewModel @Inject constructor(
             showLoading.value = false
             return false
         }
-        if (TextUtils.isEmpty(username.value)) {
+        if (signUp && TextUtils.isEmpty(username.value)) {
             errorNameText.value = ErrorMessage.ErrorText("Please enter your name")
             showLoading.value = false
             return false
         }
-
-        if (TextUtils.isEmpty(department.value)) {
+        if (signUp && TextUtils.isEmpty(department.value)) {
             errorDepartmentText.value = ErrorMessage.ErrorText("Please enter your department")
             showLoading.value = false
             return false
