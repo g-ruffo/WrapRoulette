@@ -237,7 +237,8 @@ class HomeViewModel @Inject constructor(
                         }
                         if (!list.isNullOrEmpty()) _poolBetsList.emit(list.sortedBy { member ->
                             abs(
-                                currentTimeDate.value!!.time - member.bidTime!!.time
+                                (currentTimeDate.value?.time
+                                    ?: Calendar.getInstance().time.time) - member.bidTime!!.time
                             )
                         })
                     }
