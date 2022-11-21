@@ -93,7 +93,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/adminImageCardView"
-                        app:layout_constraintVertical_bias="0.025">
+                        app:layout_constraintVertical_bias="0.025"
+                        app:startIconDrawable="@drawable/ic_baseline_person_24">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/nameInputEditText"
@@ -117,7 +118,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout">
+                        app:layout_constraintTop_toBottomOf="@+id/nameEditTextLayout"
+                        app:startIconDrawable="@drawable/ic_baseline_work_24">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/departmentInputEditText"
