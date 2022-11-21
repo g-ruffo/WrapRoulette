@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -64,7 +65,7 @@ class BidsFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                _viewModel.bids.collect {
+                _viewModel.memberList.collectLatest {
                     setupRecyclerView(it.toMemberItem(_viewModel.userAccount.value?.uid ?: ""))
                 }
             }

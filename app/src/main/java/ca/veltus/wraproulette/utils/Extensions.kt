@@ -34,6 +34,16 @@ fun View.fadeOut() {
     })
 }
 
+fun isEqual(first: List<Member>, second: List<Member>): Boolean {
+    if (first.size != second.size) return false
+    first.forEachIndexed { index, value ->
+        if (second[index].bidTime != value.bidTime && second[index].displayName != value.displayName) {
+            return false
+        }
+    }
+    return true
+}
+
 
 fun List<Member>.toMemberItem(userUid: String = ""): List<MemberItem> {
     return this.map {

@@ -9,6 +9,7 @@ import ca.veltus.wraproulette.data.objects.*
 import ca.veltus.wraproulette.data.repository.HomeRepository
 import ca.veltus.wraproulette.utils.Constants
 import ca.veltus.wraproulette.utils.calculateWinners
+import ca.veltus.wraproulette.utils.isEqual
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,21 +68,22 @@ class HomeViewModel @Inject constructor(
     val userAccount: StateFlow<User?>
         get() = _userAccount
 
-    private val _poolTotalBets = MutableStateFlow<List<Member>>(listOf())
-    val poolTotalBets: StateFlow<List<Member>>
-        get() = _poolTotalBets
+    private val _poolBetsList = MutableStateFlow<List<Member>>(listOf())
+    val poolBetsList: StateFlow<List<Member>>
+        get() = _poolBetsList
 
-    val _chatList = MutableStateFlow<List<Message>>(listOf())
+    private val _chatList = MutableStateFlow<List<Message>>(listOf())
     val chatList: StateFlow<List<Message>>
         get() = _chatList
 
-    val _readChatListItems = MutableStateFlow<Pair<List<Message>, Boolean>>(Pair(listOf(), false))
+    private val _readChatListItems =
+        MutableStateFlow<Pair<List<Message>, Boolean>>(Pair(listOf(), false))
     val readChatListItems: StateFlow<Pair<List<Message>, Boolean>>
         get() = _readChatListItems
 
-    val _bids = MutableStateFlow<List<Member>>(listOf())
-    val bids: StateFlow<List<Member>>
-        get() = _bids
+    private val _memberList = MutableStateFlow<List<Member>>(listOf())
+    val memberList: StateFlow<List<Member>>
+        get() = _memberList
 
     val timeWorkedDate = liveData {
         while (true) {
@@ -131,11 +133,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    val currentTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     val currentTimeDate = liveData<Date> {
         while (true) {
             emit(Calendar.getInstance().time)
-            currentTime.emit(Calendar.getInstance().time)
+            if (this.latestValue != null) {
+                val sortedList =
+                    _poolBetsList.value.sortedBy { member -> abs(this.latestValue!!.time - member.bidTime!!.time) }
+                if (!isEqual(sortedList, poolBetsList.value)) {
+                    _poolBetsList.emit(sortedList)
+                }
+            }
             delay(1000)
         }
     }
@@ -218,16 +225,21 @@ class HomeViewModel @Inject constructor(
                         markMessagesAsRead(true)
                     }
                 }
-
                 launch {
                     repository.getPoolMemberList(activePool).collect { members ->
-                        _bids.emit(members)
-                        addBidMemberToList(members)
+                        val list = mutableListOf<Member>()
+                        _memberList.emit(members)
                         members.forEach {
-                            if (it.uid == userAccount.value!!.uid && it.tempMemberUid == null) {
-                                setUserBetTime(it.bidTime)
-                            }
+                            if (it.uid == userAccount.value!!.uid && it.tempMemberUid == null) setUserBetTime(
+                                it.bidTime
+                            )
+                            if (it.bidTime != null) list.add(it)
                         }
+                        if (!list.isNullOrEmpty()) _poolBetsList.emit(list.sortedBy { member ->
+                            abs(
+                                currentTimeDate.value!!.time - member.bidTime!!.time
+                            )
+                        })
                     }
                 }
             }
@@ -336,18 +348,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun addBidMemberToList(members: List<Member>) {
-        viewModelScope.launch {
-            val list = mutableListOf<Member>()
-            members.forEach {
-                if (it.bidTime != null) {
-                    list.add(it)
-                }
-                _poolTotalBets.emit(list)
-            }
-        }
-    }
-
     fun markMessagesAsRead(isUpdated: Boolean) {
         viewModelScope.launch {
             if (isUpdated && !_readChatListItems.value.second || !isUpdated) {
@@ -379,8 +379,8 @@ class HomeViewModel @Inject constructor(
 
     private fun setWinningMember(wrapTime: Date?) {
         if (wrapTime != null) {
-            val winnersList = poolTotalBets.value.calculateWinners(
-                poolTotalBets.value.size,
+            val winnersList = poolBetsList.value.calculateWinners(
+                poolBetsList.value.size,
                 currentPool.value?.betAmount?.toInt() ?: 0,
                 poolMargin.value ?: "0",
                 poolPIREnabled.value,

@@ -32,9 +32,7 @@ import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class SummaryFragment : BaseFragment() {
@@ -75,17 +73,11 @@ class SummaryFragment : BaseFragment() {
         binding.marginCardView.setOnClickListener { showPoolDetailDialog(MARGIN_DIALOG) }
         binding.pirCardView.setOnClickListener { showPoolDetailDialog(PIR_DIALOG) }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    _viewModel.poolTotalBets.combine(_viewModel.currentTime) { bets, time ->
-                        Pair(bets, time)
-                    }.collectLatest {
-                        val list = it.first
-                        val time = it.second
-                        // TODO -> Only update if values are different
-                        setupBidsRecyclerView(list.toMemberBidItem()
-                            .sortedBy { member -> abs(time.time - member.member.bidTime!!.time) })
+                    _viewModel.poolBetsList.collectLatest {
+                        if (!it.isNullOrEmpty()) setupBidsRecyclerView(it.toMemberBidItem())
                     }
                 }
                 launch {
@@ -181,6 +173,8 @@ class SummaryFragment : BaseFragment() {
         binding.memberBidsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
+            layoutAnimation =
+                AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation)
         }
     }
 
