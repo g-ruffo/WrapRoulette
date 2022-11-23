@@ -107,11 +107,12 @@
                         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
                         app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/selectDateAutoComplete"
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="false"
                             android:hint="Date"
                             android:inputType="none"
                             android:text="@={viewModel.poolDate}" />
@@ -126,7 +127,6 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="6dp"
                         app:endIconMode="clear_text"
-                        app:hintEnabled="false"
                         app:layout_constraintBottom_toTopOf="@+id/selectBetAmountTextInputLayout"
                         app:layout_constraintEnd_toStartOf="@id/selectBettingCloseTimeTextInputLayout"
                         app:layout_constraintStart_toStartOf="parent"
@@ -134,12 +134,13 @@
                         app:startIconDrawable="@drawable/ic_baseline_access_time_24"
                         tools:layout_editor_absoluteX="16dp">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/selectStartTimeAutoComplete"
                             style="@style/AccountTextInputInnerFieldStyle"
                             getTimeFromDate="@{viewModel.poolStartTime}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="false"
                             android:hint="Start Time"
                             android:inputType="none"
                             android:textColorHint="@color/cardViewTitleColor" />
@@ -153,19 +154,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         app:endIconMode="clear_text"
-                        app:hintEnabled="false"
                         app:layout_constraintBaseline_toBaselineOf="@id/selectStartTimeTextInputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/selectStartTimeTextInputLayout"
                         app:startIconDrawable="@drawable/ic_outline_timer_24"
                         tools:layout_editor_absoluteY="562dp">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/selectBettingCloseTimeAutoComplete"
                             style="@style/AccountTextInputInnerFieldStyle"
                             getTimeFromDate="@{viewModel.poolBetLockTime}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="false"
                             android:hint="Final Bets"
                             android:inputType="none"
                             android:textColorHint="@color/cardViewTitleColor" />

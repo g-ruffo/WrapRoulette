@@ -44,12 +44,6 @@ class JoinPoolFragment : BaseFragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.selectDateAutoComplete.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                v.performClick()
-            }
-        }
-
         binding.selectDateAutoComplete.setOnClickListener {
             launchDatePickerDialog()
         }

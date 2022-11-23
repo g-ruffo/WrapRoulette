@@ -6,6 +6,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,22 +49,6 @@ class AddPoolFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
-        binding.selectDateAutoComplete.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                v.performClick()
-            }
-        }
-        binding.selectStartTimeAutoComplete.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                v.performClick()
-            }
-        }
-        binding.selectBettingCloseTimeAutoComplete.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                v.performClick()
-            }
-        }
 
         binding.selectDateAutoComplete.setOnClickListener {
             launchDatePickerDialog()
@@ -116,6 +101,10 @@ class AddPoolFragment : BaseFragment() {
             time.set(Calendar.MILLISECOND, 0)
 
             _viewModel.setPoolBetLockTime(Date(time.timeInMillis))
+            Log.i(
+                TAG,
+                "launchBetLockTimePickerDialog: ${binding.selectBettingCloseTimeAutoComplete.text}"
+            )
         }
 
         val dialog = TimePickerDialog(

@@ -105,11 +105,12 @@
                         app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
                         app:startIconTint="@color/blueLight">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/selectDateAutoComplete"
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="false"
                             android:hint="Date"
                             android:inputType="none"
                             android:text="@={viewModel.poolDate}" />
