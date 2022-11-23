@@ -99,6 +99,14 @@ class PoolsViewModel @Inject constructor(
         Log.i(TAG, "setPoolBetLockTime: ${poolBetLockTime.value}")
     }
 
+    fun clearPoolStartTime(time: CharSequence) {
+        if (time.isEmpty()) poolStartTime.value = null
+    }
+
+    fun clearPoolBetLockTime(time: CharSequence) {
+        if (time.isEmpty()) poolBetLockTime.value = null
+    }
+
     fun joinPool() {
         showLoading.value = true
         val production = poolProduction.value
