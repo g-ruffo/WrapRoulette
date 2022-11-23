@@ -9,7 +9,13 @@
             name="viewModel"
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
 
+        <variable
+            name="fragment"
+            type="ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragment" />
+
         <import type="android.view.View" />
+
+        <import type="ca.veltus.wraproulette.utils.Constants" />
 
         <import type="android.text.TextUtils" />
 
@@ -117,6 +123,7 @@
                             android:focusableInTouchMode="false"
                             android:hint="Date"
                             android:inputType="none"
+                            android:onClick="@{() -> fragment.launchDatePickerDialog()}"
                             android:text="@={viewModel.poolDate}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -145,6 +152,7 @@
                             android:focusableInTouchMode="false"
                             android:hint="Start Time"
                             android:inputType="none"
+                            android:onClick="@{() -> fragment.launchTimePickerDialog(true)}"
                             android:textColorHint="@color/cardViewTitleColor" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -171,7 +179,8 @@
                             android:focusableInTouchMode="@{TextUtils.isEmpty(selectBettingCloseTimeAutoComplete.text) == false ? true : false}"
                             android:hint="Final Bets"
                             android:inputType="none"
-                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolBetLockTime(text)}"
+                            android:onClick="@{() -> fragment.launchTimePickerDialog(false)}"
+                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_FINAL_BETS)}"
                             android:textColorHint="@color/cardViewTitleColor" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -197,9 +206,11 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="@{TextUtils.isEmpty(selectBetAmountAutoComplete.text) == false ? true : false}"
                             android:hint="Price"
-                            android:inputType="number"
-                            android:text="@={viewModel.poolBetAmount}" />
+                            android:inputType="none"
+                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_BET_AMOUNT)}"
+                            android:text="@{viewModel.poolBetAmount}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -222,9 +233,11 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="@{TextUtils.isEmpty(selectMarginAutoComplete.text) == false ? true : false}"
                             android:hint="Margin"
-                            android:inputType="number"
-                            android:text="@={viewModel.poolMargin}" />
+                            android:inputType="none"
+                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_MARGIN_TIME)}"
+                            android:text="@{viewModel.poolMargin}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -262,6 +275,7 @@
                             android:layout_marginEnd="22dp"
                             android:layout_weight="1"
                             android:enabled="@{!viewModel.showLoading.booleanValue()}"
+                            android:onClick="@{() -> fragment.launchDeletePoolAlert()}"
                             android:padding="12dp"
                             android:text="Delete"
                             android:textColor="@color/white"

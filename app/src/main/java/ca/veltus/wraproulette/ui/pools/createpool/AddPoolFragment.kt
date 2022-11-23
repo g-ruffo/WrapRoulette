@@ -37,7 +37,6 @@ class AddPoolFragment : BaseFragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
 
-        binding.viewModel = _viewModel
 
         checkForEditPoolArgs()
 
@@ -48,20 +47,8 @@ class AddPoolFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.selectDateAutoComplete.setOnClickListener {
-            launchDatePickerDialog()
-        }
-
-        binding.selectStartTimeAutoComplete.setOnClickListener {
-            launchTimePickerDialog(true)
-        }
-
-        binding.selectBettingCloseTimeAutoComplete.setOnClickListener {
-            launchTimePickerDialog(false)
-        }
-        binding.deleteButton.setOnClickListener {
-            launchDeletePoolAlert()
-        }
+        binding.viewModel = _viewModel
+        binding.fragment = this
 
     }
 
@@ -76,7 +63,7 @@ class AddPoolFragment : BaseFragment() {
         }
     }
 
-    private fun launchDeletePoolAlert() {
+    fun launchDeletePoolAlert() {
         val dialog = AlertDialog.Builder(requireActivity())
         dialog.setTitle("Are You Sure?")
         dialog.setMessage("You are about to delete this pool. Click Yes to continue or No to cancel")
@@ -89,7 +76,7 @@ class AddPoolFragment : BaseFragment() {
         dialog.show()
     }
 
-    private fun launchTimePickerDialog(isStartTime: Boolean = true) {
+    fun launchTimePickerDialog(isStartTime: Boolean = true) {
         val time = Calendar.getInstance()
 
         val timePickerListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
@@ -113,7 +100,7 @@ class AddPoolFragment : BaseFragment() {
     }
 
     // Launch date dialog and listen for its result.
-    private fun launchDatePickerDialog() {
+    fun launchDatePickerDialog() {
         val calendar = Calendar.getInstance()
 
         val datePickerListener =
