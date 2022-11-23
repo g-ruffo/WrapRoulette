@@ -9,6 +9,7 @@
             name="viewModel"
             type="ca.veltus.wraproulette.authentication.LoginSignupViewModel" />
 
+        <import type="ca.veltus.wraproulette.utils.Constants" />
     </data>
 
     <ScrollView
@@ -85,10 +86,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/nameEditTextLayout"
                         style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorNameText }"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
                         android:layout_marginBottom="8dp"
+                        app:errorEnabled="true"
                         app:layout_constraintBottom_toTopOf="@+id/departmentEditTextLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -103,6 +106,7 @@
                             android:layout_height="match_parent"
                             android:hint="Name"
                             android:inputType="textCapWords"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.NAME_ERROR)}"
                             android:text="@={viewModel.updateUsername}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -110,10 +114,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/departmentEditTextLayout"
                         style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorDepartmentText }"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
+                        app:errorEnabled="true"
                         app:layout_constraintBottom_toTopOf="@+id/saveButton"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -128,6 +134,7 @@
                             android:layout_height="wrap_content"
                             android:hint="Department"
                             android:inputType="textCapWords"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.DEPARTMENT_ERROR)}"
                             android:text="@={viewModel.updateDepartment}" />
                     </com.google.android.material.textfield.TextInputLayout>
 

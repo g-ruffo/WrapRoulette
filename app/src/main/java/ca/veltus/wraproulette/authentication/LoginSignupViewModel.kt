@@ -170,11 +170,11 @@ class LoginSignupViewModel @Inject constructor(
         val department = updateDepartment.value
         val tempImage = tempProfileImage.value
         if (username.isNullOrEmpty()) {
-            showToast.value = "Please Enter Your Name"
+            errorNameText.value = ErrorMessage.ErrorText("Please enter your name")
             showLoading.value = false
             return
         } else if (department.isNullOrEmpty()) {
-            showToast.value = "Please Enter Your Department"
+            errorDepartmentText.value = ErrorMessage.ErrorText("Please enter your department")
             showLoading.value = false
             return
         } else {
