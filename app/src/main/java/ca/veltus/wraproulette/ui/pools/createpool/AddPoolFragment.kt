@@ -13,9 +13,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
+import ca.veltus.wraproulette.databinding.BetNumberPickerDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -95,6 +97,11 @@ class AddPoolFragment : BaseFragment() {
             time.get(Calendar.MINUTE),
             true
         )
+        if (isStartTime) {
+            dialog.setTitle("Start Time")
+        } else {
+            dialog.setTitle("Lock Betting")
+        }
         dialog.show()
     }
 
@@ -123,5 +130,29 @@ class AddPoolFragment : BaseFragment() {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DATE)
         ).show()
+    }
+
+    fun launchNumberPickerDialog(isTimeMargin: Boolean = false) {
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        builder.setView(view.root)
+        view.apply {
+            title.text = "Bid Amount"
+            message.text = "Set the dollar amount of each bet placed."
+            numberPickerOnes.maxValue = 9
+            numberPickerOnes.minValue = 0
+            numberPickerTens.maxValue = 9
+            numberPickerTens.minValue = 0
+        }
+
+        builder.setPositiveButton("Set") { dialog, _ ->
+            _viewModel.setPoolPriceAndMargin(view.numberPickerTens.value.toString() + view.numberPickerOnes.value.toString())
+        }.setNeutralButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
     }
 }

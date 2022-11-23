@@ -192,8 +192,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="6dp"
-                        app:endIconMode="clear_text"
-                        app:helperText="Betting Amount"
                         app:helperTextTextColor="@color/cardViewTitleColor"
                         app:layout_constraintBottom_toTopOf="@+id/buttonLinearLayout"
                         app:layout_constraintEnd_toStartOf="@id/selectMarginTextInputLayout"
@@ -201,16 +199,15 @@
                         app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextInputLayout"
                         app:startIconDrawable="@drawable/ic_baseline_attach_money_24">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/selectBetAmountAutoComplete"
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusableInTouchMode="@{TextUtils.isEmpty(selectBetAmountAutoComplete.text) == false ? true : false}"
                             android:hint="Price"
                             android:inputType="none"
-                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_BET_AMOUNT)}"
-                            android:text="@{viewModel.poolBetAmount}" />
+                            android:onClick="@{() -> fragment.launchNumberPickerDialog(true)}"
+                            android:text="@{`$` + viewModel.poolBetAmount + `.00`}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,7 +218,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         app:endIconMode="clear_text"
-                        app:helperText="Minutes"
                         app:helperTextTextColor="@color/cardViewTitleColor"
                         app:layout_constraintBaseline_toBaselineOf="@id/selectBetAmountTextInputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -233,10 +229,10 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusableInTouchMode="@{TextUtils.isEmpty(selectMarginAutoComplete.text) == false ? true : false}"
+                            android:focusableInTouchMode="false"
                             android:hint="Margin"
                             android:inputType="none"
-                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_MARGIN_TIME)}"
+                            android:onClick="@{() -> fragment.launchNumberPickerDialog(false)}"
                             android:text="@{viewModel.poolMargin}" />
 
                     </com.google.android.material.textfield.TextInputLayout>

@@ -138,6 +138,29 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="NumberPickerTheme" parent="Theme.WrapRoulette">
+        <item name="colorControlNormal">@color/backgroundOrange</item>
+        <item name="android:textColorPrimary">@color/fabIconTint</item>
+    </style>
+
+    <!-- Alert Dialog -->
+    <style name="NumberPickerDialog.MaterialComponents.MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:background">@color/backgroundBlueLight</item>
+    </style>
+
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:gravity">end</item>
+        <item name="android:textColor">@color/darkOrange</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:gravity">start</item>
+        <item name="android:textColor">@color/darkOrange</item>
+    </style>
 
     <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/color_states_material_button</item>
