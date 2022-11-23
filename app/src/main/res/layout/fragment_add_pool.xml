@@ -10,6 +10,7 @@
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
 
         <import type="android.view.View" />
+
         <import type="android.text.TextUtils" />
 
     </data>
@@ -141,8 +142,7 @@
                             getTimeFromDate="@{viewModel.poolStartTime}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolStartTime(text)}"
-                            android:focusableInTouchMode="@{TextUtils.isEmpty(selectStartTimeAutoComplete.text) == false ? true : false}"
+                            android:focusableInTouchMode="false"
                             android:hint="Start Time"
                             android:inputType="none"
                             android:textColorHint="@color/cardViewTitleColor" />
@@ -168,10 +168,10 @@
                             getTimeFromDate="@{viewModel.poolBetLockTime}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolBetLockTime(text)}"
                             android:focusableInTouchMode="@{TextUtils.isEmpty(selectBettingCloseTimeAutoComplete.text) == false ? true : false}"
                             android:hint="Final Bets"
                             android:inputType="none"
+                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolBetLockTime(text)}"
                             android:textColorHint="@color/cardViewTitleColor" />
 
                     </com.google.android.material.textfield.TextInputLayout>

@@ -1,12 +1,10 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
-import android.app.AlertDialog.BUTTON_NEUTRAL
 import android.app.AlertDialog.THEME_HOLO_DARK
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,11 +53,11 @@ class AddPoolFragment : BaseFragment() {
         }
 
         binding.selectStartTimeAutoComplete.setOnClickListener {
-            launchStartTimePickerDialog()
+            launchTimePickerDialog(true)
         }
 
         binding.selectBettingCloseTimeAutoComplete.setOnClickListener {
-            launchBetLockTimePickerDialog()
+            launchTimePickerDialog(false)
         }
         binding.deleteButton.setOnClickListener {
             launchDeletePoolAlert()
@@ -91,20 +89,16 @@ class AddPoolFragment : BaseFragment() {
         dialog.show()
     }
 
-    private fun launchBetLockTimePickerDialog() {
+    private fun launchTimePickerDialog(isStartTime: Boolean = true) {
         val time = Calendar.getInstance()
 
-        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        val timePickerListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             time.set(Calendar.HOUR_OF_DAY, hourOfDay)
             time.set(Calendar.MINUTE, minute)
             time.set(Calendar.SECOND, 0)
             time.set(Calendar.MILLISECOND, 0)
 
-            _viewModel.setPoolBetLockTime(Date(time.timeInMillis))
-            Log.i(
-                TAG,
-                "launchBetLockTimePickerDialog: ${binding.selectBettingCloseTimeAutoComplete.text}"
-            )
+            _viewModel.setPoolTime(Date(time.timeInMillis), isStartTime)
         }
 
         val dialog = TimePickerDialog(
@@ -115,32 +109,7 @@ class AddPoolFragment : BaseFragment() {
             time.get(Calendar.MINUTE),
             true
         )
-        dialog.setButton(BUTTON_NEUTRAL, "Clear") { _, _ ->
-            _viewModel.setPoolBetLockTime(null)
-        }
         dialog.show()
-    }
-
-    private fun launchStartTimePickerDialog() {
-        val time = Calendar.getInstance()
-
-        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            time.set(Calendar.MINUTE, minute)
-            time.set(Calendar.SECOND, 0)
-            time.set(Calendar.MILLISECOND, 0)
-
-            _viewModel.setPoolStartTime(Date(time.timeInMillis))
-        }
-
-        TimePickerDialog(
-            requireContext(),
-            THEME_HOLO_DARK,
-            timePickerListener,
-            time.get(Calendar.HOUR_OF_DAY),
-            time.get(Calendar.MINUTE),
-            true
-        ).show()
     }
 
     // Launch date dialog and listen for its result.
