@@ -11,6 +11,9 @@ import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.PoolListRepository
 import ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragmentDirections
 import ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragmentDirections
+import ca.veltus.wraproulette.utils.Constants.SET_BET_AMOUNT
+import ca.veltus.wraproulette.utils.Constants.SET_FINAL_BETS
+import ca.veltus.wraproulette.utils.Constants.SET_MARGIN_TIME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -95,10 +98,15 @@ class PoolsViewModel @Inject constructor(
         else poolBetLockTime.value = time
     }
 
-    fun clearPoolBetLockTime(time: CharSequence) {
-        if (time.isEmpty()) poolBetLockTime.value = null
+    fun clearPoolTimeAndAmount(time: CharSequence, value: Int) {
+        if (time.isEmpty()) {
+            when (value) {
+                SET_FINAL_BETS -> poolBetLockTime.value = null
+                SET_BET_AMOUNT -> poolBetAmount.value = null
+                SET_MARGIN_TIME -> poolMargin.value = null
+            }
+        }
     }
-
 
     fun joinPool() {
         showLoading.value = true
