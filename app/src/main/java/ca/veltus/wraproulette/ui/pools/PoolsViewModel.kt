@@ -93,6 +93,11 @@ class PoolsViewModel @Inject constructor(
         poolDate.value = date
     }
 
+    fun setPoolPriceAndMargin(value: String?, isPrice: Boolean = true) {
+        if (isPrice) poolBetAmount.value = value
+        else poolMargin.value = value
+    }
+
     fun setPoolTime(time: Date?, isStartTime: Boolean = true) {
         if (isStartTime) poolStartTime.value = time
         else poolBetLockTime.value = time
