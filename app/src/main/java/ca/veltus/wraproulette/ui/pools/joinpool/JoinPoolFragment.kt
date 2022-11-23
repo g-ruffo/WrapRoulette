@@ -35,6 +35,7 @@ class JoinPoolFragment : BaseFragment() {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_pool, container, false)
 
         binding.viewModel = _viewModel
+        binding.fragment = this
 
         return binding.root
     }
@@ -44,9 +45,6 @@ class JoinPoolFragment : BaseFragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.selectDateAutoComplete.setOnClickListener {
-            launchDatePickerDialog()
-        }
     }
 
     override fun onDestroyView() {
@@ -55,7 +53,7 @@ class JoinPoolFragment : BaseFragment() {
     }
 
     // Launch date dialog and listen for its result.
-    private fun launchDatePickerDialog() {
+    fun launchDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val selectedYear = calendar.get(Calendar.YEAR)
         val selectedMonth = calendar.get(Calendar.MONTH)

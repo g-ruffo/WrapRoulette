@@ -37,6 +37,8 @@ class AddPoolFragment : BaseFragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
 
+        binding.viewModel = _viewModel
+        binding.fragment = this
 
         checkForEditPoolArgs()
 
@@ -46,9 +48,6 @@ class AddPoolFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-
-        binding.viewModel = _viewModel
-        binding.fragment = this
 
     }
 

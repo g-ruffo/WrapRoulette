@@ -8,6 +8,11 @@
         <variable
             name="viewModel"
             type="ca.veltus.wraproulette.ui.pools.PoolsViewModel" />
+
+        <variable
+            name="fragment"
+            type="ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragment" />
+
     </data>
 
     <ScrollView
@@ -113,6 +118,7 @@
                             android:focusableInTouchMode="false"
                             android:hint="Date"
                             android:inputType="none"
+                            android:onClick="@{() -> fragment.launchDatePickerDialog()}"
                             android:text="@={viewModel.poolDate}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
