@@ -138,15 +138,6 @@ class AddPoolFragment : BaseFragment() {
         )
         val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         builder.setView(view.root)
-        view.apply {
-            title.text = "Bid Amount"
-            message.text = "Set the dollar amount of each bet placed."
-            numberPickerOnes.maxValue = 9
-            numberPickerOnes.minValue = 0
-            numberPickerTens.maxValue = 9
-            numberPickerTens.minValue = 0
-        }
-
         builder.setPositiveButton("Set") { dialog, _ ->
             _viewModel.setPoolPriceAndMargin(view.numberPickerTens.value.toString() + view.numberPickerOnes.value.toString())
         }.setNeutralButton("Cancel") { dialog, _ ->
