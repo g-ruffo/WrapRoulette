@@ -56,13 +56,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/message">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_attach_money_24"
-                app:tint="@color/highlightOrange" />
-
             <NumberPicker
                 android:id="@+id/numberPickerTens"
                 android:layout_width="wrap_content"
@@ -90,6 +83,16 @@
                 app:minValue="@{0}" />
 
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_attach_money_24"
+            app:layout_constraintBottom_toBottomOf="@+id/numberPickerLayout"
+            app:layout_constraintEnd_toStartOf="@+id/numberPickerLayout"
+            app:layout_constraintTop_toTopOf="@+id/numberPickerLayout"
+            app:tint="@color/highlightOrange" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

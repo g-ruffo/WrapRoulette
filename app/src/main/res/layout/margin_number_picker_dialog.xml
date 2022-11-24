@@ -56,12 +56,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/message">
 
-
             <NumberPicker
                 android:id="@+id/numberPickerMinutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
                 android:theme="@style/NumberPickerTheme"
                 app:layout_constraintBottom_toTopOf="@+id/setButton"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,16 +69,18 @@
                 app:minValue="@{0}"
                 app:value="@{0}"
                 app:wrapSelectorWheel="@{true}" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="/ Minutes"
-                android:textColor="@color/fabIconTint"
-                android:textStyle="bold" />
-
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="/ Minutes"
+            android:textColor="@color/fabIconTint"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/numberPickerLayout"
+            app:layout_constraintStart_toEndOf="@+id/numberPickerLayout"
+            app:layout_constraintTop_toTopOf="@+id/numberPickerLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
