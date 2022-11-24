@@ -1,8 +1,6 @@
 package ca.veltus.wraproulette.ui.home
 
 import android.app.AlertDialog
-import android.app.TimePickerDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -17,6 +15,7 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.AddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
+import ca.veltus.wraproulette.databinding.TimePickerDialogBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.convertDateToDetail
 import ca.veltus.wraproulette.utils.onPageSelected
@@ -257,53 +256,69 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance()
+        time.set(Calendar.SECOND, 0)
+        time.set(Calendar.MILLISECOND, 0)
 
-        Log.i(TAG, "launchBetAndWrapDialog: ${_viewModel.userBetTime.value}")
+        val submitButtonText: String
+        val titleText: String
+        val messageText: String
 
-        val submitButtonText = when (setWrapTime) {
-            true -> "Set Wrap"
-            false -> "Bet"
+        when (setWrapTime) {
+            true -> {
+                submitButtonText = "Wrap"
+                titleText = "Set Wrap Time"
+                messageText =
+                    "Select the wrap time using the spinner below. Once set you will be unable to edit the pool or place additional bets."
+            }
+            false -> {
+                submitButtonText = "Bet"
+                titleText = "Set Bet Time"
+                messageText = "Use the spinner below to set your bet time."
+            }
         }
-        val timePickerListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            time.set(Calendar.MINUTE, minute)
-            time.set(Calendar.SECOND, 0)
-            time.set(Calendar.MILLISECOND, 0)
 
-            if (time.time.before(_viewModel.poolStartTime.value)) time.add(Calendar.DATE, 1)
-            if (setWrapTime) launchConfirmationDialog(time.time)
-            else _viewModel.setUserPoolBet(time.time)
-
-        }
-
-        val timePickerDialog = TimePickerDialog(
-            requireContext(),
-            AlertDialog.THEME_HOLO_LIGHT,
-            timePickerListener,
-            time.get(Calendar.HOUR_OF_DAY),
-            time.get(Calendar.MINUTE),
-            true
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
-
-        if (_viewModel.userBetTime.value != null && !setWrapTime) {
-            timePickerDialog.setButton(
-                DialogInterface.BUTTON_NEUTRAL, "Clear"
-            ) { _, _ -> _viewModel.setUserPoolBet(null) }
+        val view = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.apply {
+            title.text = titleText
+            message.text = messageText
+            timePicker.setIs24HourView(true)
+            timePicker.hour = time.get(Calendar.HOUR_OF_DAY)
+            timePicker.minute = time.get(Calendar.MINUTE)
+        }
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(submitButtonText) { dialog, _ -> }
         }
 
-        if (setWrapTime && _viewModel.poolEndTime.value != null) {
-            timePickerDialog.setButton(
-                DialogInterface.BUTTON_NEUTRAL, "Clear"
-            ) { _, _ -> launchConfirmationDialog(null) }
+        if ((_viewModel.userBetTime.value != null && !setWrapTime) || (setWrapTime && _viewModel.poolEndTime.value != null)) {
+            builder.setNegativeButton("Clear") { dialog, _ -> }
         }
 
-        timePickerDialog.setButton(
-            DialogInterface.BUTTON_POSITIVE, submitButtonText
-        ) { _, _ -> }
-        timePickerDialog.setButton(
-            DialogInterface.BUTTON_NEGATIVE, "Cancel"
-        ) { _, _ -> }
-        timePickerDialog.show()
+        val dialog = builder.show()
+
+        dialog.apply {
+            getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                if (setWrapTime) launchConfirmationDialog(null)
+                else _viewModel.setUserPoolBet(null)
+
+                dialog.dismiss()
+            }
+
+            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                time.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
+                time.set(Calendar.MINUTE, view.timePicker.minute)
+
+                if (time.time.before(_viewModel.poolStartTime.value)) time.add(Calendar.DATE, 1)
+                if (setWrapTime) launchConfirmationDialog(time.time)
+                else _viewModel.setUserPoolBet(time.time)
+
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun launchConfirmationDialog(time: Date?, isLeavePool: Boolean = false) {
