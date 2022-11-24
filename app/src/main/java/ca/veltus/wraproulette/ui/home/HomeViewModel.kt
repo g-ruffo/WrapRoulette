@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.objects.*
 import ca.veltus.wraproulette.data.repository.HomeRepository
 import ca.veltus.wraproulette.utils.Constants
@@ -35,7 +36,7 @@ class HomeViewModel @Inject constructor(
     val userMessageEditText = MutableStateFlow<String?>(null)
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
-    val poolRemainingBetTime = MutableStateFlow<Date?>(null)
+    private val poolBettingLockTime = MutableStateFlow<Date?>(null)
     val poolEndTime = MutableStateFlow<Date?>(null)
     val poolMargin = MutableStateFlow<String?>(null)
     val poolPIREnabled = MutableStateFlow<Boolean>(false)
@@ -103,7 +104,7 @@ class HomeViewModel @Inject constructor(
 
     val betTimeRemainingDate = liveData {
         while (true) {
-            if (poolRemainingBetTime.value == null) {
+            if (poolBettingLockTime.value == null) {
                 emit(null)
                 delay(1000)
                 if (isPoolActive.value) {
@@ -112,14 +113,14 @@ class HomeViewModel @Inject constructor(
                     isBettingOpen.emit(false)
                 }
             } else {
-                val time = poolRemainingBetTime.value!!.time - Calendar.getInstance().time.time
+                val time = poolBettingLockTime.value!!.time - Calendar.getInstance().time.time
                 if (time > 0 && currentPool.value!!.endTime == null) {
                     emit(time)
                     isBettingOpen.emit(true)
                     delay(1000)
                 } else if (time > 0 && currentPool.value!!.endTime != null) {
                     isBettingOpen.emit(false)
-                    emit(abs(poolRemainingBetTime.value!!.time - currentPool.value!!.endTime!!.time))
+                    emit(abs(poolBettingLockTime.value!!.time - currentPool.value!!.endTime!!.time))
                     delay(1000)
                 } else if (showNoData.value) {
                     emit(0)
@@ -192,7 +193,7 @@ class HomeViewModel @Inject constructor(
                             _currentPool.emit(pool)
                             _poolAdminProfileImage.emit(pool.adminProfileImage)
                             poolStartTime.emit(pool.startTime!!)
-                            poolRemainingBetTime.emit(pool.lockTime)
+                            poolBettingLockTime.emit(pool.lockTime)
                             poolEndTime.emit(pool.endTime)
                             _poolWinningMembers.emit(pool.winners)
                             poolMargin.emit(pool.margin)
@@ -276,11 +277,11 @@ class HomeViewModel @Inject constructor(
         val ownerUid = _userAccount.value!!.uid
 
         if (memberName.isNullOrEmpty()) {
-            showToast.value = "Please Enter Members Name"
+            errorNameText.value = ErrorMessage.ErrorText("Please Enter Members Name")
             return false
         }
         if (memberDepartment.isNullOrEmpty()) {
-            showToast.value = "Please Enter Members Department"
+            errorDepartmentText.value = ErrorMessage.ErrorText("Please Enter Members Department")
             return false
         }
         if (!memberEmail.isNullOrEmpty()) {
