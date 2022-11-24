@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
+import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
@@ -42,13 +43,13 @@ class PoolsViewModel @Inject constructor(
     val poolPISRulesEnabled = MutableStateFlow<Boolean>(false)
 
     val poolDocUid = MutableStateFlow<String?>(null)
-    val poolAdminUid = MutableStateFlow<String?>(null)
-    val poolAdminName = MutableStateFlow<String?>(null)
-    val poolAdminProfileImage = MutableStateFlow<String?>(null)
-    val poolWinners = MutableStateFlow<List<Member>>(listOf())
-    val poolBets = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
-    val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
-    val poolEndTime = MutableStateFlow<Date?>(null)
+    private val poolAdminUid = MutableStateFlow<String?>(null)
+    private val poolAdminName = MutableStateFlow<String?>(null)
+    private val poolAdminProfileImage = MutableStateFlow<String?>(null)
+    private val poolWinners = MutableStateFlow<List<Member>>(listOf())
+    private val poolBets = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
+    private val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
+    private val poolEndTime = MutableStateFlow<Date?>(null)
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
@@ -120,13 +121,13 @@ class PoolsViewModel @Inject constructor(
         val date = poolDate.value
 
         if (production.isNullOrEmpty()) {
-            showToast.value = "Please Enter Production Name"
+            errorPoolNameText.value = ErrorMessage.ErrorText("Please Enter Production Name")
             showLoading.value = false
             return
         }
 
         if (date.isNullOrEmpty()) {
-            showToast.value = "Please Enter Pool Date"
+            errorPoolDateText.value = ErrorMessage.ErrorText("Please Enter Pool Date")
             showLoading.value = false
             return
         }
@@ -147,18 +148,18 @@ class PoolsViewModel @Inject constructor(
     fun createUpdatePool() {
         showLoading.value = true
         if (poolProduction.value.isNullOrEmpty()) {
-            showToast.value = "Please Enter Production Name"
+            errorPoolNameText.value = ErrorMessage.ErrorText("Please Enter Production Name")
             showLoading.value = false
             return
         }
 
         if (poolDate.value.isNullOrEmpty()) {
-            showToast.value = "Please Enter Pool Date"
+            errorPoolDateText.value = ErrorMessage.ErrorText("Please Enter Pool Date")
             showLoading.value = false
             return
         }
         if (poolStartTime.value == null) {
-            showToast.value = "Please Enter Pool Start Time"
+            errorPoolStartText.value = ErrorMessage.ErrorText("Please Enter Pool Start Time")
             showLoading.value = false
             return
         }
@@ -250,8 +251,6 @@ class PoolsViewModel @Inject constructor(
                 }
                 showLoading.value = false
             }
-
-
         }
     }
 
@@ -283,7 +282,7 @@ class PoolsViewModel @Inject constructor(
         navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToAddPoolFragment()))
     }
 
-    fun navigatePoolsToHomeFragment() {
+    private fun navigatePoolsToHomeFragment() {
         navigationCommand.postValue(NavigationCommand.To(PoolsFragmentDirections.actionNavPoolsToNavHome()))
     }
 
