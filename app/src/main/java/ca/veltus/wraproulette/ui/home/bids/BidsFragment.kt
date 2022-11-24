@@ -207,9 +207,18 @@ class BidsFragment : BaseFragment() {
 
     private fun launchDeleteMemberConfirmationDialog(memberItem: MemberItem) {
         val message = "Are you sure you want to delete this member for the pool?"
-        MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?").setMessage(message)
-            .setPositiveButton("Yes") { _, _ ->
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.message.text = message
+        view.title.text = "Are You Sure?"
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("No") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton("Yes") { _, _ ->
                 _viewModel.deleteTempMember(memberItem)
-            }.setNegativeButton("No") { _, _ -> }.show()
+            }
+        }.show()
     }
 }
