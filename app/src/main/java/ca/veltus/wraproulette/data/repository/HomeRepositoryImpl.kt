@@ -65,19 +65,98 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun checkAdminForUpdate(pool: Pool) {
+    override suspend fun checkAdminForUpdate(poolId: String) {
         val adminFieldMap = mutableMapOf<String, Any>()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val user = usersCollectionReference.document(pool.adminUid).get().await()
-                    .toObject(User::class.java)
-                if (user != null) {
-                    if (user.displayName != pool.adminName) adminFieldMap["adminName"] =
-                        user.displayName
-                    if (user.profilePicturePath != pool.adminProfileImage) adminFieldMap["adminProfileImage"] =
-                        user.profilePicturePath!!
-                    if (adminFieldMap.isNotEmpty()) {
-                        poolsCollectionReference.document(pool.docId).update(adminFieldMap).await()
+                val pool = poolsCollectionReference.document(poolId).get().await()
+                    .toObject(Pool::class.java)
+                if (pool != null) {
+                    val user = usersCollectionReference.document(pool.adminUid).get().await()
+                        .toObject(User::class.java)
+                    if (user != null) {
+                        if (user.displayName != pool.adminName) adminFieldMap["adminName"] =
+                            user.displayName
+                        if (user.profilePicturePath != pool.adminProfileImage) adminFieldMap["adminProfileImage"] =
+                            user.profilePicturePath!!
+                        if (adminFieldMap.isNotEmpty()) {
+                            poolsCollectionReference.document(pool.docId).update(adminFieldMap)
+                                .await()
+                        }
+                    }
+                }
+                checkMembersForUpdate(poolId)
+            } catch (e: FirebaseFirestoreException) {
+                Log.e(TAG, "getCurrentUser: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun checkMembersForUpdate(poolId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val members =
+                    poolsCollectionReference.document(poolId).collection("members").get().await()
+                        .toObjects(Member::class.java)
+                if (!members.isNullOrEmpty()) {
+                    members.forEach { member ->
+                        if (member.tempMemberUid == null) {
+                            val memberUpdateMap = mutableMapOf<String, Any>()
+                            val user = usersCollectionReference.document(member.uid!!).get().await()
+                                .toObject(User::class.java)
+                            if (user != null) {
+                                if (member.displayName != user.displayName) memberUpdateMap["displayName"] =
+                                    user.displayName
+                                if (member.profilePicturePath != user.profilePicturePath) memberUpdateMap["profilePicturePath"] =
+                                    user.profilePicturePath!!
+
+                                if (member.email != user.email) memberUpdateMap["email"] =
+                                    user.email
+
+                                if (memberUpdateMap.isNotEmpty()) {
+//                                    memberUpdateMap.forEach { Log.i("TAG", "checkMembersForUpdate: ${it.value}") }
+                                    poolsCollectionReference.document(poolId).collection("members")
+                                        .document(member.uid).update(memberUpdateMap).await()
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } catch (e: FirebaseFirestoreException) {
+                Log.e(TAG, "getCurrentUser: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun checkChatMessagesForUpdate(poolId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val messages =
+                    messagesCollectionReference.document(poolId).collection("chat").get().await()
+                        .toObjects(Message::class.java)
+                if (!messages.isNullOrEmpty()) {
+                    messages.forEach { message ->
+                        val messageUpdateMap = mutableMapOf<String, Any>()
+                        val user =
+                            usersCollectionReference.document(message.senderUid).get().await()
+                                .toObject(User::class.java)
+                        if (user != null) {
+                            if (message.senderName != user.displayName) messageUpdateMap["senderName"] =
+                                user.displayName
+                            if (message.profilePicture != user.profilePicturePath) messageUpdateMap["profilePicture"] =
+                                user.profilePicturePath!!
+
+                            if (messageUpdateMap.isNotEmpty()) {
+                                messageUpdateMap.forEach {
+                                    Log.i(
+                                        "TAG", "checkChatMessagesForUpdate: ${it.value}"
+                                    )
+                                }
+                                messagesCollectionReference.document(poolId).collection("chat")
+                                    .document(message.messageUid).update(messageUpdateMap).await()
+                            }
+                        }
                     }
                 }
             } catch (e: FirebaseFirestoreException) {
@@ -88,6 +167,7 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun getPoolData(poolId: String?): Flow<Pool?> {
         if (poolId.isNullOrBlank()) return flowOf()
+        checkAdminForUpdate(poolId)
         return firestore.collection("pools").document(poolId).snapshots()
             .map { querySnapshot -> querySnapshot.toObject<Pool?>() }.onCompletion {
                 Log.i(TAG, "getPoolData OnCompletion: $it")
@@ -106,8 +186,9 @@ class HomeRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getChatList(activePool: String): Flow<List<Message>> {
-        return messagesCollectionReference.document(activePool).collection("chat")
+    override suspend fun getChatList(poolId: String): Flow<List<Message>> {
+        checkChatMessagesForUpdate(poolId)
+        return messagesCollectionReference.document(poolId).collection("chat")
             .orderBy("time", Query.Direction.ASCENDING).snapshots()
             .map<QuerySnapshot, List<Message>> { querySnapshot -> querySnapshot.toObjects() }
             .onCompletion {

@@ -188,9 +188,8 @@ class HomeViewModel @Inject constructor(
         if (!activePool.isNullOrEmpty()) {
             viewModelScope.launch {
                 launch {
-                    repository.getPoolData(activePool).collect { pool ->
+                    repository.getPoolData(activePool).collectLatest { pool ->
                         if (pool != null) {
-                            repository.checkAdminForUpdate(pool)
                             _currentPool.emit(pool)
                             _poolAdminProfileImage.emit(pool.adminProfileImage)
                             poolStartTime.emit(pool.startTime!!)
@@ -222,13 +221,13 @@ class HomeViewModel @Inject constructor(
                 }
 
                 launch {
-                    repository.getChatList(activePool).collect {
+                    repository.getChatList(activePool).collectLatest {
                         _chatList.emit(it)
                         markMessagesAsRead(true)
                     }
                 }
                 launch {
-                    repository.getPoolMemberList(activePool).collect { members ->
+                    repository.getPoolMemberList(activePool).collectLatest { members ->
                         val list = mutableListOf<Member>()
                         _memberList.emit(members)
                         members.forEach {
