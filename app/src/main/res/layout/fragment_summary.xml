@@ -16,7 +16,9 @@
         android:id="@+id/summaryScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blueGrey"
+        android:background="@drawable/background_pattern"
+        android:backgroundTint="@color/backgroundBlueGrey"
+        android:backgroundTintMode="screen"
         android:fillViewport="true"
         tools:context=".ui.home.summary.SummaryFragment">
 
@@ -30,9 +32,6 @@
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_pattern"
-                android:backgroundTint="@color/backgroundBlueGrey"
-                android:backgroundTintMode="screen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -530,9 +529,6 @@
                 android:id="@+id/summaryBodyLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@drawable/background_pattern"
-                android:backgroundTint="@color/backgroundBlueGrey"
-                android:backgroundTintMode="screen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/headerLayout">

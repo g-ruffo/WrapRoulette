@@ -236,7 +236,7 @@ class HomeViewModel @Inject constructor(
                             )
                             if (it.bidTime != null) list.add(it)
                         }
-                        if (!list.isNullOrEmpty()) _poolBetsList.emit(list.sortedBy { member ->
+                        _poolBetsList.emit(list.sortedBy { member ->
                             abs(
                                 (currentTimeDate.value?.time
                                     ?: Calendar.getInstance().time.time) - member.bidTime!!.time
@@ -312,7 +312,7 @@ class HomeViewModel @Inject constructor(
             viewModelScope.launch {
                 repository.addNewMemberToPool(newMember) {
                     if (!it.isNullOrEmpty()) showSnackBar.postValue(it)
-                     else clearTempMemberValues()
+                    else clearTempMemberValues()
                 }
             }
             return true
