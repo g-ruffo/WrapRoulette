@@ -190,6 +190,7 @@ class HomeViewModel @Inject constructor(
                 launch {
                     repository.getPoolData(activePool).collect { pool ->
                         if (pool != null) {
+                            repository.checkAdminForUpdate(pool)
                             _currentPool.emit(pool)
                             _poolAdminProfileImage.emit(pool.adminProfileImage)
                             poolStartTime.emit(pool.startTime!!)

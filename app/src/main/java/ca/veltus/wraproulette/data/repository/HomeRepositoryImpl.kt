@@ -24,7 +24,7 @@ class HomeRepositoryImpl @Inject constructor(
 ) : HomeRepository {
 
     companion object {
-        private const val TAG = "PoolListRepository"
+        private const val TAG = "HomeRepository"
     }
 
     private val firestoreInstance: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
@@ -39,6 +39,8 @@ class HomeRepositoryImpl @Inject constructor(
 
     private val poolsCollectionReference = firestoreInstance.collection("pools")
     private val messagesCollectionReference = firestoreInstance.collection("messages")
+    private val usersCollectionReference = firestoreInstance.collection("users")
+
 
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
@@ -57,6 +59,27 @@ class HomeRepositoryImpl @Inject constructor(
             try {
                 val user = currentUserDocReference.get().await().toObject(User::class.java)
                 onComplete(user!!)
+            } catch (e: FirebaseFirestoreException) {
+                Log.e(TAG, "getCurrentUser: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun checkAdminForUpdate(pool: Pool) {
+        val adminFieldMap = mutableMapOf<String, Any>()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val user = usersCollectionReference.document(pool.adminUid).get().await()
+                    .toObject(User::class.java)
+                if (user != null) {
+                    if (user.displayName != pool.adminName) adminFieldMap["adminName"] =
+                        user.displayName
+                    if (user.profilePicturePath != pool.adminProfileImage) adminFieldMap["adminProfileImage"] =
+                        user.profilePicturePath!!
+                    if (adminFieldMap.isNotEmpty()) {
+                        poolsCollectionReference.document(pool.docId).update(adminFieldMap).await()
+                    }
+                }
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getCurrentUser: ${e.message}")
             }
@@ -118,7 +141,8 @@ class HomeRepositoryImpl @Inject constructor(
             try {
                 poolsCollectionReference.document(poolId).update("endTime", wrapTime).await()
                 if (wrapTime == null) {
-                    poolsCollectionReference.document(poolId).update("winners", listOf<Member>()).await()
+                    poolsCollectionReference.document(poolId).update("winners", listOf<Member>())
+                        .await()
                 }
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {

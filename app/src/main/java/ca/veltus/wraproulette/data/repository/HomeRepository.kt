@@ -22,6 +22,7 @@ interface HomeRepository {
     suspend fun updateTempPoolMember(member: Member, onComplete: (String?) -> Unit)
     suspend fun deleteTempPoolMember(member: Member, onComplete: (String?) -> Unit)
     suspend fun getPoolData(poolId: String?): Flow<Pool?>
+    suspend fun checkAdminForUpdate(pool: Pool)
     suspend fun getPoolMemberList(poolId: String): Flow<List<Member>>
     suspend fun leavePool(poolUid: String, userUid: String, onComplete: (String?) -> Unit)
     suspend fun sendChatMessage(activePool: String, message: Message, onComplete: (String?) -> Unit)
