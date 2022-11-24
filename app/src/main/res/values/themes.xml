@@ -141,6 +141,7 @@
     <style name="NumberPickerTheme" parent="Theme.WrapRoulette">
         <item name="colorControlNormal">@color/backgroundOrange</item>
         <item name="android:textColorPrimary">@color/fabIconTint</item>
+        <item name="android:textColor">@color/fabIconTint</item>
     </style>
 
     <!-- Alert Dialog -->
