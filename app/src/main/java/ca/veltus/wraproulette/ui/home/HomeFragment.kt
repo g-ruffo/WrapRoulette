@@ -3,8 +3,6 @@ package ca.veltus.wraproulette.ui.home
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -17,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
-import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
+import ca.veltus.wraproulette.databinding.AddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.convertDateToDetail
@@ -237,61 +235,25 @@ class HomeFragment : BaseFragment(), MenuProvider {
     }
 
     private fun launchAddMemberDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        val dialogBinding = FragmentAddMemberDialogBinding.inflate(LayoutInflater.from(context))
-        dialogBinding.viewModel = _viewModel
-        builder.setView(dialogBinding.root)
-        val dialog: AlertDialog = builder.show()
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = AddMemberDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.viewModel = _viewModel
+        view.lifecycleOwner = viewLifecycleOwner
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton("Create") { dialog, _ -> }
+        }
 
-        dialogBinding.addMemberButton.setOnClickListener {
+        val dialog = builder.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             if (_viewModel.createUpdateTempMember()) {
                 dialog.dismiss()
             }
         }
-        dialogBinding.cancelButton.setOnClickListener {
-            dialog.dismiss()
-        }
     }
-
-//    private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
-//        val time = Calendar.getInstance()
-//
-//        val submitButtonText = when (setWrapTime) {
-//            true -> "Set Wrap"
-//            false -> "Bet"
-//        }
-//
-//        val timePickerDialog = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_24H)
-//            .setHour(Calendar.HOUR_OF_DAY).setMinute(Calendar.MINUTE)
-//
-//        if (_viewModel.userBetTime.value != null && !setWrapTime || setWrapTime && _viewModel.poolEndTime.value != null) {
-//            timePickerDialog.setNegativeButtonText("Clear")
-//        } else timePickerDialog.setNegativeButtonText("Cancel")
-//
-//        timePickerDialog.setPositiveButtonText(submitButtonText)
-//
-//        timePickerDialog.build().apply {
-//            addOnPositiveButtonClickListener {
-//                time.set(Calendar.HOUR_OF_DAY, hour)
-//                time.set(Calendar.MINUTE, minute)
-//                time.set(Calendar.SECOND, 0)
-//                time.set(Calendar.MILLISECOND, 0)
-//
-//                if (time.time.before(_viewModel.poolStartTime.value)) time.add(Calendar.DATE, 1)
-//                if (setWrapTime) launchConfirmationDialog(time.time)
-//                else _viewModel.setUserPoolBet(time.time)
-//            }
-//            addOnNegativeButtonClickListener {
-//                if (_viewModel.userBetTime.value != null && !setWrapTime) _viewModel.setUserPoolBet(
-//                    null
-//                )
-//                if (setWrapTime && _viewModel.poolEndTime.value != null) launchConfirmationDialog(
-//                    null
-//                )
-//            }
-//        }.show(activityCast.supportFragmentManager, "TimePickerDialog")
-//    }
 
     private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance()
