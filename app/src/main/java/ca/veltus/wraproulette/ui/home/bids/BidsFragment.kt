@@ -16,7 +16,7 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.databinding.AddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentBidsBinding
-import ca.veltus.wraproulette.databinding.MemberOptionsDialogBinding
+import ca.veltus.wraproulette.databinding.OptionsDialogBinding
 import ca.veltus.wraproulette.databinding.TimePickerDialogBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.home.HomeViewModel
@@ -105,7 +105,7 @@ class BidsFragment : BaseFragment() {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
-        val view = MemberOptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.member = memberItem
 
         builder.apply {
@@ -192,11 +192,10 @@ class BidsFragment : BaseFragment() {
             }
 
             getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                var selectedTime = time
-                selectedTime.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
-                selectedTime.set(Calendar.MINUTE, view.timePicker.minute)
+                time.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
+                time.set(Calendar.MINUTE, view.timePicker.minute)
 
-                if (selectedTime.time.before(_viewModel.poolStartTime.value)) {
+                if (time.time.before(_viewModel.poolStartTime.value)) {
                     time.add(Calendar.DATE, 1)
                 }
                 _viewModel.setMemberPoolBet(

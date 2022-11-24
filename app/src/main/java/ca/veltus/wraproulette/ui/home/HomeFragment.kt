@@ -15,6 +15,7 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.AddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentHomeBinding
+import ca.veltus.wraproulette.databinding.OptionsDialogBinding
 import ca.veltus.wraproulette.databinding.TimePickerDialogBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.convertDateToDetail
@@ -331,13 +332,24 @@ class HomeFragment : BaseFragment(), MenuProvider {
         } else {
             "Are you sure you want to leave this pool?"
         }
-        MaterialAlertDialogBuilder(requireContext()).setTitle("Are You Sure?").setMessage(message)
-            .setPositiveButton("Yes") { _, _ ->
+
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.message.text = message
+        view.title.text = "Are You Sure?"
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton("Bet") { _, _ ->
                 if (!isLeavePool) _viewModel.setWrapTime(time, true)
                 else {
                     _viewModel.showLoading.value = true
                     _viewModel.leavePool()
                 }
-            }.setNegativeButton("No") { _, _ -> }.show()
+            }
+
+        }.show()
     }
 }
