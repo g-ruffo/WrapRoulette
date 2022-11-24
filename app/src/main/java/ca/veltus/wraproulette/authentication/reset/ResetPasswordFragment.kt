@@ -22,7 +22,6 @@ class ResetPasswordFragment : BaseFragment() {
     override val _viewModel: LoginSignupViewModel by activityViewModels()
 
     private lateinit var binding: FragmentResetPasswordBinding
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,8 +30,6 @@ class ResetPasswordFragment : BaseFragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
 
         binding.viewModel = _viewModel
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         return binding.root
     }

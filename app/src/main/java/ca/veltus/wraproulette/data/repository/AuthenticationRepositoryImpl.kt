@@ -130,9 +130,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
     override suspend fun updateCurrentUser(
         updateUserFieldMap: MutableMap<String, Any>, onComplete: (String?) -> Unit
     ) {
+        val nameUpdate = updateUserFieldMap["displayName"].toString()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 currentUserDocReference.update(updateUserFieldMap).await()
+                currentUser?.updateProfile(
+                    UserProfileChangeRequest.Builder().setDisplayName(nameUpdate).build()
+                )?.await()
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "updateCurrentUser: ${e.message}")

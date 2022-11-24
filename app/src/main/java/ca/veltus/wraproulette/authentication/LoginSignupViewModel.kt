@@ -37,6 +37,8 @@ class LoginSignupViewModel @Inject constructor(
 
     val updateUsername = MutableStateFlow<String?>(null)
     val updateDepartment = MutableStateFlow<String?>(null)
+    val updatePassword = MutableStateFlow<String?>(null)
+    val updateEmail = MutableStateFlow<String?>(null)
 
     private val _tempProfileImage = MutableStateFlow<ByteArray?>(null)
     val tempProfileImage: StateFlow<ByteArray?>
@@ -65,6 +67,7 @@ class LoginSignupViewModel @Inject constructor(
                     _userAccount.emit(it)
                     updateUsername.emit(it?.displayName)
                     updateDepartment.emit(it?.department)
+                    updateEmail.emit(it?.email)
                     Log.i(TAG, "update called: ")
                 }
             }

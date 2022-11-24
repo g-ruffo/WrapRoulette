@@ -50,7 +50,7 @@
                         android:clipToPadding="false"
                         app:cardCornerRadius="14dp"
                         app:cardElevation="12dp"
-                        app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
+                        app:layout_constraintBottom_toTopOf="@+id/emailEditTextLayout"
                         app:layout_constraintDimensionRatio="1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -84,18 +84,85 @@
                         app:tint="@color/highlightOrange" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/emailEditTextLayout"
+                        style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorEmailText }"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:enabled="false"
+                        android:layout_marginTop="32dp"
+                        android:textColorHint="@color/inputLayoutDisabled"
+                        app:helperTextTextColor="@color/inputLayoutDisabled"
+                        app:boxBackgroundColor="@color/transparent"
+                        app:layout_constraintTop_toBottomOf="@+id/adminImageCardView"
+                        app:startIconDrawable="@drawable/ic_outline_email_24">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/emailInputEditText"
+                            style="@style/AccountTextInputInnerFieldStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Type your email"
+                            android:inputType="textEmailAddress"
+                            android:enabled="false"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.EMAIL_ERROR)}"
+                            android:text="@{viewModel.updateEmail}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/passwordEditTextLayout"
+                        style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorPasswordText }"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="4dp"
+                        app:counterEnabled="false"
+                        app:counterMaxLength="24"
+                        app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:enabled="false"
+                        app:endIconTint="@color/inputLayoutDisabled"
+                        app:counterTextColor="@color/inputLayoutDisabled"
+                        android:textColorHint="@color/inputLayoutDisabled"
+                        app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
+                        app:passwordToggleEnabled="true"
+                        app:boxBackgroundColor="@color/transparent"
+                        app:passwordToggleTint="@color/inputLayoutDisabled"
+                        app:startIconTint="@color/inputLayoutDisabled"
+                        app:startIconDrawable="@drawable/ic_outline_lock_24">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/passwordInputEditText"
+                            style="@style/AccountTextInputInnerFieldStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Your password"
+                            android:enabled="false"
+                            android:inputType="textPassword"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.PASSWORD_ERROR)}"
+                            android:text="**********" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/nameEditTextLayout"
                         style="@style/AccountTextInputOuterFieldStyle"
                         error="@{ viewModel.errorNameText }"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        app:errorEnabled="true"
                         app:layout_constraintBottom_toTopOf="@+id/departmentEditTextLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/adminImageCardView"
+                        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
                         app:layout_constraintVertical_bias="0.025"
                         app:startIconDrawable="@drawable/ic_baseline_person_24">
 
@@ -117,9 +184,8 @@
                         error="@{ viewModel.errorDepartmentText }"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginBottom="8dp"
-                        app:errorEnabled="true"
                         app:layout_constraintBottom_toTopOf="@+id/saveButton"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -144,13 +210,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="68dp"
-                        android:layout_marginTop="60dp"
+                        android:layout_marginTop="30dp"
                         android:enabled="@{!viewModel.showLoading.booleanValue()}"
                         android:onClick="@{() -> viewModel.validateUpdateCurrentUser()}"
                         android:text="Save"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/departmentEditTextLayout" />
 
