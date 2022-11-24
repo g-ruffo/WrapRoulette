@@ -22,8 +22,6 @@
             android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="16dp"
-            android:backgroundTintMode="src_atop"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/sendMessageLayout"
             app:layout_constraintTop_toTopOf="parent" />
@@ -72,18 +70,21 @@
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendMessageButton"
                 style="@style/FabButton"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                setSizeAndEnabled="@{viewModel.userMessageEditText}"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/bluePrimary"
-                android:color="@color/white"
                 android:src="@drawable/ic_baseline_send_24"
+                android:stateListAnimator="@animator/send_fab_state_animator"
                 android:visibility="visible"
                 app:elevation="22dp"
+                app:fabCustomSize="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/sendMessageTextInputLayout"
                 app:layout_constraintTop_toTopOf="parent"
                 app:maxImageSize="24dp" />
 

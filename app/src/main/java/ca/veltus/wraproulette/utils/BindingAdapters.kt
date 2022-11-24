@@ -277,6 +277,12 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter("setSizeAndEnabled")
+    @JvmStatic
+    internal fun FloatingActionButton.setSizeAndEnabled(message: String?) {
+        this.isEnabled = !(message.isNullOrEmpty() || message.isNullOrBlank())
+    }
+
     @BindingAdapter("error")
     @JvmStatic
     internal fun TextInputLayout.setError(errorMessage: ErrorMessage<String>?) {
