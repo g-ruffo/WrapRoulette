@@ -258,7 +258,10 @@ class HomeViewModel @Inject constructor(
             repository.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
                 showLoading.value = false
                 if (!it.isNullOrEmpty()) showToast.postValue(it)
-                else _actionbarTitle.value = "Home"
+                else {
+                    _actionbarTitle.value = "Home"
+                    navigateToPoolFragment()
+                }
             }
         }
     }
@@ -423,5 +426,9 @@ class HomeViewModel @Inject constructor(
         } else {
             showToast.postValue("You Are Unable To Edit This Pool")
         }
+    }
+
+    private fun navigateToPoolFragment() {
+        navigationCommand.postValue(NavigationCommand.To(HomeFragmentDirections.actionNavHomeToNavPools()))
     }
 }

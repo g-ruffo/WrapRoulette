@@ -182,7 +182,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
         )
     }
 
-
     private fun setupViewPagerListenerAndToolbar() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -215,6 +214,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 }
             }
         }
+
         binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
             if (position == 2) {
                 binding.tabLayout.getTabAt(2)!!.removeBadge()

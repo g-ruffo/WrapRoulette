@@ -15,6 +15,11 @@
             app:destination="@id/addPoolFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_pools"
+            app:destination="@id/nav_pools"
+            app:popUpTo="@id/nav_pools"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
