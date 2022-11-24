@@ -341,15 +341,14 @@ class HomeFragment : BaseFragment(), MenuProvider {
         view.title.text = "Are You Sure?"
         builder.apply {
             setView(view.root)
-            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Bet") { _, _ ->
+            setNeutralButton("No") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton("Yes") { _, _ ->
                 if (!isLeavePool) _viewModel.setWrapTime(time, true)
                 else {
                     _viewModel.showLoading.value = true
                     _viewModel.leavePool()
                 }
             }
-
         }.show()
     }
 }

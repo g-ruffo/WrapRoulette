@@ -106,7 +106,6 @@ class BidsFragment : BaseFragment() {
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
-        view.member = memberItem
 
         builder.apply {
             setView(view.root)

@@ -5,9 +5,6 @@
 
     <data>
 
-        <variable
-            name="member"
-            type="ca.veltus.wraproulette.data.objects.MemberItem" />
     </data>
 
     <ScrollView
@@ -46,7 +43,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="18dp"
                 android:gravity="start"
-                android:text="@{`Select EDIT to modify ` + member.member.displayName + `'s member details, or select BET to place their bid.`}"
+                android:text="Select EDIT to modify members details, or select BET to place their bid."
                 android:textColor="@color/fabIconTint"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
