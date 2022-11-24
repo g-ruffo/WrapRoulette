@@ -15,6 +15,7 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.BetNumberPickerDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
+import ca.veltus.wraproulette.databinding.MarginNumberPickerDialogBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -136,14 +137,34 @@ class AddPoolFragment : BaseFragment() {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
-        val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
-        builder.setView(view.root)
-        builder.setPositiveButton("Set") { dialog, _ ->
-            _viewModel.setPoolPriceAndMargin(view.numberPickerTens.value.toString() + view.numberPickerOnes.value.toString())
-        }.setNeutralButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
 
+        if (isTimeMargin) {
+            val view =
+                MarginNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+            builder.setView(view.root)
+            val array: Array<String> =
+                resources.getStringArray(R.array.margin_number_picker_entries)
+            view.numberPickerMinutes.displayedValues = array
+            view.numberPickerMinutes.maxValue = array.size - 1
+            builder.setPositiveButton("Set") { dialog, _ ->
+                _viewModel.setPoolPriceAndMargin(
+                    view.numberPickerMinutes.displayedValues[view.numberPickerMinutes.value], false
+                )
+            }.setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+        } else {
+            val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+            builder.setView(view.root)
+            builder.setPositiveButton("Set") { dialog, _ ->
+                _viewModel.setPoolPriceAndMargin(
+                    view.numberPickerTens.value.toString() + view.numberPickerOnes.value.toString(),
+                    true
+                )
+            }.setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+        }
         builder.show()
     }
 }

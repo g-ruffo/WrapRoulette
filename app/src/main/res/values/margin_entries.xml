@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="margin_number_picker_entries">
+        <item>0</item>
+        <item>6</item>
+        <item>12</item>
+        <item>18</item>
+        <item>24</item>
+        <item>30</item>
+        <item>36</item>
+        <item>42</item>
+        <item>48</item>
+        <item>54</item>
+        <item>60</item>
+        <item>66</item>
+        <item>72</item>
+        <item>78</item>
+        <item>84</item>
+        <item>90</item>
+        <item>96</item>
+    </string-array>
+</resources>
