@@ -311,30 +311,26 @@ class HomeViewModel @Inject constructor(
         if (memberItem == null) {
             viewModelScope.launch {
                 repository.addNewMemberToPool(newMember) {
-                    if (!it.isNullOrEmpty()) {
-                        showToast.postValue(it)
-                    } else {
-                        newMemberName.value = null
-                        newMemberDepartment.value = null
-                        newMemberEmail.value = null
-                    }
+                    if (!it.isNullOrEmpty()) showSnackBar.postValue(it)
+                     else clearTempMemberValues()
                 }
             }
             return true
         } else {
             viewModelScope.launch {
                 repository.updateTempPoolMember(newMember) {
-                    if (!it.isNullOrEmpty()) {
-                        showToast.postValue(it)
-                    } else {
-                        newMemberName.value = null
-                        newMemberDepartment.value = null
-                        newMemberEmail.value = null
-                    }
+                    if (!it.isNullOrEmpty()) showSnackBar.postValue(it)
+                    else clearTempMemberValues()
                 }
             }
             return true
         }
+    }
+
+    private fun clearTempMemberValues() {
+        newMemberName.value = null
+        newMemberDepartment.value = null
+        newMemberEmail.value = null
     }
 
     fun deleteTempMember(memberItem: MemberItem) {

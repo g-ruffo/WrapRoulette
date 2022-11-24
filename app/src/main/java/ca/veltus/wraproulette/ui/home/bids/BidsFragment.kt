@@ -3,8 +3,6 @@ package ca.veltus.wraproulette.ui.home.bids
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,10 +13,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberItem
-import ca.veltus.wraproulette.databinding.FragmentAddMemberDialogBinding
+import ca.veltus.wraproulette.databinding.AddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentBidsBinding
+import ca.veltus.wraproulette.databinding.MemberOptionsDialogBinding
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.home.HomeViewModel
 import ca.veltus.wraproulette.utils.toMemberItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,6 +38,7 @@ class BidsFragment : BaseFragment() {
 
     private var _binding: FragmentBidsBinding? = null
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
+    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -101,53 +103,57 @@ class BidsFragment : BaseFragment() {
     }
 
     private fun launchTempMemberOptionsDialog(memberItem: MemberItem) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Select the BET button to set bid time for ${memberItem.member.displayName}, or click EDIT to modify or delete this member.")
-        builder.setPositiveButton("Bet") { _, _ ->
-            launchSetMemberBetDialog(memberItem)
-        }
-        builder.setNegativeButton("Edit") { _, _ ->
-            launchUpdateTempMemberDialog(memberItem)
-        }
-        builder.setNeutralButton("Close") { _, _ -> }
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = MemberOptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.member = memberItem
+
+        builder.apply {
+            setView(view.root)
+            setPositiveButton("Bet") { _, _ -> launchSetMemberBetDialog(memberItem) }
+            setNegativeButton("Edit") { _, _ -> launchUpdateTempMemberDialog(memberItem) }
+            setNeutralButton("Close") { dialog, _ -> dialog.cancel() }
+        }.show()
     }
 
     private fun launchUpdateTempMemberDialog(memberItem: MemberItem) {
-        val builder = AlertDialog.Builder(requireContext())
-        val dialogBinding = FragmentAddMemberDialogBinding.inflate(LayoutInflater.from(context))
-        dialogBinding.viewModel = _viewModel
-        dialogBinding.member = memberItem.member
-        builder.setView(dialogBinding.root)
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = AddMemberDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.viewModel = _viewModel
+        view.lifecycleOwner = viewLifecycleOwner
+        view.member = memberItem.member
         _viewModel.loadTempMemberValues(memberItem.member)
-        val dialog: AlertDialog = builder.show()
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialog.setOnDismissListener { _viewModel.loadTempMemberValues(null) }
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
+            setNegativeButton("Delete") { dialog, _ -> }
+            setPositiveButton("Update") { dialog, _ -> }
+        }
 
-        dialogBinding.addMemberButton.setOnClickListener {
-            if (_viewModel.createUpdateTempMember(memberItem)) {
+        val dialog = builder.show()
+        dialog.apply {
+            setOnDismissListener { _viewModel.loadTempMemberValues(null) }
+            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { if (_viewModel.createUpdateTempMember()) dialog.dismiss() }
+            getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                if (memberItem.member.bidTime == null) {
+                    launchDeleteMemberConfirmationDialog(memberItem)
+                } else if (!_viewModel.isBettingOpen.value && _viewModel.isPoolActive.value) {
+                    _viewModel.showSnackBar.value =
+                        "Betting has locked and pool is still active, you are unable to remove this member at this time."
+                } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
+                    _viewModel.showSnackBar.value =
+                        "You need to clear your bet before leaving this pool"
+                    launchSetMemberBetDialog(memberItem)
+                } else {
+                    _viewModel.showSnackBar.value =
+                        "You are unable to remove this member at this time"
+                }
                 dialog.dismiss()
             }
-        }
-        dialogBinding.cancelButton.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialogBinding.deleteButton.setOnClickListener {
-            if (memberItem.member.bidTime == null) {
-                launchDeleteMemberConfirmationDialog(memberItem)
-            } else if (!_viewModel.isBettingOpen.value && _viewModel.isPoolActive.value) {
-                _viewModel.showSnackBar.value =
-                    "Betting has locked and pool is still active, you are unable to remove this member at this time."
-            } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
-                _viewModel.showSnackBar.value =
-                    "You need to clear your bet before leaving this pool"
-                launchSetMemberBetDialog(memberItem)
-            } else {
-                _viewModel.showSnackBar.value = "You are unable to remove this member at this time"
-            }
-            dialog.dismiss()
         }
     }
 
