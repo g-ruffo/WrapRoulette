@@ -1,7 +1,5 @@
 package ca.veltus.wraproulette.ui.pools.joinpool
 
-import android.app.AlertDialog.THEME_HOLO_DARK
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
+import ca.veltus.wraproulette.databinding.DatePickerDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentJoinPoolBinding
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
+import ca.veltus.wraproulette.utils.Constants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,6 +26,7 @@ class JoinPoolFragment : BaseFragment() {
 
     override val _viewModel by viewModels<PoolsViewModel>()
     private var _binding: FragmentJoinPoolBinding? = null
+    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -55,33 +58,37 @@ class JoinPoolFragment : BaseFragment() {
     // Launch date dialog and listen for its result.
     fun launchDatePickerDialog() {
         val calendar = Calendar.getInstance()
-        val selectedYear = calendar.get(Calendar.YEAR)
-        val selectedMonth = calendar.get(Calendar.MONTH)
-        val selectedDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val submitButtonText = "Set"
+        val titleText = "Pool Date"
+        val messageText = "Set the pools date according to the call sheet"
 
-        val datePickerListener =
-            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = DatePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.apply {
+            title.text = titleText
+            message.text = messageText
+            datePicker.minDate = calendar.time.time - Constants.YEAR
+            datePicker.maxDate = calendar.time.time + Constants.YEAR
+        }
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(submitButtonText) { dialog, _ -> }
+        }
+
+        val dialog = builder.show()
+
+        dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            view.datePicker.apply {
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, month)
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                _viewModel.setPoolDate(
-                    SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(
-                        calendar.time
-                    )
-                )
             }
-
-        val dialog = DatePickerDialog(
-            requireContext(),
-            THEME_HOLO_DARK,
-            datePickerListener,
-            selectedYear,
-            selectedMonth,
-            selectedDay
-        )
-
-        dialog.show()
+            _viewModel.setPoolDate(formatter.format(calendar.time))
+            dialog.dismiss()
+        }
     }
-
 }
