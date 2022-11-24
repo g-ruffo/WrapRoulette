@@ -19,6 +19,7 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.BetNumberPickerDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
 import ca.veltus.wraproulette.databinding.MarginNumberPickerDialogBinding
+import ca.veltus.wraproulette.databinding.TimePickerDialogBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -92,30 +93,54 @@ class AddPoolFragment : BaseFragment() {
 
     fun launchTimePickerDialog(isStartTime: Boolean = true) {
         val time = Calendar.getInstance()
+        time.set(Calendar.SECOND, 0)
+        time.set(Calendar.MILLISECOND, 0)
 
-        val timePickerListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            time.set(Calendar.MINUTE, minute)
-            time.set(Calendar.SECOND, 0)
-            time.set(Calendar.MILLISECOND, 0)
+        val submitButtonText: String
+        val titleText: String
+        val messageText: String
+
+        when (isStartTime) {
+            true -> {
+                submitButtonText = "Set"
+                titleText = "Start Time"
+                messageText =
+                    "Set the pools start time according to the call sheet"
+            }
+            false -> {
+                submitButtonText = "Set"
+                titleText = "Lock Betting"
+                messageText = "At this time no additional bets can be made and are final."
+            }
+        }
+
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.apply {
+            title.text = titleText
+            message.text = messageText
+            timePicker.setIs24HourView(true)
+            timePicker.hour = time.get(Calendar.HOUR_OF_DAY)
+            timePicker.minute = time.get(Calendar.MINUTE)
+        }
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(submitButtonText) { dialog, _ -> }
+        }
+
+        val dialog = builder.show()
+
+        dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                time.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
+                time.set(Calendar.MINUTE, view.timePicker.minute)
 
             _viewModel.setPoolTime(Date(time.timeInMillis), isStartTime)
-        }
 
-        val dialog = TimePickerDialog(
-            requireContext(),
-            THEME_HOLO_DARK,
-            timePickerListener,
-            time.get(Calendar.HOUR_OF_DAY),
-            time.get(Calendar.MINUTE),
-            true
-        )
-        if (isStartTime) {
-            dialog.setTitle("Start Time")
-        } else {
-            dialog.setTitle("Lock Betting")
-        }
-        dialog.show()
+                dialog.dismiss()
+            }
     }
 
     // Launch date dialog and listen for its result.
