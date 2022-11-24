@@ -1,8 +1,6 @@
 package ca.veltus.wraproulette.ui.home.bids
 
 import android.app.AlertDialog
-import android.app.TimePickerDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +17,7 @@ import ca.veltus.wraproulette.data.objects.MemberItem
 import ca.veltus.wraproulette.databinding.AddMemberDialogBinding
 import ca.veltus.wraproulette.databinding.FragmentBidsBinding
 import ca.veltus.wraproulette.databinding.MemberOptionsDialogBinding
+import ca.veltus.wraproulette.databinding.TimePickerDialogBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.home.HomeViewModel
 import ca.veltus.wraproulette.utils.toMemberItem
@@ -159,48 +158,53 @@ class BidsFragment : BaseFragment() {
 
     private fun launchSetMemberBetDialog(memberItem: MemberItem) {
         val time = Calendar.getInstance()
-        val timePickerListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            time.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            time.set(Calendar.MINUTE, minute)
-            time.set(Calendar.SECOND, 0)
-            time.set(Calendar.MILLISECOND, 0)
+        time.set(Calendar.SECOND, 0)
+        time.set(Calendar.MILLISECOND, 0)
 
-            if (time.time.before(_viewModel.poolStartTime.value)) {
-                time.add(Calendar.DATE, 1)
-            }
-
-            _viewModel.setMemberPoolBet(
-                memberItem.member.poolId, memberItem.member.tempMemberUid!!, time.time
-            )
-
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.apply {
+            title.text = "Set Members Bet Time"
+            message.text =
+                "Set ${memberItem.member.displayName}'s bid time using the spinner below."
+            timePicker.setIs24HourView(true)
+            timePicker.hour = time.get(Calendar.HOUR_OF_DAY)
+            timePicker.minute = time.get(Calendar.MINUTE)
+        }
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton("Bet") { dialog, _ -> }
         }
 
-        val timePickerDialog = TimePickerDialog(
-            requireContext(),
-            AlertDialog.THEME_HOLO_LIGHT,
-            timePickerListener,
-            time.get(Calendar.HOUR_OF_DAY),
-            time.get(Calendar.MINUTE),
-            true
-        )
-        if (memberItem.member.bidTime != null) {
-            timePickerDialog.setButton(
-                DialogInterface.BUTTON_NEUTRAL, "Clear"
-            ) { _, _ ->
+        if (memberItem.member.bidTime != null) builder.setNegativeButton("Clear") { dialog, _ -> }
+
+        val dialog = builder.show()
+
+        dialog.apply {
+            getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 _viewModel.setMemberPoolBet(
                     memberItem.member.poolId, memberItem.member.tempMemberUid!!, null
                 )
+                dialog.dismiss()
+            }
+
+            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                var selectedTime = time
+                selectedTime.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
+                selectedTime.set(Calendar.MINUTE, view.timePicker.minute)
+
+                if (selectedTime.time.before(_viewModel.poolStartTime.value)) {
+                    time.add(Calendar.DATE, 1)
+                }
+                _viewModel.setMemberPoolBet(
+                    memberItem.member.poolId, memberItem.member.tempMemberUid!!, time.time
+                )
+                dialog.dismiss()
             }
         }
-        timePickerDialog.setTitle(memberItem.member.displayName)
-
-        timePickerDialog.setButton(
-            DialogInterface.BUTTON_POSITIVE, "Bet"
-        ) { _, _ -> }
-        timePickerDialog.setButton(
-            DialogInterface.BUTTON_NEGATIVE, "Cancel"
-        ) { _, _ -> }
-        timePickerDialog.show()
     }
 
     private fun launchDeleteMemberConfirmationDialog(memberItem: MemberItem) {
