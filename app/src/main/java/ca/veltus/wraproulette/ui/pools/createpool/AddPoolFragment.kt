@@ -150,20 +150,17 @@ class AddPoolFragment : BaseFragment() {
                 _viewModel.setPoolPriceAndMargin(
                     view.numberPickerMinutes.displayedValues[view.numberPickerMinutes.value], false
                 )
-            }.setNeutralButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
+            }.setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
         } else {
             val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
             builder.setView(view.root)
-            builder.setPositiveButton("Set") { dialog, _ ->
-                _viewModel.setPoolPriceAndMargin(
-                    view.numberPickerTens.value.toString() + view.numberPickerOnes.value.toString(),
-                    true
-                )
-            }.setNeutralButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
+            builder.setPositiveButton("Set") { _, _ ->
+                var result = view.numberPickerOnes.value.toString()
+                if (view.numberPickerTens.value != 0) result =
+                    view.numberPickerTens.value.toString() + result
+
+                _viewModel.setPoolPriceAndMargin(result, true)
+            }.setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
         }
         builder.show()
     }

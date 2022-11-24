@@ -204,10 +204,11 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusableInTouchMode="false"
                             android:hint="Price"
                             android:inputType="none"
-                            android:onClick="@{() -> fragment.launchNumberPickerDialog(true)}"
-                            android:text="@{`$` + viewModel.poolBetAmount + `.00`}" />
+                            android:onClick="@{() -> fragment.launchNumberPickerDialog(false)}"
+                            android:text="@{viewModel.poolBetAmount == null ? null : `$` + viewModel.poolBetAmount + `.00`}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -224,7 +225,7 @@
                         app:layout_constraintStart_toEndOf="@+id/selectBetAmountTextInputLayout"
                         app:startIconDrawable="@drawable/ic_baseline_align_horizontal_center_24">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/selectMarginAutoComplete"
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
@@ -232,8 +233,8 @@
                             android:focusableInTouchMode="false"
                             android:hint="Margin"
                             android:inputType="none"
-                            android:onClick="@{() -> fragment.launchNumberPickerDialog(false)}"
-                            android:text="@{viewModel.poolMargin}" />
+                            android:onClick="@{() -> fragment.launchNumberPickerDialog(true)}"
+                            android:text="@{viewModel.poolMargin == null ? null : viewModel.poolMargin + ` min.`}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
