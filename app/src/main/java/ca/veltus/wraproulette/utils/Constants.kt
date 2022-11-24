@@ -14,6 +14,9 @@ object Constants {
     const val EMAIL_ERROR = 1
     const val DEPARTMENT_ERROR = 2
     const val NAME_ERROR = 3
+    const val POOL_NAME_ERROR = 4
+    const val POOL_DATE_ERROR = 5
+    const val POOL_START_ERROR = 6
     const val SET_FINAL_BETS = 0
     const val SET_BET_AMOUNT = 1
     const val SET_MARGIN_TIME = 2

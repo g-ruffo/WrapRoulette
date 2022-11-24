@@ -14,7 +14,9 @@
             type="ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragment" />
 
         <import type="android.view.View" />
+
         <import type="ca.veltus.wraproulette.utils.Constants" />
+
         <import type="android.text.TextUtils" />
 
     </data>
@@ -55,6 +57,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/productionEditTextLayout"
                         style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorPoolNameText }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -73,9 +76,9 @@
                             android:layout_height="wrap_content"
                             android:hint="Production name"
                             android:inputType="textCapWords"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
                             android:text="@={viewModel.poolProduction}" />
                     </com.google.android.material.textfield.TextInputLayout>
-
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/passwordEditTextLayout"
@@ -103,6 +106,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/selectDateTextInputLayout"
                         style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorPoolDateText }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -122,6 +126,7 @@
                             android:hint="Date"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchDatePickerDialog()}"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
                             android:text="@={viewModel.poolDate}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -129,6 +134,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/selectStartTimeTextInputLayout"
                         style="@style/AccountTextInputOuterFieldStyle"
+                        error="@{ viewModel.errorPoolStartText }"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -151,6 +157,7 @@
                             android:hint="Start Time"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchTimePickerDialog(true)}"
+                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_START_ERROR)}"
                             android:textColorHint="@color/cardViewTitleColor" />
 
                     </com.google.android.material.textfield.TextInputLayout>
