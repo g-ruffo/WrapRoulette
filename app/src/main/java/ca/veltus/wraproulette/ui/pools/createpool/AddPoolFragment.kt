@@ -1,8 +1,5 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
-import android.app.AlertDialog.THEME_HOLO_DARK
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,12 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
-import ca.veltus.wraproulette.databinding.BetNumberPickerDialogBinding
-import ca.veltus.wraproulette.databinding.FragmentAddPoolBinding
-import ca.veltus.wraproulette.databinding.MarginNumberPickerDialogBinding
-import ca.veltus.wraproulette.databinding.TimePickerDialogBinding
+import ca.veltus.wraproulette.databinding.*
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
+import ca.veltus.wraproulette.utils.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -104,8 +99,7 @@ class AddPoolFragment : BaseFragment() {
             true -> {
                 submitButtonText = "Set"
                 titleText = "Start Time"
-                messageText =
-                    "Set the pools start time according to the call sheet"
+                messageText = "Set the pools start time according to the call sheet"
             }
             false -> {
                 submitButtonText = "Set"
@@ -134,40 +128,51 @@ class AddPoolFragment : BaseFragment() {
         val dialog = builder.show()
 
         dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                time.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
-                time.set(Calendar.MINUTE, view.timePicker.minute)
+            time.set(Calendar.HOUR_OF_DAY, view.timePicker.hour)
+            time.set(Calendar.MINUTE, view.timePicker.minute)
 
             _viewModel.setPoolTime(Date(time.timeInMillis), isStartTime)
 
-                dialog.dismiss()
-            }
+            dialog.dismiss()
+        }
     }
 
     // Launch date dialog and listen for its result.
     fun launchDatePickerDialog() {
         val calendar = Calendar.getInstance()
 
-        val datePickerListener =
-            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        val submitButtonText = "Set"
+        val titleText = "Pool Date"
+        val messageText = "Set the pools date according to the call sheet"
+
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = DatePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.apply {
+            title.text = titleText
+            message.text = messageText
+            datePicker.minDate = calendar.time.time - Constants.YEAR
+            datePicker.maxDate = calendar.time.time + Constants.YEAR
+        }
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(submitButtonText) { dialog, _ -> }
+        }
+
+        val dialog = builder.show()
+
+        dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            view.datePicker.apply {
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, month)
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                _viewModel.setPoolDate(
-                    SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(
-                        calendar.time
-                    )
-                )
             }
-
-        DatePickerDialog(
-            requireContext(),
-            THEME_HOLO_DARK,
-            datePickerListener,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DATE)
-        ).show()
+            _viewModel.setPoolDate(formatter.format(calendar.time))
+            dialog.dismiss()
+        }
     }
 
     fun launchNumberPickerDialog(isTimeMargin: Boolean = false) {
