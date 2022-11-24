@@ -216,7 +216,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
             }
         }
         binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
-
             if (position == 2) {
                 binding.tabLayout.getTabAt(2)!!.removeBadge()
                 fabView.animate().translationX(400f).alpha(0f).setDuration(200)
@@ -244,7 +243,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         builder.apply {
             setView(view.root)
             setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Create") { dialog, _ -> }
+            setPositiveButton("Create") { _, _ -> }
         }
 
         val dialog = builder.show()
@@ -292,11 +291,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
         builder.apply {
             setView(view.root)
             setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton(submitButtonText) { dialog, _ -> }
+            setPositiveButton(submitButtonText) { _, _ -> }
         }
 
         if ((_viewModel.userBetTime.value != null && !setWrapTime) || (setWrapTime && _viewModel.poolEndTime.value != null)) {
-            builder.setNegativeButton("Clear") { dialog, _ -> }
+            builder.setNegativeButton("Clear") { _, _ -> }
         }
 
         val dialog = builder.show()

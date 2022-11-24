@@ -269,7 +269,7 @@ class PoolsViewModel @Inject constructor(
     fun deletePool() {
         viewModelScope.launch {
             repository.deletePool(poolDocUid.value!!) {
-                navigateBack()
+                navigateAddPoolToHomeFragment()
             }
         }
     }
