@@ -1,11 +1,9 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -74,16 +72,20 @@ class AddPoolFragment : BaseFragment() {
     }
 
     fun launchDeletePoolAlert() {
-        val dialog = AlertDialog.Builder(requireActivity())
-        dialog.setTitle("Are You Sure?")
-        dialog.setMessage("You are about to delete this pool. Click Yes to continue or No to cancel")
-        dialog.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-            _viewModel.deletePool()
-        })
-        dialog.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
-            dialog.dismiss()
-        })
-        dialog.show()
+        val message = "You are about to delete this pool. Click Yes to continue or No to cancel."
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.message.text = message
+        view.title.text = "Are You Sure?"
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("No") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton("Yes") { _, _ ->
+                _viewModel.deletePool()
+            }
+        }.show()
     }
 
     fun launchTimePickerDialog(isStartTime: Boolean = true) {
