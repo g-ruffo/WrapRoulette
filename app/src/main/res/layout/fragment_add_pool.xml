@@ -14,9 +14,7 @@
             type="ca.veltus.wraproulette.ui.pools.createpool.AddPoolFragment" />
 
         <import type="android.view.View" />
-
         <import type="ca.veltus.wraproulette.utils.Constants" />
-
         <import type="android.text.TextUtils" />
 
     </data>

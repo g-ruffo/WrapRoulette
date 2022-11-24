@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.BetNumberPickerDialogBinding
@@ -20,6 +23,8 @@ import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,12 +61,19 @@ class AddPoolFragment : BaseFragment() {
 
     private fun checkForEditPoolArgs() {
         val args = AddPoolFragmentArgs.fromBundle(requireArguments()).poolId
-        if (args != null) {
-            _viewModel.loadEditPool(args)
-            binding.createButton.text = "Update"
-            activityCast.supportActionBar!!.title = "Edit Pool"
-        } else {
-            activityCast.supportActionBar!!.title = "New Pool"
+        if (args != null) _viewModel.loadEditPool(args)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                _viewModel.poolDocUid.collectLatest {
+                    if (it.isNullOrBlank()) {
+                        activityCast.supportActionBar!!.title = "New Pool"
+                    } else {
+                        binding.createButton.text = "Update"
+                        activityCast.supportActionBar!!.title = "Edit Pool"
+                    }
+                }
+            }
         }
     }
 
