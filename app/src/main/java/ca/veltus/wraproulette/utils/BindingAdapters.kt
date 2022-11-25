@@ -284,6 +284,14 @@ object BindingAdapters {
     }
 
     @BindingAdapter(
+        value = ["setResetEnabledArg1", "setResetEnabledArg2"], requireAll = true
+    )
+    @JvmStatic
+    fun setResetEnabledArg(view: View, arg1: String?, arg2: Boolean) {
+        view.isEnabled = !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !arg2
+    }
+
+    @BindingAdapter(
         value = ["setAccountEnabledArg1", "setAccountEnabledArg2", "setAccountEnabledArg3"],
         requireAll = true
     )
