@@ -283,6 +283,16 @@ object BindingAdapters {
         this.isEnabled = !(message.isNullOrEmpty() || message.isNullOrBlank())
     }
 
+    @BindingAdapter(
+        value = ["setAccountEnabledArg1", "setAccountEnabledArg2", "setAccountEnabledArg3"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun setAccountEnabledArg(view: View, arg1: String?, arg2: String?, arg3: Boolean) {
+        view.isEnabled =
+            !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && !arg3
+    }
+
     @BindingAdapter("error")
     @JvmStatic
     internal fun TextInputLayout.setError(errorMessage: ErrorMessage<String>?) {

@@ -48,6 +48,7 @@
     <color name="cardViewTitleColor">#404040</color>
     <color name="cardBackgroundWhite">#F8F8F8</color>
     <color name="cardStartTimeBackground">#99ff99</color>
+    <color name="inputLayoutDisabled">#50404040</color>
 
     <color name="transparent">#00000000</color>
 

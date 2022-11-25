@@ -95,7 +95,7 @@
     <style name="AccountTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="startIconTint">@color/blueLight</item>
+        <item name="startIconTint">@color/color_states_pir_image</item>
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginBottom">15dp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
@@ -104,7 +104,7 @@
         <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
         <item name="boxBackgroundColor">@color/blueGrey</item>
         <item name="android:textColorHint">@color/cardViewTitleColor</item>
-        <item name="android:textColor">@color/blueInputHintTextColor</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
         <item name="helperTextTextColor">@color/fabIconTint</item>
         <item name="colorAccent">@color/fabIconTint</item>
         <item name="colorControlNormal">@color/fabIconTint</item>
@@ -112,7 +112,7 @@
         <item name="boxBackgroundMode">outline</item>
         <item name="colorPrimary">@color/fabIconTint</item>
         <item name="colorOnSurface">@color/fabIconTint</item>
-        <item name="hintTextColor">@color/blueInputHintTextColor</item>
+        <item name="hintTextColor">@color/color_states_pir_image</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="android:textColorPrimary">@color/fabIconTint</item>
         <item name="android:titleTextColor">@color/fabIconTint</item>
@@ -131,8 +131,8 @@
     <style name="AccountTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/cardViewTitleColor</item>
-        <item name="android:textColorHint">@color/blueLight</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="android:textColorHint">@color/color_states_pir_image</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
@@ -188,6 +188,7 @@
         <item name="android:background">@drawable/rounded_corners_button_login</item>
         <item name="android:textColor">@color/fabIconTint</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
         <item name="backgroundTint">@color/color_states_material_button</item>
     </style>
 
