@@ -175,6 +175,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signUpButton"
                 style="@style/loginButtonStyle"
+                setSignupEnabledArg1="@{viewModel.username}"
+                setSignupEnabledArg2="@{viewModel.emailAddress}"
+                setSignupEnabledArg3="@{viewModel.department}"
+                setSignupEnabledArg4="@{viewModel.password}"
+                setSignupEnabledArg5="@{viewModel.showLoading}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="100dp"

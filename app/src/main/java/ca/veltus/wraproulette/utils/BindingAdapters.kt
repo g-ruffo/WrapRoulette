@@ -303,6 +303,18 @@ object BindingAdapters {
             !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && (arg3 != null) && !arg4
     }
 
+    @BindingAdapter(
+        value = ["setSignupEnabledArg1", "setSignupEnabledArg2", "setSignupEnabledArg3", "setSignupEnabledArg4", "setSignupEnabledArg5"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun setSignupEnabledArg(
+        view: View, arg1: String?, arg2: String?, arg3: String?, arg4: String?, arg5: Boolean
+    ) {
+        view.isEnabled =
+            !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && (arg3 != null) && !(arg4.isNullOrEmpty() || arg4.isNullOrBlank()) && !arg5
+    }
+
     @BindingAdapter("error")
     @JvmStatic
     internal fun TextInputLayout.setError(errorMessage: ErrorMessage<String>?) {
