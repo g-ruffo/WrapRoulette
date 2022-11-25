@@ -211,5 +211,14 @@
         <item name="android:layout_margin">@dimen/backButtonLayoutMargin</item>
     </style>
 
+    <style name="progressBar">
+        <item name="android:elevation">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:visibility">gone</item>
+        <item name="indicatorColor">@color/highlightOrange</item>
+        <item name="indicatorSize">60dp</item>
+        <item name="trackThickness">10dp</item>
+    </style>
 
 </resources>

@@ -23,26 +23,6 @@
             android:layout_height="match_parent"
             android:visibility="@{viewModel.showNoData == false ? View.VISIBLE : View.GONE}">
 
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:elevation="8dp"
-                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                android:indeterminate="true"
-                android:secondaryProgressTint="@color/black"
-                android:visibility="gone"
-                app:indicatorColor="@color/earningsGreen"
-                app:indicatorSize="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:trackColor="@color/purpleLogoLight"
-                app:trackThickness="15dp" />
-
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
@@ -153,6 +133,24 @@
             android:textSize="22sp"
             android:visibility="@{viewModel.showNoData == true ? View.VISIBLE : View.GONE}"
             app:drawableTopCompat="@drawable/ic_baseline_monetization_on_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            android:indeterminate="true"
+            android:secondaryProgressTint="@color/black"
+            android:theme="@style/progressBar"
+            android:visibility="visible"
+            app:indicatorColor="@color/highlightOrange"
+            app:indicatorSize="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

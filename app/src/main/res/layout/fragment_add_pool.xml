@@ -318,15 +318,14 @@
                 android:gravity="center"
                 android:indeterminate="true"
                 android:secondaryProgressTint="@color/black"
-                android:visibility="gone"
-                app:indicatorColor="@color/earningsGreen"
-                app:indicatorSize="100dp"
+                android:theme="@style/progressBar"
+                android:visibility="visible"
+                app:indicatorColor="@color/highlightOrange"
+                app:indicatorSize="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:trackColor="@color/purpleLogoLight"
-                app:trackThickness="15dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
