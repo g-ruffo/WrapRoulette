@@ -1,7 +1,9 @@
 package ca.veltus.wraproulette.ui.account
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,6 +12,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -37,6 +40,7 @@ class AccountFragment : BaseFragment() {
     override val _viewModel by viewModels<LoginSignupViewModel>()
 
     private val RC_SELECT_IMAGE = 2
+    private val STORAGE_REQUEST_CODE = 8
     private lateinit var selectedImageBytes: ByteArray
     private var _binding: FragmentAccountBinding? = null
 
@@ -90,7 +94,6 @@ class AccountFragment : BaseFragment() {
         _binding = null
     }
 
-    // TODO: Replace with ActivityResultContract
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -98,7 +101,7 @@ class AccountFragment : BaseFragment() {
             val selectedImagePath = data.data
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
 
-            val cursor: Cursor = activity?.contentResolver!!.query(
+            val cursor: Cursor = requireActivity().contentResolver!!.query(
                 selectedImagePath!!, filePathColumn, null, null, null
             )!!
 
@@ -116,19 +119,46 @@ class AccountFragment : BaseFragment() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == STORAGE_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            // Permission is denied
+            _viewModel.showSnackBar.value =
+                "You need to grant permissions to select a new profile image."
+        }
+    }
+
     private fun setupOnClickListeners() {
         binding.profilePictureImageView.setOnClickListener {
-            val intent = Intent().apply {
-                type = "image/*"
-                action = Intent.ACTION_PICK
-                putExtra(
-                    Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/gif")
+            if (arePermissionsGranted()) {
+                val intent = Intent().apply {
+                    type = "image/*"
+                    action = Intent.ACTION_PICK
+                    putExtra(
+                        Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/gif")
+                    )
+                }
+                startActivityForResult(
+                    Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE
                 )
+            } else {
+                requestPermission()
             }
-            // TODO: Replace with ActivityResultContract
-            startActivityForResult(
-                Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE
+        }
+    }
+
+    private fun arePermissionsGranted() = ActivityCompat.checkSelfPermission(
+        requireActivity(), READ_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
+
+    private fun requestPermission() {
+        if (!arePermissionsGranted()) {
+            val permissions = arrayOf(
+                READ_EXTERNAL_STORAGE
             )
+            requestPermissions(permissions, STORAGE_REQUEST_CODE)
         }
     }
 }
