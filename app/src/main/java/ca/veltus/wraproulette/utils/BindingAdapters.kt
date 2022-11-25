@@ -293,6 +293,16 @@ object BindingAdapters {
             !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && !arg3
     }
 
+    @BindingAdapter(
+        value = ["setPoolEnabledArg1", "setPoolEnabledArg2", "setPoolEnabledArg3", "setPoolEnabledArg4"],
+        requireAll = true
+    )
+    @JvmStatic
+    fun setPoolEnabledArg(view: View, arg1: String?, arg2: String?, arg3: Date?, arg4: Boolean) {
+        view.isEnabled =
+            !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && (arg3 != null) && !arg4
+    }
+
     @BindingAdapter("error")
     @JvmStatic
     internal fun TextInputLayout.setError(errorMessage: ErrorMessage<String>?) {

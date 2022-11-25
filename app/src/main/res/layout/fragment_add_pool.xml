@@ -74,7 +74,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Production name"
+                            android:hint="Production Name*"
                             android:inputType="textCapWords"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
                             android:text="@={viewModel.poolProduction}" />
@@ -98,7 +98,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Pool password"
+                            android:hint="Pool Password"
                             android:inputType="textEmailAddress"
                             android:text="@={viewModel.poolPassword}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -123,7 +123,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Date"
+                            android:hint="Date*"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchDatePickerDialog()}"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
@@ -154,7 +154,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Start Time"
+                            android:hint="Start Time*"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchTimePickerDialog(true)}"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_START_ERROR)}"
@@ -288,6 +288,10 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/createButton"
                             style="@style/mainBlueButtonStyle"
+                            setPoolEnabledArg1="@{viewModel.poolProduction}"
+                            setPoolEnabledArg2="@{viewModel.poolDate}"
+                            setPoolEnabledArg3="@{viewModel.poolStartTime}"
+                            setPoolEnabledArg4="@{viewModel.showLoading}"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="22dp"
