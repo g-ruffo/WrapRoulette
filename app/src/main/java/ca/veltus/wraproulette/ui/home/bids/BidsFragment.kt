@@ -135,7 +135,12 @@ class BidsFragment : BaseFragment() {
         val dialog = builder.show()
         dialog.apply {
             setOnDismissListener { _viewModel.loadTempMemberValues(null) }
-            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { if (_viewModel.createUpdateTempMember()) dialog.dismiss() }
+            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if (_viewModel.createUpdateTempMember(
+                        memberItem
+                    )
+                ) dialog.dismiss()
+            }
             getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 if (memberItem.member.bidTime == null) {
                     launchDeleteMemberConfirmationDialog(memberItem)

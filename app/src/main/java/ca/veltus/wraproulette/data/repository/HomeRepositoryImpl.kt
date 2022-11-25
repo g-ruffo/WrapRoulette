@@ -294,13 +294,20 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun updateTempPoolMember(member: Member, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                poolsCollectionReference.document(member.poolId).collection("members")
-                    .document(member.tempMemberUid!!).set(member, SetOptions.merge()).await()
-                onComplete(null)
-            } catch (e: FirebaseFirestoreException) {
-                Log.e(TAG, "updateTempPoolMember: ${e.message}")
-                onComplete(e.message)
+            val result = poolsCollectionReference.document(member.poolId).collection("members")
+                .whereEqualTo("displayName", member.displayName)
+                .whereEqualTo("department", member.department).get().await()
+            if (result.isEmpty) {
+                try {
+                    poolsCollectionReference.document(member.poolId).collection("members")
+                        .document(member.tempMemberUid!!).set(member, SetOptions.merge()).await()
+                    onComplete(null)
+                } catch (e: FirebaseFirestoreException) {
+                    Log.e(TAG, "updateTempPoolMember: ${e.message}")
+                    onComplete(e.message)
+                }
+            } else {
+                onComplete("Member already exists")
             }
         }
     }
