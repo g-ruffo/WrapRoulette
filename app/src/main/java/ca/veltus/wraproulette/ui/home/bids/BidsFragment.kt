@@ -57,14 +57,15 @@ class BidsFragment : BaseFragment() {
     ): View {
         _binding = FragmentBidsBinding.inflate(inflater, container, false)
 
-        binding.viewModel = _viewModel
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.viewModel = _viewModel
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.memberList.collectLatest {
@@ -118,7 +119,7 @@ class BidsFragment : BaseFragment() {
             setView(view.root)
             setPositiveButton("Bet") { _, _ -> launchSetMemberBetDialog(memberItem) }
             setNegativeButton("Edit") { _, _ -> launchUpdateTempMemberDialog(memberItem) }
-            setNeutralButton("Close") { dialog, _ -> dialog.cancel() }
+            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
         }.show()
     }
 

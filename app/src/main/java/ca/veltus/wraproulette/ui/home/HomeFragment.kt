@@ -41,27 +41,33 @@ class HomeFragment : BaseFragment(), MenuProvider {
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    private var adapter: ViewPagerAdapter? = null
+    private var tabLayoutMediator: TabLayoutMediator? = null
+
     override val _viewModel by viewModels<HomeViewModel>()
     private val activityCast by lazy { activity as WrapRouletteActivity }
     private lateinit var menuHost: MenuHost
-    private lateinit var fabView: View
+
+    private var _fabView: View? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val fabView get() = _fabView!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.viewModel = _viewModel
-
-        val adapter = ViewPagerAdapter(this)
-
-        binding.viewPager.adapter = adapter
-
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = ViewPagerAdapter.fragmentTitle[position]
-        }.attach()
-
         setupMenuOptions()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.viewModel = _viewModel
 
         binding.bidFab.setOnClickListener {
             launchBetAndWrapDialog()
@@ -75,13 +81,17 @@ class HomeFragment : BaseFragment(), MenuProvider {
             launchBetAndWrapDialog(true)
         }
 
-        return binding.root
-    }
+        adapter = ViewPagerAdapter(this)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
-        fabView = binding.bidFab
+        binding.viewPager.adapter = adapter
+        tabLayoutMediator =
+            TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+                tab.text = ViewPagerAdapter.fragmentTitle[position]
+            }
+        tabLayoutMediator?.attach()
+
+        _fabView = binding.bidFab
+
         checkAdminStatus()
 
         lifecycleScope.launch {
@@ -159,6 +169,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        _fabView = null
+        binding.viewPager.adapter = null
+        adapter = null
         _binding = null
         Log.i(TAG, "onDestroyView: called")
     }
@@ -174,10 +189,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
                 _viewModel.isPoolAdmin.collectLatest {
                     when (it) {
                         true -> {
-                            fabView = binding.adminFabLayout
+                            _fabView = binding.adminFabLayout
                         }
                         false -> {
-                            fabView = binding.bidFab
+                            _fabView = binding.bidFab
                         }
                     }
                 }
@@ -333,8 +348,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     private fun launchConfirmationDialog(time: Date?, isLeavePool: Boolean = false) {
         val format = SimpleDateFormat("HH:mm MMM d, yyyy", Locale.ENGLISH)
-        var message = ""
-        message = if (time == null && !isLeavePool) {
+        val message: String = if (time == null && !isLeavePool) {
             "Are you sure you want to clear the set wrap time?"
         } else if (time != null && !isLeavePool) {
             "Please confirm the selected wrap time is correct: ${format.format(time)}"
