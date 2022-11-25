@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +32,17 @@ class AddPoolFragment : BaseFragment() {
 
     override val _viewModel by viewModels<PoolsViewModel>()
 
-    private lateinit var binding: FragmentAddPoolBinding
+    private var _binding: FragmentAddPoolBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
+
     private val activityCast by lazy { activity as WrapRouletteActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
 
         binding.viewModel = _viewModel
         binding.fragment = this
@@ -51,6 +56,12 @@ class AddPoolFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: ")
     }
 
     private fun checkForEditPoolArgs() {

@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.authentication.reset
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.databinding.FragmentResetPasswordBinding
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,12 +21,15 @@ class ResetPasswordFragment : BaseFragment() {
 
     override val _viewModel: LoginSignupViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentResetPasswordBinding
+    private var _binding: FragmentResetPasswordBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding =
+        _binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
 
         binding.viewModel = _viewModel
@@ -37,6 +40,11 @@ class ResetPasswordFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: ")
     }
 }

@@ -35,9 +35,10 @@ class BidsFragment : BaseFragment() {
         private const val TAG = "BidsFragment"
     }
 
-    private var _binding: FragmentBidsBinding? = null
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
     private val activityCast by lazy { activity as WrapRouletteActivity }
+
+    private var _binding: FragmentBidsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -83,10 +84,16 @@ class BidsFragment : BaseFragment() {
         Log.i(TAG, "onStop: called")
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: called")
+    }
+
+
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy: called")
-        _binding = null
     }
 
     private fun setupRecyclerView(items: List<MemberItem>) {

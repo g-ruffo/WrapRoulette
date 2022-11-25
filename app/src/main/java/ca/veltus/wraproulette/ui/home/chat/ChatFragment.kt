@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.ui.home.chat
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,13 +29,18 @@ class ChatFragment : BaseFragment() {
         private const val TAG = "ChatFragment"
     }
 
-    private lateinit var binding: FragmentChatBinding
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
+
+    private var _binding: FragmentChatBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentChatBinding.inflate(inflater, container, false)
+        _binding = FragmentChatBinding.inflate(inflater, container, false)
 
         binding.viewModel = _viewModel
 
@@ -59,6 +65,12 @@ class ChatFragment : BaseFragment() {
                 inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: ")
     }
 
     private fun setupRecyclerView(items: List<Message>) {

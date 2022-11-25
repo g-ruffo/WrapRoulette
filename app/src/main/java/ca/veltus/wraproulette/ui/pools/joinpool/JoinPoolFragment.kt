@@ -26,11 +26,12 @@ class JoinPoolFragment : BaseFragment() {
 
     override val _viewModel by viewModels<PoolsViewModel>()
     private var _binding: FragmentJoinPoolBinding? = null
-    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

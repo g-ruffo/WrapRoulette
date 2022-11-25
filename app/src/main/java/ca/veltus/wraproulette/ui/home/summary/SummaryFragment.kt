@@ -103,6 +103,12 @@ class SummaryFragment : BaseFragment() {
         _viewModel.setIsScrolling()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: called")
+    }
+
     override fun onResume() {
         super.onResume()
         Log.i(TAG, "onResume: ")

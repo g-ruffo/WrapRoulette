@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.ui.pools
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,11 @@ class PoolsFragment : BaseFragment() {
 
     override val _viewModel by viewModels<PoolsViewModel>()
 
-    private lateinit var binding: FragmentPoolsBinding
+    private var _binding: FragmentPoolsBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     private val onItemClick = OnItemClickListener { item, _ ->
         if (item is PoolItem) {
@@ -43,7 +48,7 @@ class PoolsFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
 
         binding.viewModel = _viewModel
 
@@ -65,6 +70,12 @@ class PoolsFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: ")
     }
 
     private fun setupRecyclerView(items: List<PoolItem>) {

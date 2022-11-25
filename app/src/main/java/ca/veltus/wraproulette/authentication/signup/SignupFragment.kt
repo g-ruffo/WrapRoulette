@@ -30,12 +30,15 @@ class SignupFragment : BaseFragment() {
 
     override val _viewModel: LoginSignupViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentSignupBinding
+    private var _binding: FragmentSignupBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
 
         binding.viewModel = _viewModel
 
@@ -49,6 +52,12 @@ class SignupFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: ")
     }
 
     private fun observeSignup() {

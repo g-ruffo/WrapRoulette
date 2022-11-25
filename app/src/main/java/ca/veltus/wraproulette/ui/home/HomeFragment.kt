@@ -36,7 +36,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
         private const val TAG = "HomeFragment"
     }
 
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
+
     override val _viewModel by viewModels<HomeViewModel>()
     private val activityCast by lazy { activity as WrapRouletteActivity }
     private lateinit var menuHost: MenuHost
@@ -45,7 +49,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         binding.viewModel = _viewModel
 
@@ -151,6 +155,12 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onResume() {
         super.onResume()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.i(TAG, "onDestroyView: called")
     }
 
     override fun onDestroy() {
