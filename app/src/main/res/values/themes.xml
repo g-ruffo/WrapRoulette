@@ -196,6 +196,7 @@
         <item name="android:background">@drawable/rounded_corners_button_login</item>
         <item name="android:textColor">@color/bluePrimary</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
         <item name="android:backgroundTint">@color/color_states_material_button_login</item>
         <item name="backgroundTint">@color/color_states_material_button_login</item>
     </style>
