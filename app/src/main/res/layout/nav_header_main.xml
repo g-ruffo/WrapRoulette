@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
-        android:background="@color/bluePrimary"
+        android:background="@drawable/drawer_background_image"
         android:gravity="bottom"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -53,17 +53,6 @@
 
 
         </com.google.android.material.card.MaterialCardView>
-
-        <!--        <de.hdodenhof.circleimageview.CircleImageView-->
-        <!--            android:id="@+id/profileHeaderImageView"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:contentDescription="@string/nav_header_desc"-->
-        <!--            android:paddingTop="@dimen/nav_header_vertical_spacing"-->
-        <!--            android:src="@mipmap/ic_launcher_round"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/userNameHeaderTextView"
