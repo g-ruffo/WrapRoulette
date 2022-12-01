@@ -58,4 +58,5 @@
     <string name="productionName">Production name<font color='#FF0000'>*</font></string>
     <string name="poolPassword">Pool password</string>
     <string name="date">Date<font color='#FF0000'>*</font></string>
+    <string name="join">Join</string>
 </resources>

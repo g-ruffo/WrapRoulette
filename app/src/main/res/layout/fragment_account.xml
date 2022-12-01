@@ -15,9 +15,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_pattern"
-        android:backgroundTint="@color/backgroundBlueLight"
-        android:backgroundTintMode="src_over"
+        android:background="@color/greyBackgroundColor"
         android:fillViewport="true"
         tools:context=".ui.account.AccountFragment">
 
