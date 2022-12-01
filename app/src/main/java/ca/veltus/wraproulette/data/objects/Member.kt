@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.data.objects
 
 import android.view.View
 import ca.veltus.wraproulette.R
+import ca.veltus.wraproulette.databinding.MemberBidListItemBinding
 import ca.veltus.wraproulette.databinding.MemberListItemBinding
 import ca.veltus.wraproulette.databinding.WinnerMemberItemBinding
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
@@ -59,16 +60,11 @@ class MemberItem(
 
 class MemberBidItem(
     val member: Member, val userUid: String
-) : BindableItem<MemberListItemBinding>() {
+) : BindableItem<MemberBidListItemBinding>() {
 
-    override fun bind(viewBinding: MemberListItemBinding, position: Int) {
+    override fun bind(viewBinding: MemberBidListItemBinding, position: Int) {
         viewBinding.member = member
 
-        if (userUid != member.uid || member.tempMemberUid == null) {
-            viewBinding.editMemberIcon.visibility = View.GONE
-            viewBinding.cardView.isClickable = false
-            viewBinding.cardView.isFocusable = false
-        }
         if (!member.activeMember) {
             viewBinding.mainLayout.alpha = 0.5f
         }
@@ -82,7 +78,7 @@ class MemberBidItem(
     }
 
     override fun getLayout(): Int {
-        return R.layout.member_list_item
+        return R.layout.member_bid_list_item
     }
 
     companion object {
