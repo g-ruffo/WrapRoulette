@@ -209,7 +209,11 @@ class PoolsViewModel @Inject constructor(
         if (!poolDocUid.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 repository.updatePool(pool) {
-                    navigateBack()
+                    if (it.isNullOrEmpty()) {
+                        navigateBack()
+                    } else {
+                        showToast.postValue(it)
+                    }
                     showLoading.value = false
                 }
             }

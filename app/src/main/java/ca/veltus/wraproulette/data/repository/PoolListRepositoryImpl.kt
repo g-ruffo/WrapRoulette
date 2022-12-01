@@ -114,11 +114,20 @@ class PoolListRepositoryImpl @Inject constructor(
 
     override suspend fun updatePool(pool: Pool, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                poolsCollectionReference.document(pool.docId).set(pool, SetOptions.merge()).await()
-                onComplete(null)
-            } catch (e: FirebaseFirestoreException) {
-                onComplete(e.message)
+            // Check if pool with supplied parameters already exists.
+            val poolIsEmpty = poolsCollectionReference.whereEqualTo("production", pool.production)
+                .whereEqualTo("password", pool.password).whereEqualTo("date", pool.date).get()
+                .await().isEmpty
+            if (poolIsEmpty) {
+                try {
+                    poolsCollectionReference.document(pool.docId).set(pool, SetOptions.merge())
+                        .await()
+                    onComplete(null)
+                } catch (e: FirebaseFirestoreException) {
+                    onComplete(e.message)
+                }
+            } else {
+                onComplete("Pool already exists")
             }
         }
     }
