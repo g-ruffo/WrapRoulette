@@ -50,4 +50,9 @@
     <string name="resetPasswordSubtitle">Enter your email address to reset you password.</string>
     <string name="reset">Reset</string>
     <string name="backButton">Back button</string>
+    <string name="signUpTitle">Sign Up</string>
+    <string name="signUpSubtitle">Enter your details to register</string>
+    <string name="typeYourName">Type your name</string>
+    <string name="enterYourDepartment">Enter your department</string>
+    <string name="signUp">Sign Up</string>
 </resources>
