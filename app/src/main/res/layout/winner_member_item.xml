@@ -35,6 +35,7 @@
 
         <TextView
             android:id="@+id/memberNameTextView"
+            style="@style/WinnerItemText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -47,59 +48,62 @@
 
         <TextView
             android:id="@+id/memberDepartmentTextView"
+            style="@style/WinnerItemText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{member.department}"
-            android:textSize="12sp"
+            android:textSize="13sp"
+            android:textStyle="normal|italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
             app:layout_constraintTop_toBottomOf="@id/memberNameTextView"
             tools:text="Grips" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/memberBidTimeCardView"
+        <TextView
+            android:id="@+id/memberBidTimeTextView"
+            style="@style/WinnerItemText"
+            dateToStringTimeConverter="@{member.bidTime}"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textColor="@color/blueLight"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/memberEarningsCardView"
+            app:layout_constraintEnd_toStartOf="@id/line"
             app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/memberNameTextView"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="11:58" />
 
-            <TextView
-                android:id="@+id/memberBidTimeTextView"
-                dateToStringTimeConverter="@{member.bidTime}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:textSize="16sp"
-                tools:text="11:58" />
-        </androidx.cardview.widget.CardView>
+        <View
+            android:id="@+id/line"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="2dp"
+            android:layout_marginVertical="14dp"
+            android:background="#c0c0c0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/memberEarningsTextView"
+            app:layout_constraintStart_toEndOf="@id/memberBidTimeTextView"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/memberEarningsCardView"
+        <TextView
+            android:id="@+id/memberEarningsTextView"
+            style="@style/WinnerItemText"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@{`$` + member.winnings}"
+            android:textColor="@color/winningsGreen"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/memberEarningsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@{`$` + member.winnings}"
-                android:textSize="16sp"
-                tools:text="$20.00" />
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$20.00" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

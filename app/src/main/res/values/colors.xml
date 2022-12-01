@@ -27,6 +27,7 @@
     <color name="purpleLogoLight">#6B406E</color>
     <color name="greyBackground">#F0F8FF</color>
     <color name="earningsGreen">#00D905</color>
+    <color name="winningsGreen">#00cc03</color>
     <color name="calendarGrey">#888</color>
     <color name="calendarBlack">#FF000000</color>
     <color name="calendarWhite">#FFFFFFFF</color>
