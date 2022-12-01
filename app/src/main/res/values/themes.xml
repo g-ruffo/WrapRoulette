@@ -50,11 +50,12 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginBottom">15dp</item>
+        <item name="hintEnabled">false</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
-        <item name="boxBackgroundColor">@color/blueInputBoxColor</item>
+        <item name="boxBackgroundColor">@color/loginInputLayoutBoxColor</item>
         <item name="startIconTint">@color/white</item>
         <item name="android:textColorHint">@color/blueInputHintTextColor</item>
         <item name="counterTextColor">@color/blueInputHintTextColor</item>
