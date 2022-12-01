@@ -32,7 +32,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context=".ui.pools.createpool.AddPoolFragment">
 
             <com.google.android.material.card.MaterialCardView
@@ -74,7 +74,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Production Name*"
+                            android:hint="@string/productionName"
                             android:inputType="textCapWords"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
                             android:text="@={viewModel.poolProduction}" />
@@ -98,7 +98,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Pool Password"
+                            android:hint="@string/poolPassword"
                             android:inputType="textEmailAddress"
                             android:text="@={viewModel.poolPassword}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -123,7 +123,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Date*"
+                            android:hint="@string/date"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchDatePickerDialog()}"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
@@ -154,7 +154,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Start Time*"
+                            android:hint="@string/startTime"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchTimePickerDialog(true)}"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_START_ERROR)}"
@@ -182,7 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="@{TextUtils.isEmpty(selectBettingCloseTimeAutoComplete.text) == false ? true : false}"
-                            android:hint="Final Bets"
+                            android:hint="@string/finalBets"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchTimePickerDialog(false)}"
                             android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_FINAL_BETS)}"
@@ -210,7 +210,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Price"
+                            android:hint="@string/price"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchNumberPickerDialog(false)}"
                             android:text="@{viewModel.poolBetAmount == null ? null : `$` + viewModel.poolBetAmount + `.00`}" />
@@ -236,7 +236,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Margin"
+                            android:hint="@string/margin"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchNumberPickerDialog(true)}"
                             android:text="@{viewModel.poolMargin == null ? null : viewModel.poolMargin + ` min.`}" />
@@ -250,7 +250,7 @@
                         android:layout_marginTop="12dp"
                         android:buttonTint="@color/bluePrimary"
                         android:checked="@={viewModel.poolPISRulesEnabled}"
-                        android:text="Price Is Right Rules"
+                        android:text="@string/priceIsRightRules"
                         android:textColor="@color/cardViewTitleColor"
                         app:layout_constraintBottom_toTopOf="@id/buttonLinearLayout"
                         app:layout_constraintStart_toStartOf="parent"
@@ -279,9 +279,7 @@
                             android:enabled="@{!viewModel.showLoading.booleanValue()}"
                             android:onClick="@{() -> fragment.launchDeletePoolAlert()}"
                             android:padding="12dp"
-                            android:text="Delete"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
+                            android:text="@string/delete"
                             android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}" />
 
 
@@ -300,9 +298,7 @@
                             android:enabled="@{!viewModel.showLoading.booleanValue()}"
                             android:onClick="@{() -> viewModel.createUpdatePool()}"
                             android:padding="12dp"
-                            android:text="Create"
-                            android:textColor="@color/white"
-                            android:textStyle="bold" />
+                            android:text="@string/create" />
 
                     </LinearLayout>
 

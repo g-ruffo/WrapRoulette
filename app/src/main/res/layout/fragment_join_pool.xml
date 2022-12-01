@@ -26,7 +26,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context=".ui.pools.createpool.AddPoolFragment">
 
 
@@ -141,14 +141,13 @@
                         android:padding="12dp"
                         android:paddingStart="64dp"
                         android:paddingEnd="64dp"
-                        android:text="Join"
+                        android:text="@string/join"
                         android:textStyle="bold"
                         app:cornerRadius="12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/selectDateTextView" />
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

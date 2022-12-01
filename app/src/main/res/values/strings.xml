@@ -59,4 +59,11 @@
     <string name="poolPassword">Pool password</string>
     <string name="date">Date<font color='#FF0000'>*</font></string>
     <string name="join">Join</string>
+    <string name="startTime">Start time<font color='#FF0000'>*</font></string>
+    <string name="finalBets">Final bets</string>
+    <string name="price">Price</string>
+    <string name="margin">Margin</string>
+    <string name="priceIsRightRules">Price Is Right Rules</string>
+    <string name="delete">Delete</string>
+    <string name="create">Create</string>
 </resources>
