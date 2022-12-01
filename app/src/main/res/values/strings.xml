@@ -55,4 +55,7 @@
     <string name="typeYourName">Type your name</string>
     <string name="enterYourDepartment">Enter your department</string>
     <string name="signUp">Sign Up</string>
+    <string name="productionName">Production name<font color='#FF0000'>*</font></string>
+    <string name="poolPassword">Pool password</string>
+    <string name="date">Date<font color='#FF0000'>*</font></string>
 </resources>

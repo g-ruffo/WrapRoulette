@@ -20,9 +20,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_pattern"
-        android:backgroundTint="@color/backgroundBlueLight"
-        android:backgroundTintMode="src_over"
+        android:background="@color/greyBackgroundColor"
         android:fillViewport="true"
         tools:context=".authentication.signup.SignupFragment">
 
@@ -67,7 +65,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Production name"
+                            android:hint="@string/productionName"
                             android:inputType="textCapWords"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
                             android:text="@={viewModel.poolProduction}" />
@@ -93,7 +91,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Pool password"
+                            android:hint="@string/poolPassword"
                             android:inputType="text"
                             android:text="@={viewModel.poolPassword}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -120,7 +118,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusableInTouchMode="false"
-                            android:hint="Date"
+                            android:hint="@string/date"
                             android:inputType="none"
                             android:onClick="@{() -> fragment.launchDatePickerDialog()}"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
