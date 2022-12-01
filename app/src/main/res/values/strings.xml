@@ -46,4 +46,8 @@
     <string name="roulette">Roulette</string>
     <string name="wrap">Wrap</string>
     <string name="logoHeaderImage">Logo header image</string>
+    <string name="resetPasswordTitle">Reset Password</string>
+    <string name="resetPasswordSubtitle">Enter your email address to reset you password.</string>
+    <string name="reset">Reset</string>
+    <string name="backButton">Back button</string>
 </resources>
