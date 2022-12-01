@@ -20,151 +20,154 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/greyBackgroundColor"
+        android:background="@color/white"
         android:fillViewport="true"
         tools:context=".authentication.signup.SignupFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="hideKeyboard"
             tools:context=".ui.pools.createpool.AddPoolFragment">
 
+            <ImageView
+                android:id="@+id/poolImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="12dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/joinPoolHeaderImage"
+                android:src="@drawable/ic_baseline_connect_without_contact_24"
+                app:layout_constraintBottom_toTopOf="@+id/subtitleText"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_max="@dimen/poolImageMaxSize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.45"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:tint="@color/blueLight" />
 
-            <com.google.android.material.card.MaterialCardView
+            <TextView
+                android:id="@+id/subtitleText"
+                style="@style/PoolSubtitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
+                android:layout_marginHorizontal="30dp"
+                android:text="@string/joinPoolSubtitle"
+                app:layout_constraintBottom_toTopOf="@+id/productionEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/poolImage"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productionEditTextLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                errorRequired="@{ viewModel.errorPoolNameText }"
+                errorRequiredInput="@{viewModel.poolProduction}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
+                android:layout_marginTop="@dimen/topMarginInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtitleText"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:startIconDrawable="@drawable/ic_baseline_person_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/productionInputEditText"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/productionName"
+                    android:inputType="textCapWords"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
+                    android:text="@={viewModel.poolProduction}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordEditTextLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
+                app:layout_constraintBottom_toTopOf="@+id/selectDateTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productionEditTextLayout"
+                app:startIconDrawable="@drawable/ic_baseline_email_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInputEditText"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/poolPassword"
+                    android:inputType="text"
+                    android:text="@={viewModel.poolPassword}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectDateTextView"
+                style="@style/PoolTextInputOuterFieldStyle"
+                errorRequired="@{ viewModel.errorPoolDateText }"
+                errorRequiredInput="@{viewModel.poolDate.toString}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
+                app:layout_constraintBottom_toTopOf="@id/joinButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/selectDateAutoComplete"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/date"
+                    android:inputType="none"
+                    android:onClick="@{() -> fragment.launchDatePickerDialog()}"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
+                    android:text="@={viewModel.poolDate}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/joinButton"
+                style="@style/mainBlueButtonStyle"
+                setAccountEnabledArg1="@{viewModel.poolProduction}"
+                setAccountEnabledArg2="@{viewModel.poolDate}"
+                setAccountEnabledArg3="@{viewModel.showLoading}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:onClick="@{() -> viewModel.joinPool()}"
+                android:padding="12dp"
+                android:paddingStart="64dp"
+                android:paddingEnd="64dp"
+                android:text="@string/join"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/productionEditTextLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        error="@{ viewModel.errorPoolNameText }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="38dp"
-                        app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:startIconDrawable="@drawable/ic_baseline_person_24"
-                        app:startIconTint="@color/blueLight">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/productionInputEditText"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/productionName"
-                            android:inputType="textCapWords"
-                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
-                            android:text="@={viewModel.poolProduction}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/passwordEditTextLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        app:helperTextEnabled="true"
-                        app:layout_constraintBottom_toTopOf="@+id/selectDateTextView"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/productionEditTextLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_email_24"
-                        app:startIconTint="@color/blueLight">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/passwordInputEditText"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/poolPassword"
-                            android:inputType="text"
-                            android:text="@={viewModel.poolPassword}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/selectDateTextView"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        error="@{ viewModel.errorPoolDateText }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="18dp"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toTopOf="@id/joinButton"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/passwordEditTextLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
-                        app:startIconTint="@color/blueLight">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/selectDateAutoComplete"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusableInTouchMode="false"
-                            android:hint="@string/date"
-                            android:inputType="none"
-                            android:onClick="@{() -> fragment.launchDatePickerDialog()}"
-                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
-                            android:text="@={viewModel.poolDate}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/joinButton"
-                        style="@style/mainBlueButtonStyle"
-                        setAccountEnabledArg1="@{viewModel.poolProduction}"
-                        setAccountEnabledArg2="@{viewModel.poolDate}"
-                        setAccountEnabledArg3="@{viewModel.showLoading}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="44dp"
-                        android:layout_marginBottom="24dp"
-                        android:onClick="@{() -> viewModel.joinPool()}"
-                        android:padding="12dp"
-                        android:paddingStart="64dp"
-                        android:paddingEnd="64dp"
-                        android:text="@string/join"
-                        android:textStyle="bold"
-                        app:cornerRadius="12dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/selectDateTextView" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+                app:layout_constraintTop_toBottomOf="@+id/selectDateTextView" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
+                style="@style/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:elevation="8dp"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                android:indeterminate="true"
-                android:secondaryProgressTint="@color/black"
-                android:theme="@style/progressBar"
-                android:visibility="visible"
-                app:indicatorColor="@color/highlightOrange"
-                app:indicatorSize="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -90,6 +90,13 @@
         <item name="android:textSize">@dimen/poolDetailHeaderTextSize</item>
     </style>
 
+    <style name="PoolSubtitleText">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 
     <style name="LoginTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
@@ -153,12 +160,17 @@
         <item name="android:textColor">@color/textTitleColor</item>
     </style>
 
+    <style name="poolHelperTextStyle">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="AccountTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="startIconTint">@color/color_states_pir_image</item>
-        <item name="android:layout_marginTop">15dp</item>
-        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
@@ -166,7 +178,7 @@
         <item name="boxBackgroundColor">@color/blueGrey</item>
         <item name="android:textColorHint">@color/loginHintTextColor</item>
         <item name="android:textColor">@color/color_states_pir_image</item>
-        <item name="helperTextTextColor">@color/fabIconTint</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
         <item name="colorAccent">@color/fabIconTint</item>
         <item name="colorControlNormal">@color/fabIconTint</item>
         <item name="colorControlActivated">@color/fabIconTint</item>
@@ -193,7 +205,46 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/color_states_pir_image</item>
-        <item name="android:textColorHint">@color/color_states_pir_image</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColorHint">@color/loginHintTextColor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+
+    <style name="PoolTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="startIconTint">@color/color_states_pir_image</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/color_state_text_input_hint_text</item>
+        <item name="hintTextColor">@color/color_state_text_input_hint_text</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/color_state_text_input_layout_border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="helperTextTextAppearance">@style/poolHelperTextStyle</item>
+        <item name="android:editTextColor">@color/cardViewTitleColor</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
+
+    </style>
+
+
+    <style name="PoolTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blueDark</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
@@ -239,10 +290,11 @@
     </style>
 
     <style name="sendFabButton">
-        <item name="maxImageSize">28dp</item>
-        <item name="backgroundTint">@color/color_states_material_button</item>
         <item name="tint">@color/darkHeaderTextColor</item>
+        <item name="backgroundTint">@color/bluePrimary</item>
         <item name="fabSize">normal</item>
+        <item name="fabCustomSize">50dp</item>
+        <item name="maxImageSize">24dp</item>
         <item name="android:visibility">invisible</item>
     </style>
 
@@ -255,8 +307,9 @@
 
     <style name="mainBlueButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/rounded_corners_button_login</item>
-        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:textColor">@color/bluePrimary</item>
         <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">12dp</item>
         <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
         <item name="backgroundTint">@color/color_states_material_button</item>
     </style>
@@ -282,13 +335,12 @@
     </style>
 
     <style name="progressBar">
-        <item name="android:elevation">12dp</item>
+        <item name="android:elevation">8dp</item>
         <item name="android:gravity">center</item>
         <item name="android:indeterminate">true</item>
         <item name="android:visibility">gone</item>
         <item name="indicatorColor">@color/highlightOrange</item>
         <item name="indicatorSize">60dp</item>
-        <item name="trackThickness">10dp</item>
     </style>
 
 </resources>

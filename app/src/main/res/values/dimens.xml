@@ -12,4 +12,7 @@
     <dimen name="poolDetailCardSubTextSize">14sp</dimen>
     <dimen name="poolDetailCardTextSize">24sp</dimen>
     <dimen name="poolDetailHeaderTextSize">12sp</dimen>
+    <dimen name="poolEditTextHorizontal">24dp</dimen>
+    <dimen name="poolImageMaxSize">120dp</dimen>
+    <dimen name="topMarginInputLayout">24dp</dimen>
 </resources>

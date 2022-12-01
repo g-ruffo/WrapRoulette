@@ -39,7 +39,7 @@ object BindingAdapters {
             ) {
                 view.setHelperTextColor(
                     ColorStateList.valueOf(
-                        ContextCompat.getColor(context, R.color.warningRed)
+                        getColor(context, R.color.warningRed)
                     )
                 )
                 view.helperText = context.getString(R.string.invalidEmailAddressHelper)
@@ -47,7 +47,7 @@ object BindingAdapters {
             } else {
                 view.setHelperTextColor(
                     ColorStateList.valueOf(
-                        ContextCompat.getColor(context, R.color.optionalGrey)
+                        getColor(context, R.color.optionalGrey)
                     )
                 )
                 view.helperText = null
@@ -219,7 +219,7 @@ object BindingAdapters {
         val formatter = DecimalFormat("$###0.00")
         val bidAmount = pool.betAmount?.toInt() ?: 0
         val total = formatter.format(bidAmount * totalBets.size)
-        view.text = "$total"
+        view.text = total
     }
 
     @BindingAdapter(
@@ -280,7 +280,7 @@ object BindingAdapters {
     @BindingAdapter("setSizeAndEnabled")
     @JvmStatic
     internal fun FloatingActionButton.setSizeAndEnabled(message: String?) {
-        this.isEnabled = !(message.isNullOrEmpty() || message.isNullOrBlank())
+        this.isEnabled = !(message.isNullOrEmpty() || message.isBlank())
     }
 
     @BindingAdapter(
@@ -288,7 +288,7 @@ object BindingAdapters {
     )
     @JvmStatic
     fun setResetEnabledArg(view: View, arg1: String?, arg2: Boolean) {
-        view.isEnabled = !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !arg2
+        view.isEnabled = !(arg1.isNullOrEmpty() || arg1.isBlank()) && !arg2
     }
 
     @BindingAdapter(
@@ -298,7 +298,7 @@ object BindingAdapters {
     @JvmStatic
     fun setAccountEnabledArg(view: View, arg1: String?, arg2: String?, arg3: Boolean) {
         view.isEnabled =
-            !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && !arg3
+            !(arg1.isNullOrEmpty() || arg1.isBlank()) && !(arg2.isNullOrEmpty() || arg2.isBlank()) && !arg3
     }
 
     @BindingAdapter(
@@ -308,7 +308,7 @@ object BindingAdapters {
     @JvmStatic
     fun setPoolEnabledArg(view: View, arg1: String?, arg2: String?, arg3: Date?, arg4: Boolean) {
         view.isEnabled =
-            !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && (arg3 != null) && !arg4
+            !(arg1.isNullOrEmpty() || arg1.isBlank()) && !(arg2.isNullOrEmpty() || arg2.isBlank()) && (arg3 != null) && !arg4
     }
 
     @BindingAdapter(
@@ -320,7 +320,7 @@ object BindingAdapters {
         view: View, arg1: String?, arg2: String?, arg3: String?, arg4: String?, arg5: Boolean
     ) {
         view.isEnabled =
-            !(arg1.isNullOrEmpty() || arg1.isNullOrBlank()) && !(arg2.isNullOrEmpty() || arg2.isNullOrBlank()) && (arg3 != null) && !(arg4.isNullOrEmpty() || arg4.isNullOrBlank()) && !arg5
+            !(arg1.isNullOrEmpty() || arg1.isBlank()) && !(arg2.isNullOrEmpty() || arg2.isBlank()) && (arg3 != null) && !(arg4.isNullOrEmpty() || arg4.isBlank()) && !arg5
     }
 
     @BindingAdapter("error")
@@ -344,6 +344,29 @@ object BindingAdapters {
                 boxStrokeWidth = 0
                 this.isErrorEnabled = errorMessage != null
                 this.isHelperTextEnabled = false
+                this.isErrorEnabled = false
+            }
+        }
+
+        boxStrokeWidthFocused = boxStrokeWidth
+    }
+
+    @BindingAdapter(value = ["errorRequired", "errorRequiredInput"], requireAll = true)
+    @JvmStatic
+    internal fun TextInputLayout.setErrorRequired(
+        errorMessage: ErrorMessage<String>?, inputString: String?
+    ) {
+        this.helperText = "Required*"
+        this.isErrorEnabled = errorMessage != null
+        this.isHelperTextEnabled = inputString.isNullOrEmpty() || inputString.isBlank()
+
+        when (errorMessage) {
+            is ErrorMessage.ErrorText -> {
+                error = errorMessage.message.takeUnless { it == null }
+                this.isErrorEnabled = true
+            }
+            else -> {
+                this.isErrorEnabled = errorMessage != null
                 this.isErrorEnabled = false
             }
         }
