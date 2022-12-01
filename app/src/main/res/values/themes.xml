@@ -263,7 +263,7 @@
 
     <style name="loginButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/rounded_corners_button_login</item>
-        <item name="android:textColor">@color/bluePrimary</item>
+        <item name="android:textColor">@color/blueDark</item>
         <item name="android:textStyle">bold</item>
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>

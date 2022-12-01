@@ -57,6 +57,7 @@
     <color name="greyBackgroundColor">#eff1f6</color>
     <color name="valueTextColor">#50658a</color>
     <color name="darkHeaderTextColor">#f2f2f2</color>
+    <color name="buttonOrange">#fd8c35</color>
 
     <color name="transparent">#00000000</color>
 

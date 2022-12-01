@@ -38,4 +38,12 @@
     <string name="marginHeaderTitle">Margin</string>
     <string name="adminHeaderTitle">Admin</string>
     <string name="totalPotHeaderTitle">Total Pot</string>
+    <string name="forgotPassword">Forgot password?</string>
+    <string name="clickToSignUp">Not registered? Click to signup</string>
+    <string name="signIn">Sign In</string>
+    <string name="typeYourPassword">Type your password</string>
+    <string name="typeYourEmail">Type your email</string>
+    <string name="roulette">Roulette</string>
+    <string name="wrap">Wrap</string>
+    <string name="logoHeaderImage">Logo header image</string>
 </resources>
