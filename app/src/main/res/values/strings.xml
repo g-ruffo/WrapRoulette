@@ -24,4 +24,18 @@
     <string name="add_member">Add Member</string>
     <string name="edit_pool">Edit Pool</string>
     <string name="leave_pool">Leave Pool</string>
+    <string name="membersHeaderTitle">Members</string>
+    <string name="finalBetsHeaderTitle">Final Bets</string>
+    <string name="betsHeaderTitle">Bets</string>
+    <string name="administratorHeaderTitle">Administrator</string>
+    <string name="currentTimeTitle">Current Time</string>
+    <string name="timeWorkedTitle">Time Worked</string>
+    <string name="wrapTimeHeaderTitle">Wrap Time</string>
+    <string name="startTimeTitle">Start Time</string>
+    <string name="positionTitle">Position</string>
+    <string name="currentBetTitle">Current Bet</string>
+    <string name="memberBidsTitle">Member Bids</string>
+    <string name="marginHeaderTitle">Margin</string>
+    <string name="adminHeaderTitle">Admin</string>
+    <string name="totalPotHeaderTitle">Total Pot</string>
 </resources>
