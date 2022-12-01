@@ -37,11 +37,11 @@
 
             <TextView
                 android:id="@+id/signUpTitle"
+                style="@style/LoginText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:text="Sign Up"
-                android:textColor="@color/white"
                 android:textSize="50sp"
                 app:layout_constraintBottom_toTopOf="@+id/signUpSubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -52,10 +52,10 @@
 
             <TextView
                 android:id="@+id/signUpSubtitle"
+                style="@style/LoginText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Enter your details to register"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"

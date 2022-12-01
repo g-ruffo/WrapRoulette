@@ -49,7 +49,9 @@
     <color name="cardBackgroundWhite">#F8F8F8</color>
     <color name="cardStartTimeBackground">#99ff99</color>
     <color name="inputLayoutDisabled">#50404040</color>
-    <color name="loginInputLayoutBoxColor">#606f99d1</color>
+    <color name="loginInputLayoutBoxColor">#e7eaee</color>
+    <color name="loginTextDarkBackgroundColor">#f2f2f2</color>
+    <color name="loginHintTextColor">#6b7889</color>
 
     <color name="transparent">#00000000</color>
 

@@ -45,6 +45,13 @@
 
     <style name="Theme.WrapRoulette.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="LoginText">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
+        <item name="textFillColor">@color/loginTextDarkBackgroundColor</item>
+    </style>
+
     <style name="LoginTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -56,10 +63,10 @@
         <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
         <item name="boxBackgroundColor">@color/loginInputLayoutBoxColor</item>
-        <item name="startIconTint">@color/white</item>
+        <item name="startIconTint">@color/bluePrimary</item>
         <item name="android:textColorHint">@color/blueInputHintTextColor</item>
-        <item name="counterTextColor">@color/blueInputHintTextColor</item>
-        <item name="passwordToggleTint">@color/white</item>
+        <item name="counterTextColor">@color/loginInputLayoutBoxColor</item>
+        <item name="passwordToggleTint">@color/bluePrimary</item>
         <item name="android:textColor">@color/blueInputHintTextColor</item>
         <item name="helperTextTextColor">@color/warningRed</item>
         <item name="colorAccent">@color/fabIconTint</item>
@@ -71,10 +78,10 @@
         <item name="hintTextColor">@color/blueInputHintTextColor</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="android:textColorPrimary">@color/fabIconTint</item>
-        <item name="android:titleTextColor">@color/fabIconTint</item>
-        <item name="editTextColor">@color/fabIconTint</item>
-        <item name="textFillColor">@color/fabIconTint</item>
-        <item name="android:editTextColor">@color/fabIconTint</item>
+        <item name="android:titleTextColor">@color/blueDark</item>
+        <item name="editTextColor">@color/blueDark</item>
+        <item name="textFillColor">@color/blueDark</item>
+        <item name="android:editTextColor">@color/blueDark</item>
         <item name="android:textCursorDrawable">@color/fabIconTint</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="errorTextColor">@color/warningRed</item>
@@ -87,8 +94,9 @@
     <style name="LoginTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/fabIconTint</item>
-        <item name="android:textColorHint">@color/fabIconTint</item>
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:textColorHint">@color/loginHintTextColor</item>
+        <item name="fontFamily">@font/roboto</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
@@ -198,6 +206,7 @@
         <item name="android:background">@drawable/rounded_corners_button_login</item>
         <item name="android:textColor">@color/bluePrimary</item>
         <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
         <item name="android:backgroundTint">@color/color_states_material_button_login</item>
         <item name="backgroundTint">@color/color_states_material_button_login</item>
