@@ -16,9 +16,7 @@
         android:id="@+id/summaryScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_pattern"
-        android:backgroundTint="@color/backgroundBlueGrey"
-        android:backgroundTintMode="screen"
+        android:background="@color/greyBackgroundColor"
         android:fillViewport="true"
         tools:context=".ui.home.summary.SummaryFragment">
 
@@ -48,12 +46,11 @@
 
                 <TextView
                     android:id="@+id/totalPotTitle"
+                    style="@style/PoolDetailHeaderText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Pot"
-                    android:textColor="@color/white"
+                    android:text="@string/totalPotHeaderTitle"
                     android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/totalPotText"
                     app:layout_constraintStart_toStartOf="@id/totalPotText"
                     app:layout_constraintTop_toTopOf="@id/totalBetsCardView"
@@ -62,14 +59,13 @@
 
                 <TextView
                     android:id="@+id/totalPotText"
+                    style="@style/PoolDetailHeaderValueText"
                     calculatePoolPotSizeList="@{viewModel.poolBetsList}"
                     calculatePoolPotSizePrice="@{viewModel.currentPool.betAmount}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
-                    android:textColor="@color/white"
                     android:textSize="42sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/headerImage"
                     app:layout_constraintStart_toStartOf="@id/headerImage"
                     app:layout_constraintTop_toBottomOf="@id/totalPotTitle"
@@ -103,12 +99,11 @@
 
                         <TextView
                             android:id="@+id/isAdmingTextView"
+                            style="@style/PoolDetailHeaderText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Administrator"
+                            android:text="@string/administratorHeaderTitle"
                             android:textColor="@color/fabIconTint"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/isAdminIcon"
@@ -156,12 +151,11 @@
 
                         <TextView
                             android:id="@+id/totalMembersText"
+                            style="@style/PoolDetailHeaderValueText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(viewModel.memberList.size)}"
-                            android:textColor="@color/white"
                             android:textSize="18sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@id/totalMemberTitle"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/totalMembersIcon"
@@ -170,12 +164,10 @@
 
                         <TextView
                             android:id="@+id/totalMemberTitle"
+                            style="@style/PoolDetailHeaderText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Members"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                            android:text="@string/membersHeaderTitle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
@@ -218,12 +210,11 @@
 
                         <TextView
                             android:id="@+id/totalBetsText"
+                            style="@style/PoolDetailHeaderValueText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(viewModel.poolBetsList.size)}"
-                            android:textColor="@color/white"
                             android:textSize="18sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@id/totalBetsTitle"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/totalBetsIcon"
@@ -232,12 +223,10 @@
 
                         <TextView
                             android:id="@+id/totalBetsTitle"
+                            style="@style/PoolDetailHeaderText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Bets"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                            android:text="@string/betsHeaderTitle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -267,26 +256,23 @@
 
                         <TextView
                             android:id="@+id/bettingClosesTextView"
+                            style="@style/PoolDetailHeaderValueText"
                             getTimeStringFromLong="@{viewModel.betTimeRemainingDate}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="-06:12:00" />
 
                         <TextView
                             android:id="@+id/bettingClosesTitle"
+                            style="@style/PoolDetailHeaderText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:gravity="center"
-                            android:text="Final Bets"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                            android:text="@string/finalBetsHeaderTitle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
@@ -318,11 +304,10 @@
 
                         <TextView
                             android:id="@+id/bidAmountText"
+                            style="@style/PoolDetailCardText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{`$` + viewModel.currentPool.betAmount}"
-                            android:textSize="24sp"
-                            android:textStyle="normal"
                             app:layout_constraintBottom_toTopOf="@id/bidAmountTitle"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -333,10 +318,10 @@
 
                         <TextView
                             android:id="@+id/bidAmountTitle"
+                            style="@style/PoolDetailCardSubText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Bid"
-                            android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -367,10 +352,10 @@
 
                         <TextView
                             android:id="@+id/marginText"
+                            style="@style/PoolDetailCardText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.poolMargin}"
-                            android:textSize="24sp"
                             app:layout_constraintBottom_toTopOf="@id/marginTitle"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -381,10 +366,10 @@
 
                         <TextView
                             android:id="@+id/marginTitle"
+                            style="@style/PoolDetailCardSubText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Margin"
-                            android:textSize="14sp"
+                            android:text="@string/marginHeaderTitle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -434,12 +419,11 @@
 
                         <TextView
                             android:id="@+id/pirTitle"
+                            style="@style/PoolDetailCardSubText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:text="@{viewModel.poolPIREnabled == true ? `Enabled` : `Disabled`}"
-                            android:textSize="14sp"
-
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
@@ -506,13 +490,13 @@
 
                         <TextView
                             android:id="@+id/adminTitle"
+                            style="@style/PoolDetailCardSubText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
                             android:gravity="center"
-                            android:text="Admin"
-                            android:textSize="14sp"
+                            android:text="@string/adminHeaderTitle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -561,13 +545,13 @@
 
                         <TextView
                             android:id="@+id/currentTimeTitle"
+                            style="@style/TitleText"
                             setCurrentTimeTitleIsActive="@{viewModel.isPoolActive}"
                             setCurrentTimeTitleWinners="@{viewModel.poolWinningMembers}"
                             setCurrentTimeTitleWrapTime="@{viewModel.poolEndTime}"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:textSize="18sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@id/winnersListBarrier"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -634,16 +618,17 @@
 
                             <TextView
                                 android:id="@+id/timeTitle"
+                                style="@style/TitleText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Current Time"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:text="@string/currentTimeTitle"
+                                android:textSize="16sp" />
 
 
                             <TextView
                                 android:id="@+id/timeTextView"
+                                style="@style/ValueText"
                                 currentTimeFromDateToString="@{viewModel.currentTimeDate}"
                                 isPoolActiveTime="@{viewModel.isPoolActive()}"
                                 android:layout_width="match_parent"
@@ -651,7 +636,6 @@
                                 android:format12Hour="kk:mm:ss"
                                 android:gravity="center"
                                 android:textSize="28sp"
-                                android:textStyle="bold"
                                 tools:text="18:14:01" />
 
                         </LinearLayout>
@@ -671,23 +655,23 @@
 
                             <TextView
                                 android:id="@+id/workedTimeTitle"
+                                style="@style/TitleText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Time Worked"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:text="@string/timeWorkedTitle"
+                                android:textSize="16sp" />
 
 
                             <TextView
                                 android:id="@+id/workedTimeTextView"
+                                style="@style/ValueText"
                                 getTimeStringFromLong="@{viewModel.timeWorkedDate}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:format12Hour="kk:mm:ss"
                                 android:gravity="center"
                                 android:textSize="28sp"
-                                android:textStyle="bold"
                                 tools:text="18:14:01" />
 
                         </LinearLayout>
@@ -724,12 +708,12 @@
 
                                 <TextView
                                     android:id="@+id/workStartTimeTextView"
+                                    style="@style/ValueText"
                                     dateToStringTimeConverter="@{viewModel.currentPool.startTime}"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginStart="12dp"
                                     android:textSize="20sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/startTimeIcon"
                                     app:layout_constraintTop_toBottomOf="@+id/workStartTimeTitle"
@@ -737,10 +721,11 @@
 
                                 <TextView
                                     android:id="@+id/workStartTimeTitle"
+                                    style="@style/TitleText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginEnd="12dp"
-                                    android:text="Start Time"
+                                    android:text="@string/startTimeTitle"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="@+id/workStartTimeTextView"
@@ -780,23 +765,23 @@
 
                                 <TextView
                                     android:id="@+id/workWrapTimeTitle"
+                                    style="@style/TitleText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:text="Wrap Time"
+                                    android:text="@string/wrapTimeHeaderTitle"
                                     android:textSize="12sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintBottom_toTopOf="@id/workWrapTimeTextView"
                                     app:layout_constraintStart_toStartOf="@id/workWrapTimeTextView"
                                     app:layout_constraintTop_toBottomOf="@id/workWrapTimeTextView" />
 
                                 <TextView
                                     android:id="@+id/workWrapTimeTextView"
+                                    style="@style/ValueText"
                                     dateToStringTimeConverter="@{viewModel.currentPool.endTime}"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_marginStart="12dp"
                                     android:textSize="20sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toEndOf="@id/wrapTimeIcon"
                                     app:layout_constraintTop_toBottomOf="@id/workWrapTimeTitle"
@@ -837,11 +822,11 @@
 
                                 <TextView
                                     android:id="@+id/positionTextView"
+                                    style="@style/ValueText"
                                     dateToStringConverter="@{viewModel.userBetTime}"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textSize="20sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="@+id/positionTitle"
                                     app:layout_constraintTop_toBottomOf="@id/positionTitle"
@@ -849,12 +834,12 @@
 
                                 <TextView
                                     android:id="@+id/positionTitle"
+                                    style="@style/TitleText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="12dp"
-                                    android:text="Position"
+                                    android:text="@string/positionTitle"
                                     android:textSize="12sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintStart_toEndOf="@id/currentPositionIcon"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -894,22 +879,22 @@
 
                                 <TextView
                                     android:id="@+id/currentBetTimeTitle"
+                                    style="@style/TitleText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Current Bet"
+                                    android:text="@string/currentBetTitle"
                                     android:textSize="12sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@id/currentBetIcon"
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <TextView
                                     android:id="@+id/currentBetTimeTextView"
+                                    style="@style/ValueText"
                                     dateToStringConverter="@{viewModel.userBetTime}"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textSize="20sp"
-                                    android:textStyle="bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="@id/currentBetTimeTitle"
                                     app:layout_constraintTop_toBottomOf="@id/currentBetTimeTitle"
@@ -951,13 +936,13 @@
 
                         <TextView
                             android:id="@+id/recyclerViewTitle"
+                            style="@style/TitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:elevation="4dp"
-                            android:text="Member Bids"
+                            android:text="@string/memberBidsTitle"
                             android:textSize="18sp"
-                            android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

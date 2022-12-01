@@ -52,6 +52,45 @@
         <item name="textFillColor">@color/loginTextDarkBackgroundColor</item>
     </style>
 
+    <style name="TitleText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ValueText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/blueLight</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PoolDetailCardText">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/blueLight</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/poolDetailCardTextSize</item>
+    </style>
+
+    <style name="PoolDetailCardSubText">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/poolDetailCardSubTextSize</item>
+    </style>
+
+    <style name="PoolDetailHeaderText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
+        <item name="android:textSize">@dimen/poolDetailHeaderTextSize</item>
+    </style>
+
+    <style name="PoolDetailHeaderValueText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
+        <item name="android:textSize">@dimen/poolDetailHeaderTextSize</item>
+    </style>
+
+
     <style name="LoginTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -113,7 +152,7 @@
         <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
         <item name="boxBackgroundColor">@color/blueGrey</item>
-        <item name="android:textColorHint">@color/cardViewTitleColor</item>
+        <item name="android:textColorHint">@color/loginHintTextColor</item>
         <item name="android:textColor">@color/color_states_pir_image</item>
         <item name="helperTextTextColor">@color/fabIconTint</item>
         <item name="colorAccent">@color/fabIconTint</item>
@@ -179,17 +218,25 @@
 
     <style name="FabButton">
         <item name="maxImageSize">28dp</item>
-        <item name="backgroundTint">@color/color_states_material_button</item>
-        <item name="tint">@color/fabIconTint</item>
+        <item name="backgroundTint">@color/color_states_fab_button</item>
+        <item name="tint">@color/color_states_fab_text</item>
         <item name="fabSize">normal</item>
-        <item name="iconTint">@color/fabIconTint</item>
-        <item name="android:textColor">@color/fabIconTint</item>
+        <item name="iconTint">@color/color_states_fab_text</item>
+        <item name="android:textColor">@color/color_states_fab_text</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="sendFabButton">
+        <item name="maxImageSize">28dp</item>
+        <item name="backgroundTint">@color/color_states_material_button</item>
+        <item name="tint">@color/darkHeaderTextColor</item>
+        <item name="fabSize">normal</item>
         <item name="android:visibility">invisible</item>
     </style>
 
     <style name="FabText">
         <item name="elevation">42dp</item>
-        <item name="android:textColor">@color/fabTextColor</item>
+        <item name="android:textColor">@color/color_states_fab_text</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
     </style>

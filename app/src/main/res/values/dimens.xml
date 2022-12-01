@@ -9,4 +9,7 @@
     <dimen name="login_edit_text_radius">10dp</dimen>
     <dimen name="backButtonSize">32dp</dimen>
     <dimen name="backButtonLayoutMargin">24dp</dimen>
+    <dimen name="poolDetailCardSubTextSize">14sp</dimen>
+    <dimen name="poolDetailCardTextSize">24sp</dimen>
+    <dimen name="poolDetailHeaderTextSize">12sp</dimen>
 </resources>

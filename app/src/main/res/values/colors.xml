@@ -51,11 +51,22 @@
     <color name="inputLayoutDisabled">#50404040</color>
     <color name="loginInputLayoutBoxColor">#e7eaee</color>
     <color name="loginTextDarkBackgroundColor">#f2f2f2</color>
-    <color name="loginHintTextColor">#6b7889</color>
+    <color name="loginHintTextColor">#99001533</color>
+    <color name="textTitleColor">#666666</color>
+    <color name="greyBackgroundColor">#eff1f6</color>
+    <color name="valueTextColor">#233b5d</color>
+    <color name="darkHeaderTextColor">#f2f2f2</color>
 
     <color name="transparent">#00000000</color>
 
+    <color name="colorEnabledFab">#FC7307</color>
+    <color name="colorDisabledFab">#80ff8b33</color>
+
+    <color name="colorEnabledFabText">#262626</color>
+    <color name="colorDisabledFabText">#90262626</color>
+
     <color name="colorEnabled">#233b5d</color>
     <color name="colorDisabled">#9050658a</color>
+
 
 </resources>

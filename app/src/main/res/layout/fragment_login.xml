@@ -78,8 +78,6 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/logoWrapText"
                     app:layout_constraintTop_toTopOf="@id/logoWrapText" />
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.textfield.TextInputLayout

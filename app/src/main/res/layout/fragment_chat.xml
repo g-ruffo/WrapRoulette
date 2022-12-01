@@ -13,8 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_pattern"
-        android:backgroundTint="@color/backgroundBlueGrey"
+        android:background="@color/greyBackgroundColor"
         android:backgroundTintMode="screen"
         tools:context=".ui.home.chat.ChatFragment">
 
@@ -30,46 +29,66 @@
             android:id="@+id/sendMessageLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_pattern"
-            android:backgroundTint="@color/backgroundBlueGrey"
+            android:background="@color/greyBackgroundColor"
             android:backgroundTintMode="screen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/sendMessageTextInputLayout"
-                style="@style/AccountTextInputOuterFieldStyle"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/sendMessageCardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusBottomEnd="30dp"
-                app:boxCornerRadiusBottomStart="30dp"
-                app:boxCornerRadiusTopEnd="30dp"
-                app:boxCornerRadiusTopStart="30dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:hintEnabled="false"
+                android:clipToPadding="false"
+                app:cardCornerRadius="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/sendMessageButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/sendMessageTextEditText"
-                    style="@style/AccountTextInputInnerFieldStyle"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sendMessageTextInputLayout"
+                    style="@style/AccountTextInputOuterFieldStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Message"
-                    android:inputType="textCapSentences"
-                    android:maxLines="6"
-                    android:text="@={viewModel.userMessageEditText}"
-                    tools:ignore="Autofill" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusBottomEnd="0dp"
+                    app:boxCornerRadiusBottomStart="0dp"
+                    app:boxCornerRadiusTopEnd="0dp"
+                    app:boxCornerRadiusTopStart="0dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/sendMessageButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sendMessageTextEditText"
+                        style="@style/AccountTextInputInnerFieldStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Message"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:maxLines="6"
+                        android:singleLine="false"
+                        android:text="@={viewModel.userMessageEditText}"
+                        android:textColor="@color/blueDark"
+                        tools:ignore="Autofill" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendMessageButton"
-                style="@style/FabButton"
+                style="@style/sendFabButton"
+                icontTint="@color/loginTextDarkBackgroundColor"
                 setSizeAndEnabled="@{viewModel.userMessageEditText}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -84,7 +103,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/sendMessageTextInputLayout"
+                app:layout_constraintStart_toEndOf="@id/sendMessageCardView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:maxImageSize="24dp" />
 
