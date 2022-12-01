@@ -108,11 +108,13 @@ class LoginSignupViewModel @Inject constructor(
         showLoading.value = true
         emailAddress.value = emailAddress.value?.trim()
         if (TextUtils.isEmpty(emailAddress.value)) {
-            errorPasswordText.value = ErrorMessage.ErrorText("Please enter your email address")
+            errorEmailText.value = ErrorMessage.ErrorText("Please enter your email address")
+            showLoading.value = false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
                 .matches()
         ) {
-            errorPasswordText.value = ErrorMessage.ErrorText("Email address is not valid")
+            errorEmailText.value = ErrorMessage.ErrorText("Email address is not valid")
+            showLoading.value = false
         } else {
             viewModelScope.launch {
                 repository.resetPassword(emailAddress.value!!) {
