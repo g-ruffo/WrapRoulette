@@ -53,7 +53,7 @@
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
-                android:text="Enter temporary pool members details below."
+                android:text="@{member == null ? `Enter temporary pool members details below.` : `Edit ` + member.displayName + `'s member details.`}"
                 android:textColor="@color/fabIconTint"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"
