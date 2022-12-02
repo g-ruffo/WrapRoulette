@@ -13,46 +13,40 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:background="@color/bluePrimary">
+            android:layout_height="wrap_content"
+            tools:background="@color/greyBackgroundColor">
 
             <TextView
                 android:id="@+id/title"
+                style="@style/dialogTitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="Set Bet Time"
-                android:textColor="@color/fabIconTint"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/message"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Set Bet Time" />
 
             <TextView
                 android:id="@+id/message"
+                style="@style/dialogMessageStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:text="Select your bid time using the spinner below."
-                android:textColor="@color/fabIconTint"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/timePicker"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="Select your bid time using the spinner below." />
 
             <TimePicker
                 android:id="@+id/timePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="-6dp"
                 android:theme="@style/NumberPickerTheme"
                 android:timePickerMode="spinner"
                 app:layout_constraintBottom_toBottomOf="parent"

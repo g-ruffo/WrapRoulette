@@ -75,4 +75,5 @@
     <string name="pirInfoImageDescription">Price is right rules info image</string>
     <string name="tempMemberOptionDialogMessage">Select EDIT to modify members details, or select BET to place their bid.</string>
     <string name="memberOptionsDialogTitle">Member Options</string>
+    <string name="setMemberBetTimeDialogTitle">Set Members Bet Time</string>
 </resources>

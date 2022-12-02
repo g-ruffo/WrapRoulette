@@ -258,9 +258,10 @@
     </style>
 
     <style name="NumberPickerTheme" parent="Theme.WrapRoulette">
-        <item name="colorControlNormal">@color/backgroundOrange</item>
-        <item name="android:textColorPrimary">@color/fabIconTint</item>
-        <item name="android:textColor">@color/fabIconTint</item>
+        <item name="colorControlNormal">@color/blueLight</item>
+        <item name="android:textColorPrimary">@color/bluePrimary</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+        <item name="fontFamily">@font/roboto_bold</item>
     </style>
 
     <!-- Alert Dialog -->
@@ -273,13 +274,13 @@
 
     <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:gravity">end</item>
-        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/darkOrange</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:gravity">start</item>
-        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/darkOrange</item>
     </style>
 
@@ -359,7 +360,7 @@
     </style>
 
     <style name="dialogMessageStyle">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:gravity">start</item>
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/textTitleColor</item>
