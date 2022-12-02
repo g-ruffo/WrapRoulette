@@ -1,8 +1,6 @@
 package ca.veltus.wraproulette.utils
 
-import android.content.res.ColorStateList
 import android.text.TextUtils
-import android.util.Patterns
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -20,40 +18,12 @@ import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 object BindingAdapters {
-    @BindingAdapter(
-        value = ["emailHelperTextColorSwitcher", "emailTextInputEditTextStatus"], requireAll = true
-    )
-    @JvmStatic
-    fun setEmailHelperTextColor(view: TextInputLayout, text: String?, editText: TextInputEditText) {
-        val context = view.context
-        editText.setOnFocusChangeListener { v, hasFocus ->
-            if (!Patterns.EMAIL_ADDRESS.matcher(text.toString())
-                    .matches() && !hasFocus && text != "null" && !text.isNullOrEmpty()
-            ) {
-                view.setHelperTextColor(
-                    ColorStateList.valueOf(
-                        getColor(context, R.color.warningRed)
-                    )
-                )
-                view.helperText = context.getString(R.string.invalidEmailAddressHelper)
-
-            } else {
-                view.setHelperTextColor(
-                    ColorStateList.valueOf(
-                        getColor(context, R.color.optionalGrey)
-                    )
-                )
-                view.helperText = null
-            }
-        }
-    }
 
     @BindingAdapter("dateToStringConverter")
     @JvmStatic

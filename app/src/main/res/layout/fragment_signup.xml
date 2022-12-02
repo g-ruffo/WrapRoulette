@@ -94,8 +94,6 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailEditTextLayout"
                 style="@style/LoginTextInputOuterFieldStyle"
-                emailHelperTextColorSwitcher="@{String.valueOf(viewModel.emailAddress)}"
-                emailTextInputEditTextStatus="@{emailInputEditText}"
                 error="@{ viewModel.errorEmailText }"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
