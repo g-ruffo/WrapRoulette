@@ -84,4 +84,11 @@
     <string name="bidPriceDialogTitle">Bid Price</string>
     <string name="bidPriceDialogMessage">Set the betting price for this pool.</string>
     <string name="dollarSignImageDescription">Dollar sign image for spinner price</string>
+    <string name="memberNameHint">Member name</string>
+    <string name="memberEmailHint">Member email</string>
+    <string name="memberDepartmentHint">Member department</string>
+    <string name="createTempMemberDialogMessage">Enter temporary pool members details below.</string>
+    <string name="editTempMemberDialogMessage">Edit %s\'s member details.</string>
+    <string name="addMemberDialogTitle">Add Member</string>
+    <string name="editMemberDialogTitle">Edit Member</string>
 </resources>

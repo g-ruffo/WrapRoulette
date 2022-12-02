@@ -257,6 +257,45 @@
         <item name="android:textAppearance">@style/poolHintTextStyle</item>
     </style>
 
+    <style name="DialogTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="startIconTint">@color/color_states_pir_image</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="endIconTint">@color/bluePrimary</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/color_state_text_input_hint_text</item>
+        <item name="hintTextColor">@color/color_state_text_input_hint_text</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/color_state_text_input_layout_border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="helperTextTextAppearance">@style/poolHelperTextStyle</item>
+        <item name="android:editTextColor">@color/cardViewTitleColor</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
+        <item name="hintTextAppearance">@style/poolHelperTextStyle</item>
+    </style>
+
+    <style name="DialogTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/poolHintTextStyle</item>
+    </style>
+
     <style name="NumberPickerTheme" parent="Theme.WrapRoulette">
         <item name="colorControlNormal">@color/blueLight</item>
         <item name="android:textColorPrimary">@color/bluePrimary</item>
