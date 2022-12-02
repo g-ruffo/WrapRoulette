@@ -81,4 +81,7 @@
     <string name="minutesDialogSpinnerText">/ Minutes</string>
     <string name="poolDateDialogTitle">Set Bet Time</string>
     <string name="poolDateDialogMessage">Set the pools date according to the call sheet.</string>
+    <string name="bidPriceDialogTitle">Bid Price</string>
+    <string name="bidPriceDialogMessage">Set the betting price for this pool.</string>
+    <string name="dollarSignImageDescription">Dollar sign image for spinner price</string>
 </resources>
