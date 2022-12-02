@@ -100,5 +100,8 @@
     <string name="noSavedPoolsText">No Saved Pools</string>
     <string name="poolStatusImageDescription">Pool status image</string>
     <string name="poolAdminImageDescription">Pool admin image</string>
-    <string name="poolSelectedImageDescription">Pool selected image</string>
+    <string name="poolLoadedImageDescription">Pool loaded image</string>
+    <string name="tempMemberIconDescription">Temporary member icon</string>
+    <string name="memberProfileImageDescription">Member profile image</string>
+    <string name="tempMemberOptionsImageDescription">Admin temporary member options icon</string>
 </resources>
