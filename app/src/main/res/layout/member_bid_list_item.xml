@@ -14,12 +14,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
+        style="@style/ListItemCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
         android:background="@color/transparent"
-        android:clipToPadding="false"
-        app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,17 +28,13 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/memberProfileImageCardView"
+                style="@style/ListItemImageCardView"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:background="@color/poolItemIconTint"
-                android:clipToPadding="false"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="14dp"
                 app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintBottom_toBottomOf="@id/memberDepartmentTextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="@id/memberNameTextView">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -49,19 +43,13 @@
 
                     <ImageView
                         android:id="@+id/memberTempIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="top|start"
-                        android:layout_marginStart="22dp"
-                        android:layout_marginBottom="22dp"
-                        android:src="@drawable/ic_baseline_new_releases_24"
-                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
-                        app:tint="@color/memberItemTempIconTint" />
+                        style="@style/ListItemTempMemberIcon"
+                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}" />
 
                     <ImageView
                         android:id="@+id/memberProfileImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:adjustViewBounds="true"
                         android:clipToPadding="false"
@@ -73,30 +61,27 @@
 
                 </FrameLayout>
 
-
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/memberNameTextView"
-                style="@style/MemberBidItemText"
+                style="@style/ListItemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
                 android:text="@{member.displayName}"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@+id/memberDepartmentTextView"
                 app:layout_constraintStart_toEndOf="@id/memberProfileImageCardView"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
                 tools:text="John Doe" />
 
             <TextView
                 android:id="@+id/memberDepartmentTextView"
-                style="@style/MemberBidItemText"
+                style="@style/ListItemSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{member.department}"
-                android:textSize="14sp"
-                android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/memberNameTextView"
                 app:layout_constraintTop_toBottomOf="@+id/memberNameTextView"
@@ -104,13 +89,11 @@
 
             <TextView
                 android:id="@+id/betTimeTextView"
-                style="@style/MemberBidItemText"
+                style="@style/ListItemValueText"
                 dateToStringConverter="@{member.bidTime}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="12dp"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

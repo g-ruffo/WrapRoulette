@@ -40,15 +40,8 @@
 
                     <ImageView
                         android:id="@+id/memberTempIcon"
-                        android:layout_width="@dimen/listItemSecondaryImageSize"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="top|start"
-                        android:layout_marginStart="@dimen/listItemSecondaryImageMargin"
-                        android:layout_marginBottom="@dimen/listItemSecondaryImageMargin"
-                        android:contentDescription="@string/tempMemberIconDescription"
-                        android:src="@drawable/ic_baseline_new_releases_24"
+                        style="@style/ListItemTempMemberIcon"
                         android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
-                        app:tint="@color/memberItemTempIconTint"
                         tools:ignore="ImageContrastCheck" />
 
                     <ImageView

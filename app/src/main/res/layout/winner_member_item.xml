@@ -23,44 +23,46 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePictureImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_baseline_person_24"
             app:civ_border_color="@color/earningsGreen"
-            app:civ_border_width="2dp"
+            app:civ_border_width="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/memberNameTextView"
-            style="@style/WinnerItemText"
+            style="@style/ListItemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{member.displayName}"
+            android:textColor="@color/textTitleColor"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/memberDepartmentTextView"
             app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="John Doe" />
 
         <TextView
             android:id="@+id/memberDepartmentTextView"
-            style="@style/WinnerItemText"
+            style="@style/ListItemSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{member.department}"
             android:textSize="13sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profilePictureImageView"
+            app:layout_constraintStart_toStartOf="@+id/memberNameTextView"
             app:layout_constraintTop_toBottomOf="@id/memberNameTextView"
             tools:text="Grips" />
 
         <TextView
             android:id="@+id/memberBidTimeTextView"
-            style="@style/WinnerItemValue"
+            style="@style/ListItemValueText"
             dateToStringTimeConverter="@{member.bidTime}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,7 +89,7 @@
 
         <TextView
             android:id="@+id/memberEarningsTextView"
-            style="@style/WinnerItemValue"
+            style="@style/ListItemValueText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{`$` + member.winnings}"

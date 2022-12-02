@@ -149,25 +149,6 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="WinnerItemText">
-        <item name="fontFamily">@font/roboto</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/textTitleColor</item>
-    </style>
-
-    <style name="WinnerItemValue">
-        <item name="fontFamily">@font/roboto_bold</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="MemberBidItemText">
-        <item name="fontFamily">@font/roboto</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/textTitleColor</item>
-    </style>
-
     <style name="poolHelperTextStyle">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textSize">12sp</item>
@@ -459,6 +440,17 @@
         <item name="cardCornerRadius">14dp</item>
         <item name="layout_constraintDimensionRatio">1</item>
         <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="ListItemTempMemberIcon">
+        <item name="android:layout_width">@dimen/listItemSecondaryImageSize</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">top|start</item>
+        <item name="android:layout_marginStart">@dimen/listItemSecondaryImageMargin</item>
+        <item name="android:layout_marginBottom">@dimen/listItemSecondaryImageMargin</item>
+        <item name="android:contentDescription">@string/tempMemberIconDescription</item>
+        <item name="android:src">@drawable/ic_baseline_new_releases_24</item>
+        <item name="tint">@color/memberItemTempIconTint</item>
     </style>
 
     <style name="ListItemTitle">
