@@ -355,6 +355,7 @@
     <style name="dialogTitleStyle">
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/dialogTitleTopMargin</item>
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/bluePrimary</item>
     </style>
@@ -363,7 +364,17 @@
         <item name="android:textSize">15sp</item>
         <item name="android:gravity">start</item>
         <item name="fontFamily">@font/roboto</item>
+        <item name="android:layout_marginTop">@dimen/dialogMessageTopMargin</item>
+        <item name="android:layout_marginStart">@dimen/dialogMessageHorizontalMargin</item>
+        <item name="android:layout_marginEnd">@dimen/dialogMessageHorizontalMargin</item>
         <item name="android:textColor">@color/textTitleColor</item>
+    </style>
+
+    <style name="dialogSpinnerTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/bluePrimary</item>
     </style>
 
 </resources>

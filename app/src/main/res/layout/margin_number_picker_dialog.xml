@@ -11,82 +11,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:background="@color/bluePrimary">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="Betting Margin"
-            android:textColor="@color/fabIconTint"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/message"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/message"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="Time added to each bet, in 6 minute increments. \n\n If 0, only the closest bid wil win."
-            android:textColor="@color/fabIconTint"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/numberPickerLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            tools:background="@color/greyBackgroundColor">
 
-        <LinearLayout
-            android:id="@+id/numberPickerLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message">
+            <TextView
+                android:id="@+id/title"
+                style="@style/dialogTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bettingMarginDialogTitle"
+                app:layout_constraintBottom_toTopOf="@+id/message"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/message"
+                style="@style/dialogMessageStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bettingMarginDialogMessage"
+                app:layout_constraintBottom_toTopOf="@+id/numberPickerMinutes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <NumberPicker
                 android:id="@+id/numberPickerMinutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/NumberPickerTheme"
-                app:layout_constraintBottom_toTopOf="@+id/setButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/message"
                 app:minValue="@{0}"
                 app:value="@{0}"
                 app:wrapSelectorWheel="@{true}" />
-        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="/ Minutes"
-            android:textColor="@color/fabIconTint"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/numberPickerLayout"
-            app:layout_constraintStart_toEndOf="@+id/numberPickerLayout"
-            app:layout_constraintTop_toTopOf="@+id/numberPickerLayout" />
+            <TextView
+                style="@style/dialogSpinnerTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minutesDialogSpinnerText"
+                app:layout_constraintBottom_toBottomOf="@+id/numberPickerMinutes"
+                app:layout_constraintStart_toEndOf="@+id/numberPickerMinutes"
+                app:layout_constraintTop_toTopOf="@+id/numberPickerMinutes" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 </layout>

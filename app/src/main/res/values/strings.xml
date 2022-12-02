@@ -76,4 +76,7 @@
     <string name="tempMemberOptionDialogMessage">Select EDIT to modify members details, or select BET to place their bid.</string>
     <string name="memberOptionsDialogTitle">Member Options</string>
     <string name="setMemberBetTimeDialogTitle">Set Members Bet Time</string>
+    <string name="bettingMarginDialogTitle">Betting Margin</string>
+    <string name="bettingMarginDialogMessage">Time added to each bet, in 6 minute increments. If 0, only the closest bid will win.</string>
+    <string name="minutesDialogSpinnerText">/ Minutes</string>
 </resources>
