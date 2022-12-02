@@ -116,8 +116,8 @@ class PoolListRepositoryImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             // Check if pool with supplied parameters already exists.
             val poolIsEmpty = poolsCollectionReference.whereEqualTo("production", pool.production)
-                .whereEqualTo("password", pool.password).whereEqualTo("date", pool.date).get()
-                .await().isEmpty
+                .whereEqualTo("password", pool.password).whereEqualTo("date", pool.date)
+                .whereNotEqualTo("docId", pool.docId).get().await().isEmpty
             if (poolIsEmpty) {
                 try {
                     poolsCollectionReference.document(pool.docId).set(pool, SetOptions.merge())
