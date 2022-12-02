@@ -17,11 +17,9 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/ListItemConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
-            android:clipToPadding="false"
-            android:padding="4dp">
+            android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/poolItemImageCardView"
@@ -44,6 +42,7 @@
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
                         android:background="@color/poolItemProgressBlue"
+                        android:contentDescription="@string/poolStatusImageDescription"
                         android:padding="4dp"
                         android:src="@drawable/ic_baseline_verified_24"
                         app:tint="@color/poolItemIconTint" />
@@ -55,6 +54,7 @@
                         android:layout_gravity="bottom|end"
                         android:layout_marginStart="@dimen/listItemSecondaryImageMargin"
                         android:layout_marginTop="@dimen/listItemSecondaryImageMargin"
+                        android:contentDescription="@string/poolAdminImageDescription"
                         android:src="@drawable/ic_baseline_account_circle_24"
                         app:tint="@color/poolItemAdminTint" />
                 </FrameLayout>
@@ -87,6 +87,7 @@
                 android:layout_height="0dp"
                 android:layout_marginBottom="2dp"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/poolSelectedImageDescription"
                 android:elevation="28dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_check_circle_24"
