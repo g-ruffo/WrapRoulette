@@ -151,8 +151,15 @@
 
     <style name="WinnerItemText">
         <item name="fontFamily">@font/roboto</item>
+        <item name="android:layout_marginStart">8dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/textTitleColor</item>
+    </style>
+
+    <style name="WinnerItemValue">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="MemberBidItemText">
