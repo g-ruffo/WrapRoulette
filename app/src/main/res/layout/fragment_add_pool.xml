@@ -24,304 +24,327 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_pattern"
-        android:backgroundTint="@color/backgroundBlueLight"
-        android:backgroundTintMode="src_over"
+        android:background="@color/white"
         android:fillViewport="true"
         tools:context=".authentication.signup.SignupFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
+            android:onClick="hideKeyboard"
             tools:context=".ui.pools.createpool.AddPoolFragment">
 
-            <com.google.android.material.card.MaterialCardView
+            <ImageView
+                android:id="@+id/poolImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/joinPoolHeaderImage"
+                android:src="@drawable/movie_edit"
+                app:layout_constraintBottom_toTopOf="@+id/subtitleText"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_max="@dimen/poolImageMaxSize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.53"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:tint="@color/blueLight" />
+
+            <TextView
+                android:id="@+id/subtitleText"
+                style="@style/PoolSubtitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
+                android:layout_marginHorizontal="30dp"
+                android:text="@string/addPoolSubtitleText"
+                app:layout_constraintBottom_toTopOf="@+id/productionEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/poolImage"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/productionEditTextLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                errorRequired="@{ viewModel.errorPoolNameText }"
+                errorRequiredInput="@{viewModel.poolProduction}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/topMarginInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtitleText"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:startIconDrawable="@drawable/ic_baseline_person_24"
+                tools:helperText="Required*">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/productionInputEditText"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/productionName"
+                    android:inputType="textCapWords"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
+                    android:text="@={viewModel.poolProduction}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordEditTextLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/selectDateTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productionEditTextLayout"
+                app:startIconDrawable="@drawable/ic_baseline_email_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInputEditText"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/poolPassword"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.poolPassword}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectDateTextInputLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                errorRequired="@{ viewModel.errorPoolDateText }"
+                errorRequiredInput="@{viewModel.poolDate.toString()}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                app:endIconMode="custom"
+                app:layout_constraintBottom_toTopOf="@+id/selectStartTimeTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                tools:helperText="Required*">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/selectDateAutoComplete"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/date"
+                    android:inputType="none"
+                    android:onClick="@{(v) -> fragment.launchDatePickerDialog(v)}"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
+                    android:text="@={viewModel.poolDate}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectStartTimeTextInputLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                errorRequired="@{ viewModel.errorPoolStartText }"
+                errorRequiredInput="@{viewModel.poolStartTime.toString}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/doubleTextInputLayoutPadding"
+                app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                app:endIconMode="custom"
+                app:layout_constraintBottom_toTopOf="@+id/selectBetAmountTextInputLayout"
+                app:layout_constraintEnd_toStartOf="@id/selectBettingCloseTimeTextInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectDateTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_access_time_24"
+                tools:helperText="Required*">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/selectStartTimeAutoComplete"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    getTimeFromDate="@{viewModel.poolStartTime}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="-8dp"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/startTime"
+                    android:inputType="none"
+                    android:onClick="@{(v) -> fragment.launchTimePickerDialog(true, v)}"
+                    android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_START_ERROR)}"
+                    android:textColorHint="@color/cardViewTitleColor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectBettingCloseTimeTextInputLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/doubleTextInputLayoutPadding"
+                app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                app:endIconMode="custom"
+                app:layout_constraintBaseline_toBaselineOf="@id/selectStartTimeTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/selectStartTimeTextInputLayout"
+                app:startIconDrawable="@drawable/ic_outline_timer_24">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/selectBettingCloseTimeAutoComplete"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    getTimeFromDate="@{viewModel.poolBetLockTime}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="-8dp"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/finalBets"
+                    android:inputType="none"
+                    android:onClick="@{(v) -> fragment.launchTimePickerDialog(false, v)}"
+                    android:textColorHint="@color/cardViewTitleColor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectBetAmountTextInputLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/doubleTextInputLayoutPadding"
+                app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                app:endIconMode="custom"
+                app:layout_constraintBottom_toTopOf="@+id/pIRCheckbox"
+                app:layout_constraintEnd_toStartOf="@id/selectMarginTextInputLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_attach_money_24">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/selectBetAmountAutoComplete"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/price"
+                    android:inputType="none"
+                    android:onClick="@{(v) -> fragment.launchNumberPickerDialog(false, v)}"
+                    android:text="@{viewModel.poolBetAmount == null ? null : `$` + viewModel.poolBetAmount + `.00`}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/selectMarginTextInputLayout"
+                style="@style/PoolTextInputOuterFieldStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/doubleTextInputLayoutPadding"
+                app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                app:endIconMode="custom"
+                app:helperTextTextColor="@color/cardViewTitleColor"
+                app:layout_constraintBaseline_toBaselineOf="@id/selectBetAmountTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/selectBetAmountTextInputLayout"
+                app:startIconDrawable="@drawable/ic_baseline_align_horizontal_center_24">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/selectMarginAutoComplete"
+                    style="@style/PoolTextInputInnerFieldStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/margin"
+                    android:inputType="none"
+                    android:onClick="@{(v) -> fragment.launchNumberPickerDialog(true, v)}"
+                    android:text="@{viewModel.poolMargin == null ? null : viewModel.poolMargin + ` min.`}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/pIRCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
+                android:buttonTint="@color/color_state_check_box"
+                android:checked="@={viewModel.poolPISRulesEnabled}"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/priceIsRightRules"
+                android:textColor="@color/textTitleColor"
+                app:layout_constraintBottom_toTopOf="@id/buttonLinearLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selectBetAmountTextInputLayout"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <ImageView
+                android:id="@+id/pirInfoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/pirInfoImageDescription"
+                android:onClick="@{() -> fragment.launchPirInfoDialog()}"
+                android:padding="12dp"
+                android:src="@drawable/ic_baseline_info_24"
+                app:layout_constraintBottom_toBottomOf="@+id/pIRCheckbox"
+                app:layout_constraintStart_toEndOf="@+id/pIRCheckbox"
+                app:layout_constraintTop_toTopOf="@+id/pIRCheckbox"
+                app:tint="@color/blueLight" />
+
+            <LinearLayout
+                android:id="@+id/buttonLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/pIRCheckbox">
 
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/deleteButton"
+                    style="@style/mainBlueButtonStyle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="22dp">
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
+                    android:enabled="@{!viewModel.showLoading.booleanValue()}"
+                    android:onClick="@{() -> fragment.launchDeletePoolAlert()}"
+                    android:padding="12dp"
+                    android:text="@string/delete"
+                    android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}" />
 
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/productionEditTextLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        error="@{ viewModel.errorPoolNameText }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:layout_constraintVertical_chainStyle="packed"
-                        app:startIconDrawable="@drawable/ic_baseline_person_24">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/createButton"
+                    style="@style/mainBlueButtonStyle"
+                    setPoolEnabledArg1="@{viewModel.poolProduction}"
+                    setPoolEnabledArg2="@{viewModel.poolDate}"
+                    setPoolEnabledArg3="@{viewModel.poolStartTime}"
+                    setPoolEnabledArg4="@{viewModel.showLoading}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
+                    android:enabled="@{!viewModel.showLoading.booleanValue()}"
+                    android:onClick="@{() -> viewModel.createUpdatePool()}"
+                    android:padding="12dp"
+                    android:text="@string/create" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/productionInputEditText"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/productionName"
-                            android:inputType="textCapWords"
-                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_NAME_ERROR)}"
-                            android:text="@={viewModel.poolProduction}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/passwordEditTextLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        app:helperTextEnabled="true"
-                        app:layout_constraintBottom_toTopOf="@+id/selectDateTextInputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/productionEditTextLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_email_24">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/passwordInputEditText"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/poolPassword"
-                            android:inputType="textEmailAddress"
-                            android:text="@={viewModel.poolPassword}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/selectDateTextInputLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        error="@{ viewModel.errorPoolDateText }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toTopOf="@+id/selectStartTimeTextInputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/selectDateAutoComplete"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusableInTouchMode="false"
-                            android:hint="@string/date"
-                            android:inputType="none"
-                            android:onClick="@{() -> fragment.launchDatePickerDialog()}"
-                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
-                            android:text="@={viewModel.poolDate}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/selectStartTimeTextInputLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        error="@{ viewModel.errorPoolStartText }"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="6dp"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintBottom_toTopOf="@+id/selectBetAmountTextInputLayout"
-                        app:layout_constraintEnd_toStartOf="@id/selectBettingCloseTimeTextInputLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/selectDateTextInputLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_access_time_24"
-                        tools:layout_editor_absoluteX="16dp">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/selectStartTimeAutoComplete"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            getTimeFromDate="@{viewModel.poolStartTime}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusableInTouchMode="false"
-                            android:hint="@string/startTime"
-                            android:inputType="none"
-                            android:onClick="@{() -> fragment.launchTimePickerDialog(true)}"
-                            android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_START_ERROR)}"
-                            android:textColorHint="@color/cardViewTitleColor" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/selectBettingCloseTimeTextInputLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        app:endIconMode="clear_text"
-                        app:layout_constraintBaseline_toBaselineOf="@id/selectStartTimeTextInputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/selectStartTimeTextInputLayout"
-                        app:startIconDrawable="@drawable/ic_outline_timer_24"
-                        tools:layout_editor_absoluteY="562dp">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/selectBettingCloseTimeAutoComplete"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            getTimeFromDate="@{viewModel.poolBetLockTime}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusableInTouchMode="@{TextUtils.isEmpty(selectBettingCloseTimeAutoComplete.text) == false ? true : false}"
-                            android:hint="@string/finalBets"
-                            android:inputType="none"
-                            android:onClick="@{() -> fragment.launchTimePickerDialog(false)}"
-                            android:onTextChanged="@{(text, start, before, count) -> viewModel.clearPoolTimeAndAmount(text, Constants.SET_FINAL_BETS)}"
-                            android:textColorHint="@color/cardViewTitleColor" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/selectBetAmountTextInputLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="6dp"
-                        app:helperTextTextColor="@color/cardViewTitleColor"
-                        app:layout_constraintBottom_toTopOf="@+id/buttonLinearLayout"
-                        app:layout_constraintEnd_toStartOf="@id/selectMarginTextInputLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextInputLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_attach_money_24">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/selectBetAmountAutoComplete"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusableInTouchMode="false"
-                            android:hint="@string/price"
-                            android:inputType="none"
-                            android:onClick="@{() -> fragment.launchNumberPickerDialog(false)}"
-                            android:text="@{viewModel.poolBetAmount == null ? null : `$` + viewModel.poolBetAmount + `.00`}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/selectMarginTextInputLayout"
-                        style="@style/AccountTextInputOuterFieldStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        app:endIconMode="clear_text"
-                        app:helperTextTextColor="@color/cardViewTitleColor"
-                        app:layout_constraintBaseline_toBaselineOf="@id/selectBetAmountTextInputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/selectBetAmountTextInputLayout"
-                        app:startIconDrawable="@drawable/ic_baseline_align_horizontal_center_24">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/selectMarginAutoComplete"
-                            style="@style/AccountTextInputInnerFieldStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusableInTouchMode="false"
-                            android:hint="@string/margin"
-                            android:inputType="none"
-                            android:onClick="@{() -> fragment.launchNumberPickerDialog(true)}"
-                            android:text="@{viewModel.poolMargin == null ? null : viewModel.poolMargin + ` min.`}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/pIRCheckbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:buttonTint="@color/bluePrimary"
-                        android:checked="@={viewModel.poolPISRulesEnabled}"
-                        android:text="@string/priceIsRightRules"
-                        android:textColor="@color/cardViewTitleColor"
-                        app:layout_constraintBottom_toTopOf="@id/buttonLinearLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/selectBetAmountTextInputLayout"
-                        app:layout_constraintVertical_chainStyle="packed" />
-
-                    <LinearLayout
-                        android:id="@+id/buttonLinearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="26dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/pIRCheckbox">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/deleteButton"
-                            style="@style/mainBlueButtonStyle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginEnd="22dp"
-                            android:layout_weight="1"
-                            android:enabled="@{!viewModel.showLoading.booleanValue()}"
-                            android:onClick="@{() -> fragment.launchDeletePoolAlert()}"
-                            android:padding="12dp"
-                            android:text="@string/delete"
-                            android:visibility="@{viewModel.poolDocUid == null ? View.GONE : View.VISIBLE}" />
-
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/createButton"
-                            style="@style/mainBlueButtonStyle"
-                            setPoolEnabledArg1="@{viewModel.poolProduction}"
-                            setPoolEnabledArg2="@{viewModel.poolDate}"
-                            setPoolEnabledArg3="@{viewModel.poolStartTime}"
-                            setPoolEnabledArg4="@{viewModel.showLoading}"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="22dp"
-                            android:layout_marginEnd="12dp"
-                            android:layout_weight="1"
-                            android:enabled="@{!viewModel.showLoading.booleanValue()}"
-                            android:onClick="@{() -> viewModel.createUpdatePool()}"
-                            android:padding="12dp"
-                            android:text="@string/create" />
-
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
+                style="@style/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:elevation="8dp"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                android:indeterminate="true"
-                android:secondaryProgressTint="@color/black"
-                android:theme="@style/progressBar"
-                android:visibility="visible"
-                app:indicatorColor="@color/highlightOrange"
-                app:indicatorSize="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

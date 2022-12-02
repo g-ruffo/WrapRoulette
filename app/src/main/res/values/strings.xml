@@ -71,4 +71,6 @@
     <string name="email">Email</string>
     <string name="joinPoolHeaderImage">Join pool header image</string>
     <string name="joinPoolSubtitle">Enter the details of the pool you wish to join. Inputs are case sensitive.</string>
+    <string name="addPoolSubtitleText">Create a new pool below. Users can join using the name, password and date inputs.</string>
+    <string name="pirInfoImageDescription">Price is right rules info image</string>
 </resources>

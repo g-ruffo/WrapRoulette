@@ -161,8 +161,12 @@
     </style>
 
     <style name="poolHelperTextStyle">
-        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="poolHintTextStyle">
+        <item name="fontFamily">@font/roboto</item>
     </style>
 
     <style name="AccountTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -218,6 +222,7 @@
         <item name="startIconTint">@color/color_states_pir_image</item>
         <item name="android:layout_marginTop">0dp</item>
         <item name="android:imeOptions">actionDone</item>
+        <item name="endIconTint">@color/bluePrimary</item>
         <item name="android:layout_marginBottom">12dp</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
         <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
@@ -237,6 +242,7 @@
         <item name="errorTextColor">@color/warningRed</item>
         <item name="boxStrokeErrorColor">@color/warningRed</item>
         <item name="errorIconTint">@color/warningRed</item>
+        <item name="hintTextAppearance">@style/poolHelperTextStyle</item>
 
     </style>
 
@@ -248,6 +254,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/poolHintTextStyle</item>
     </style>
 
     <style name="NumberPickerTheme" parent="Theme.WrapRoulette">

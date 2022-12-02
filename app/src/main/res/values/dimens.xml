@@ -15,4 +15,5 @@
     <dimen name="poolEditTextHorizontal">24dp</dimen>
     <dimen name="poolImageMaxSize">120dp</dimen>
     <dimen name="topMarginInputLayout">24dp</dimen>
+    <dimen name="doubleTextInputLayoutPadding">6dp</dimen>
 </resources>
