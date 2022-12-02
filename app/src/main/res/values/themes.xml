@@ -268,17 +268,18 @@
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="android:background">@color/backgroundBlueLight</item>
     </style>
 
 
     <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:gravity">end</item>
+        <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/darkOrange</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:gravity">start</item>
+        <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/darkOrange</item>
     </style>
 
@@ -348,6 +349,20 @@
         <item name="android:visibility">gone</item>
         <item name="indicatorColor">@color/highlightOrange</item>
         <item name="indicatorSize">60dp</item>
+    </style>
+
+    <style name="dialogTitleStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+    </style>
+
+    <style name="dialogMessageStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">start</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/textTitleColor</item>
     </style>
 
 </resources>
