@@ -34,6 +34,12 @@ fun View.fadeOut() {
     })
 }
 
+fun View.temporaryFocus() {
+    this.isFocusableInTouchMode = true
+    this.requestFocus()
+    this.isFocusableInTouchMode = false
+}
+
 fun isEqual(first: List<Member>, second: List<Member>): Boolean {
     if (first.size != second.size) return false
     first.forEachIndexed { index, value ->

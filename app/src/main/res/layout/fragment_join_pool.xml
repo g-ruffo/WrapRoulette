@@ -27,6 +27,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
             android:onClick="hideKeyboard"
             tools:context=".ui.pools.createpool.AddPoolFragment">
 
@@ -34,7 +35,7 @@
                 android:id="@+id/poolImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="24dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/joinPoolHeaderImage"
                 android:src="@drawable/ic_baseline_connect_without_contact_24"
@@ -69,7 +70,6 @@
                 errorRequiredInput="@{viewModel.poolProduction}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
                 android:layout_marginTop="@dimen/topMarginInputLayout"
                 app:layout_constraintBottom_toTopOf="@+id/passwordEditTextLayout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +95,6 @@
                 style="@style/PoolTextInputOuterFieldStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
                 app:layout_constraintBottom_toTopOf="@+id/selectDateTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +118,8 @@
                 errorRequiredInput="@{viewModel.poolDate.toString}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/poolEditTextHorizontal"
+                app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                app:endIconMode="custom"
                 app:layout_constraintBottom_toTopOf="@id/joinButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,7 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/date"
                     android:inputType="none"
-                    android:onClick="@{() -> fragment.launchDatePickerDialog()}"
+                    android:onClick="@{(v) -> fragment.launchDatePickerDialog(v)}"
                     android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.POOL_DATE_ERROR)}"
                     android:text="@={viewModel.poolDate}" />
 
@@ -148,7 +148,6 @@
                 setAccountEnabledArg3="@{viewModel.showLoading}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
                 android:onClick="@{() -> viewModel.joinPool()}"
@@ -171,7 +170,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
