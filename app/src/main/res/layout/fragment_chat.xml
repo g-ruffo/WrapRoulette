@@ -40,12 +40,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
                 android:clipToPadding="false"
+                app:cardElevation="1dp"
                 app:cardCornerRadius="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/sendMessageButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/sendMessageTextInputLayout"
@@ -87,25 +87,22 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendMessageButton"
-                style="@style/sendFabButton"
+                style="@style/SendFabButton"
                 icontTint="@color/loginTextDarkBackgroundColor"
                 setSizeAndEnabled="@{viewModel.userMessageEditText}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
                 android:adjustViewBounds="true"
-                android:backgroundTint="@color/bluePrimary"
                 android:src="@drawable/ic_baseline_send_24"
                 android:stateListAnimator="@animator/send_fab_state_animator"
                 android:visibility="visible"
                 app:elevation="22dp"
-                app:fabCustomSize="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/sendMessageCardView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:maxImageSize="24dp" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

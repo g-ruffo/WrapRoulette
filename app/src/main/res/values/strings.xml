@@ -104,4 +104,9 @@
     <string name="tempMemberIconDescription">Temporary member icon</string>
     <string name="memberProfileImageDescription">Member profile image</string>
     <string name="tempMemberOptionsImageDescription">Admin temporary member options icon</string>
+    <string name="chatProfileImageDescription">Chat message profile image</string>
+    <string name="noActivePoolText">No Active Pool</string>
+    <string name="setWrapTimeFabDescription">Set pool wrap time fab</string>
+    <string name="placeBetFabDescription">Place bet fab</string>
+    <string name="homeFragmentTabLayoutDescription">Home fragment tabs</string>
 </resources>

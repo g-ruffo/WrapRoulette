@@ -41,6 +41,7 @@
                     <ImageView
                         android:id="@+id/memberTempIcon"
                         style="@style/ListItemTempMemberIcon"
+                        android:contentDescription="@string/tempMemberIconDescription"
                         android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
                         tools:ignore="ImageContrastCheck" />
 

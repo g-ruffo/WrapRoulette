@@ -60,10 +60,9 @@
     <color name="buttonOrange">#fd8c35</color>
     <color name="poolHintTextColor">#757575</color>
 
-
     <color name="transparent">#00000000</color>
 
-    <color name="colorEnabledFab">#FC7307</color>
+    <color name="colorEnabledFab">#fd7d1c</color>
     <color name="colorDisabledFab">#80ff8b33</color>
 
     <color name="colorEnabledFabText">#262626</color>
@@ -71,6 +70,5 @@
 
     <color name="colorEnabled">#233b5d</color>
     <color name="colorDisabled">#9050658a</color>
-
 
 </resources>

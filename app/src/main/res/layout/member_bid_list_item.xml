@@ -44,7 +44,9 @@
                     <ImageView
                         android:id="@+id/memberTempIcon"
                         style="@style/ListItemTempMemberIcon"
-                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}" />
+                        android:contentDescription="@string/tempMemberIconDescription"
+                        android:visibility="@{member.tempMemberUid == null ? View.GONE : View.VISIBLE}"
+                        tools:ignore="ImageContrastCheck" />
 
                     <ImageView
                         android:id="@+id/memberProfileImageView"
@@ -53,6 +55,7 @@
                         android:layout_gravity="center"
                         android:adjustViewBounds="true"
                         android:clipToPadding="false"
+                        android:contentDescription="@string/memberProfileImageDescription"
                         android:scaleType="centerCrop"
                         android:src="@drawable/no_profile_image_member"
                         app:layout_constraintBottom_toBottomOf="parent"

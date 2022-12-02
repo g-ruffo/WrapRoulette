@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/title"
-                style="@style/dialogTitleStyle"
+                style="@style/DialogTitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@{member == null ? @string/addMemberDialogTitle : @string/editMemberDialogTitle}"
@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/subtitle"
-                style="@style/dialogMessageStyle"
+                style="@style/DialogMessageStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{member == null ? @string/createTempMemberDialogMessage : @string/editTempMemberDialogMessage(member.displayName)}"

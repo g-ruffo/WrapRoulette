@@ -34,7 +34,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.6"
+                app:layout_constraintVertical_bias="0.7"
                 app:layout_constraintVertical_chainStyle="packed">
 
                 <ImageView
@@ -42,8 +42,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="150dp"
+                    android:layout_marginTop="24dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/logoHeaderImage"
+                    android:maxWidth="80dp"
+                    android:maxHeight="80dp"
                     android:src="@drawable/logo_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -154,7 +157,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signInButton"
-                style="@style/loginButtonStyle"
+                style="@style/LoginButtonStyle"
                 setAccountEnabledArg1="@{viewModel.password}"
                 setAccountEnabledArg2="@{viewModel.emailAddress}"
                 setAccountEnabledArg3="@{viewModel.showLoading}"
@@ -176,6 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
+                android:layout_marginBottom="24dp"
                 android:onClick="@{() -> viewModel.navigateToSignUp()}"
                 android:text="@string/clickToSignUp"
                 android:textColor="@color/fabIconTint"
@@ -200,21 +204,15 @@
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
-                style="@style/progressBar"
+                style="@style/ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:elevation="8dp"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                android:indeterminate="true"
-                android:secondaryProgressTint="@color/black"
-                android:visibility="visible"
-                app:indicatorColor="@color/highlightOrange"
-                app:indicatorSize="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

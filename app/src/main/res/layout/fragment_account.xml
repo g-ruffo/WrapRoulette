@@ -19,7 +19,6 @@
         android:fillViewport="true"
         tools:context=".ui.account.AccountFragment">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -46,7 +45,8 @@
                         android:layout_height="0dp"
                         android:layout_marginHorizontal="68dp"
                         android:clipToPadding="false"
-                        android:maxWidth="100dp"
+                        android:maxWidth="40dp"
+                        android:maxHeight="40dp"
                         app:cardCornerRadius="14dp"
                         app:cardElevation="12dp"
                         app:layout_constraintBottom_toTopOf="@+id/emailEditTextLayout"
@@ -63,6 +63,8 @@
                             android:layout_gravity="center"
                             android:adjustViewBounds="true"
                             android:clipToPadding="false"
+                            android:maxWidth="40dp"
+                            android:maxHeight="40dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_baseline_person_24" />
 
@@ -107,7 +109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:hint="Type your email"
+                            android:hint="@string/email"
                             android:inputType="textEmailAddress"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.EMAIL_ERROR)}"
                             android:text="@{viewModel.updateEmail}" />
@@ -144,7 +146,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:hint="Your password"
+                            android:hint="Password"
                             android:inputType="textPassword"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.PASSWORD_ERROR)}"
                             android:text="**********" />
@@ -170,7 +172,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Name*"
+                            android:hint="@string/name"
                             android:inputType="textCapWords"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.NAME_ERROR)}"
                             android:text="@={viewModel.updateUsername}" />
@@ -197,7 +199,7 @@
                             style="@style/AccountTextInputInnerFieldStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Department*"
+                            android:hint="@string/department"
                             android:inputType="textCapWords"
                             android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.DEPARTMENT_ERROR)}"
                             android:text="@={viewModel.updateDepartment}" />
@@ -205,7 +207,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/saveButton"
-                        style="@style/mainBlueButtonStyle"
+                        style="@style/MainBlueButtonStyle"
                         setAccountEnabledArg1="@{viewModel.updateDepartment}"
                         setAccountEnabledArg2="@{viewModel.updateUsername}"
                         setAccountEnabledArg3="@{viewModel.showLoading}"
@@ -213,6 +215,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="68dp"
                         android:layout_marginTop="30dp"
+                        android:layout_marginBottom="12dp"
                         android:onClick="@{() -> viewModel.validateUpdateCurrentUser()}"
                         android:text="Save"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -225,24 +228,16 @@
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
+                style="@style/ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:elevation="8dp"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                android:indeterminate="true"
-                android:secondaryProgressTint="@color/black"
-                android:theme="@style/progressBar"
-                android:visibility="visible"
-                app:indicatorColor="@color/highlightOrange"
-                app:indicatorSize="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </ScrollView>
-
 </layout>

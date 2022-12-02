@@ -301,7 +301,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/deleteButton"
-                    style="@style/mainBlueButtonStyle"
+                    style="@style/MainBlueButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -317,7 +317,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/createButton"
-                    style="@style/mainBlueButtonStyle"
+                    style="@style/MainBlueButtonStyle"
                     setPoolEnabledArg1="@{viewModel.poolProduction}"
                     setPoolEnabledArg2="@{viewModel.poolDate}"
                     setPoolEnabledArg3="@{viewModel.poolStartTime}"
@@ -337,7 +337,7 @@
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
-                style="@style/progressBar"
+                style="@style/ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"

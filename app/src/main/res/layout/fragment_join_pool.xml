@@ -142,7 +142,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/joinButton"
-                style="@style/mainBlueButtonStyle"
+                style="@style/MainBlueButtonStyle"
                 setAccountEnabledArg1="@{viewModel.poolProduction}"
                 setAccountEnabledArg2="@{viewModel.poolDate}"
                 setAccountEnabledArg3="@{viewModel.showLoading}"
@@ -163,7 +163,7 @@
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
-                style="@style/progressBar"
+                style="@style/ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
