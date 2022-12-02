@@ -59,6 +59,7 @@ class SummaryFragment : BaseFragment() {
         _binding = FragmentSummaryBinding.inflate(inflater, container, false)
 
         binding.viewModel = _viewModel
+        binding.fragment = this
 
         return binding.root
     }
@@ -67,11 +68,6 @@ class SummaryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         setupScrollingListener()
-
-        binding.betAmountCardView.setOnClickListener { showPoolDetailDialog(BID_DIALOG) }
-        binding.adminCardView.setOnClickListener { showPoolDetailDialog(ADMIN_DIALOG) }
-        binding.marginCardView.setOnClickListener { showPoolDetailDialog(MARGIN_DIALOG) }
-        binding.pirCardView.setOnClickListener { showPoolDetailDialog(PIR_DIALOG) }
 
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -123,7 +119,7 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
-    private fun showPoolDetailDialog(dialog: Int) {
+    fun showPoolDetailDialog(dialog: Int) {
         if (_viewModel.currentPool.value == null) {
             _viewModel.showToast.value = "The pool has not loaded yet."
         } else {
