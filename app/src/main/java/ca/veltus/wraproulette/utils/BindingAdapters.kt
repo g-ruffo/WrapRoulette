@@ -83,8 +83,7 @@ object BindingAdapters {
             val minutes = (time / (1000 * 60) % 60)
             val hours = (time / (1000 * 60 * 60) % 24)
 
-            if (seconds < 0 && minutes < 0 && hours < 0) view.text = "--:--"
-            else view.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            view.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
         }
     }
 

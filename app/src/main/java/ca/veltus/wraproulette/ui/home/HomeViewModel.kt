@@ -92,7 +92,7 @@ class HomeViewModel @Inject constructor(
             if (poolEndTime.value != null) {
                 emit(poolEndTime.value!!.time - poolStartTime.value.time)
                 delay(1000)
-            } else if (showNoData.value || time > Constants.DAY) {
+            } else if (showNoData.value || time > Constants.DAY || time < 0) {
                 emit(0)
                 delay(1000)
             } else {
