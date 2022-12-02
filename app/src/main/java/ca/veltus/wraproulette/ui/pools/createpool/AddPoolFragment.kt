@@ -16,7 +16,9 @@ import ca.veltus.wraproulette.databinding.*
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import ca.veltus.wraproulette.utils.Constants
+import ca.veltus.wraproulette.utils.temporaryFocus
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -99,23 +101,39 @@ class AddPoolFragment : BaseFragment() {
         }.show()
     }
 
-    fun launchTimePickerDialog(isStartTime: Boolean = true) {
+    fun launchPirInfoDialog() {
+        val message =
+            "The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over."
+
+        val builder = MaterialAlertDialogBuilder(
+            activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.message.text = message
+        view.title.text = "Price Is Right Rules"
+        builder.apply {
+            setView(view.root)
+            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+        }.show()
+    }
+
+    fun launchTimePickerDialog(isStartTime: Boolean = true, editText: View) {
+        editText.temporaryFocus()
+
         val time = Calendar.getInstance()
         time.set(Calendar.SECOND, 0)
         time.set(Calendar.MILLISECOND, 0)
 
-        val submitButtonText: String
+        val submitButtonText = "Set"
         val titleText: String
         val messageText: String
 
         when (isStartTime) {
             true -> {
-                submitButtonText = "Set"
                 titleText = "Start Time"
                 messageText = "Set the pools start time according to the call sheet"
             }
             false -> {
-                submitButtonText = "Set"
                 titleText = "Lock Betting"
                 messageText = "At this time no additional bets can be made and are final."
             }
@@ -135,7 +153,12 @@ class AddPoolFragment : BaseFragment() {
         builder.apply {
             setView(view.root)
             setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton(submitButtonText) { dialog, _ -> }
+            setPositiveButton(submitButtonText) { _, _ -> }
+            if (!(editText as MaterialAutoCompleteTextView).text.isNullOrEmpty() && !isStartTime) {
+                setNegativeButton("Clear") { _, _ ->
+                    _viewModel.clearPoolTimeAndAmount(Constants.SET_FINAL_BETS)
+                }
+            }
         }
 
         val dialog = builder.show()
@@ -148,10 +171,14 @@ class AddPoolFragment : BaseFragment() {
 
             dialog.dismiss()
         }
+
+        dialog.setOnDismissListener { editText.clearFocus() }
     }
 
     // Launch date dialog and listen for its result.
-    fun launchDatePickerDialog() {
+    fun launchDatePickerDialog(editText: View) {
+        editText.temporaryFocus()
+
         val calendar = Calendar.getInstance()
 
         val submitButtonText = "Set"
@@ -171,7 +198,7 @@ class AddPoolFragment : BaseFragment() {
         builder.apply {
             setView(view.root)
             setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton(submitButtonText) { dialog, _ -> }
+            setPositiveButton(submitButtonText) { _, _ -> }
         }
 
         val dialog = builder.show()
@@ -186,9 +213,13 @@ class AddPoolFragment : BaseFragment() {
             _viewModel.setPoolDate(formatter.format(calendar.time))
             dialog.dismiss()
         }
+
+        dialog.setOnDismissListener { editText.clearFocus() }
     }
 
-    fun launchNumberPickerDialog(isTimeMargin: Boolean = false) {
+    fun launchNumberPickerDialog(isTimeMargin: Boolean = false, editText: View) {
+        editText.temporaryFocus()
+
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
@@ -201,11 +232,11 @@ class AddPoolFragment : BaseFragment() {
                 resources.getStringArray(R.array.margin_number_picker_entries)
             view.numberPickerMinutes.displayedValues = array
             view.numberPickerMinutes.maxValue = array.size - 1
-            builder.setPositiveButton("Set") { dialog, _ ->
+            builder.setPositiveButton("Set") { _, _ ->
                 _viewModel.setPoolPriceAndMargin(
                     view.numberPickerMinutes.displayedValues[view.numberPickerMinutes.value], false
                 )
-            }.setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            }.setNeutralButton("Cancel") { dialogCancel, _ -> dialogCancel.dismiss() }
         } else {
             val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
             builder.setView(view.root)
@@ -215,8 +246,16 @@ class AddPoolFragment : BaseFragment() {
                     view.numberPickerTens.value.toString() + result
 
                 _viewModel.setPoolPriceAndMargin(result, true)
-            }.setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            }.setNeutralButton("Cancel") { dialogCancel, _ -> dialogCancel.dismiss() }
         }
-        builder.show()
+        if (!(editText as MaterialAutoCompleteTextView).text.isNullOrEmpty()) {
+            builder.setNegativeButton("Clear") { _, _ ->
+                if (isTimeMargin) _viewModel.clearPoolTimeAndAmount(Constants.SET_MARGIN_TIME)
+                else _viewModel.clearPoolTimeAndAmount(Constants.SET_BET_AMOUNT)
+            }
+        }
+        val dialog = builder.show()
+
+        dialog.setOnDismissListener { editText.clearFocus() }
     }
 }

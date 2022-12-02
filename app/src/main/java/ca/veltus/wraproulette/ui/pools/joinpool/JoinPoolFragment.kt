@@ -13,6 +13,7 @@ import ca.veltus.wraproulette.databinding.FragmentJoinPoolBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.pools.PoolsViewModel
 import ca.veltus.wraproulette.utils.Constants
+import ca.veltus.wraproulette.utils.temporaryFocus
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -57,7 +58,9 @@ class JoinPoolFragment : BaseFragment() {
     }
 
     // Launch date dialog and listen for its result.
-    fun launchDatePickerDialog() {
+    fun launchDatePickerDialog(editText: View) {
+        editText.temporaryFocus()
+
         val calendar = Calendar.getInstance()
         val submitButtonText = "Set"
         val titleText = "Pool Date"
@@ -91,5 +94,6 @@ class JoinPoolFragment : BaseFragment() {
             _viewModel.setPoolDate(formatter.format(calendar.time))
             dialog.dismiss()
         }
+        dialog.setOnDismissListener { editText.clearFocus() }
     }
 }
