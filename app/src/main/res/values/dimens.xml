@@ -20,4 +20,6 @@
     <dimen name="dialogMessageHorizontalMargin">24dp</dimen>
     <dimen name="dialogMessageTopMargin">6dp</dimen>
     <dimen name="expandedFabBottomMargin">24dp</dimen>
+    <dimen name="listItemSecondaryImageMargin">22dp</dimen>
+    <dimen name="listItemSecondaryImageSize">24dp</dimen>
 </resources>
