@@ -18,13 +18,10 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/messageCardView"
+            style="@style/ChatMessageCardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/blueLight"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -36,16 +33,10 @@
 
                 <TextView
                     android:id="@+id/messageTextView"
+                    style="@style/ChatMessageText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:maxWidth="260dp"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="8dp"
-                    android:paddingRight="12dp"
                     android:text="@{message.text}"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
                     tools:text="This is a Message" />
             </LinearLayout>
 
@@ -53,17 +44,14 @@
 
         <TextView
             android:id="@+id/timestampTextView"
+            style="@style/ChatMessageTimestamp"
             dateToStringTimeConverter="@{message.time}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:textColor="@color/optionalGrey"
-            android:textSize="10sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/messageCardView"
             app:layout_constraintEnd_toStartOf="@+id/messageCardView"
             tools:text="10:00" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

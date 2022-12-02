@@ -149,12 +149,12 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="poolHelperTextStyle">
+    <style name="PoolHelperTextStyle">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="poolHintTextStyle">
+    <style name="PoolHintTextStyle">
         <item name="fontFamily">@font/roboto</item>
     </style>
 
@@ -225,13 +225,13 @@
         <item name="boxBackgroundMode">outline</item>
         <item name="boxStrokeColor">@color/color_state_text_input_layout_border</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="helperTextTextAppearance">@style/poolHelperTextStyle</item>
+        <item name="helperTextTextAppearance">@style/PoolHelperTextStyle</item>
         <item name="android:editTextColor">@color/cardViewTitleColor</item>
         <item name="boxStrokeWidthFocused">1dp</item>
         <item name="errorTextColor">@color/warningRed</item>
         <item name="boxStrokeErrorColor">@color/warningRed</item>
         <item name="errorIconTint">@color/warningRed</item>
-        <item name="hintTextAppearance">@style/poolHelperTextStyle</item>
+        <item name="hintTextAppearance">@style/PoolHelperTextStyle</item>
 
     </style>
 
@@ -243,7 +243,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textAppearance">@style/poolHintTextStyle</item>
+        <item name="android:textAppearance">@style/PoolHintTextStyle</item>
     </style>
 
     <style name="DialogTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -266,13 +266,13 @@
         <item name="boxBackgroundMode">outline</item>
         <item name="boxStrokeColor">@color/color_state_text_input_layout_border</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="helperTextTextAppearance">@style/poolHelperTextStyle</item>
+        <item name="helperTextTextAppearance">@style/PoolHelperTextStyle</item>
         <item name="android:editTextColor">@color/cardViewTitleColor</item>
         <item name="boxStrokeWidthFocused">1dp</item>
         <item name="errorTextColor">@color/warningRed</item>
         <item name="boxStrokeErrorColor">@color/warningRed</item>
         <item name="errorIconTint">@color/warningRed</item>
-        <item name="hintTextAppearance">@style/poolHelperTextStyle</item>
+        <item name="hintTextAppearance">@style/PoolHelperTextStyle</item>
     </style>
 
     <style name="DialogTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -282,7 +282,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textAppearance">@style/poolHintTextStyle</item>
+        <item name="android:textAppearance">@style/PoolHintTextStyle</item>
     </style>
 
     <style name="NumberPickerTheme" parent="Theme.WrapRoulette">
@@ -327,7 +327,7 @@
         <item name="android:visibility">invisible</item>
     </style>
 
-    <style name="sendFabButton">
+    <style name="SendFabButton">
         <item name="tint">@color/darkHeaderTextColor</item>
         <item name="backgroundTint">@color/bluePrimary</item>
         <item name="fabSize">normal</item>
@@ -343,7 +343,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="mainBlueButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="MainBlueButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/rounded_corners_button_login</item>
         <item name="android:textColor">@color/bluePrimary</item>
         <item name="android:textStyle">bold</item>
@@ -352,7 +352,7 @@
         <item name="backgroundTint">@color/color_states_material_button</item>
     </style>
 
-    <style name="loginButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="LoginButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/rounded_corners_button_login</item>
         <item name="android:textColor">@color/blueDark</item>
         <item name="android:textStyle">bold</item>
@@ -362,7 +362,7 @@
         <item name="backgroundTint">@color/color_states_material_button_login</item>
     </style>
 
-    <style name="backButton">
+    <style name="BackButton">
         <item name="android:elevation">12dp</item>
         <item name="tint">@color/fabIconTint</item>
         <item name="android:scaleType">centerCrop</item>
@@ -372,7 +372,7 @@
         <item name="android:layout_margin">@dimen/backButtonLayoutMargin</item>
     </style>
 
-    <style name="progressBar">
+    <style name="ProgressBar">
         <item name="android:elevation">8dp</item>
         <item name="android:gravity">center</item>
         <item name="android:indeterminate">true</item>
@@ -381,7 +381,7 @@
         <item name="indicatorSize">60dp</item>
     </style>
 
-    <style name="dialogTitleStyle">
+    <style name="DialogTitleStyle">
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginTop">@dimen/dialogTitleTopMargin</item>
@@ -389,7 +389,7 @@
         <item name="android:textColor">@color/bluePrimary</item>
     </style>
 
-    <style name="dialogMessageStyle">
+    <style name="DialogMessageStyle">
         <item name="android:textSize">15sp</item>
         <item name="android:gravity">start</item>
         <item name="fontFamily">@font/roboto</item>
@@ -399,7 +399,7 @@
         <item name="android:textColor">@color/textTitleColor</item>
     </style>
 
-    <style name="dialogSpinnerTextStyle">
+    <style name="DialogSpinnerTextStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
         <item name="fontFamily">@font/roboto_medium</item>
@@ -448,7 +448,6 @@
         <item name="android:layout_gravity">top|start</item>
         <item name="android:layout_marginStart">@dimen/listItemSecondaryImageMargin</item>
         <item name="android:layout_marginBottom">@dimen/listItemSecondaryImageMargin</item>
-        <item name="android:contentDescription">@string/tempMemberIconDescription</item>
         <item name="android:src">@drawable/ic_baseline_new_releases_24</item>
         <item name="tint">@color/memberItemTempIconTint</item>
     </style>
@@ -481,6 +480,31 @@
         <item name="android:textColor">@color/textTitleColor</item>
         <item name="android:textSize">15sp</item>
         <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="ChatMessageText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:maxWidth">260dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="ChatMessageTimestamp">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="ChatMessageCardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
     </style>
 
 </resources>
