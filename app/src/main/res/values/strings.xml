@@ -91,4 +91,11 @@
     <string name="editTempMemberDialogMessage">Edit %s\'s member details.</string>
     <string name="addMemberDialogTitle">Add Member</string>
     <string name="editMemberDialogTitle">Edit Member</string>
+    <string name="totalWinningsTitle">Total Winnings</string>
+    <string name="totalPoolsTitle">Total Pools</string>
+    <string name="totalBetsTitle">Total Bets</string>
+    <string name="actions">Actions</string>
+    <string name="createPoolFabDescription">Create pool fab</string>
+    <string name="joinPoolFabDescription">Join pool fab</string>
+    <string name="noSavedPoolsText">No Saved Pools</string>
 </resources>

@@ -19,4 +19,5 @@
     <dimen name="dialogTitleTopMargin">18dp</dimen>
     <dimen name="dialogMessageHorizontalMargin">24dp</dimen>
     <dimen name="dialogMessageTopMargin">6dp</dimen>
+    <dimen name="expandedFabBottomMargin">24dp</dimen>
 </resources>

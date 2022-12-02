@@ -33,34 +33,31 @@
                 android:layout_height="140dp"
                 android:background="@drawable/rounded_corners_header"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/totalWinningsTitle"
+                style="@style/PoolDetailHeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Winnings"
-                android:textColor="@color/white"
+                android:text="@string/totalWinningsTitle"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/totalWinningsText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintVertical_bias="0.3"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <TextView
                 android:id="@+id/totalWinningsText"
+                style="@style/PoolDetailHeaderText"
                 calculateTotalWinningsList="@{viewModel.pools}"
                 calculateTotalWinningsUid="@{viewModel.userAccount.uid}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
                 android:textSize="28sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/headerImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,17 +66,15 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/totalPoolsCardView"
+                style="@style/PoolDetailValueCardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="12dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
                 app:layout_constraintBottom_toBottomOf="@id/totalBetsCardView"
                 app:layout_constraintEnd_toStartOf="@id/totalBetsCardView"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/totalWinningsText">
 
@@ -90,11 +85,10 @@
 
                     <TextView
                         android:id="@+id/totalPoolsTitle"
+                        style="@style/PoolDetailCardSubText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Total Pools"
-                        android:textSize="14sp"
+                        android:text="@string/totalPoolsTitle"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -102,11 +96,11 @@
 
                     <TextView
                         android:id="@+id/totalPoolsText"
+                        style="@style/PoolDetailCardText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{String.valueOf(viewModel.pools.size())}"
                         android:textSize="28sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -119,17 +113,15 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/totalBetsCardView"
+                style="@style/PoolDetailValueCardView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="12dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
                 app:layout_constraintBottom_toBottomOf="@id/totalPoolsCardView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@id/totalPoolsCardView"
                 app:layout_constraintTop_toBottomOf="@id/totalWinningsText">
 
@@ -140,11 +132,10 @@
 
                     <TextView
                         android:id="@+id/totalBetsTitle"
+                        style="@style/PoolDetailCardSubText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Total Bets"
-                        android:textSize="14sp"
+                        android:text="@string/totalBetsTitle"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -152,12 +143,12 @@
 
                     <TextView
                         android:id="@+id/totalBetsText"
+                        style="@style/PoolDetailCardText"
                         calculateTotalPoolBetsList="@{viewModel.pools}"
                         calculateTotalPoolBetsUid="@{viewModel.userAccount.uid}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="28sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -172,7 +163,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@color/greyBackgroundColor"
-                android:backgroundTintMode="screen"
                 android:clipToPadding="false"
                 android:paddingTop="44dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -184,10 +174,11 @@
                 android:id="@+id/adminFabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:elevation="100dp"
-                tools:ignore="HardcodedText"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="0dp">
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/expandFab"
@@ -200,7 +191,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:onClick="@{() -> viewModel.toggleFabButton()}"
-                    android:text="Actions"
+                    android:text="@string/actions"
                     app:icon="@drawable/ic_baseline_add_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -213,7 +204,8 @@
                     setExpandableFabVisibleState="@{true}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="@dimen/expandedFabBottomMargin"
+                    android:contentDescription="@string/createPoolFabDescription"
                     android:onClick="@{() -> viewModel.navigateToAddPoolFragment()}"
                     app:layout_constraintBottom_toTopOf="@+id/expandFab"
                     app:layout_constraintEnd_toEndOf="@+id/expandFab"
@@ -227,7 +219,8 @@
                     setExpandableFabVisibleState="@{true}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="@dimen/expandedFabBottomMargin"
+                    android:contentDescription="@string/joinPoolFabDescription"
                     android:onClick="@{() -> viewModel.navigateToJoinPoolFragment()}"
                     app:layout_constraintBottom_toTopOf="@+id/newPoolFab"
                     app:layout_constraintEnd_toEndOf="@+id/newPoolFab"
@@ -239,13 +232,12 @@
 
             <TextView
                 android:id="@+id/noDataTextView"
+                style="@style/NoDataTextImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="No Saved Pools"
-                android:textSize="22sp"
+                android:text="@string/noSavedPoolsText"
                 android:visibility="@{viewModel.showNoData == true ? View.VISIBLE : View.GONE}"
-                app:drawableTopCompat="@drawable/ic_baseline_monetization_on_24"
+                app:drawableTopCompat="@drawable/folder_open_48"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -253,21 +245,15 @@
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressBar"
+                style="@style/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:elevation="8dp"
                 android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                android:indeterminate="true"
-                android:secondaryProgressTint="@color/black"
-                android:theme="@style/progressBar"
-                android:visibility="visible"
-                app:indicatorColor="@color/highlightOrange"
-                app:indicatorSize="60dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
