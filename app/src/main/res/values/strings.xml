@@ -79,4 +79,6 @@
     <string name="bettingMarginDialogTitle">Betting Margin</string>
     <string name="bettingMarginDialogMessage">Time added to each bet, in 6 minute increments. If 0, only the closest bid will win.</string>
     <string name="minutesDialogSpinnerText">/ Minutes</string>
+    <string name="poolDateDialogTitle">Set Bet Time</string>
+    <string name="poolDateDialogMessage">Set the pools date according to the call sheet.</string>
 </resources>
