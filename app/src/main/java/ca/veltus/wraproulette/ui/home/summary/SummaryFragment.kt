@@ -17,6 +17,8 @@ import ca.veltus.wraproulette.base.BaseFragment
 import ca.veltus.wraproulette.data.objects.MemberBidItem
 import ca.veltus.wraproulette.data.objects.WinnerMemberItem
 import ca.veltus.wraproulette.databinding.FragmentSummaryBinding
+import ca.veltus.wraproulette.databinding.OptionsDialogBinding
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.home.HomeViewModel
 import ca.veltus.wraproulette.utils.Constants.ADMIN_DIALOG
 import ca.veltus.wraproulette.utils.Constants.BID_DIALOG
@@ -42,6 +44,7 @@ class SummaryFragment : BaseFragment() {
 
     private var _binding: FragmentSummaryBinding? = null
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
+    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -119,42 +122,52 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
-    fun showPoolDetailDialog(dialog: Int) {
+    fun showPoolDetailDialog(dialogValue: Int) {
         if (_viewModel.currentPool.value == null) {
             _viewModel.showToast.value = "The pool has not loaded yet."
         } else {
-            var title: String = ""
-            var description: String = ""
-            when (dialog) {
+            var title = ""
+            var description = ""
+            when (dialogValue) {
                 BID_DIALOG -> {
-                    title = "Bid Amount"
-                    description =
-                        "The admin has set the bid price as $${_viewModel.currentPool.value!!.betAmount} for this pool."
+                    title = getString(R.string.bidAmountDialogTitle)
+                    description = getString(
+                        R.string.bidAmountDialogMessage, _viewModel.currentPool.value?.betAmount
+                    )
                 }
                 ADMIN_DIALOG -> {
-                    title = "Pool Administrator"
-                    description =
-                        "The creator and admin for this pool is ${_viewModel.currentPool.value!!.adminName}. They are responsible for adding temporary members, declaring rules and setting the wrap time."
+                    title = getString(R.string.poolAdminDialogTitle)
+                    description = getString(
+                        R.string.poolAdminDialogMessage, _viewModel.currentPool.value?.adminName
+                    )
                 }
                 MARGIN_DIALOG -> {
-                    title = "Betting Margin"
-                    description =
-                        "The current margin is ${_viewModel.currentPool.value!!.margin} minutes for this pool. This time is added to any bets made."
+                    title = getString(R.string.bettingMarginDialogTitle)
+                    description = getString(
+                        R.string.bettingMarginDialogPoolMessage,
+                        _viewModel.currentPool.value?.margin
+                    )
                 }
                 PIR_DIALOG -> {
-                    title = "Price Is Right Rules"
-                    description =
-                        "The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over. For this pool the admin has set this to ${_viewModel.currentPool.value!!.pIRRulesEnabled}."
+                    title = getString(R.string.priceIsRightRules)
+                    description = getString(
+                        R.string.priceIsRightRulesDialogMessage,
+                        _viewModel.currentPool.value?.pIRRulesEnabled.toString()
+                    )
                 }
-
             }
-            val dialog = MaterialAlertDialogBuilder(requireContext())
-            dialog.setTitle(title).setMessage(description).setPositiveButton("Close") { int, view ->
+            val builder = MaterialAlertDialogBuilder(
+                activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+            )
+            val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+            view.message.text = description
+            view.title.text = title
 
-            }
-            dialog.show()
+            builder.apply {
+                setView(view.root)
+                setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+            }.show()
         }
-
     }
 
     private fun setupScrollingListener() {
