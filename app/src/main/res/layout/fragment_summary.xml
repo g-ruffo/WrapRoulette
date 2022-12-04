@@ -80,13 +80,12 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/isAdminCardView"
+                    style="@style/SummaryHeaderCardView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="#00ffffff"
+                    android:backgroundTint="@color/transparent"
                     android:visibility="@{viewModel.isPoolAdmin() == false ? View.GONE : View.VISIBLE}"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="0dp"
                     app:layout_constraintStart_toStartOf="@id/totalPotText"
                     app:layout_constraintTop_toBottomOf="@id/totalPotText">
 
@@ -98,10 +97,12 @@
                             android:id="@+id/isAdminIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
+                            android:contentDescription="@string/adminIconDescription"
                             android:src="@drawable/ic_baseline_admin_panel_settings_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/loginTextDarkBackgroundColor" />
 
                         <TextView
                             android:id="@+id/isAdmingTextView"
@@ -109,13 +110,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/administratorHeaderTitle"
-                            android:textColor="@color/fabIconTint"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/isAdminIcon"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0" />
-
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -123,37 +122,34 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/totalMembersCardView"
+                    style="@style/SummaryHeaderCardView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="12dp"
-                    android:backgroundTint="#10ffffff"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="@id/headerImage"
                     app:layout_constraintDimensionRatio="10:8"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/headerImage"
                     app:layout_constraintVertical_bias="0.0">
 
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="12dp">
 
-
                         <ImageView
                             android:id="@+id/totalMembersIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/poolMemberIconDescription"
                             android:src="@drawable/ic_baseline_person_24"
                             app:layout_constraintBottom_toBottomOf="@id/totalMembersText"
                             app:layout_constraintEnd_toStartOf="@id/totalMembersText"
                             app:layout_constraintHorizontal_chainStyle="packed"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/white" />
+                            app:tint="@color/loginTextDarkBackgroundColor" />
 
                         <TextView
                             android:id="@+id/totalMembersText"
@@ -161,7 +157,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(viewModel.memberList.size)}"
-                            android:textSize="18sp"
                             app:layout_constraintBottom_toTopOf="@id/totalMemberTitle"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/totalMembersIcon"
@@ -184,12 +179,10 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/totalBetsCardView"
+                    style="@style/SummaryHeaderCardView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
-                    android:backgroundTint="#10ffffff"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="@id/totalMembersCardView"
                     app:layout_constraintDimensionRatio="10:8"
                     app:layout_constraintEnd_toStartOf="@id/totalMembersCardView"
@@ -206,13 +199,14 @@
                             android:id="@+id/totalBetsIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
+                            android:contentDescription="@string/poolBetsIconDescription"
                             android:src="@drawable/ic_baseline_casino_24"
                             app:layout_constraintBottom_toBottomOf="@id/totalBetsText"
                             app:layout_constraintEnd_toStartOf="@id/totalBetsText"
                             app:layout_constraintHorizontal_chainStyle="packed"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/white" />
+                            app:tint="@color/loginTextDarkBackgroundColor" />
 
                         <TextView
                             android:id="@+id/totalBetsText"
@@ -220,7 +214,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{String.valueOf(viewModel.poolBetsList.size)}"
-                            android:textSize="18sp"
                             app:layout_constraintBottom_toTopOf="@id/totalBetsTitle"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/totalBetsIcon"
@@ -244,12 +237,10 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/bettingClosesCardView"
+                    style="@style/SummaryHeaderCardView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:backgroundTint="#10ffffff"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="0dp"
                     app:layout_constraintEnd_toEndOf="@id/totalMembersCardView"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@id/totalBetsCardView"
@@ -262,11 +253,10 @@
 
                         <TextView
                             android:id="@+id/bettingClosesTextView"
-                            style="@style/PoolDetailHeaderValueText"
+                            style="@style/PoolDetailHeaderText"
                             getTimeStringFromLong="@{viewModel.betTimeRemainingDate}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="-06:12:00" />
@@ -288,19 +278,16 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/betAmountCardView"
+                    style="@style/SummaryInfoCardView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="22dp"
                     android:layout_marginBottom="12dp"
                     android:onClick="@{() -> fragment.showPoolDetailDialog(Constants.BID_DIALOG)}"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toStartOf="@id/marginCardView"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/bettingClosesCardView">
 
@@ -328,7 +315,7 @@
                             style="@style/PoolDetailCardSubText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Bid"
+                            android:text="@string/bidCardViewTitle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -340,16 +327,13 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/marginCardView"
+                    style="@style/SummaryInfoCardView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:onClick="@{() -> fragment.showPoolDetailDialog(Constants.MARGIN_DIALOG)}"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="@id/betAmountCardView"
-                    app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toStartOf="@id/pirCardView"
-                    app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@id/betAmountCardView"
                     app:layout_constraintTop_toTopOf="@id/betAmountCardView">
 
@@ -390,16 +374,13 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/pirCardView"
+                    style="@style/SummaryInfoCardView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:onClick="@{() -> fragment.showPoolDetailDialog(Constants.PIR_DIALOG)}"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="@id/betAmountCardView"
-                    app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toStartOf="@id/adminCardView"
-                    app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@id/marginCardView"
                     app:layout_constraintTop_toTopOf="@id/betAmountCardView">
 
@@ -415,6 +396,7 @@
                             android:layout_marginHorizontal="8dp"
                             android:layout_marginTop="8dp"
                             android:adjustViewBounds="true"
+                            android:contentDescription="@string/pirIconDescription"
                             android:enabled="@{viewModel.poolPIREnabled}"
                             android:src="@drawable/pir_card_view_image_selector"
                             app:layout_constraintBottom_toTopOf="@+id/pirTitle"
@@ -446,17 +428,14 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/adminCardView"
+                    style="@style/SummaryInfoCardView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="12dp"
                     android:onClick="@{() -> fragment.showPoolDetailDialog(Constants.ADMIN_DIALOG)}"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="@id/betAmountCardView"
-                    app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@id/pirCardView"
                     app:layout_constraintTop_toTopOf="@id/betAmountCardView">
 
@@ -490,6 +469,7 @@
                                 android:layout_gravity="center"
                                 android:adjustViewBounds="true"
                                 android:clipToPadding="false"
+                                android:contentDescription="@string/poolAdminPictureDescription"
                                 android:scaleType="centerCrop"
                                 android:src="@drawable/no_profile_image_member"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -552,7 +532,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-
                         <TextView
                             android:id="@+id/currentTimeTitle"
                             style="@style/TitleText"
@@ -561,7 +540,6 @@
                             setCurrentTimeTitleWrapTime="@{viewModel.poolEndTime}"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:textSize="18sp"
                             app:layout_constraintBottom_toTopOf="@id/winnersListBarrier"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -593,330 +571,18 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
+                <include
                     android:id="@+id/summaryCardView"
+                    layout="@layout/pool_times_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="12dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/login_edit_text_radius"
-                    app:cardElevation="2dp"
                     app:layout_constraintBottom_toTopOf="@id/memberBidsListBarrier"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/winnersCardViewBarrier">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="12dp">
-
-                        <LinearLayout
-                            android:id="@+id/currentTimeLayout"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="6dp"
-                            android:orientation="vertical"
-                            app:layout_constraintBottom_toTopOf="@id/startTimeCardView"
-                            app:layout_constraintEnd_toStartOf="@id/timeWorkedLayout"
-                            app:layout_constraintHorizontal_weight="1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0">
-
-                            <TextView
-                                android:id="@+id/timeTitle"
-                                style="@style/TitleText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/currentTimeTitle"
-                                android:textSize="16sp" />
-
-
-                            <TextView
-                                android:id="@+id/timeTextView"
-                                style="@style/ValueText"
-                                currentTimeFromDateToString="@{viewModel.currentTimeDate}"
-                                isPoolActiveTime="@{viewModel.isPoolActive()}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:format12Hour="kk:mm:ss"
-                                android:gravity="center"
-                                android:textSize="28sp"
-                                tools:text="18:14:01" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/timeWorkedLayout"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:orientation="vertical"
-                            app:layout_constraintBaseline_toBaselineOf="@id/currentTimeLayout"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_weight="1"
-                            app:layout_constraintStart_toEndOf="@id/currentTimeLayout"
-                            app:layout_constraintTop_toTopOf="parent">
-
-
-                            <TextView
-                                android:id="@+id/workedTimeTitle"
-                                style="@style/TitleText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/timeWorkedTitle"
-                                android:textSize="16sp" />
-
-
-                            <TextView
-                                android:id="@+id/workedTimeTextView"
-                                style="@style/ValueText"
-                                getTimeStringFromLong="@{viewModel.timeWorkedDate}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:format12Hour="kk:mm:ss"
-                                android:gravity="center"
-                                android:textSize="28sp"
-                                tools:text="18:14:01" />
-
-                        </LinearLayout>
-
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/startTimeCardView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="@dimen/login_edit_text_radius"
-                            app:cardElevation="0dp"
-                            app:layout_constraintBottom_toTopOf="@id/wrapTimeCardView"
-                            app:layout_constraintEnd_toEndOf="@id/wrapTimeCardView"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/timeWorkedLayout">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="12dp">
-
-                                <ImageView
-                                    android:id="@+id/startTimeIcon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_baseline_play_arrow_24"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:tint="@color/earningsGreen" />
-
-                                <TextView
-                                    android:id="@+id/workStartTimeTextView"
-                                    style="@style/ValueText"
-                                    dateToStringTimeConverter="@{viewModel.currentPool.startTime}"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginStart="12dp"
-                                    android:textSize="20sp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toEndOf="@+id/startTimeIcon"
-                                    app:layout_constraintTop_toBottomOf="@+id/workStartTimeTitle"
-                                    tools:text="18:14" />
-
-                                <TextView
-                                    android:id="@+id/workStartTimeTitle"
-                                    style="@style/TitleText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginEnd="12dp"
-                                    android:text="@string/startTimeTitle"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold"
-                                    app:layout_constraintStart_toStartOf="@+id/workStartTimeTextView"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        </com.google.android.material.card.MaterialCardView>
-
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/wrapTimeCardView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardElevation="0dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/startTimeCardView"
-                            app:layout_constraintTop_toBottomOf="@+id/startTimeCardView">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="12dp">
-
-
-                                <ImageView
-                                    android:id="@+id/wrapTimeIcon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_baseline_stop_24"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:tint="@color/warningRed" />
-
-                                <TextView
-                                    android:id="@+id/workWrapTimeTitle"
-                                    style="@style/TitleText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="@string/wrapTimeHeaderTitle"
-                                    android:textSize="12sp"
-                                    app:layout_constraintBottom_toTopOf="@id/workWrapTimeTextView"
-                                    app:layout_constraintStart_toStartOf="@id/workWrapTimeTextView"
-                                    app:layout_constraintTop_toBottomOf="@id/workWrapTimeTextView" />
-
-                                <TextView
-                                    android:id="@+id/workWrapTimeTextView"
-                                    style="@style/ValueText"
-                                    dateToStringTimeConverter="@{viewModel.currentPool.endTime}"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginStart="12dp"
-                                    android:textSize="20sp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/wrapTimeIcon"
-                                    app:layout_constraintTop_toBottomOf="@id/workWrapTimeTitle"
-                                    tools:text="18:14" />
-
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/currentPositionCardView"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="@dimen/login_edit_text_radius"
-                            app:cardElevation="0dp"
-                            app:layout_constraintEnd_toEndOf="@+id/currentBetCardView"
-                            app:layout_constraintStart_toStartOf="@+id/currentBetCardView"
-                            app:layout_constraintTop_toBottomOf="@+id/timeWorkedLayout">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="12dp">
-
-                                <ImageView
-                                    android:id="@+id/currentPositionIcon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_marginTop="6dp"
-                                    android:layout_marginBottom="6dp"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_baseline_access_time_24"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/positionTextView"
-                                    style="@style/ValueText"
-                                    dateToStringConverter="@{viewModel.userBetTime}"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="20sp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toStartOf="@+id/positionTitle"
-                                    app:layout_constraintTop_toBottomOf="@id/positionTitle"
-                                    tools:text="5th" />
-
-                                <TextView
-                                    android:id="@+id/positionTitle"
-                                    style="@style/TitleText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
-                                    android:text="@string/positionTitle"
-                                    android:textSize="12sp"
-                                    app:layout_constraintStart_toEndOf="@id/currentPositionIcon"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/currentBetCardView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="12dp"
-                            app:cardBackgroundColor="@android:color/transparent"
-                            app:cardCornerRadius="14dp"
-                            app:cardElevation="0dp"
-                            app:layout_constraintBottom_toBottomOf="@id/wrapTimeCardView"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/currentPositionCardView">
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="12dp">
-
-                                <ImageView
-                                    android:id="@+id/currentBetIcon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_marginTop="6dp"
-                                    android:layout_marginEnd="12dp"
-                                    android:layout_marginBottom="6dp"
-                                    android:adjustViewBounds="true"
-                                    android:src="@drawable/ic_outline_watch_24"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/currentBetTimeTitle"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/currentBetTimeTitle"
-                                    style="@style/TitleText"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/currentBetTitle"
-                                    android:textSize="12sp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/currentBetIcon"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/currentBetTimeTextView"
-                                    style="@style/ValueText"
-                                    dateToStringConverter="@{viewModel.userBetTime}"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="20sp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toStartOf="@id/currentBetTimeTitle"
-                                    app:layout_constraintTop_toBottomOf="@id/currentBetTimeTitle"
-                                    tools:text="06:12" />
-
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </androidx.cardview.widget.CardView>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </com.google.android.material.card.MaterialCardView>
+                    app:layout_constraintTop_toBottomOf="@id/winnersCardViewBarrier" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/winnersCardViewBarrier"
@@ -952,7 +618,6 @@
                             android:layout_marginTop="12dp"
                             android:elevation="4dp"
                             android:text="@string/memberBidsTitle"
-                            android:textSize="18sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

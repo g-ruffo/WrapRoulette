@@ -56,6 +56,7 @@
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/textTitleColor</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="ValueText">
@@ -88,7 +89,7 @@
     <style name="PoolDetailHeaderValueText">
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
-        <item name="android:textSize">@dimen/poolDetailHeaderTextSize</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="PoolSubtitleText">
@@ -509,6 +510,20 @@
         <item name="android:elevation">2dp</item>
         <item name="cardUseCompatPadding">true</item>
         <item name="cardPreventCornerOverlap">false</item>
+    </style>
+
+    <style name="SummaryHeaderCardView">
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/login_edit_text_radius</item>
+        <item name="android:backgroundTint">@color/headerSummaryCardViewBackground</item>
+    </style>
+
+    <style name="SummaryInfoCardView">
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">@dimen/login_edit_text_radius</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="layout_constraintHorizontal_weight">1</item>
+        <item name="layout_constraintDimensionRatio">1</item>
     </style>
 
 </resources>

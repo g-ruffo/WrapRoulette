@@ -70,5 +70,6 @@
 
     <color name="colorEnabled">#233b5d</color>
     <color name="colorDisabled">#9050658a</color>
+    <color name="headerSummaryCardViewBackground">#10ffffff</color>
 
 </resources>

@@ -27,7 +27,7 @@
             <ImageView
                 android:id="@+id/backButton"
                 style="@style/BackButton"
-                android:contentDescription="@string/backButton"
+                android:contentDescription="@string/backButtonDescription"
                 android:onClick="@{() -> viewModel.navigateBack()}"
                 android:src="@drawable/ic_baseline_arrow_back_24"
                 app:layout_constraintEnd_toEndOf="parent"

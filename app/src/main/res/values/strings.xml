@@ -49,7 +49,7 @@
     <string name="resetPasswordTitle">Reset Password</string>
     <string name="resetPasswordSubtitle">Enter your email address to reset you password.</string>
     <string name="reset">Reset</string>
-    <string name="backButton">Back button</string>
+    <string name="backButtonDescription">Back image</string>
     <string name="signUpTitle">Sign Up</string>
     <string name="signUpSubtitle">Enter your details to register</string>
     <string name="typeYourName">Type your name</string>
@@ -117,4 +117,14 @@
     <string name="bidAmountDialogMessage">The admin has set the bid price as $%s.00 for this pool.</string>
     <string name="messageHint">Message</string>
     <string name="sendFabDescription">Send message fab</string>
+    <string name="adminIconDescription">Admin icon image</string>
+    <string name="poolMemberIconDescription">Pool member icon</string>
+    <string name="poolBetsIconDescription">Pool bets icon</string>
+    <string name="bidCardViewTitle">Bid</string>
+    <string name="pirIconDescription">Price is right state icon</string>
+    <string name="poolAdminPictureDescription">Pool admin profile picture</string>
+    <string name="startTimeIconDescription">Start time icon</string>
+    <string name="wrapTimeIconDescription">Wrap time icon</string>
+    <string name="positionIconDescription">Position icon</string>
+    <string name="betTimeIconDescription">Bet time icon</string>
 </resources>

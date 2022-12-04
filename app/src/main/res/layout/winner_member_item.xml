@@ -38,6 +38,7 @@
             style="@style/ListItemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:text="@{member.displayName}"
             android:textColor="@color/textTitleColor"
             android:textSize="14sp"
