@@ -28,7 +28,6 @@
             android:layout_marginEnd="24dp"
             android:background="@color/fabIconTint"
             android:fitsSystemWindows="true"
-            app:drawerLayoutCornerSize="24dp"
             app:headerLayout="@layout/nav_header_main"
             app:itemBackground="@drawable/drawer_item_selector"
             app:itemIconTint="@color/drawer_item_selector_text_icon"
@@ -49,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="24dp"
                     android:gravity="center"
-                    android:text="Logout"
+                    android:text="@string/logout"
                     android:textColor="@color/bluePrimary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
