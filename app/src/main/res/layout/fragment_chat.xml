@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:background="@color/greyBackgroundColor"
             android:backgroundTintMode="screen"
+            android:paddingTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -40,8 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
                 android:clipToPadding="false"
-                app:cardElevation="1dp"
                 app:cardCornerRadius="30dp"
+                app:cardElevation="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/sendMessageButton"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,13 +68,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/sendMessageTextEditText"
                         style="@style/AccountTextInputInnerFieldStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Message"
+                        android:hint="@string/messageHint"
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="6"
                         android:singleLine="false"
@@ -84,28 +84,22 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendMessageButton"
                 style="@style/SendFabButton"
-                icontTint="@color/loginTextDarkBackgroundColor"
                 setSizeAndEnabled="@{viewModel.userMessageEditText}"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
-                android:adjustViewBounds="true"
+                android:contentDescription="@string/sendFabDescription"
                 android:src="@drawable/ic_baseline_send_24"
-                android:stateListAnimator="@animator/send_fab_state_animator"
                 android:visibility="visible"
-                app:elevation="22dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/sendMessageCardView"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
