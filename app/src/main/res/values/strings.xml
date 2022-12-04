@@ -66,8 +66,8 @@
     <string name="priceIsRightRules">Price Is Right Rules</string>
     <string name="delete">Delete</string>
     <string name="create">Create</string>
-    <string name="name">Name<font color='#FF0000'>*</font></string>
-    <string name="department">Department<font color='#FF0000'>*</font></string>
+    <string name="name">Name</string>
+    <string name="department">Department</string>
     <string name="email">Email</string>
     <string name="joinPoolHeaderImage">Join pool header image</string>
     <string name="joinPoolSubtitle">Enter the details of the pool you wish to join. Inputs are case sensitive.</string>
@@ -128,4 +128,7 @@
     <string name="positionIconDescription">Position icon</string>
     <string name="betTimeIconDescription">Bet time icon</string>
     <string name="winnerEmailDialogTitle">%s\'s Email:</string>
+    <string name="save">Save</string>
+    <string name="profilePictureDescription">Profile picture</string>
+    <string name="changePictureIconDescription">Change picture icon</string>
 </resources>
