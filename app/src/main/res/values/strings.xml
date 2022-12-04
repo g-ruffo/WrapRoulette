@@ -127,4 +127,5 @@
     <string name="wrapTimeIconDescription">Wrap time icon</string>
     <string name="positionIconDescription">Position icon</string>
     <string name="betTimeIconDescription">Bet time icon</string>
+    <string name="winnerEmailDialogTitle">%s\'s Email:</string>
 </resources>

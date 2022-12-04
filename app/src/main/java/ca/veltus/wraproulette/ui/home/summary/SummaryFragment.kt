@@ -1,6 +1,5 @@
 package ca.veltus.wraproulette.ui.home.summary
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,7 +49,7 @@ class SummaryFragment : BaseFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val onItemClick = OnItemClickListener { item, view ->
+    private val onItemClick = OnItemClickListener { item, _ ->
         if (item is WinnerMemberItem) {
             launchViewWinnerEmailDialog(item)
         }
@@ -62,6 +61,7 @@ class SummaryFragment : BaseFragment() {
         _binding = FragmentSummaryBinding.inflate(inflater, container, false)
 
         binding.viewModel = _viewModel
+        binding.summaryCardView.viewModel = _viewModel
         binding.fragment = this
 
         return binding.root
@@ -76,7 +76,7 @@ class SummaryFragment : BaseFragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     _viewModel.poolBetsList.collectLatest {
-                        if (!it.isNullOrEmpty()) setupBidsRecyclerView(it.toMemberBidItem())
+                        if (it.isNotEmpty()) setupBidsRecyclerView(it.toMemberBidItem())
                     }
                 }
                 launch {
@@ -115,7 +115,7 @@ class SummaryFragment : BaseFragment() {
             _viewModel.setIsScrolling(true)
         }
 
-        if (_viewModel.poolAdminProfileImage != null) {
+        if (_viewModel.poolAdminProfileImage.value != null) {
             Glide.with(requireContext()).asBitmap()
                 .load(FirebaseStorageUtil.pathToReference(_viewModel.poolAdminProfileImage.value!!))
                 .placeholder(R.drawable.no_profile_image_member).into(binding.adminImage)
@@ -171,7 +171,7 @@ class SummaryFragment : BaseFragment() {
     }
 
     private fun setupScrollingListener() {
-        binding.summaryScrollView.setOnScrollChangeListener { _, _, scrollY, _, s ->
+        binding.summaryScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             if (scrollY < 100) {
                 _viewModel.setIsScrolling()
             } else {
@@ -196,7 +196,7 @@ class SummaryFragment : BaseFragment() {
     private fun setPositionTextView(items: List<MemberBidItem>) {
         for (i in items.indices) {
             if (items[i].member.uid == _viewModel.userAccount.value!!.uid && items[i].member.displayName == _viewModel.userAccount.value!!.displayName) {
-                binding.positionTextView.text = intToStringOrdinal(i + 1)
+                binding.summaryCardView.positionTextView.text = intToStringOrdinal(i + 1)
             }
         }
     }
@@ -220,11 +220,17 @@ class SummaryFragment : BaseFragment() {
             _viewModel.showSnackBar.value = "No email found"
             return
         } else {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("${memberItem.member.displayName}'s Email:")
-            builder.setMessage(memberItem.member.email)
-            builder.setPositiveButton("Close") { _, _ -> }
-            builder.show()
+            val builder = MaterialAlertDialogBuilder(
+                activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+            )
+            val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+            view.message.text = email
+            view.title.text =
+                getString(R.string.winnerEmailDialogTitle, memberItem.member.displayName)
+            builder.apply {
+                setView(view.root)
+                setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+            }.show()
         }
     }
 }
