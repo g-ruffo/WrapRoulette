@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="68dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="32dp"
                 android:onClick="@{() -> viewModel.validateUpdateCurrentUser()}"
                 android:text="@string/save"
                 app:layout_constraintBottom_toBottomOf="parent"
