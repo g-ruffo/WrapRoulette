@@ -35,12 +35,12 @@ import java.io.ByteArrayOutputStream
 class AccountFragment : BaseFragment() {
     companion object {
         private const val TAG = "AccountFragment"
+        private const val RC_SELECT_IMAGE = 2
+        private const val STORAGE_REQUEST_CODE = 8
     }
 
     override val _viewModel by viewModels<LoginSignupViewModel>()
 
-    private val RC_SELECT_IMAGE = 2
-    private val STORAGE_REQUEST_CODE = 8
     private lateinit var selectedImageBytes: ByteArray
     private var _binding: FragmentAccountBinding? = null
 

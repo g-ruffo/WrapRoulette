@@ -30,6 +30,7 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     val errorPoolNameText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorPoolDateText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorPoolStartText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
+    val hasNetworkConnection: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     fun navigateBack() {
         navigationCommand.postValue(NavigationCommand.Back)

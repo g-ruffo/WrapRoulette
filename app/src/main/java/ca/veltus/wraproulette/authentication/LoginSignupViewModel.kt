@@ -2,7 +2,6 @@ package ca.veltus.wraproulette.authentication
 
 import android.app.Application
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.authentication.login.LoginFragmentDirections
@@ -13,6 +12,8 @@ import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
+import ca.veltus.wraproulette.utils.network.ConnectivityObserver
+import ca.veltus.wraproulette.utils.network.NetworkConnectivityObserver
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginSignupViewModel @Inject constructor(
-    private val repository: AuthenticationRepository, app: Application
+    private val repository: AuthenticationRepository,
+    private val connectivityObserver: NetworkConnectivityObserver,
+    app: Application
 ) : BaseViewModel(app) {
 
     companion object {
@@ -37,8 +40,6 @@ class LoginSignupViewModel @Inject constructor(
 
     val updateUsername = MutableStateFlow<String?>(null)
     val updateDepartment = MutableStateFlow<String?>(null)
-    val updatePassword = MutableStateFlow<String?>(null)
-    val updateEmail = MutableStateFlow<String?>(null)
 
     private val _tempProfileImage = MutableStateFlow<ByteArray?>(null)
     val tempProfileImage: StateFlow<ByteArray?>
@@ -63,12 +64,20 @@ class LoginSignupViewModel @Inject constructor(
         if (repository.currentUser != null) {
             _loginFlow.value = Result.Success(repository.currentUser!!)
             viewModelScope.launch {
-                repository.getCurrentUserProfile().collectLatest {
-                    _userAccount.emit(it)
-                    updateUsername.emit(it?.displayName)
-                    updateDepartment.emit(it?.department)
-                    updateEmail.emit(it?.email)
-                    Log.i(TAG, "update called: ")
+                launch {
+                    repository.getCurrentUserProfile().collectLatest {
+                        _userAccount.emit(it)
+                        updateUsername.emit(it?.displayName)
+                        updateDepartment.emit(it?.department)
+                    }
+                }
+                launch {
+                    connectivityObserver.observe().collectLatest {
+                        if (it == ConnectivityObserver.Status.Available) hasNetworkConnection.emit(
+                            true
+                        )
+                        else hasNetworkConnection.emit(false)
+                    }
                 }
             }
         }
@@ -139,23 +148,21 @@ class LoginSignupViewModel @Inject constructor(
             errorEmailText.value = ErrorMessage.ErrorText("Please enter your email address")
             showLoading.value = false
             return false
-        }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString()).matches()) {
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
+                .matches()
+        ) {
             errorEmailText.value = ErrorMessage.ErrorText("Email address is not a valid format")
             showLoading.value = false
             return false
-        }
-        if (TextUtils.isEmpty(password.value)) {
+        } else if (TextUtils.isEmpty(password.value)) {
             errorPasswordText.value = ErrorMessage.ErrorText("Please enter a password")
             showLoading.value = false
             return false
-        }
-        if (signUp && TextUtils.isEmpty(username.value)) {
+        } else if (signUp && TextUtils.isEmpty(username.value)) {
             errorNameText.value = ErrorMessage.ErrorText("Please enter your name")
             showLoading.value = false
             return false
-        }
-        if (signUp && TextUtils.isEmpty(department.value)) {
+        } else if (signUp && TextUtils.isEmpty(department.value)) {
             errorDepartmentText.value = ErrorMessage.ErrorText("Please enter your department")
             showLoading.value = false
             return false
@@ -184,22 +191,29 @@ class LoginSignupViewModel @Inject constructor(
             return
         } else {
             viewModelScope.launch {
-                if (tempImage != null) {
+                if (tempImage != null && hasNetworkConnection.value) {
                     FirebaseStorageUtil.uploadProfilePhoto(tempImage) { imagePath ->
-                        updateUserProfile(username, department, imagePath)
+                        updateUserProfile(
+                            username, department, imagePath, hasNetworkConnection.value
+                        )
                     }
                 } else {
-                    updateUserProfile(username, department, null)
+                    updateUserProfile(username, department, null, hasNetworkConnection.value)
                 }
             }
         }
     }
 
-    private fun updateUserProfile(username: String, department: String, tempImage: String? = null) {
+    private fun updateUserProfile(
+        username: String,
+        department: String,
+        tempImage: String? = null,
+        hasNetworkConnection: Boolean
+    ) {
         viewModelScope.launch {
             val userFieldMap = mutableMapOf<String, Any>()
-            if (!username.isNullOrEmpty()) userFieldMap["displayName"] = username.trim()
-            if (!department.isNullOrEmpty()) userFieldMap["department"] = department.trim()
+            if (username.isNotEmpty()) userFieldMap["displayName"] = username.trim()
+            if (department.isNotEmpty()) userFieldMap["department"] = department.trim()
             if (tempImage != null) userFieldMap["profilePicturePath"] = tempImage
 
             repository.updateCurrentUser(userFieldMap) {
@@ -210,6 +224,11 @@ class LoginSignupViewModel @Inject constructor(
                     showSnackBar.postValue(it)
                 }
                 showLoading.value = false
+            }
+            if (!hasNetworkConnection) {
+                showLoading.value = false
+                showSnackBar.postValue("Unable to connect to network, your changes will apply when reconnected.")
+                navigateBack()
             }
         }
     }
