@@ -133,4 +133,8 @@
     <string name="changePictureIconDescription">Change picture icon</string>
     <string name="settings">Settings</string>
     <string name="invite">Invite</string>
+    <string name="noNetworkCantUpdateMessage">No network connection, please reconnect before applying changes.</string>
+    <string name="noNetworkCantJoinMessage">No network connection, reconnect to join pool.</string>
+    <string name="accountSettings">Account Settings</string>
+    <string name="joinPool">Join Pool</string>
 </resources>
