@@ -1,6 +1,9 @@
 package ca.veltus.wraproulette.di
 
+import android.content.Context
 import ca.veltus.wraproulette.data.repository.*
+import ca.veltus.wraproulette.utils.network.ConnectivityObserver
+import ca.veltus.wraproulette.utils.network.NetworkConnectivityObserver
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -35,5 +38,13 @@ class AppModule {
         firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore
     ): HomeRepository {
         return HomeRepositoryImpl(firebaseAuth, firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNetworkConnectivityObserver(
+        context: Context
+    ): ConnectivityObserver {
+        return NetworkConnectivityObserver(context)
     }
 }
