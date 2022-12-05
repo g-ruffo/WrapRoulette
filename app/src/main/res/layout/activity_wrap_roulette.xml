@@ -28,11 +28,13 @@
             android:layout_marginEnd="24dp"
             android:background="@color/bluePrimary"
             android:fitsSystemWindows="true"
+            android:theme="@style/NavigationView"
             app:headerLayout="@layout/nav_header_main"
             app:itemBackground="@drawable/drawer_item_selector"
             app:itemIconTint="@color/drawer_item_selector_text_icon"
             app:itemTextColor="@color/drawer_item_selector_text_icon"
-            app:menu="@menu/activity_main_drawer">
+            app:menu="@menu/activity_main_drawer"
+            app:subheaderColor="@color/darkHeaderTextColor">
 
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>

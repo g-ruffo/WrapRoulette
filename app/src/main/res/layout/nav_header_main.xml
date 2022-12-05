@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
-        android:background="@drawable/nav_header_background"
+        android:background="@drawable/header_background"
         android:gravity="bottom"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
