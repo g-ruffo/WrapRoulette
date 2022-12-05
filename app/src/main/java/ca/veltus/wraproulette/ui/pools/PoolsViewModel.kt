@@ -3,6 +3,7 @@ package ca.veltus.wraproulette.ui.pools
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.ErrorMessage
@@ -15,6 +16,9 @@ import ca.veltus.wraproulette.ui.pools.joinpool.JoinPoolFragmentDirections
 import ca.veltus.wraproulette.utils.Constants.SET_BET_AMOUNT
 import ca.veltus.wraproulette.utils.Constants.SET_FINAL_BETS
 import ca.veltus.wraproulette.utils.Constants.SET_MARGIN_TIME
+import ca.veltus.wraproulette.utils.StringResourcesProvider
+import ca.veltus.wraproulette.utils.network.ConnectivityObserver
+import ca.veltus.wraproulette.utils.network.NetworkConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +30,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PoolsViewModel @Inject constructor(
-    private val repository: PoolListRepository, app: Application
+    private val repository: PoolListRepository,
+    private val connectivityObserver: NetworkConnectivityObserver,
+    private val stringResourcesProvider: StringResourcesProvider,
+    app: Application
 ) : BaseViewModel(app) {
 
     companion object {
@@ -64,13 +71,23 @@ class PoolsViewModel @Inject constructor(
     init {
         showLoading.value = true
         viewModelScope.launch {
-            repository.getCurrentUserProfile().collectLatest {
-                _userAccount.emit(it)
-                Log.i(TAG, "_userAccount: $it")
-                if (it != null && !it.uid.isNullOrEmpty()) {
-                    fetchPoolList(it.uid)
-                } else {
-                    showLoading.emit(false)
+            launch {
+                repository.getCurrentUserProfile().collectLatest {
+                    _userAccount.emit(it)
+                    Log.i(TAG, "_userAccount: $it")
+                    if (it != null && !it.uid.isNullOrEmpty()) {
+                        fetchPoolList(it.uid)
+                    } else {
+                        showLoading.emit(false)
+                    }
+                }
+            }
+            launch {
+                connectivityObserver.observe().collectLatest {
+                    if (it == ConnectivityObserver.Status.Available) hasNetworkConnection.emit(
+                        true
+                    )
+                    else hasNetworkConnection.emit(false)
                 }
             }
         }
@@ -104,13 +121,11 @@ class PoolsViewModel @Inject constructor(
         else poolBetLockTime.value = time
     }
 
-    fun clearPoolTimeAndAmount(time: CharSequence, value: Int) {
-        if (time.isEmpty()) {
-            when (value) {
-                SET_FINAL_BETS -> poolBetLockTime.value = null
-                SET_BET_AMOUNT -> poolBetAmount.value = null
-                SET_MARGIN_TIME -> poolMargin.value = null
-            }
+    fun clearPoolTimeAndAmount(value: Int) {
+        when (value) {
+            SET_FINAL_BETS -> poolBetLockTime.value = null
+            SET_BET_AMOUNT -> poolBetAmount.value = null
+            SET_MARGIN_TIME -> poolMargin.value = null
         }
     }
 
@@ -119,6 +134,12 @@ class PoolsViewModel @Inject constructor(
         val production = poolProduction.value
         val password = poolPassword.value
         val date = poolDate.value
+
+        if (!hasNetworkConnection.value) {
+            showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantJoinMessage))
+            showLoading.value = false
+            return
+        }
 
         if (production.isNullOrEmpty()) {
             errorPoolNameText.value = ErrorMessage.ErrorText("Please Enter Production Name")
@@ -147,6 +168,11 @@ class PoolsViewModel @Inject constructor(
 
     fun createUpdatePool() {
         showLoading.value = true
+        if (!hasNetworkConnection.value) {
+            showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantUpdateMessage))
+            showLoading.value = false
+            return
+        }
         if (poolProduction.value.isNullOrEmpty()) {
             errorPoolNameText.value = ErrorMessage.ErrorText("Please Enter Production Name")
             showLoading.value = false
@@ -258,14 +284,18 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
-    fun setUsersActivePool(poolId: String, onComplete: () -> Unit) {
+    fun setUsersActivePool(poolId: String) {
         viewModelScope.launch {
             showLoading.emit(true)
             repository.setActivePool(poolId) {
                 if (!it.isNullOrEmpty()) showToast.postValue(it)
                 else navigatePoolsToHomeFragment()
                 showLoading.value = false
-                onComplete()
+            }
+            if (!hasNetworkConnection.value) {
+                showSnackBar.postValue("No network connection, data will update when reconnected.")
+                showLoading.value = false
+                navigatePoolsToHomeFragment()
             }
         }
     }
