@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -87,6 +88,25 @@ class WrapRouletteActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        navView.menu.apply {
+            findItem(R.id.nav_logout).setOnMenuItemClickListener {
+                viewModel.logout()
+                startActivity(
+                    Intent(
+                        this@WrapRouletteActivity, LoginSignupActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
+                finish()
+                true
+            }
+
+            findItem(R.id.nav_invite).setOnMenuItemClickListener {
+                Toast.makeText(this@WrapRouletteActivity, "Invite", Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
+
+
         // Get Firebase current user data and display it in header.
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -110,15 +130,6 @@ class WrapRouletteActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-        binding.logout.setOnClickListener {
-            viewModel.logout()
-            startActivity(
-                Intent(
-                    this, LoginSignupActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            )
-            finish()
         }
     }
 }

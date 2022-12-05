@@ -131,4 +131,6 @@
     <string name="save">Save</string>
     <string name="profilePictureDescription">Profile picture</string>
     <string name="changePictureIconDescription">Change picture icon</string>
+    <string name="settings">Settings</string>
+    <string name="invite">Invite</string>
 </resources>
