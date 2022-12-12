@@ -68,16 +68,19 @@ class AddPoolFragment : BaseFragment() {
 
     private fun checkForEditPoolArgs() {
         val args = AddPoolFragmentArgs.fromBundle(requireArguments()).poolId
-        if (args != null) _viewModel.loadEditPool(args)
+        if (args != null) {
+            _viewModel.loadEditPool(args)
+            binding.subtitleText.text = getString(R.string.editPoolSubtitleText)
+        }
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.poolDocUid.collectLatest {
                     if (it.isNullOrBlank()) {
-                        activityCast.supportActionBar!!.title = "New Pool"
+                        activityCast.supportActionBar!!.title = getString(R.string.newPool)
                     } else {
                         binding.createButton.text = "Update"
-                        activityCast.supportActionBar!!.title = "Edit Pool"
+                        activityCast.supportActionBar!!.title = getString(R.string.editPool)
                     }
                 }
             }
@@ -181,24 +184,18 @@ class AddPoolFragment : BaseFragment() {
 
         val calendar = Calendar.getInstance()
 
-        val submitButtonText = "Set"
-        val titleText = "Pool Date"
-        val messageText = "Set the pools date according to the call sheet"
-
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = DatePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.apply {
-            title.text = titleText
-            message.text = messageText
             datePicker.minDate = calendar.time.time - Constants.YEAR
             datePicker.maxDate = calendar.time.time + Constants.YEAR
         }
         builder.apply {
             setView(view.root)
             setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton(submitButtonText) { _, _ -> }
+            setPositiveButton("Set") { _, _ -> }
         }
 
         val dialog = builder.show()

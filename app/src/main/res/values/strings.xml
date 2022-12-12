@@ -72,6 +72,7 @@
     <string name="joinPoolHeaderImage">Join pool header image</string>
     <string name="joinPoolSubtitle">Enter the details of the pool you wish to join. Inputs are case sensitive.</string>
     <string name="addPoolSubtitleText">Create a new pool below. Users can join using the name, password and date inputs.</string>
+    <string name="editPoolSubtitleText">Edit your pool details below. Users can join using the name, password and date inputs.</string>
     <string name="pirInfoImageDescription">Price is right rules info image</string>
     <string name="tempMemberOptionDialogMessage">Select EDIT to modify members details, or select BET to place their bid.</string>
     <string name="memberOptionsDialogTitle">Member Options</string>
@@ -145,4 +146,8 @@
     <string name="share">Share</string>
     <string name="inviteEmailIntentSubject">Welcome to Wrap Roulette</string>
     <string name="inviteEmailIntentMessage">Ready to put your money where your mouth is? Join the Wrap Roulette community to start placing your bets. \n\n</string>
+    <string name="inviteIntentTitle">Share Via</string>
+    <string name="send">Send</string>
+    <string name="newPool">New Pool</string>
+    <string name="editPool">Edit Pool</string>
 </resources>
