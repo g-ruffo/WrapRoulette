@@ -182,7 +182,7 @@
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/expandFab"
-                    style="@style/FabButton"
+                    style="@style/ExtendedFabButton"
                     setExpandableFabAdminState="@{true}"
                     setExpandableFabState="@{viewModel.isFabClicked}"
                     android:layout_width="wrap_content"
@@ -197,9 +197,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:visibility="visible" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/newPoolFab"
-                    style="@style/FabButton"
+                    style="@style/ExtendedSecondaryButton"
                     setExpandableFabEnabledState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleState="@{true}"
                     android:layout_width="wrap_content"
@@ -207,14 +207,14 @@
                     android:layout_marginBottom="@dimen/expandedFabBottomMargin"
                     android:contentDescription="@string/createPoolFabDescription"
                     android:onClick="@{() -> viewModel.navigateToAddPoolFragment()}"
+                    android:text="@string/create"
                     app:layout_constraintBottom_toTopOf="@+id/expandFab"
                     app:layout_constraintEnd_toEndOf="@+id/expandFab"
-                    app:srcCompat="@drawable/ic_outline_add_home_work_24"
                     tools:visibility="visible" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/joinPoolFab"
-                    style="@style/FabButton"
+                    style="@style/ExtendedSecondaryButton"
                     setExpandableFabEnabledState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleState="@{true}"
                     android:layout_width="wrap_content"
@@ -222,10 +222,10 @@
                     android:layout_marginBottom="@dimen/expandedFabBottomMargin"
                     android:contentDescription="@string/joinPoolFabDescription"
                     android:onClick="@{() -> viewModel.navigateToJoinPoolFragment()}"
+                    android:text="@string/join"
                     app:layout_constraintBottom_toTopOf="@+id/newPoolFab"
                     app:layout_constraintEnd_toEndOf="@+id/newPoolFab"
                     app:layout_constraintStart_toStartOf="@+id/newPoolFab"
-                    app:srcCompat="@drawable/ic_baseline_group_add_24"
                     tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

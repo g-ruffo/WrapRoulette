@@ -63,7 +63,7 @@
                 android:clickable="@{viewModel.isPoolAdmin == false ? true : false}"
                 android:contentDescription="@string/placeBetFabDescription"
                 android:enabled="@{viewModel.isBettingOpen == true ? true : false}"
-                android:src="@drawable/ic_baseline_currency_exchange_24"
+                android:src="@drawable/ic_baseline_casino_24"
                 android:visibility="@{viewModel.isPoolAdmin == false ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,11 +77,12 @@
                 android:layout_height="match_parent"
                 android:elevation="100dp"
                 android:visibility="@{viewModel.isPoolAdmin == true ? View.VISIBLE : View.GONE}"
-                tools:ignore="HardcodedText">
+                tools:ignore="HardcodedText"
+                tools:visibility="visible">
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/adminExpandableFab"
-                    style="@style/FabButton"
+                    style="@style/ExtendedFabButton"
                     setExpandableFabAdminState="@{viewModel.isPoolAdmin}"
                     setExpandableFabState="@{viewModel.isFabClicked}"
                     android:layout_width="wrap_content"
@@ -90,29 +91,29 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:onClick="@{() -> viewModel.toggleFabButton()}"
-                    android:text="Actions"
+                    android:text="@string/actions"
                     app:icon="@drawable/ic_baseline_add_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:visibility="visible" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/setWrapAdminFab"
-                    style="@style/FabButton"
+                    style="@style/ExtendedSecondaryButton"
                     setExpandableFabEnabledState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleState="@{viewModel.isPoolAdmin}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/expandedFabBottomMargin"
                     android:contentDescription="@string/setWrapTimeFabDescription"
+                    android:text="@string/wrap"
                     app:layout_constraintBottom_toTopOf="@+id/adminExpandableFab"
                     app:layout_constraintEnd_toEndOf="@+id/adminExpandableFab"
-                    app:srcCompat="@drawable/ic_outline_timer_off_24"
                     tools:visibility="visible" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                     android:id="@+id/betAdminFab"
-                    style="@style/FabButton"
+                    style="@style/ExtendedSecondaryButton"
                     setExpandableFabEnabledState="@{viewModel.isFabClicked}"
                     setExpandableFabVisibleState="@{viewModel.isPoolAdmin}"
                     android:layout_width="wrap_content"
@@ -121,13 +122,11 @@
                     android:contentDescription="@string/placeBetFabDescription"
                     android:elevation="8dp"
                     android:enabled="@{viewModel.isBettingOpen == true ? true : false}"
-                    android:src="@drawable/ic_baseline_currency_exchange_24"
+                    android:text="@string/bet"
                     app:layout_constraintBottom_toTopOf="@+id/setWrapAdminFab"
                     app:layout_constraintEnd_toEndOf="@+id/setWrapAdminFab"
                     app:layout_constraintStart_toStartOf="@+id/setWrapAdminFab"
-                    tools:visibility="visible">
-
-                </com.google.android.material.floatingactionbutton.FloatingActionButton>
+                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -348,28 +348,15 @@ object BindingAdapters {
         value = ["setExpandableFabVisibleState", "setExpandableFabEnabledState"], requireAll = true
     )
     @JvmStatic
-    fun setExpandableFabViews(view: FloatingActionButton, visible: Boolean, enabled: Boolean) {
+    fun setExpandableFabViews(
+        view: ExtendedFloatingActionButton, visible: Boolean, enabled: Boolean
+    ) {
         if (visible && enabled) {
             view.isClickable = true
             view.show()
         } else {
             view.hide()
             view.isClickable = false
-        }
-    }
-
-    @BindingAdapter(
-        value = ["setExpandableFabVisibleTextViewsState", "setExpandableFabEnabledTextViewsState"],
-        requireAll = true
-    )
-    @JvmStatic
-    fun setExpandableFabTextViews(view: View, visible: Boolean, enabled: Boolean) {
-        if (visible && enabled) {
-            view.visibility = View.VISIBLE
-            view.isEnabled = true
-        } else {
-            view.visibility = View.GONE
-            view.isEnabled = false
         }
     }
 
