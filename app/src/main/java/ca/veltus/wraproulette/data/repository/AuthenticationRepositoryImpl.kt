@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.data.repository
 
 import android.util.Log
 import ca.veltus.wraproulette.data.Result
+import ca.veltus.wraproulette.data.objects.Feedback
 import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -147,6 +148,19 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "updateCurrentUser: ${e.message}")
+                onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
+            }
+        }
+    }
+
+    override suspend fun sendFeedback(feedback: Feedback, onComplete: (String?) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                firestore.collection("feedback").document().set(feedback)
+                onComplete(null)
+            } catch (e: FirebaseFirestoreException) {
+                Log.e(TAG, "sendFeedback: ${e.message}")
                 onComplete(e.message)
                 Firebase.crashlytics.recordException(e)
             }

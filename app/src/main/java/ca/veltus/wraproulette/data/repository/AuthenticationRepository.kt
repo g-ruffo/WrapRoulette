@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.data.repository
 
 import ca.veltus.wraproulette.data.Result
+import ca.veltus.wraproulette.data.objects.Feedback
 import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -17,4 +18,6 @@ interface AuthenticationRepository {
     suspend fun updateCurrentUser(
         updateUserFieldMap: MutableMap<String, Any>, onComplete: (String?) -> Unit
     )
+
+    suspend fun sendFeedback(feedback: Feedback, onComplete: (String?) -> Unit)
 }
