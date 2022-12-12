@@ -9,6 +9,7 @@ import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.Result
+import ca.veltus.wraproulette.data.objects.Feedback
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +42,8 @@ class LoginSignupViewModel @Inject constructor(
 
     val updateUsername = MutableStateFlow<String?>(null)
     val updateDepartment = MutableStateFlow<String?>(null)
+
+    val feedbackMessage = MutableStateFlow<String?>(null)
 
     private val _tempProfileImage = MutableStateFlow<ByteArray?>(null)
     val tempProfileImage: StateFlow<ByteArray?>
@@ -230,6 +234,29 @@ class LoginSignupViewModel @Inject constructor(
                 showSnackBar.postValue("Unable to connect to network, your changes will apply when reconnected.")
                 navigateBack()
             }
+        }
+    }
+
+    fun sendFeedbackMessage(): Boolean {
+        val message = feedbackMessage.value
+        if (message.isNullOrEmpty() || message.isBlank()) {
+            return false
+        }
+        else {
+            val feedback = Feedback(
+                message,
+                Calendar.getInstance().time,
+                currentUser?.uid ?: "",
+                currentUser?.displayName ?: "",
+                currentUser?.email ?: ""
+            )
+            viewModelScope.launch {
+                repository.sendFeedback(feedback) {
+                    if (!it.isNullOrEmpty()) showToast.postValue(it)
+                    else feedbackMessage.value = null
+                }
+            }
+            return true
         }
     }
 

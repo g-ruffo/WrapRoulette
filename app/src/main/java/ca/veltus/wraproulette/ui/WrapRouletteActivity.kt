@@ -1,7 +1,9 @@
 package ca.veltus.wraproulette.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -23,8 +25,10 @@ import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.LoginSignupActivity
 import ca.veltus.wraproulette.authentication.LoginSignupViewModel
 import ca.veltus.wraproulette.databinding.ActivityWrapRouletteBinding
+import ca.veltus.wraproulette.databinding.FeedbackDialogBinding
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -89,6 +93,13 @@ class WrapRouletteActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navView.menu.apply {
+            findItem(R.id.nav_feedback).setOnMenuItemClickListener {
+                launchFeedbackDialog()
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawers()
+                }
+                true
+            }
             findItem(R.id.nav_logout).setOnMenuItemClickListener {
                 viewModel.logout()
                 startActivity(
@@ -131,5 +142,44 @@ class WrapRouletteActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun launchFeedbackDialog() {
+        viewModel.showToast.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+
+        val builder = MaterialAlertDialogBuilder(
+            this@WrapRouletteActivity,
+            R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
+        )
+        val view = FeedbackDialogBinding.inflate(LayoutInflater.from(this@WrapRouletteActivity))
+        view.viewModel = viewModel
+
+        builder.apply {
+            setView(view.root)
+            setPositiveButton("Send") { _, _ -> viewModel.sendFeedbackMessage() }
+        }
+        val dialog = builder.show()
+        dialog.apply {
+            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if (!viewModel.sendFeedbackMessage()) Toast.makeText(
+                    this@WrapRouletteActivity, getString(
+                        R.string.feedbackDialogEmptyErrorToast
+                    ), Toast.LENGTH_SHORT
+                ).show()
+                else {
+                    Toast.makeText(
+                        this@WrapRouletteActivity,
+                        getString(R.string.feedbackDialogSuccessToast),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    dialog.dismiss()
+                }
+            }
+            dialog.dismiss()
+        }
+        dialog.show()
+
     }
 }
