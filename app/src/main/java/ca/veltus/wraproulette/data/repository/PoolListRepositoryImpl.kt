@@ -1,9 +1,11 @@
 package ca.veltus.wraproulette.data.repository
 
 import android.util.Log
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
+import ca.veltus.wraproulette.utils.StringResourcesProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -23,8 +25,11 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class PoolListRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth, private val firestore: FirebaseFirestore
-) : PoolListRepository {
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val stringResourcesProvider: StringResourcesProvider,
+
+    ) : PoolListRepository {
 
     companion object {
         private const val TAG = "PoolListRepository"
@@ -148,13 +153,14 @@ class PoolListRepositoryImpl @Inject constructor(
             val queryResult = poolsCollectionReference.whereEqualTo("production", production)
                 .whereEqualTo("password", password).whereEqualTo("date", date).get().await()
             // Return a message if no pools match those credentials.
-            if (queryResult.isEmpty) onComplete("No Pool Found Matching Credentials")
+            if (queryResult.isEmpty) onComplete(stringResourcesProvider.getString(R.string.joinPoolErrorNoResults))
+            else if (queryResult.size() > 1) onComplete(stringResourcesProvider.getString(R.string.joinPoolErrorMultiplePools))
             else {
                 queryResult.documents.forEach {
                     val pool = it.toObject(Pool::class.java)
                     // If user is already a member of the pool return a message.
                     if (account!!.pools.any { entry -> entry.key == pool!!.docId && entry.value == true }) {
-                        onComplete("You are already a member of this pool")
+                        onComplete("You are already a member of this pool.")
                         // If the user had previously joined the pool but left, rejoin the pool.
                     } else if (account.pools.any { entry -> entry.key == pool!!.docId && entry.value == false }) {
                         try {
