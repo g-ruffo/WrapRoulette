@@ -60,10 +60,22 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun postSnackbarToastMessage(value: Int, string: String) {
+    fun postErrorHelperText(error: Int?, message: ErrorMessage<String>) {
+        when (error) {
+            PASSWORD_ERROR -> errorPasswordText.value = message
+            EMAIL_ERROR -> errorEmailText.value = message
+            DEPARTMENT_ERROR -> errorDepartmentText.value = message
+            NAME_ERROR -> errorNameText.value = message
+            POOL_NAME_ERROR -> errorPoolNameText.value = message
+            POOL_DATE_ERROR -> errorPoolDateText.value = message
+            POOL_START_ERROR -> errorPoolStartText.value = message
+        }
+    }
+
+    fun postSnackBarToastMessage(value: Int, message: String) {
         when (value) {
-            SHOW_SNACKBAR -> showSnackBar.postValue(string)
-            SHOW_TOAST -> showToast.postValue(string)
+            SHOW_SNACKBAR -> showSnackBar.postValue(message)
+            SHOW_TOAST -> showToast.postValue(message)
         }
     }
 }
