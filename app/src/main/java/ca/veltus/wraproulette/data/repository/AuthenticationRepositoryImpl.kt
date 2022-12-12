@@ -6,12 +6,14 @@ import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -47,6 +49,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             .map<DocumentSnapshot, User?> { it.toObject() }.onCompletion {
                 Log.i(TAG, "getCurrentUserProfile: $it")
             }.catch {
+                Firebase.crashlytics.recordException(it)
                 Log.e(TAG, "getCurrentUserProfile: $it")
             }
     }
@@ -56,6 +59,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             Result.Success(result.user!!)
         } catch (e: Exception) {
+            Firebase.crashlytics.recordException(e)
             e.printStackTrace()
             Result.Failure(e)
         }
@@ -71,6 +75,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             )?.await()
             Result.Success(result.user!!)
         } catch (e: Exception) {
+            Firebase.crashlytics.recordException(e)
             e.printStackTrace()
             Result.Failure(e)
         }
@@ -110,6 +115,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "initCurrentUserIfFirstTime: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
 
         }
@@ -122,6 +128,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 onComplete(user!!)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getCurrentUser: ${e.message}")
+                Firebase.crashlytics.recordException(e)
             }
         }
 
@@ -141,6 +148,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "updateCurrentUser: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }

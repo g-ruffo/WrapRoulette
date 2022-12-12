@@ -7,10 +7,12 @@ import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -51,6 +53,7 @@ class HomeRepositoryImpl @Inject constructor(
                 Log.i(TAG, "getCurrentUserProfile: $it")
             }.catch {
                 Log.e(TAG, "getCurrentUserProfile: $it")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
@@ -61,6 +64,7 @@ class HomeRepositoryImpl @Inject constructor(
                 onComplete(user!!)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getCurrentUser: ${e.message}")
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -88,6 +92,7 @@ class HomeRepositoryImpl @Inject constructor(
                 checkMembersForUpdate(poolId)
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getCurrentUser: ${e.message}")
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -98,7 +103,7 @@ class HomeRepositoryImpl @Inject constructor(
                 val members =
                     poolsCollectionReference.document(poolId).collection("members").get().await()
                         .toObjects(Member::class.java)
-                if (!members.isNullOrEmpty()) {
+                if (members.isNotEmpty()) {
                     members.forEach { member ->
                         if (member.tempMemberUid == null) {
                             val memberUpdateMap = mutableMapOf<String, Any>()
@@ -125,6 +130,7 @@ class HomeRepositoryImpl @Inject constructor(
 
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getCurrentUser: ${e.message}")
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -135,7 +141,7 @@ class HomeRepositoryImpl @Inject constructor(
                 val messages =
                     messagesCollectionReference.document(poolId).collection("chat").get().await()
                         .toObjects(Message::class.java)
-                if (!messages.isNullOrEmpty()) {
+                if (messages.isNotEmpty()) {
                     messages.forEach { message ->
                         val messageUpdateMap = mutableMapOf<String, Any>()
                         val user =
@@ -161,6 +167,7 @@ class HomeRepositoryImpl @Inject constructor(
                 }
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getCurrentUser: ${e.message}")
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -173,6 +180,7 @@ class HomeRepositoryImpl @Inject constructor(
                 Log.i(TAG, "getPoolData OnCompletion: $it")
             }.catch {
                 Log.e(TAG, "getPoolData Catch: ${it.message}  Caused: ${it.cause}")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
@@ -183,18 +191,20 @@ class HomeRepositoryImpl @Inject constructor(
                 Log.i(TAG, "getPoolMemberList OnCompletion: $it")
             }.catch {
                 Log.e(TAG, "getPoolMemberList: $it")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
-    override suspend fun getChatList(poolId: String): Flow<List<Message>> {
-        checkChatMessagesForUpdate(poolId)
-        return messagesCollectionReference.document(poolId).collection("chat")
+    override suspend fun getChatList(activePool: String): Flow<List<Message>> {
+        checkChatMessagesForUpdate(activePool)
+        return messagesCollectionReference.document(activePool).collection("chat")
             .orderBy("time", Query.Direction.ASCENDING).snapshots()
             .map<QuerySnapshot, List<Message>> { querySnapshot -> querySnapshot.toObjects() }
             .onCompletion {
                 Log.i(TAG, "getChatList: $it")
             }.catch {
                 Log.e(TAG, "getChatList: $it")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
@@ -211,6 +221,7 @@ class HomeRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "setUserPoolBet: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -229,6 +240,7 @@ class HomeRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "setPoolWrapTime: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -243,6 +255,7 @@ class HomeRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "setPoolWinner: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -265,6 +278,7 @@ class HomeRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "leavePool: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -285,6 +299,7 @@ class HomeRepositoryImpl @Inject constructor(
                 } catch (e: FirebaseFirestoreException) {
                     Log.e(TAG, "addNewMemberToPool: ${e.message}")
                     onComplete(e.message)
+                    Firebase.crashlytics.recordException(e)
                 }
             } else {
                 onComplete("Member already exists")
@@ -305,6 +320,7 @@ class HomeRepositoryImpl @Inject constructor(
                 } catch (e: FirebaseFirestoreException) {
                     Log.e(TAG, "updateTempPoolMember: ${e.message}")
                     onComplete(e.message)
+                    Firebase.crashlytics.recordException(e)
                 }
             } else {
                 onComplete("Member already exists")
@@ -321,6 +337,7 @@ class HomeRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "deleteTempPoolMember: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -339,6 +356,7 @@ class HomeRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "sendChatMessage: ${e.message}")
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }

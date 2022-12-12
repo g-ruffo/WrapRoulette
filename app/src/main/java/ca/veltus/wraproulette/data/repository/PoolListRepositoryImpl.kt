@@ -6,10 +6,12 @@ import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -49,6 +51,7 @@ class PoolListRepositoryImpl @Inject constructor(
                 Log.i(TAG, "getCurrentUserProfile: $it")
             }.catch {
                 Log.e(TAG, "getCurrentUserProfile: $it")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
@@ -60,6 +63,7 @@ class PoolListRepositoryImpl @Inject constructor(
                 Log.i(TAG, "getPoolsList: $it")
             }.catch {
                 Log.e(TAG, "getPoolsList: $it")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
@@ -105,6 +109,7 @@ class PoolListRepositoryImpl @Inject constructor(
 
                 } catch (e: FirebaseFirestoreException) {
                     onComplete(e.message)
+                    Firebase.crashlytics.recordException(e)
                 }
             } else {
                 onComplete("Pool already exists")
@@ -125,6 +130,7 @@ class PoolListRepositoryImpl @Inject constructor(
                     onComplete(null)
                 } catch (e: FirebaseFirestoreException) {
                     onComplete(e.message)
+                    Firebase.crashlytics.recordException(e)
                 }
             } else {
                 onComplete("Pool already exists")
@@ -169,6 +175,7 @@ class PoolListRepositoryImpl @Inject constructor(
                             onComplete(null)
                         } catch (e: FirebaseFirestoreException) {
                             onComplete(e.message)
+                            Firebase.crashlytics.recordException(e)
                         }
                     } else {
                         try {
@@ -201,6 +208,7 @@ class PoolListRepositoryImpl @Inject constructor(
                             onComplete(null)
                         } catch (e: FirebaseFirestoreException) {
                             onComplete(e.message)
+                            Firebase.crashlytics.recordException(e)
                         }
                     }
 
@@ -219,6 +227,7 @@ class PoolListRepositoryImpl @Inject constructor(
             } catch (e: FirebaseFirestoreException) {
                 Log.e(TAG, "getEditPool: ${e.message}")
                 onComplete(null)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -235,6 +244,7 @@ class PoolListRepositoryImpl @Inject constructor(
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
                 onComplete(e.message)
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -248,7 +258,7 @@ class PoolListRepositoryImpl @Inject constructor(
 
             } catch (e: FirebaseFirestoreException) {
                 onComplete(e.message)
-
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
