@@ -10,6 +10,8 @@ import ca.veltus.wraproulette.utils.Constants.PASSWORD_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_DATE_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_NAME_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_START_ERROR
+import ca.veltus.wraproulette.utils.Constants.SHOW_SNACKBAR
+import ca.veltus.wraproulette.utils.Constants.SHOW_TOAST
 import ca.veltus.wraproulette.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -55,6 +57,13 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
                 errorPoolDateText.value = null
                 errorPoolStartText.value = null
             }
+        }
+    }
+
+    fun postSnackbarToastMessage(value: Int, string: String) {
+        when (value) {
+            SHOW_SNACKBAR -> showSnackBar.postValue(string)
+            SHOW_TOAST -> showToast.postValue(string)
         }
     }
 }

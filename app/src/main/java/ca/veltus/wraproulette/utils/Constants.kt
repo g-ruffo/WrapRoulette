@@ -20,4 +20,7 @@ object Constants {
     const val SET_FINAL_BETS = 0
     const val SET_BET_AMOUNT = 1
     const val SET_MARGIN_TIME = 2
+    const val SHOW_SNACKBAR = 0
+    const val SHOW_TOAST = 1
+
 }
