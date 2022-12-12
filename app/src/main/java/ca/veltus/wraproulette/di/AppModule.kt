@@ -35,8 +35,9 @@ class AppModule {
     @Provides
     @Singleton
     fun provideHomeRepository(
-        firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore
+        firebaseAuth: FirebaseAuth, firestore: FirebaseFirestore,
+        stringResourcesProvider: StringResourcesProvider
     ): HomeRepository {
-        return HomeRepositoryImpl(firebaseAuth, firestore)
+        return HomeRepositoryImpl(firebaseAuth, firestore, stringResourcesProvider)
     }
 }

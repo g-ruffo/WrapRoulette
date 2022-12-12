@@ -27,9 +27,8 @@ import javax.inject.Inject
 class PoolListRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val stringResourcesProvider: StringResourcesProvider,
-
-    ) : PoolListRepository {
+    private val stringResourcesProvider: StringResourcesProvider
+) : PoolListRepository {
 
     companion object {
         private const val TAG = "PoolListRepository"
@@ -117,7 +116,7 @@ class PoolListRepositoryImpl @Inject constructor(
                     Firebase.crashlytics.recordException(e)
                 }
             } else {
-                onComplete("Pool already exists")
+                onComplete(stringResourcesProvider.getString(R.string.poolExistsErrorMessage))
             }
         }
     }
@@ -138,7 +137,7 @@ class PoolListRepositoryImpl @Inject constructor(
                     Firebase.crashlytics.recordException(e)
                 }
             } else {
-                onComplete("Pool already exists")
+                onComplete(stringResourcesProvider.getString(R.string.poolExistsErrorMessage))
             }
         }
     }
@@ -160,7 +159,7 @@ class PoolListRepositoryImpl @Inject constructor(
                     val pool = it.toObject(Pool::class.java)
                     // If user is already a member of the pool return a message.
                     if (account!!.pools.any { entry -> entry.key == pool!!.docId && entry.value == true }) {
-                        onComplete("You are already a member of this pool.")
+                        onComplete(stringResourcesProvider.getString(R.string.alreadyPoolMemberErrorMessage))
                         // If the user had previously joined the pool but left, rejoin the pool.
                     } else if (account.pools.any { entry -> entry.key == pool!!.docId && entry.value == false }) {
                         try {

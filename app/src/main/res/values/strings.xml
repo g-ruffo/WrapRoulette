@@ -153,4 +153,7 @@
     <string name="bet">Bet</string>
     <string name="joinPoolErrorMultiplePools">Multiple pools have the same credentials, contact administrator to change pool values.</string>
     <string name="joinPoolErrorNoResults">No pool found matching the provided credentials.</string>
+    <string name="poolExistsErrorMessage">Pool already exists.</string>
+    <string name="alreadyPoolMemberErrorMessage">You are already a member of this pool.</string>
+    <string name="memberExistsErrorMessage">Member already exists.</string>
 </resources>

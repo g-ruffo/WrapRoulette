@@ -1,10 +1,12 @@
 package ca.veltus.wraproulette.data.repository
 
 import android.util.Log
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.Pool
 import ca.veltus.wraproulette.data.objects.User
+import ca.veltus.wraproulette.utils.StringResourcesProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -22,7 +24,9 @@ import java.util.*
 import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth, private val firestore: FirebaseFirestore
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val stringResourcesProvider: StringResourcesProvider
 ) : HomeRepository {
 
     companion object {
@@ -42,7 +46,6 @@ class HomeRepositoryImpl @Inject constructor(
     private val poolsCollectionReference = firestoreInstance.collection("pools")
     private val messagesCollectionReference = firestoreInstance.collection("messages")
     private val usersCollectionReference = firestoreInstance.collection("users")
-
 
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
@@ -119,7 +122,6 @@ class HomeRepositoryImpl @Inject constructor(
                                     user.email
 
                                 if (memberUpdateMap.isNotEmpty()) {
-//                                    memberUpdateMap.forEach { Log.i("TAG", "checkMembersForUpdate: ${it.value}") }
                                     poolsCollectionReference.document(poolId).collection("members")
                                         .document(member.uid).update(memberUpdateMap).await()
                                 }
@@ -154,11 +156,6 @@ class HomeRepositoryImpl @Inject constructor(
                                 user.profilePicturePath!!
 
                             if (messageUpdateMap.isNotEmpty()) {
-                                messageUpdateMap.forEach {
-                                    Log.i(
-                                        "TAG", "checkChatMessagesForUpdate: ${it.value}"
-                                    )
-                                }
                                 messagesCollectionReference.document(poolId).collection("chat")
                                     .document(message.messageUid).update(messageUpdateMap).await()
                             }
@@ -302,7 +299,7 @@ class HomeRepositoryImpl @Inject constructor(
                     Firebase.crashlytics.recordException(e)
                 }
             } else {
-                onComplete("Member already exists")
+                onComplete(stringResourcesProvider.getString(R.string.memberExistsErrorMessage))
             }
         }
     }
@@ -323,7 +320,7 @@ class HomeRepositoryImpl @Inject constructor(
                     Firebase.crashlytics.recordException(e)
                 }
             } else {
-                onComplete("Member already exists")
+                onComplete(stringResourcesProvider.getString(R.string.memberExistsErrorMessage))
             }
         }
     }
