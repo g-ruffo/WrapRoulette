@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -30,6 +29,7 @@ import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -113,6 +113,7 @@ class WrapRouletteActivity : AppCompatActivity() {
 
             findItem(R.id.nav_invite).setOnMenuItemClickListener {
                 Toast.makeText(this@WrapRouletteActivity, "Invite", Toast.LENGTH_SHORT).show()
+                sendInviteIntent()
                 true
             }
         }
@@ -135,12 +136,27 @@ class WrapRouletteActivity : AppCompatActivity() {
                                 .load(FirebaseStorageUtil.pathToReference(it.profilePicturePath))
                                 .placeholder(R.drawable.ic_baseline_account_circle_24).into(
                                     navView.getHeaderView(0)
-                                        .findViewById<ImageView>(R.id.profileHeaderImageView)
+                                        .findViewById(R.id.profileHeaderImageView)
                                 )
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun sendInviteIntent() {
+        try {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.inviteEmailIntentSubject))
+            var shareMessage = getString(R.string.inviteEmailIntentMessage)
+            shareMessage =
+                shareMessage + "https://play.google.com/store/apps/details?id=" + packageName
+            intent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+            startActivity(Intent.createChooser(intent, "Share Via"))
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 

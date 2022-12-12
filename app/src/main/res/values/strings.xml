@@ -143,4 +143,6 @@
     <string name="feedbackDialogEmptyErrorToast">Please enter your message before sending.</string>
     <string name="feedbackDialogSuccessToast">Thanks for sharing your feedback!</string>
     <string name="share">Share</string>
+    <string name="inviteEmailIntentSubject">Welcome to Wrap Roulette</string>
+    <string name="inviteEmailIntentMessage">Ready to put your money where your mouth is? Join the Wrap Roulette community to start placing your bets. \n\n</string>
 </resources>
