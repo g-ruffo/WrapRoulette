@@ -137,4 +137,10 @@
     <string name="noNetworkCantJoinMessage">No network connection, reconnect to join pool.</string>
     <string name="accountSettings">Account Settings</string>
     <string name="joinPool">Join Pool</string>
+    <string name="sendFeedbackDialogTitle">Send Feedback</string>
+    <string name="sendFeedbackDialogMessage">Are you experiencing issues with the app or have suggestions to improve your experience? Let us know below.</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedbackDialogEmptyErrorToast">Please enter your message before sending.</string>
+    <string name="feedbackDialogSuccessToast">Thanks for sharing your feedback!</string>
+    <string name="share">Share</string>
 </resources>
