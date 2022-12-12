@@ -3,14 +3,18 @@ package ca.veltus.wraproulette.ui.home
 import android.app.Application
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
 import ca.veltus.wraproulette.data.ErrorMessage
 import ca.veltus.wraproulette.data.objects.*
 import ca.veltus.wraproulette.data.repository.HomeRepository
 import ca.veltus.wraproulette.utils.Constants
+import ca.veltus.wraproulette.utils.StringResourcesProvider
 import ca.veltus.wraproulette.utils.calculateWinners
 import ca.veltus.wraproulette.utils.isEqual
+import ca.veltus.wraproulette.utils.network.ConnectivityObserver
+import ca.veltus.wraproulette.utils.network.NetworkConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,23 +27,26 @@ import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: HomeRepository, private val app: Application
+    private val repository: HomeRepository,
+    private val connectivityObserver: NetworkConnectivityObserver,
+    private val stringResourcesProvider: StringResourcesProvider,
+    app: Application
 ) : BaseViewModel(app) {
     companion object {
         private const val TAG = "HomeViewModel"
     }
 
-    val isBettingOpen = MutableStateFlow<Boolean>(false)
-    val isPoolAdmin = MutableStateFlow<Boolean>(false)
-    val isFabClicked = MutableStateFlow<Boolean>(false)
-    val isScrolling = MutableStateFlow<Boolean>(false)
+    val isBettingOpen = MutableStateFlow(false)
+    val isPoolAdmin = MutableStateFlow(false)
+    val isFabClicked = MutableStateFlow(false)
+    val isScrolling = MutableStateFlow(false)
     val userMessageEditText = MutableStateFlow<String?>(null)
     val userBetTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     private val poolBettingLockTime = MutableStateFlow<Date?>(null)
     val poolEndTime = MutableStateFlow<Date?>(null)
     val poolMargin = MutableStateFlow<String?>(null)
-    val poolPIREnabled = MutableStateFlow<Boolean>(false)
+    val poolPIREnabled = MutableStateFlow(false)
 
     val newMemberName = MutableStateFlow<String?>(null)
     val newMemberDepartment = MutableStateFlow<String?>(null)
@@ -53,11 +60,11 @@ class HomeViewModel @Inject constructor(
     val poolAdminProfileImage: StateFlow<String?>
         get() = _poolAdminProfileImage
 
-    private val _isPoolActive = MutableStateFlow<Boolean>(false)
+    private val _isPoolActive = MutableStateFlow(false)
     val isPoolActive: StateFlow<Boolean>
         get() = _isPoolActive
 
-    private val _actionbarTitle = MutableStateFlow<String>("Home")
+    private val _actionbarTitle = MutableStateFlow("Home")
     val actionbarTitle: StateFlow<String>
         get() = _actionbarTitle
 
@@ -151,13 +158,23 @@ class HomeViewModel @Inject constructor(
     init {
         showLoading.value = true
         viewModelScope.launch {
-            repository.getCurrentUserProfile().collectLatest {
-                _userAccount.value = it
-                if (it != null && !it.activePool.isNullOrEmpty()) {
-                    getPoolData(it.activePool)
-                } else {
-                    showLoading.emit(false)
-                    showNoData.emit(true)
+            launch {
+                repository.getCurrentUserProfile().collectLatest {
+                    _userAccount.value = it
+                    if (it != null && !it.activePool.isNullOrEmpty()) {
+                        getPoolData(it.activePool)
+                    } else {
+                        showLoading.emit(false)
+                        showNoData.emit(true)
+                    }
+                }
+            }
+            launch {
+                connectivityObserver.observe().collectLatest {
+                    if (it == ConnectivityObserver.Status.Available) hasNetworkConnection.emit(
+                        true
+                    )
+                    else hasNetworkConnection.emit(false)
                 }
             }
         }
@@ -254,13 +271,19 @@ class HomeViewModel @Inject constructor(
     }
 
     fun leavePool() {
-        viewModelScope.launch {
-            repository.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
-                showLoading.value = false
-                if (!it.isNullOrEmpty()) showToast.postValue(it)
-                else {
-                    _actionbarTitle.value = "Home"
-                    navigateToPoolFragment()
+        if (!hasNetworkConnection.value) {
+            showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantUpdateMessage))
+            showLoading.value = false
+            return
+        } else {
+            viewModelScope.launch {
+                repository.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
+                    showLoading.value = false
+                    if (!it.isNullOrEmpty()) showToast.postValue(it)
+                    else {
+                        _actionbarTitle.value = "Home"
+                        navigateToPoolFragment()
+                    }
                 }
             }
         }
