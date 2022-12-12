@@ -4,7 +4,7 @@ import java.util.*
 
 data class Feedback(
     val message: String,
-    val time: Date,
+    val date: Date,
     val senderUid: String,
     val senderName: String,
     val senderEmail: String
