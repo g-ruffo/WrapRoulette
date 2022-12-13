@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.home.summary
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,9 +36,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SummaryFragment : BaseFragment() {
-    companion object {
-        private const val TAG = "SummaryFragment"
-    }
 
     private var _binding: FragmentSummaryBinding? = null
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
@@ -98,19 +94,16 @@ class SummaryFragment : BaseFragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.i(TAG, "onPause:")
         _viewModel.setIsScrolling()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.i(TAG, "onDestroyView: called")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i(TAG, "onResume: ")
         if (binding.summaryScrollView.scrollY > 100) {
             _viewModel.setIsScrolling(true)
         }
@@ -124,7 +117,7 @@ class SummaryFragment : BaseFragment() {
 
     fun showPoolDetailDialog(dialogValue: Int) {
         if (_viewModel.currentPool.value == null) {
-            _viewModel.showToast.value = "The pool has not loaded yet."
+            _viewModel.postToastMessage(getString(R.string.poolHasntLoadedMessage))
         } else {
             var title = ""
             var description = ""
@@ -165,7 +158,7 @@ class SummaryFragment : BaseFragment() {
 
             builder.apply {
                 setView(view.root)
-                setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+                setPositiveButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
             }.show()
         }
     }
@@ -217,7 +210,7 @@ class SummaryFragment : BaseFragment() {
     private fun launchViewWinnerEmailDialog(memberItem: WinnerMemberItem) {
         val email = memberItem.member.email
         if (email.isNullOrEmpty()) {
-            _viewModel.showSnackBar.value = "No email found"
+            _viewModel.postSnackBarMessage(getString(R.string.noMemberEmailMessage))
             return
         } else {
             val builder = MaterialAlertDialogBuilder(
@@ -229,7 +222,7 @@ class SummaryFragment : BaseFragment() {
                 getString(R.string.winnerEmailDialogTitle, memberItem.member.displayName)
             builder.apply {
                 setView(view.root)
-                setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+                setPositiveButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
             }.show()
         }
     }
