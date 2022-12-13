@@ -37,10 +37,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class WrapRouletteActivity : AppCompatActivity() {
 
-    companion object {
-        private const val TAG = "WrapRouletteActivity"
-    }
-
     private val viewModel: LoginSignupViewModel by viewModels()
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -61,11 +57,12 @@ class WrapRouletteActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers()
         } else {
-            super.onBackPressed()
+            @Suppress("DEPRECATION") super.onBackPressed()
         }
     }
 
@@ -110,9 +107,7 @@ class WrapRouletteActivity : AppCompatActivity() {
                 finish()
                 true
             }
-
             findItem(R.id.nav_invite).setOnMenuItemClickListener {
-                Toast.makeText(this@WrapRouletteActivity, "Invite", Toast.LENGTH_SHORT).show()
                 sendInviteIntent()
                 true
             }
@@ -154,7 +149,7 @@ class WrapRouletteActivity : AppCompatActivity() {
             shareMessage =
                 shareMessage + "https://play.google.com/store/apps/details?id=" + packageName
             intent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(intent, "Share Via"))
+            startActivity(Intent.createChooser(intent, getString(R.string.inviteIntentTitle)))
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
@@ -174,7 +169,7 @@ class WrapRouletteActivity : AppCompatActivity() {
 
         builder.apply {
             setView(view.root)
-            setPositiveButton("Send") { _, _ -> viewModel.sendFeedbackMessage() }
+            setPositiveButton(getString(R.string.send)) { _, _ -> viewModel.sendFeedbackMessage() }
         }
         val dialog = builder.show()
         dialog.apply {
@@ -196,6 +191,5 @@ class WrapRouletteActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
-
     }
 }
