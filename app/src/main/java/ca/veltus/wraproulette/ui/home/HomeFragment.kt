@@ -2,7 +2,6 @@ package ca.veltus.wraproulette.ui.home
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateInterpolator
 import androidx.core.view.MenuHost
@@ -32,9 +31,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(), MenuProvider {
-    companion object {
-        private const val TAG = "HomeFragment"
-    }
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -65,25 +61,14 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
-
         binding.viewModel = _viewModel
-
-        binding.bidFab.setOnClickListener {
-            launchBetAndWrapDialog()
-        }
-
-        binding.betAdminFab.setOnClickListener {
-            launchBetAndWrapDialog()
-        }
-
-        binding.setWrapAdminFab.setOnClickListener {
-            launchBetAndWrapDialog(true)
-        }
+        binding.fragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         adapter = ViewPagerAdapter(this)
 
         binding.viewPager.adapter = adapter
+
         tabLayoutMediator =
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                 tab.text = ViewPagerAdapter.fragmentTitle[position]
@@ -107,7 +92,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.main, menu)
-
     }
 
     override fun onPrepareMenu(menu: Menu) {
@@ -130,25 +114,21 @@ class HomeFragment : BaseFragment(), MenuProvider {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
                 if (_viewModel.isPoolActive.value || _viewModel.poolEndTime.value == null) _viewModel.navigateToEditPool()
-                else _viewModel.showSnackBar.value =
-                    "Pool has finished, you are unable to edit details."
+                else _viewModel.postSnackBarMessage(getString(R.string.poolFinishedCantEditMessage))
                 true
             }
             R.id.actionAddMember -> {
                 if (_viewModel.isPoolActive.value) launchAddMemberDialog()
-                else _viewModel.showSnackBar.value =
-                    "Pool has finished, you are unable to add anymore members."
+                else _viewModel.postSnackBarMessage(getString(R.string.poolFinishedCantAddMemberMessage))
                 true
             }
             R.id.actionLeavePool -> {
                 if ((!_viewModel.isPoolAdmin.value && _viewModel.userBetTime.value == null) || (_viewModel.poolEndTime.value != null && !_viewModel.isPoolActive.value && !_viewModel.isPoolAdmin.value)) {
                     launchConfirmationDialog(null, true)
                 } else if (!_viewModel.isBettingOpen.value && _viewModel.isPoolActive.value) {
-                    _viewModel.showSnackBar.value =
-                        "Betting has locked and pool is still active, you are unable to leave at this time."
+                    _viewModel.postSnackBarMessage(getString(R.string.bettingLockedPoolActiveCantLeaveMessage))
                 } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
-                    _viewModel.showSnackBar.value =
-                        "You need to clear your bet before leaving this pool"
+                    _viewModel.postSnackBarMessage(getString(R.string.clearBetToLeavePoolMessage))
                 }
                 true
             }
@@ -163,10 +143,6 @@ class HomeFragment : BaseFragment(), MenuProvider {
         activityCast.supportActionBar?.subtitle = null
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         tabLayoutMediator?.detach()
@@ -175,25 +151,15 @@ class HomeFragment : BaseFragment(), MenuProvider {
         binding.viewPager.adapter = null
         adapter = null
         _binding = null
-        Log.i(TAG, "onDestroyView: called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "onDestroy: called")
     }
 
     private fun checkAdminStatus() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.isPoolAdmin.collectLatest {
-                    when (it) {
-                        true -> {
-                            _fabView = binding.adminFabLayout
-                        }
-                        false -> {
-                            _fabView = binding.bidFab
-                        }
+                    _fabView = when (it) {
+                        true -> binding.adminFabLayout
+                        false -> binding.bidFab
                     }
                 }
             }
@@ -264,11 +230,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
         )
         val view = AddMemberDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.viewModel = _viewModel
-        view.lifecycleOwner = viewLifecycleOwner
+        view.lifecycleOwner = this.viewLifecycleOwner
         builder.apply {
             setView(view.root)
-            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Create") { _, _ -> }
+            setNeutralButton(getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.create)) { _, _ -> }
         }
 
         val dialog = builder.show()
@@ -279,7 +245,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
-    private fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
+    fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance()
         time.set(Calendar.SECOND, 0)
         time.set(Calendar.MILLISECOND, 0)
@@ -290,15 +256,14 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
         when (setWrapTime) {
             true -> {
-                submitButtonText = "Wrap"
-                titleText = "Set Wrap Time"
-                messageText =
-                    "Select the wrap time using the spinner below. Once set you will be unable to edit the pool or place additional bets."
+                submitButtonText = getString(R.string.wrap)
+                titleText = getString(R.string.setWrapTimeDialogTitle)
+                messageText = getString(R.string.setWrapTimeDialogSubtitle)
             }
             false -> {
-                submitButtonText = "Bet"
-                titleText = "Set Bet Time"
-                messageText = "Use the spinner below to set your bet time."
+                submitButtonText = getString(R.string.bet)
+                titleText = getString(R.string.setBetTimeDialogTitle)
+                messageText = getString(R.string.setBetTimeDialogSubtitle)
             }
         }
 
@@ -315,12 +280,12 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
         builder.apply {
             setView(view.root)
-            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            setNeutralButton(getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
             setPositiveButton(submitButtonText) { _, _ -> }
         }
 
         if ((_viewModel.userBetTime.value != null && !setWrapTime) || (setWrapTime && _viewModel.poolEndTime.value != null)) {
-            builder.setNegativeButton("Clear") { _, _ -> }
+            builder.setNegativeButton(getString(R.string.clear)) { _, _ -> }
         }
 
         val dialog = builder.show()
@@ -349,11 +314,11 @@ class HomeFragment : BaseFragment(), MenuProvider {
     private fun launchConfirmationDialog(time: Date?, isLeavePool: Boolean = false) {
         val format = SimpleDateFormat("HH:mm MMM d, yyyy", Locale.ENGLISH)
         val message: String = if (time == null && !isLeavePool) {
-            "Are you sure you want to clear the set wrap time?"
+            getString(R.string.clearWrapConfirmDialogSubtitle)
         } else if (time != null && !isLeavePool) {
-            "Please confirm the selected wrap time is correct: ${format.format(time)}"
+            getString(R.string.confirmWrapConfirmDialogSubtitle, format.format(time))
         } else {
-            "Are you sure you want to leave this pool?"
+            getString(R.string.leavePoolConfirmDialogSubtitle)
         }
 
         val builder = MaterialAlertDialogBuilder(
@@ -361,14 +326,14 @@ class HomeFragment : BaseFragment(), MenuProvider {
         )
         val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.message.text = message
-        view.title.text = "Are You Sure?"
+        view.title.text = getString(R.string.areYouSureDialogTitle)
         builder.apply {
             setView(view.root)
-            setNeutralButton("No") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Yes") { _, _ ->
+            setNeutralButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 if (!isLeavePool) _viewModel.setWrapTime(time, true)
                 else {
-                    _viewModel.showLoading.value = true
+                    _viewModel.setShowLoadingValue(true)
                     _viewModel.leavePool()
                 }
             }

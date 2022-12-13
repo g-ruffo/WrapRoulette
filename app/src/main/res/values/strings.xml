@@ -179,5 +179,16 @@
     <string name="yes">Yes</string>
     <string name="poolHasntLoadedMessage">The pool has not loaded yet.</string>
     <string name="noMemberEmailMessage">Member has not provided an email address.</string>
+    <string name="poolFinishedCantEditMessage">Pool has finished, you are unable to edit details.</string>
+    <string name="poolFinishedCantAddMemberMessage">Pool has finished, you are unable to add anymore members.</string>
+    <string name="bettingLockedPoolActiveCantLeaveMessage">Betting has locked and pool is still active, you are unable to leave at this time.</string>
+    <string name="clearBetToLeavePoolMessage">You need to clear your bet before leaving this pool.</string>
+    <string name="setWrapTimeDialogTitle">Set Wrap Time</string>
+    <string name="setWrapTimeDialogSubtitle">Select the wrap time using the spinner below. Once set you will be unable to edit the pool or place additional bets.</string>
+    <string name="setBetTimeDialogTitle">Set Bet Time</string>
+    <string name="setBetTimeDialogSubtitle">Use the spinner below to set your bet time.</string>
+    <string name="clearWrapConfirmDialogSubtitle">Are you sure you want to clear the set wrap time?</string>
+    <string name="confirmWrapConfirmDialogSubtitle">"Please confirm the selected wrap time is correct: %s"</string>
+    <string name="leavePoolConfirmDialogSubtitle">Are you sure you want to leave this pool?</string>
 
 </resources>

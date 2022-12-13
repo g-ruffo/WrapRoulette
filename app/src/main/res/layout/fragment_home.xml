@@ -9,6 +9,10 @@
             name="viewModel"
             type="ca.veltus.wraproulette.ui.home.HomeViewModel" />
 
+        <variable
+            name="fragment"
+            type="ca.veltus.wraproulette.ui.home.HomeFragment" />
+
         <import type="android.view.View" />
 
     </data>
@@ -63,6 +67,7 @@
                 android:clickable="@{viewModel.isPoolAdmin == false ? true : false}"
                 android:contentDescription="@string/placeBetFabDescription"
                 android:enabled="@{viewModel.isBettingOpen == true ? true : false}"
+                android:onClick="@{() -> fragment.launchBetAndWrapDialog(false)}"
                 android:src="@drawable/ic_baseline_casino_24"
                 android:visibility="@{viewModel.isPoolAdmin == false ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -106,6 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/expandedFabBottomMargin"
                     android:contentDescription="@string/setWrapTimeFabDescription"
+                    android:onClick="@{() -> fragment.launchBetAndWrapDialog(true)}"
                     android:text="@string/wrap"
                     app:layout_constraintBottom_toTopOf="@+id/adminExpandableFab"
                     app:layout_constraintEnd_toEndOf="@+id/adminExpandableFab"
@@ -122,6 +128,7 @@
                     android:contentDescription="@string/placeBetFabDescription"
                     android:elevation="8dp"
                     android:enabled="@{viewModel.isBettingOpen == true ? true : false}"
+                    android:onClick="@{() -> fragment.launchBetAndWrapDialog(false)}"
                     android:text="@string/bet"
                     app:layout_constraintBottom_toTopOf="@+id/setWrapAdminFab"
                     app:layout_constraintEnd_toEndOf="@+id/setWrapAdminFab"
