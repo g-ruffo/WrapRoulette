@@ -133,10 +133,11 @@
                         dateToStringTimeConverter="@{viewModel.currentPool.startTime}"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="12dp"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/workStartTimeTitle"
                         app:layout_constraintStart_toEndOf="@+id/startTimeIcon"
+                        app:layout_constraintStart_toStartOf="@id/workStartTimeTitle"
                         app:layout_constraintTop_toBottomOf="@+id/workStartTimeTitle"
                         tools:text="18:14" />
 
@@ -145,11 +146,11 @@
                         style="@style/TitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="12dp"
                         android:text="@string/startTimeTitle"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@+id/workStartTimeTextView"
+                        app:layout_constraintStart_toEndOf="@+id/startTimeIcon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -190,10 +191,11 @@
                         style="@style/TitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="12dp"
                         android:text="@string/wrapTimeHeaderTitle"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toTopOf="@id/workWrapTimeTextView"
-                        app:layout_constraintStart_toStartOf="@id/workWrapTimeTextView"
+                        app:layout_constraintStart_toEndOf="@id/wrapTimeIcon"
                         app:layout_constraintTop_toBottomOf="@id/workWrapTimeTextView" />
 
                     <TextView
@@ -202,10 +204,10 @@
                         dateToStringTimeConverter="@{viewModel.currentPool.endTime}"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="12dp"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/wrapTimeIcon"
+                        app:layout_constraintEnd_toEndOf="@+id/workWrapTimeTitle"
+                        app:layout_constraintStart_toStartOf="@+id/workWrapTimeTitle"
                         app:layout_constraintTop_toBottomOf="@id/workWrapTimeTitle"
                         tools:text="18:14" />
 
@@ -246,11 +248,12 @@
                     <TextView
                         android:id="@+id/positionTextView"
                         style="@style/ValueText"
-                        dateToStringConverter="@{viewModel.userBetTime}"
+                        poolBetPosition="@{viewModel.userBetTime}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/positionTitle"
                         app:layout_constraintStart_toStartOf="@+id/positionTitle"
                         app:layout_constraintTop_toBottomOf="@id/positionTitle"
                         tools:text="5th" />
@@ -315,11 +318,12 @@
                     <TextView
                         android:id="@+id/currentBetTimeTextView"
                         style="@style/ValueText"
-                        dateToStringConverter="@{viewModel.userBetTime}"
+                        dateToStringTimeConverter="@{viewModel.userBetTime}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/currentBetTimeTitle"
                         app:layout_constraintStart_toStartOf="@id/currentBetTimeTitle"
                         app:layout_constraintTop_toBottomOf="@id/currentBetTimeTitle"
                         tools:text="06:12" />
