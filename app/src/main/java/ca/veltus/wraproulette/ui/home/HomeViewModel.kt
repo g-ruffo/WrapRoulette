@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,19 +33,32 @@ class HomeViewModel @Inject constructor(
     private val stringResourcesProvider: StringResourcesProvider,
     app: Application
 ) : BaseViewModel(app) {
-    companion object {
-        private const val TAG = "HomeViewModel"
-    }
 
-    val isBettingOpen = MutableStateFlow(false)
-    val isPoolAdmin = MutableStateFlow(false)
+    private val _isPoolAdmin = MutableStateFlow(false)
+    val isPoolAdmin: StateFlow<Boolean>
+        get() = _isPoolAdmin.asStateFlow()
+
+    private val _poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
+    val poolStartTime: StateFlow<Date>
+        get() = _poolStartTime.asStateFlow()
+
+    private val _poolEndTime = MutableStateFlow<Date?>(null)
+    val poolEndTime: StateFlow<Date?>
+        get() = _poolEndTime.asStateFlow()
+
+    private val _userBetTime = MutableStateFlow<Date?>(null)
+    val userBetTime: StateFlow<Date?>
+        get() = _userBetTime.asStateFlow()
+
+    private val _isBettingOpen = MutableStateFlow(false)
+    val isBettingOpen: StateFlow<Boolean>
+        get() = _isBettingOpen.asStateFlow()
+
     val isFabClicked = MutableStateFlow(false)
     val isScrolling = MutableStateFlow(false)
     val userMessageEditText = MutableStateFlow<String?>(null)
-    val userBetTime = MutableStateFlow<Date?>(null)
-    val poolStartTime = MutableStateFlow<Date>(Calendar.getInstance().time)
     private val poolBettingLockTime = MutableStateFlow<Date?>(null)
-    val poolEndTime = MutableStateFlow<Date?>(null)
+
     val poolMargin = MutableStateFlow<String?>(null)
     val poolPIREnabled = MutableStateFlow(false)
 
@@ -54,50 +68,51 @@ class HomeViewModel @Inject constructor(
 
     private val _poolWinningMembers = MutableStateFlow<List<Member>>(listOf())
     val poolWinningMembers: StateFlow<List<Member>>
-        get() = _poolWinningMembers
+        get() = _poolWinningMembers.asStateFlow()
 
     private val _poolAdminProfileImage = MutableStateFlow<String?>(null)
     val poolAdminProfileImage: StateFlow<String?>
-        get() = _poolAdminProfileImage
+        get() = _poolAdminProfileImage.asStateFlow()
 
     private val _isPoolActive = MutableStateFlow(false)
     val isPoolActive: StateFlow<Boolean>
-        get() = _isPoolActive
+        get() = _isPoolActive.asStateFlow()
 
-    private val _actionbarTitle = MutableStateFlow("Home")
+    private val _actionbarTitle =
+        MutableStateFlow(stringResourcesProvider.getString(R.string.menu_home))
     val actionbarTitle: StateFlow<String>
-        get() = _actionbarTitle
+        get() = _actionbarTitle.asStateFlow()
 
     private val _currentPool = MutableStateFlow<Pool?>(null)
     val currentPool: StateFlow<Pool?>
-        get() = _currentPool
+        get() = _currentPool.asStateFlow()
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
-        get() = _userAccount
+        get() = _userAccount.asStateFlow()
 
     private val _poolBetsList = MutableStateFlow<List<Member>>(listOf())
     val poolBetsList: StateFlow<List<Member>>
-        get() = _poolBetsList
+        get() = _poolBetsList.asStateFlow()
 
     private val _chatList = MutableStateFlow<List<Message>>(listOf())
     val chatList: StateFlow<List<Message>>
-        get() = _chatList
+        get() = _chatList.asStateFlow()
 
     private val _readChatListItems =
         MutableStateFlow<Pair<List<Message>, Boolean>>(Pair(listOf(), false))
     val readChatListItems: StateFlow<Pair<List<Message>, Boolean>>
-        get() = _readChatListItems
+        get() = _readChatListItems.asStateFlow()
 
     private val _memberList = MutableStateFlow<List<Member>>(listOf())
     val memberList: StateFlow<List<Member>>
-        get() = _memberList
+        get() = _memberList.asStateFlow()
 
     val timeWorkedDate = liveData {
         while (true) {
-            val time = Calendar.getInstance().time.time - poolStartTime.value.time
-            if (poolEndTime.value != null) {
-                emit(poolEndTime.value!!.time - poolStartTime.value.time)
+            val time = Calendar.getInstance().time.time - _poolStartTime.value.time
+            if (_poolEndTime.value != null) {
+                emit(_poolEndTime.value!!.time - _poolStartTime.value.time)
                 delay(1000)
             } else if (showNoData.value || time > Constants.DAY || time < 0) {
                 emit(0)
@@ -115,25 +130,25 @@ class HomeViewModel @Inject constructor(
                 emit(null)
                 delay(1000)
                 if (isPoolActive.value) {
-                    isBettingOpen.emit(true)
+                    _isBettingOpen.emit(true)
                 } else {
-                    isBettingOpen.emit(false)
+                    _isBettingOpen.emit(false)
                 }
             } else {
                 val time = poolBettingLockTime.value!!.time - Calendar.getInstance().time.time
                 if (time > 0 && currentPool.value!!.endTime == null) {
                     emit(time)
-                    isBettingOpen.emit(true)
+                    _isBettingOpen.emit(true)
                     delay(1000)
                 } else if (time > 0 && currentPool.value!!.endTime != null) {
-                    isBettingOpen.emit(false)
+                    _isBettingOpen.emit(false)
                     emit(abs(poolBettingLockTime.value!!.time - currentPool.value!!.endTime!!.time))
                     delay(1000)
                 } else if (showNoData.value) {
                     emit(0)
                     delay(1000)
                 } else {
-                    isBettingOpen.emit(false)
+                    _isBettingOpen.emit(false)
                     emit(0)
                     delay(1000)
                 }
@@ -156,7 +171,7 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        showLoading.value = true
+        setShowLoadingValue(true)
         viewModelScope.launch {
             launch {
                 repository.getCurrentUserProfile().collectLatest {
@@ -164,8 +179,8 @@ class HomeViewModel @Inject constructor(
                     if (it != null && !it.activePool.isNullOrEmpty()) {
                         getPoolData(it.activePool)
                     } else {
-                        showLoading.emit(false)
-                        showNoData.emit(true)
+                        setShowLoadingValue(false)
+                        setNoDataValue(true)
                     }
                 }
             }
@@ -209,31 +224,31 @@ class HomeViewModel @Inject constructor(
                         if (pool != null) {
                             _currentPool.emit(pool)
                             _poolAdminProfileImage.emit(pool.adminProfileImage)
-                            poolStartTime.emit(pool.startTime!!)
+                            _poolStartTime.emit(pool.startTime!!)
                             poolBettingLockTime.emit(pool.lockTime)
-                            poolEndTime.emit(pool.endTime)
+                            _poolEndTime.emit(pool.endTime)
                             _poolWinningMembers.emit(pool.winners)
                             poolMargin.emit(pool.margin)
                             poolPIREnabled.emit(pool.pIRRulesEnabled)
-                            showNoData.emit(false)
+                            setNoDataValue(false)
                             if (pool.adminUid == _userAccount.value!!.uid) {
-                                isPoolAdmin.emit(true)
+                                _isPoolAdmin.emit(true)
                                 _actionbarTitle.emit(pool.production)
                             } else {
-                                isPoolAdmin.emit(false)
+                                _isPoolAdmin.emit(false)
                                 _actionbarTitle.emit(pool.production)
                             }
-                            if (pool.endTime != null || (Calendar.getInstance().time.time - poolStartTime.value.time) > Constants.DAY) {
+                            if (pool.endTime != null || (Calendar.getInstance().time.time - _poolStartTime.value.time) > Constants.DAY) {
                                 _isPoolActive.emit(false)
-                                isBettingOpen.value = false
+                                _isBettingOpen.value = false
                             } else {
                                 _isPoolActive.emit(true)
                             }
                         } else {
-                            showNoData.emit(true)
-                            _actionbarTitle.emit("Home")
+                            setNoDataValue(true)
+                            _actionbarTitle.emit(stringResourcesProvider.getString(R.string.menu_home))
                         }
-                        showLoading.emit(false)
+                        setShowLoadingValue(false)
                     }
                 }
 
@@ -262,26 +277,27 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
-            showLoading.value = false
+            setShowLoadingValue(false)
         } else return
     }
 
     private fun setUserBetTime(date: Date?) {
-        userBetTime.value = date
+        _userBetTime.value = date
     }
 
     fun leavePool() {
         if (!hasNetworkConnection.value) {
             showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantUpdateMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return
         } else {
             viewModelScope.launch {
                 repository.leavePool(currentPool.value?.docId ?: "", userAccount.value?.uid ?: "") {
-                    showLoading.value = false
+                    setShowLoadingValue(false)
                     if (!it.isNullOrEmpty()) showToast.postValue(it)
                     else {
-                        _actionbarTitle.value = "Home"
+                        _actionbarTitle.value =
+                            stringResourcesProvider.getString(R.string.menu_home)
                         navigateToPoolFragment()
                     }
                 }
@@ -303,11 +319,13 @@ class HomeViewModel @Inject constructor(
         val ownerUid = _userAccount.value!!.uid
 
         if (memberName.isNullOrEmpty()) {
-            errorNameText.value = ErrorMessage.ErrorText("Please Enter Members Name")
+            errorNameText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterMembersNameErrorMessage))
             return false
         }
         if (memberDepartment.isNullOrEmpty()) {
-            errorDepartmentText.value = ErrorMessage.ErrorText("Please Enter Members Department")
+            errorDepartmentText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterMembersDepartmentErrorMessage))
             return false
         }
         if (!memberEmail.isNullOrEmpty()) {
@@ -315,11 +333,13 @@ class HomeViewModel @Inject constructor(
         }
 
         if (poolUid.isNullOrEmpty()) {
-            showToast.value = "Unable To Find Pool"
+            showToast.value =
+                stringResourcesProvider.getString(R.string.unableToFindPoolErrorMessage)
             return false
         }
-        if (!isPoolAdmin.value) {
-            showToast.value = "You Do Not Have Permission"
+        if (!_isPoolAdmin.value) {
+            showToast.value =
+                stringResourcesProvider.getString(R.string.doNotHavePermissionErrorMessage)
             return false
         }
         val newMember = Member(
@@ -360,8 +380,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun deleteTempMember(memberItem: MemberItem) {
-        if (!isPoolAdmin.value) {
-            showToast.value = "You Do Not Have Permission"
+        if (!_isPoolAdmin.value) {
+            showToast.value =
+                stringResourcesProvider.getString(R.string.doNotHavePermissionErrorMessage)
             return
         } else {
             viewModelScope.launch {
@@ -442,12 +463,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun navigateToEditPool() {
-        if (isPoolAdmin.value && currentPool.value != null) {
+        if (_isPoolAdmin.value && currentPool.value != null) {
             val action = HomeFragmentDirections.actionNavHomeToAddPoolFragment()
             action.poolId = currentPool.value!!.docId
             navigationCommand.postValue(NavigationCommand.To(action))
         } else {
-            showToast.postValue("You Are Unable To Edit This Pool")
+            showToast.postValue(stringResourcesProvider.getString(R.string.unableToEditPool))
         }
     }
 

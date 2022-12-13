@@ -190,5 +190,9 @@
     <string name="clearWrapConfirmDialogSubtitle">Are you sure you want to clear the set wrap time?</string>
     <string name="confirmWrapConfirmDialogSubtitle">"Please confirm the selected wrap time is correct: %s"</string>
     <string name="leavePoolConfirmDialogSubtitle">Are you sure you want to leave this pool?</string>
-
+    <string name="enterMembersNameErrorMessage">Please Enter Members Name</string>
+    <string name="enterMembersDepartmentErrorMessage">Please Enter Members Department</string>
+    <string name="unableToFindPoolErrorMessage">Unable To Find Pool</string>
+    <string name="doNotHavePermissionErrorMessage">You Do Not Have Permission</string>
+    <string name="unableToEditPool">You Are Unable To Edit This Pool</string>
 </resources>
