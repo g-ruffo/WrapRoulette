@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.pools
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +23,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PoolsFragment : BaseFragment() {
-    companion object {
-        private const val TAG = "PoolsFragment"
-    }
 
     override val _viewModel by viewModels<PoolsViewModel>()
 
@@ -39,9 +35,7 @@ class PoolsFragment : BaseFragment() {
     private val onItemClick = OnItemClickListener { item, _ ->
         if (item is PoolItem) {
             binding.poolsRecyclerView.isClickable = false
-            _viewModel.setUsersActivePool(item.pool.docId) {
-                binding.poolsRecyclerView.isClickable = true
-            }
+            _viewModel.setUsersActivePool(item.pool.docId)
         }
     }
 
@@ -50,13 +44,12 @@ class PoolsFragment : BaseFragment() {
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pools, container, false)
 
-        binding.viewModel = _viewModel
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = _viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         lifecycleScope.launch {
@@ -75,7 +68,6 @@ class PoolsFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.i(TAG, "onDestroyView: ")
     }
 
     private fun setupRecyclerView(items: List<PoolItem>) {
