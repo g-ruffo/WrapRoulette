@@ -1,11 +1,11 @@
 package ca.veltus.wraproulette.utils
 
+import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.AutoCompleteTextView
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -25,25 +25,11 @@ import java.util.*
 
 object BindingAdapters {
 
-    @BindingAdapter("dateToStringConverter")
+    @BindingAdapter("poolBetPosition")
     @JvmStatic
     fun dateToStringConverter(view: TextView, date: Date?) {
-        if (date != null) {
-            val parsedDate = SimpleDateFormat("HH:mm", Locale.ENGLISH)
-            val time = parsedDate.format(date)
-            view.text = time
-        } else {
+        if (date == null) {
             view.text = "--:--"
-        }
-    }
-
-    @BindingAdapter("dateToStringDayConverter")
-    @JvmStatic
-    fun dateToStringDayConverter(view: TextView, date: Date?) {
-        if (date != null) {
-            val dateFormatter = SimpleDateFormat("EEEE, d MMM yyyy", Locale.ENGLISH)
-            val day = dateFormatter.format(date)
-            view.text = day
         }
     }
 
@@ -87,23 +73,6 @@ object BindingAdapters {
         }
     }
 
-    @BindingAdapter("convertDateToSummaryTitle")
-    @JvmStatic
-    fun convertDateToDetail(view: TextView, date: String?) {
-        if (date != null) {
-            val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val dateFormatter = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
-            val dateObject = parsedDate.parse(date)
-            val convertedDate = dateFormatter.format(dateObject!!)
-            view.text = convertedDate
-            view.isSelected = true
-            view.ellipsize = TextUtils.TruncateAt.MARQUEE
-            view.isSingleLine = true
-            view.marqueeRepeatLimit = -1
-            view.setHorizontallyScrolling(true)
-        }
-    }
-
     @BindingAdapter("convertDateToPoolItem")
     @JvmStatic
     fun convertDateToPoolItem(view: TextView, date: String?) {
@@ -129,29 +98,18 @@ object BindingAdapters {
     fun setCurrentTimeTitle(
         view: TextView, isActive: Boolean, list: List<Member>, wrapTime: Date?
     ) {
+        val context = view.context
+
         if (isActive && wrapTime == null) {
-            view.text = "Current Time"
+            view.text = context.getString(R.string.currentTime)
         } else if (!isActive && list.isEmpty() && wrapTime != null) {
-            view.text = "No Winners"
+            view.text = context.getString(R.string.noWinners)
         } else if (!isActive && wrapTime == null) {
-            view.text = "Error, Wrap Time Not Set"
+            view.text = context.getString(R.string.errorWrapNotSet)
         } else if (!isActive && list.size < 2) {
-            view.text = "Winner"
+            view.text = context.getString(R.string.winner)
         } else {
-            view.text = "Winners"
-        }
-    }
-
-    @BindingAdapter(
-        value = ["setTempMemberUidVisibility", "setTempMemberBetTimeVisibility"], requireAll = false
-    )
-    @JvmStatic
-    fun setTempMemberButtonVisibility(view: ImageButton, tempMemberUid: String?, betTime: Date?) {
-        if (tempMemberUid != null && betTime == null) {
-            view.visibility = View.VISIBLE
-        } else {
-            view.visibility = View.GONE
-
+            view.text = context.getString(R.string.winners)
         }
     }
 
@@ -167,6 +125,7 @@ object BindingAdapters {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @BindingAdapter(
         value = ["calculatePoolPotSizePrice", "calculatePoolPotSizeList"], requireAll = true
     )
@@ -181,6 +140,7 @@ object BindingAdapters {
         }
     }
 
+    @Suppress("SENSELESS_COMPARISON")
     @BindingAdapter("android:calculatePoolItemPotSize")
     @JvmStatic
     fun calculatePoolItemPotSize(view: TextView, pool: Pool) {
@@ -192,6 +152,7 @@ object BindingAdapters {
         view.text = total
     }
 
+    @Suppress("SENSELESS_COMPARISON")
     @BindingAdapter(
         value = ["calculateTotalPoolBetsList", "calculateTotalPoolBetsUid"], requireAll = true
     )
@@ -293,6 +254,7 @@ object BindingAdapters {
             !(arg1.isNullOrEmpty() || arg1.isBlank()) && !(arg2.isNullOrEmpty() || arg2.isBlank()) && (arg3 != null) && !(arg4.isNullOrEmpty() || arg4.isBlank()) && !arg5
     }
 
+    @Suppress("SENSELESS_COMPARISON")
     @BindingAdapter("error")
     @JvmStatic
     internal fun TextInputLayout.setError(errorMessage: ErrorMessage<String>?) {
@@ -321,6 +283,7 @@ object BindingAdapters {
         boxStrokeWidthFocused = boxStrokeWidth
     }
 
+    @Suppress("SENSELESS_COMPARISON")
     @BindingAdapter(value = ["errorRequired", "errorRequiredInput"], requireAll = true)
     @JvmStatic
     internal fun TextInputLayout.setErrorRequired(
@@ -410,7 +373,7 @@ object BindingAdapters {
                     context, R.drawable.ic_baseline_verified_24
                 )
             )
-        } else if (pool.startTime == null || (Calendar.getInstance().time.time - dateObject.time) < (Constants.DAY * 2)) {
+        } else if (pool.startTime == null || dateObject != null && (Calendar.getInstance().time.time - dateObject.time) < (Constants.DAY * 2)) {
             view.setBackgroundColor(getColor(context, R.color.poolItemProgressBlue))
             view.setImageDrawable(
                 ContextCompat.getDrawable(

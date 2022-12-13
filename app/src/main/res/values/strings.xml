@@ -208,4 +208,9 @@
     <string name="enterProductionNameErrorMessage">Please Enter Production Name</string>
     <string name="enterPoolDateErrorMessage">Please Enter Pool Date</string>
     <string name="enterPoolStartTimeErrorMessage">Please Enter Pool Start Time</string>
+    <string name="currentTime">Current Time</string>
+    <string name="noWinners">No Winners</string>
+    <string name="errorWrapNotSet">Error, Wrap Time Not Set</string>
+    <string name="winner">Winner</string>
+    <string name="winners">Winners</string>
 </resources>
