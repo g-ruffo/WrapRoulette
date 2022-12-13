@@ -57,9 +57,9 @@ fun List<Member>.toMemberItem(userUid: String = ""): List<MemberItem> {
     }
 }
 
-fun List<Member>.toMemberBidItem(userUid: String = ""): List<MemberBidItem> {
+fun List<Member>.toMemberBidItem(): List<MemberBidItem> {
     return this.map {
-        MemberBidItem(it, userUid)
+        MemberBidItem(it)
     }
 }
 

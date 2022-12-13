@@ -26,7 +26,7 @@ data class Member(
 }
 
 class MemberItem(
-    val member: Member, val userUid: String
+    val member: Member, private val userUid: String
 ) : BindableItem<MemberListItemBinding>() {
 
     override fun bind(viewBinding: MemberListItemBinding, position: Int) {
@@ -52,15 +52,9 @@ class MemberItem(
     override fun getLayout(): Int {
         return R.layout.member_list_item
     }
-
-    companion object {
-        private const val TAG = "Member"
-    }
 }
 
-class MemberBidItem(
-    val member: Member, val userUid: String
-) : BindableItem<MemberBidListItemBinding>() {
+class MemberBidItem(val member: Member) : BindableItem<MemberBidListItemBinding>() {
 
     override fun bind(viewBinding: MemberBidListItemBinding, position: Int) {
         viewBinding.member = member
@@ -80,15 +74,9 @@ class MemberBidItem(
     override fun getLayout(): Int {
         return R.layout.member_bid_list_item
     }
-
-    companion object {
-        private const val TAG = "Member"
-    }
 }
 
-class WinnerMemberItem(
-    val member: Member
-) : BindableItem<WinnerMemberItemBinding>() {
+class WinnerMemberItem(val member: Member) : BindableItem<WinnerMemberItemBinding>() {
 
     override fun bind(viewBinding: WinnerMemberItemBinding, position: Int) {
         viewBinding.member = member
@@ -103,9 +91,5 @@ class WinnerMemberItem(
 
     override fun getLayout(): Int {
         return R.layout.winner_member_item
-    }
-
-    companion object {
-        private const val TAG = "Member"
     }
 }
