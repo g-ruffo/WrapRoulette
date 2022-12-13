@@ -4,6 +4,7 @@ import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.authentication.login.LoginFragmentDirections
 import ca.veltus.wraproulette.base.BaseViewModel
 import ca.veltus.wraproulette.base.NavigationCommand
@@ -13,6 +14,7 @@ import ca.veltus.wraproulette.data.objects.Feedback
 import ca.veltus.wraproulette.data.objects.User
 import ca.veltus.wraproulette.data.repository.AuthenticationRepository
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
+import ca.veltus.wraproulette.utils.StringResourcesProvider
 import ca.veltus.wraproulette.utils.network.ConnectivityObserver
 import ca.veltus.wraproulette.utils.network.NetworkConnectivityObserver
 import com.google.firebase.auth.FirebaseUser
@@ -28,6 +30,7 @@ import javax.inject.Inject
 class LoginSignupViewModel @Inject constructor(
     private val repository: AuthenticationRepository,
     private val connectivityObserver: NetworkConnectivityObserver,
+    private val stringResourcesProvider: StringResourcesProvider,
     app: Application
 ) : BaseViewModel(app) {
 
@@ -121,19 +124,21 @@ class LoginSignupViewModel @Inject constructor(
         showLoading.value = true
         emailAddress.value = emailAddress.value?.trim()
         if (TextUtils.isEmpty(emailAddress.value)) {
-            errorEmailText.value = ErrorMessage.ErrorText("Please enter your email address")
+            errorEmailText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterEmailErrorMessage))
             showLoading.value = false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
                 .matches()
         ) {
-            errorEmailText.value = ErrorMessage.ErrorText("Email address is not valid")
+            errorEmailText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.emailNotValidErrorMessage))
             showLoading.value = false
         } else {
             viewModelScope.launch {
                 repository.resetPassword(emailAddress.value!!) {
                     showLoading.value = false
                     if (it.isNullOrEmpty()) {
-                        showToast.postValue("Reset link has been sent to your email address.")
+                        showToast.postValue(stringResourcesProvider.getString(R.string.resetEmailSentMessage))
                         navigateBack()
                     } else errorEmailText.value = ErrorMessage.ErrorText(it)
                 }
@@ -149,25 +154,30 @@ class LoginSignupViewModel @Inject constructor(
         username.value = username.value?.trim()
 
         if (TextUtils.isEmpty(emailAddress.value)) {
-            errorEmailText.value = ErrorMessage.ErrorText("Please enter your email address")
+            errorEmailText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterEmailErrorMessage))
             showLoading.value = false
             return false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
                 .matches()
         ) {
-            errorEmailText.value = ErrorMessage.ErrorText("Email address is not a valid format")
+            errorEmailText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.emailNotValidErrorMessage))
             showLoading.value = false
             return false
         } else if (TextUtils.isEmpty(password.value)) {
-            errorPasswordText.value = ErrorMessage.ErrorText("Please enter a password")
+            errorPasswordText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterPasswordErrorMessage))
             showLoading.value = false
             return false
         } else if (signUp && TextUtils.isEmpty(username.value)) {
-            errorNameText.value = ErrorMessage.ErrorText("Please enter your name")
+            errorNameText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterNameErrorMessage))
             showLoading.value = false
             return false
         } else if (signUp && TextUtils.isEmpty(department.value)) {
-            errorDepartmentText.value = ErrorMessage.ErrorText("Please enter your department")
+            errorDepartmentText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterDepartmentErrorMessage))
             showLoading.value = false
             return false
         } else {
@@ -186,11 +196,13 @@ class LoginSignupViewModel @Inject constructor(
         val department = updateDepartment.value
         val tempImage = tempProfileImage.value
         if (username.isNullOrEmpty()) {
-            errorNameText.value = ErrorMessage.ErrorText("Please enter your name")
+            errorNameText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterNameErrorMessage))
             showLoading.value = false
             return
         } else if (department.isNullOrEmpty()) {
-            errorDepartmentText.value = ErrorMessage.ErrorText("Please enter your department")
+            errorDepartmentText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterDepartmentErrorMessage))
             showLoading.value = false
             return
         } else {
@@ -222,7 +234,7 @@ class LoginSignupViewModel @Inject constructor(
 
             repository.updateCurrentUser(userFieldMap) {
                 if (it.isNullOrEmpty()) {
-                    showToast.postValue("Saved Successfully")
+                    showToast.postValue(stringResourcesProvider.getString(R.string.savedSuccessfullyMessage))
                     navigateBack()
                 } else {
                     showSnackBar.postValue(it)
@@ -231,7 +243,7 @@ class LoginSignupViewModel @Inject constructor(
             }
             if (!hasNetworkConnection) {
                 showLoading.value = false
-                showSnackBar.postValue("Unable to connect to network, your changes will apply when reconnected.")
+                showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkUpdateDelayMessage))
                 navigateBack()
             }
         }
@@ -241,8 +253,7 @@ class LoginSignupViewModel @Inject constructor(
         val message = feedbackMessage.value
         if (message.isNullOrEmpty() || message.isBlank()) {
             return false
-        }
-        else {
+        } else {
             val feedback = Feedback(
                 message,
                 Calendar.getInstance().time,

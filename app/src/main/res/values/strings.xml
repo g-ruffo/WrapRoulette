@@ -156,4 +156,14 @@
     <string name="poolExistsErrorMessage">Pool already exists.</string>
     <string name="alreadyPoolMemberErrorMessage">You are already a member of this pool.</string>
     <string name="memberExistsErrorMessage">Member already exists.</string>
+    <string name="imagePermissionsNeededErrorMessage">You need to grant permissions to select a new profile image.</string>
+    <string name="enterEmailErrorMessage">Please enter your email address.</string>
+    <string name="emailNotValidErrorMessage">Email address is not valid.</string>
+    <string name="resetEmailSentMessage">Reset link has been sent to your email address.</string>
+    <string name="enterPasswordErrorMessage">Please enter a password.</string>
+    <string name="enterNameErrorMessage">Please enter your name.</string>
+    <string name="enterDepartmentErrorMessage">Please enter your department.</string>
+    <string name="savedSuccessfullyMessage">Saved Successfully!</string>
+    <string name="noNetworkUpdateDelayMessage">Unable to connect to network, your changes will apply when reconnected.</string>
+
 </resources>
