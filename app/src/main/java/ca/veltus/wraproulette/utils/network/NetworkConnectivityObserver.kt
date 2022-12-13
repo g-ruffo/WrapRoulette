@@ -13,9 +13,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NetworkConnectivityObserver @Inject constructor(@ApplicationContext private val context: Context): ConnectivityObserver {
+class NetworkConnectivityObserver @Inject constructor(@ApplicationContext private val context: Context) :
+    ConnectivityObserver {
 
-    private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     override fun observe(): Flow<ConnectivityObserver.Status> {
         return callbackFlow {

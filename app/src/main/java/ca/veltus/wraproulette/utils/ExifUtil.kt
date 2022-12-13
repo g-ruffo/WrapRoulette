@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException
 
 object ExifUtil {
     /**
-     * @see http://sylvana.net/jpegcrop/exif_orientation.html
+     *  See http://sylvana.net/jpegcrop/exif_orientation.html
      */
     fun rotateBitmap(src: String, bitmap: Bitmap): Bitmap {
         try {
@@ -57,20 +57,15 @@ object ExifUtil {
         try {
             val exifClass = Class.forName("android.media.ExifInterface")
             val exifConstructor = exifClass.getConstructor(
-                *arrayOf<Class<*>>(
-                    String::class.java
-                )
+                String::class.java
             )
-            val exifInstance = exifConstructor.newInstance(*arrayOf<Any>(src))
+            val exifInstance = exifConstructor.newInstance(src)
             val getAttributeInt = exifClass.getMethod(
-                "getAttributeInt", *arrayOf<Class<*>?>(
-                    String::class.java, Int::class.javaPrimitiveType
-                )
+                "getAttributeInt", String::class.java, Int::class.javaPrimitiveType
             )
             val tagOrientationField = exifClass.getField("TAG_ORIENTATION")
             val tagOrientation = tagOrientationField[null] as String
-            orientation =
-                getAttributeInt.invoke(exifInstance, *arrayOf<Any>(tagOrientation, 1)) as Int
+            orientation = getAttributeInt.invoke(exifInstance, tagOrientation, 1) as Int
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
         } catch (e: SecurityException) {

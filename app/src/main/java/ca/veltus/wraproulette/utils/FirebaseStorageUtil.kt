@@ -12,17 +12,17 @@ object FirebaseStorageUtil {
 
     private val currentUserReference: StorageReference
         get() = storageInstance.reference.child(
-                FirebaseAuth.getInstance().uid ?: throw NullPointerException("UID is null.")
-            )
+            FirebaseAuth.getInstance().uid ?: throw NullPointerException("UID is null.")
+        )
 
     fun uploadProfilePhoto(imageBytes: ByteArray, onSuccess: (imagePath: String) -> Unit) {
         val ref =
             currentUserReference.child("profilePictures/${UUID.nameUUIDFromBytes(imageBytes)}")
         ref.putBytes(imageBytes).addOnSuccessListener {
-                onSuccess(ref.path)
-            }.addOnFailureListener {
-                Firebase.crashlytics.recordException(it)
-            }
+            onSuccess(ref.path)
+        }.addOnFailureListener {
+            Firebase.crashlytics.recordException(it)
+        }
     }
 
     fun pathToReference(path: String) = storageInstance.getReference(path)
