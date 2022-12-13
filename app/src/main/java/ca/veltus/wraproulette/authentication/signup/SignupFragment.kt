@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.authentication.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,6 @@ import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentSignupBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.Constants
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,8 +40,6 @@ class SignupFragment : BaseFragment() {
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
 
-        binding.viewModel = _viewModel
-
         observeSignup()
 
         return binding.root
@@ -50,8 +48,8 @@ class SignupFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = _viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
     }
 
     override fun onDestroyView() {
@@ -78,7 +76,7 @@ class SignupFragment : BaseFragment() {
                         }
 
                         is Result.Loading -> {
-                            CircularProgressIndicator(requireContext())
+                            Log.i(TAG, "observeSignup: Loading")
                         }
                         is Result.Failure -> {
                             // If Firebase cannot create account with provided details show helper text with task exception message.

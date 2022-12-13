@@ -40,8 +40,6 @@ class LoginFragment : BaseFragment() {
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
-        binding.viewModel = _viewModel
-
         observeLogin()
 
         return binding.root
@@ -49,6 +47,7 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = _viewModel
         binding.lifecycleOwner = viewLifecycleOwner
     }
 

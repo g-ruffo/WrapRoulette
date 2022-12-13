@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
@@ -50,19 +51,19 @@ class LoginSignupViewModel @Inject constructor(
 
     private val _tempProfileImage = MutableStateFlow<ByteArray?>(null)
     val tempProfileImage: StateFlow<ByteArray?>
-        get() = _tempProfileImage
+        get() = _tempProfileImage.asStateFlow()
 
     private val _loginFlow = MutableStateFlow<Result<FirebaseUser>?>(null)
     val loginFlow: StateFlow<Result<FirebaseUser>?>
-        get() = _loginFlow
+        get() = _loginFlow.asStateFlow()
 
     private val _signupFlow = MutableStateFlow<Result<FirebaseUser>?>(null)
     val signupFlow: StateFlow<Result<FirebaseUser>?>
-        get() = _signupFlow
+        get() = _signupFlow.asStateFlow()
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
-        get() = _userAccount
+        get() = _userAccount.asStateFlow()
 
     val currentUser: FirebaseUser?
         get() = repository.currentUser
