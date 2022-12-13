@@ -62,9 +62,4 @@ class PoolItem(
     override fun getLayout(): Int {
         return R.layout.pool_list_item
     }
-
-    companion object {
-        private const val TAG = "Pool"
-    }
-
 }
