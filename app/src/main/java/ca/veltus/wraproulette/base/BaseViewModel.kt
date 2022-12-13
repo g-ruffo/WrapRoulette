@@ -10,8 +10,6 @@ import ca.veltus.wraproulette.utils.Constants.PASSWORD_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_DATE_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_NAME_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_START_ERROR
-import ca.veltus.wraproulette.utils.Constants.SHOW_SNACKBAR
-import ca.veltus.wraproulette.utils.Constants.SHOW_TOAST
 import ca.veltus.wraproulette.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -19,9 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
 
     val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
-    val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
-    val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
     val showToast: SingleLiveEvent<String> = SingleLiveEvent()
     val showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
@@ -72,10 +68,10 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun postSnackBarToastMessage(value: Int, message: String) {
-        when (value) {
-            SHOW_SNACKBAR -> showSnackBar.postValue(message)
-            SHOW_TOAST -> showToast.postValue(message)
-        }
+    fun postSnackBarMessage(message: String) {
+      showSnackBar.postValue(message)
+    }
+    fun postToastMessage(message: String) {
+        showToast.postValue(message)
     }
 }
