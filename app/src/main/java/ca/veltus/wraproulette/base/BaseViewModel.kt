@@ -18,13 +18,17 @@ import kotlinx.coroutines.flow.asStateFlow
 // Base class for View Models to declare the common LiveData objects in a single place
 abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
 
-    val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
-    val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
-    val showToast: SingleLiveEvent<String> = SingleLiveEvent()
-    val showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val _showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showLoading: StateFlow<Boolean>
+        get() = _showLoading.asStateFlow()
+
     private val _showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val showNoData: StateFlow<Boolean>
         get() = _showNoData.asStateFlow()
+
+    val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
+    val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
+    val showToast: SingleLiveEvent<String> = SingleLiveEvent()
     val errorPasswordText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorEmailText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorDepartmentText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
@@ -81,6 +85,10 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun setShowLoadingValue(isLoading: Boolean) {
-        showLoading.value = isLoading
+        _showLoading.value = isLoading
+    }
+
+    fun setNoDataValue(noData: Boolean) {
+        _showNoData.value = noData
     }
 }
