@@ -308,7 +308,8 @@ class HomeRepositoryImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             val result = poolsCollectionReference.document(member.poolId).collection("members")
                 .whereEqualTo("displayName", member.displayName)
-                .whereEqualTo("department", member.department).get().await()
+                .whereEqualTo("department", member.department)
+                .whereNotEqualTo("tempMemberUid", member.tempMemberUid).get().await()
             if (result.isEmpty) {
                 try {
                     poolsCollectionReference.document(member.poolId).collection("members")

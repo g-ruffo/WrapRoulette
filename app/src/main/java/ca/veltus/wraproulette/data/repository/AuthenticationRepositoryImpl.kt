@@ -98,7 +98,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val result = currentUserDocReference.get().await()
-
                 if (!result.exists()) {
                     val newUser = User(
                         firebaseAuth.currentUser?.uid ?: "",
@@ -118,7 +117,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 onComplete(e.message)
                 Firebase.crashlytics.recordException(e)
             }
-
         }
     }
 
@@ -132,7 +130,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 Firebase.crashlytics.recordException(e)
             }
         }
-
     }
 
     override suspend fun updateCurrentUser(
