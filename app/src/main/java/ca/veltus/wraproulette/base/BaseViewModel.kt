@@ -12,6 +12,8 @@ import ca.veltus.wraproulette.utils.Constants.POOL_NAME_ERROR
 import ca.veltus.wraproulette.utils.Constants.POOL_START_ERROR
 import ca.veltus.wraproulette.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 // Base class for View Models to declare the common LiveData objects in a single place
 abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
@@ -20,7 +22,9 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
     val showToast: SingleLiveEvent<String> = SingleLiveEvent()
     val showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    private val _showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val showNoData: StateFlow<Boolean>
+        get() = _showNoData.asStateFlow()
     val errorPasswordText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorEmailText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
     val errorDepartmentText: MutableStateFlow<ErrorMessage<String>?> = MutableStateFlow(null)
@@ -69,9 +73,14 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun postSnackBarMessage(message: String) {
-      showSnackBar.postValue(message)
+        showSnackBar.postValue(message)
     }
+
     fun postToastMessage(message: String) {
         showToast.postValue(message)
+    }
+
+    fun setShowLoadingValue(isLoading: Boolean) {
+        showLoading.value = isLoading
     }
 }
