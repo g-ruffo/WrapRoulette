@@ -34,7 +34,6 @@ import java.io.ByteArrayOutputStream
 @AndroidEntryPoint
 class AccountFragment : BaseFragment() {
     companion object {
-        private const val TAG = "AccountFragment"
         private const val RC_SELECT_IMAGE = 2
         private const val STORAGE_REQUEST_CODE = 8
     }
@@ -94,8 +93,9 @@ class AccountFragment : BaseFragment() {
         _binding = null
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        @Suppress("DEPRECATION") super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val selectedImagePath = data.data
@@ -113,20 +113,24 @@ class AccountFragment : BaseFragment() {
             val bitmap = BitmapFactory.decodeFile(picturePath)
             val rotatedBitmap = rotateBitmap(picturePath, bitmap)
             val outputStream = ByteArrayOutputStream()
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
             selectedImageBytes = outputStream.toByteArray()
             _viewModel.setTemporaryProfileImage(selectedImageBytes)
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        @Suppress("DEPRECATION") super.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
         if (requestCode == STORAGE_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_DENIED) {
             // Permission is denied
-            _viewModel.showSnackBar.value =
-                "You need to grant permissions to select a new profile image."
+            _viewModel.postSnackBarMessage(getString(R.string.imagePermissionsNeededErrorMessage))
         }
     }
 
@@ -140,7 +144,7 @@ class AccountFragment : BaseFragment() {
                         Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/gif")
                     )
                 }
-                startActivityForResult(
+                @Suppress("DEPRECATION") startActivityForResult(
                     Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE
                 )
             } else {
@@ -158,7 +162,7 @@ class AccountFragment : BaseFragment() {
             val permissions = arrayOf(
                 READ_EXTERNAL_STORAGE
             )
-            requestPermissions(permissions, STORAGE_REQUEST_CODE)
+            @Suppress("DEPRECATION") requestPermissions(permissions, STORAGE_REQUEST_CODE)
         }
     }
 }
