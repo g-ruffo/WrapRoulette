@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.authentication.reset
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +44,5 @@ class ResetPasswordFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.i(TAG, "onDestroyView: ")
     }
 }
