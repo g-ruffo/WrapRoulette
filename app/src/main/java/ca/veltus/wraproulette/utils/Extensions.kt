@@ -2,9 +2,6 @@ package ca.veltus.wraproulette.utils
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.app.ActivityManager
-import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewpager2.widget.ViewPager2
@@ -96,19 +93,7 @@ inline fun ViewPager2.onPageSelected(
     }
 }
 
-fun getTimeStringFromLong(time: Long): String {
-    val seconds = (time / 1000) % 60
-    val minutes = (time / (1000 * 60) % 60)
-    val hours = (time / (1000 * 60 * 60) % 24)
-
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
-}
-
-fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
-    return (getSystemService(ACTIVITY_SERVICE) as ActivityManager).getRunningServices(Integer.MAX_VALUE)
-        .any { it -> it.service.className == service.name }
-}
-
+@Suppress("SENSELESS_COMPARISON")
 fun String.convertDateToDetail(): String {
     return if (this != null) {
         val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
