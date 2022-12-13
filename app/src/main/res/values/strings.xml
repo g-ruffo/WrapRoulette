@@ -195,4 +195,6 @@
     <string name="unableToFindPoolErrorMessage">Unable To Find Pool</string>
     <string name="doNotHavePermissionErrorMessage">You Do Not Have Permission</string>
     <string name="unableToEditPool">You Are Unable To Edit This Pool</string>
+    <string name="summary">Summary</string>
+    <string name="bids">Bids</string>
 </resources>

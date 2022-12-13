@@ -65,13 +65,13 @@ class HomeFragment : BaseFragment(), MenuProvider {
         binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
 
-        adapter = ViewPagerAdapter(this)
+        adapter = ViewPagerAdapter(this, resources.getStringArray(R.array.viewPagerTitles))
 
         binding.viewPager.adapter = adapter
 
         tabLayoutMediator =
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                tab.text = ViewPagerAdapter.fragmentTitle[position]
+                tab.text = resources.getStringArray(R.array.viewPagerTitles)[position]
             }
         tabLayoutMediator?.attach()
 

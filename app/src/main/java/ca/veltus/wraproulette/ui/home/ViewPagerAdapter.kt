@@ -6,17 +6,15 @@ import ca.veltus.wraproulette.ui.home.bids.BidsFragment
 import ca.veltus.wraproulette.ui.home.chat.ChatFragment
 import ca.veltus.wraproulette.ui.home.summary.SummaryFragment
 
-class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-    companion object {
-    val fragmentTitle = arrayListOf<String>("Summary", "Bids", "Chat")
-}
+class ViewPagerAdapter(fragment: Fragment, val titles: Array<String>) :
+    FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int {
-        return fragmentTitle.size
+        return titles.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when(position) {
+        return when (position) {
             0 -> SummaryFragment()
             1 -> BidsFragment()
             else -> ChatFragment()
