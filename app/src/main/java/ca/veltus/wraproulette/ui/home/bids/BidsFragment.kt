@@ -2,7 +2,6 @@ package ca.veltus.wraproulette.ui.home.bids
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +30,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class BidsFragment : BaseFragment() {
-    companion object {
-        private const val TAG = "BidsFragment"
-    }
 
     override val _viewModel by viewModels<HomeViewModel>(ownerProducer = { requireParentFragment() })
     private val activityCast by lazy { activity as WrapRouletteActivity }
@@ -44,10 +40,9 @@ class BidsFragment : BaseFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val onItemClick = OnItemClickListener { item, view ->
-        if (item is MemberItem && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty()) {
-            if (!_viewModel.isPoolActive.value) _viewModel.showSnackBar.value =
-                "This pool has finished, you are unable to make changes at this time."
+    private val onItemClick = OnItemClickListener { item, _ ->
+        if ((item is MemberItem) && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty()) {
+            if (!_viewModel.isPoolActive.value) _viewModel.postSnackBarMessage(getString(R.string.poolFinishedCantUpdateMemberMessage))
             else launchTempMemberOptionsDialog(item)
         }
     }
@@ -75,26 +70,9 @@ class BidsFragment : BaseFragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.i(TAG, "onStart: called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i(TAG, "onStop: called")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.i(TAG, "onDestroyView: called")
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "onDestroy: called")
     }
 
     private fun setupRecyclerView(items: List<MemberItem>) {
@@ -114,12 +92,18 @@ class BidsFragment : BaseFragment() {
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        view.message.text = getString(R.string.tempMemberOptionDialogMessage)
+        view.title.text = getString(R.string.memberOptionsDialogTitle)
 
         builder.apply {
             setView(view.root)
-            setPositiveButton("Bet") { _, _ -> launchSetMemberBetDialog(memberItem) }
-            setNegativeButton("Edit") { _, _ -> launchUpdateTempMemberDialog(memberItem) }
-            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.bet)) { _, _ -> launchSetMemberBetDialog(memberItem) }
+            setNegativeButton(getString(R.string.edit)) { _, _ ->
+                launchUpdateTempMemberDialog(
+                    memberItem
+                )
+            }
+            setNeutralButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
         }.show()
     }
 
@@ -135,33 +119,27 @@ class BidsFragment : BaseFragment() {
 
         builder.apply {
             setView(view.root)
-            setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
-            setNegativeButton("Delete") { dialog, _ -> }
-            setPositiveButton("Update") { dialog, _ -> }
+            setNeutralButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+            setNegativeButton(getString(R.string.delete)) { _, _ -> }
+            setPositiveButton(getString(R.string.update)) { _, _ -> }
         }
 
         val dialog = builder.show()
         dialog.apply {
             setOnDismissListener { _viewModel.loadTempMemberValues(null) }
             getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (_viewModel.createUpdateTempMember(
-                        memberItem
-                    )
-                ) dialog.dismiss()
+                if (_viewModel.createUpdateTempMember(memberItem)) dialog.dismiss()
             }
             getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
                 if (memberItem.member.bidTime == null) {
                     launchDeleteMemberConfirmationDialog(memberItem)
                 } else if (!_viewModel.isBettingOpen.value && _viewModel.isPoolActive.value) {
-                    _viewModel.showSnackBar.value =
-                        "Betting has locked and pool is still active, you are unable to remove this member at this time."
+                    _viewModel.postSnackBarMessage(getString(R.string.bettingLockedPoolActiveCantRemoveMemberMessage))
                 } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
-                    _viewModel.showSnackBar.value =
-                        "You need to clear your bet before leaving this pool"
+                    _viewModel.postSnackBarMessage(getString(R.string.clearBetBeforeLeavingMessage))
                     launchSetMemberBetDialog(memberItem)
                 } else {
-                    _viewModel.showSnackBar.value =
-                        "You are unable to remove this member at this time"
+                    _viewModel.postSnackBarMessage(getString(R.string.unableRemoveMemberMessage))
                 }
                 dialog.dismiss()
             }
@@ -178,20 +156,20 @@ class BidsFragment : BaseFragment() {
         )
         val view = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.apply {
-            title.text = "Set Members Bet Time"
+            title.text = getString(R.string.setMemberBetTimeDialogTitle)
             message.text =
-                "Set ${memberItem.member.displayName}'s bid time using the spinner below."
+                getString(R.string.setMembersBetDialogSubtitle, memberItem.member.displayName)
             timePicker.setIs24HourView(true)
             timePicker.hour = time.get(Calendar.HOUR_OF_DAY)
             timePicker.minute = time.get(Calendar.MINUTE)
         }
         builder.apply {
             setView(view.root)
-            setNeutralButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Bet") { dialog, _ -> }
+            setNeutralButton(getString(R.string.cancel)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.bet)) { _, _ -> }
         }
 
-        if (memberItem.member.bidTime != null) builder.setNegativeButton("Clear") { dialog, _ -> }
+        if (memberItem.member.bidTime != null) builder.setNegativeButton(getString(R.string.clear)) { _, _ -> }
 
         val dialog = builder.show()
 
@@ -219,17 +197,17 @@ class BidsFragment : BaseFragment() {
     }
 
     private fun launchDeleteMemberConfirmationDialog(memberItem: MemberItem) {
-        val message = "Are you sure you want to delete this member for the pool?"
+        val message = getString(R.string.areYouSureDialogSubtitle)
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.message.text = message
-        view.title.text = "Are You Sure?"
+        view.title.text = getString(R.string.areYouSureDialogTitle)
         builder.apply {
             setView(view.root)
-            setNeutralButton("No") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Yes") { _, _ ->
+            setNeutralButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 _viewModel.deleteTempMember(memberItem)
             }
         }.show()

@@ -165,5 +165,18 @@
     <string name="enterDepartmentErrorMessage">Please enter your department.</string>
     <string name="savedSuccessfullyMessage">Saved Successfully!</string>
     <string name="noNetworkUpdateDelayMessage">Unable to connect to network, your changes will apply when reconnected.</string>
+    <string name="poolFinishedCantUpdateMemberMessage">This pool has finished, you are unable to make changes at this time.</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
+    <string name="bettingLockedPoolActiveCantRemoveMemberMessage">Betting has locked and pool is still active, you are unable to remove this member at this time.</string>
+    <string name="clearBetBeforeLeavingMessage">You need to clear your bet before leaving this pool</string>
+    <string name="unableRemoveMemberMessage">You are unable to remove this member at this time</string>
+    <string name="setMembersBetDialogSubtitle">Set %s\'s bid time using the spinner below.</string>
+    <string name="clear">Clear</string>
+    <string name="areYouSureDialogTitle">Are You Sure?</string>
+    <string name="areYouSureDialogSubtitle">Are you sure you want to delete this member for the pool?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 
 </resources>
