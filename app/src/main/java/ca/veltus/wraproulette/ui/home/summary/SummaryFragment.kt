@@ -56,16 +56,16 @@ class SummaryFragment : BaseFragment() {
     ): View {
         _binding = FragmentSummaryBinding.inflate(inflater, container, false)
 
-        binding.viewModel = _viewModel
-        binding.summaryCardView.viewModel = _viewModel
-        binding.fragment = this
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = _viewModel
+        binding.summaryCardView.viewModel = _viewModel
+        binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
+
         setupScrollingListener()
 
         viewLifecycleOwner.lifecycleScope.launch {
