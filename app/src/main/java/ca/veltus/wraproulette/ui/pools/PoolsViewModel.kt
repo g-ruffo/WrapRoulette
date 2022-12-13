@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.pools
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.base.BaseViewModel
@@ -22,6 +21,7 @@ import ca.veltus.wraproulette.utils.network.NetworkConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -36,10 +36,6 @@ class PoolsViewModel @Inject constructor(
     app: Application
 ) : BaseViewModel(app) {
 
-    companion object {
-        private const val TAG = "PoolsViewModel"
-    }
-
     val poolProduction = MutableStateFlow<String?>(null)
     val poolPassword = MutableStateFlow<String?>(null)
     val poolDate = MutableStateFlow<String?>(null)
@@ -47,9 +43,8 @@ class PoolsViewModel @Inject constructor(
     val poolMargin = MutableStateFlow<String?>(null)
     val poolBetLockTime = MutableStateFlow<Date?>(null)
     val poolStartTime = MutableStateFlow<Date?>(null)
-    val poolPISRulesEnabled = MutableStateFlow<Boolean>(false)
+    val poolPISRulesEnabled = MutableStateFlow(false)
 
-    val poolDocUid = MutableStateFlow<String?>(null)
     private val poolAdminUid = MutableStateFlow<String?>(null)
     private val poolAdminName = MutableStateFlow<String?>(null)
     private val poolAdminProfileImage = MutableStateFlow<String?>(null)
@@ -57,28 +52,31 @@ class PoolsViewModel @Inject constructor(
     private val poolBets = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
     private val poolUsers = MutableStateFlow<MutableMap<String, Any>>(mutableMapOf())
     private val poolEndTime = MutableStateFlow<Date?>(null)
+    val isFabClicked = MutableStateFlow(false)
+
+    private val _poolDocUid = MutableStateFlow<String?>(null)
+    val poolDocUid: StateFlow<String?>
+        get() = _poolDocUid.asStateFlow()
+
 
     private val _userAccount = MutableStateFlow<User?>(null)
     val userAccount: StateFlow<User?>
-        get() = _userAccount
+        get() = _userAccount.asStateFlow()
 
     private val _pools = MutableStateFlow<List<Pool>>(listOf())
     val pools: StateFlow<List<Pool>>
-        get() = _pools
-
-    val isFabClicked = MutableStateFlow<Boolean>(false)
+        get() = _pools.asStateFlow()
 
     init {
-        showLoading.value = true
+        setShowLoadingValue(true)
         viewModelScope.launch {
             launch {
                 repository.getCurrentUserProfile().collectLatest {
                     _userAccount.emit(it)
-                    Log.i(TAG, "_userAccount: $it")
-                    if (it != null && !it.uid.isNullOrEmpty()) {
+                    if (it != null && it.uid.isNotEmpty()) {
                         fetchPoolList(it.uid)
                     } else {
-                        showLoading.emit(false)
+                        setShowLoadingValue(false)
                     }
                 }
             }
@@ -96,13 +94,13 @@ class PoolsViewModel @Inject constructor(
     private fun fetchPoolList(uid: String) {
         viewModelScope.launch {
             repository.getPoolsList(uid).collect {
-                if (it.isNullOrEmpty()) {
-                    showNoData.emit(true)
+                if (it.isEmpty()) {
+                    setNoDataValue(true)
                 } else {
                     _pools.emit(it)
-                    showNoData.emit(false)
+                    setNoDataValue(false)
                 }
-                showLoading.emit(false)
+                setShowLoadingValue(false)
             }
         }
     }
@@ -130,26 +128,28 @@ class PoolsViewModel @Inject constructor(
     }
 
     fun joinPool() {
-        showLoading.value = true
+        setShowLoadingValue(true)
         val production = poolProduction.value
         val password = poolPassword.value
         val date = poolDate.value
 
         if (!hasNetworkConnection.value) {
             showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantJoinMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return
         }
 
         if (production.isNullOrEmpty()) {
-            errorPoolNameText.value = ErrorMessage.ErrorText("Please Enter Production Name")
-            showLoading.value = false
+            errorPoolNameText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterProductionNameErrorMessage))
+            setShowLoadingValue(false)
             return
         }
 
         if (date.isNullOrEmpty()) {
-            errorPoolDateText.value = ErrorMessage.ErrorText("Please Enter Pool Date")
-            showLoading.value = false
+            errorPoolDateText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterPoolDateErrorMessage))
+            setShowLoadingValue(false)
             return
         }
         viewModelScope.launch {
@@ -160,50 +160,58 @@ class PoolsViewModel @Inject constructor(
                     navigateJoinPoolToHomeFragment()
                 } else {
                     showSnackBar.postValue(it)
-                    showLoading.value = false
+                    setShowLoadingValue(false)
                 }
             }
         }
     }
 
+    @Suppress("DEPRECATION")
     fun createUpdatePool() {
-        showLoading.value = true
+        setShowLoadingValue(true)
+
+        val startTime = poolStartTime.value
+        val production = poolProduction.value
+        val date = poolDate.value
+        val betLockTime = poolBetLockTime.value
+        var bidPrice = poolBetAmount.value
+
         if (!hasNetworkConnection.value) {
             showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantUpdateMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return
         }
-        if (poolProduction.value.isNullOrEmpty()) {
-            errorPoolNameText.value = ErrorMessage.ErrorText("Please Enter Production Name")
-            showLoading.value = false
-            return
-        }
-
-        if (poolDate.value.isNullOrEmpty()) {
-            errorPoolDateText.value = ErrorMessage.ErrorText("Please Enter Pool Date")
-            showLoading.value = false
-            return
-        }
-        if (poolStartTime.value == null) {
-            errorPoolStartText.value = ErrorMessage.ErrorText("Please Enter Pool Start Time")
-            showLoading.value = false
+        if (production.isNullOrEmpty()) {
+            errorPoolNameText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterProductionNameErrorMessage))
+            setShowLoadingValue(false)
             return
         }
 
-        var bidPrice = poolBetAmount.value
+        if (date.isNullOrEmpty()) {
+            errorPoolDateText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterPoolDateErrorMessage))
+            setShowLoadingValue(false)
+            return
+        }
+        if (startTime == null) {
+            errorPoolStartText.value =
+                ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterPoolStartTimeErrorMessage))
+            setShowLoadingValue(false)
+            return
+        }
+
         if (bidPrice.isNullOrEmpty()) {
             bidPrice = "0"
         }
 
         val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-        val dateObject = parsedDate.parse(poolDate.value)
+        val dateObject = parsedDate.parse(date)
 
-        val startTime = poolStartTime.value
-        startTime!!.year = dateObject.year
+        startTime.year = dateObject!!.year
         startTime.month = dateObject.month
         startTime.date = dateObject.date
 
-        val betLockTime = poolBetLockTime.value
         if (betLockTime != null) {
             betLockTime.year = dateObject.year
             betLockTime.month = dateObject.month
@@ -240,7 +248,7 @@ class PoolsViewModel @Inject constructor(
                     } else {
                         showToast.postValue(it)
                     }
-                    showLoading.value = false
+                    setShowLoadingValue(false)
                 }
             }
         } else {
@@ -250,7 +258,7 @@ class PoolsViewModel @Inject constructor(
                         navigateAddPoolToHomeFragment()
                     } else {
                         showToast.postValue(it)
-                        showLoading.value = false
+                        setShowLoadingValue(false)
                     }
                 }
             }
@@ -258,11 +266,11 @@ class PoolsViewModel @Inject constructor(
     }
 
     fun loadEditPool(poolId: String) {
-        showLoading.value = true
+        setShowLoadingValue(true)
         viewModelScope.launch {
             repository.getEditPool(poolId) { pool ->
                 if (pool != null) {
-                    poolDocUid.value = poolId
+                    _poolDocUid.value = poolId
                     poolProduction.value = pool.production
                     poolPassword.value = pool.password
                     poolDate.value = pool.date
@@ -279,32 +287,37 @@ class PoolsViewModel @Inject constructor(
                     poolPISRulesEnabled.value = pool.pIRRulesEnabled
                     poolBets.value = pool.bets
                 }
-                showLoading.value = false
+                setShowLoadingValue(false)
             }
         }
     }
 
     fun setUsersActivePool(poolId: String) {
         viewModelScope.launch {
-            showLoading.emit(true)
+            setShowLoadingValue(true)
             repository.setActivePool(poolId) {
                 if (!it.isNullOrEmpty()) showToast.postValue(it)
                 else navigatePoolsToHomeFragment()
-                showLoading.value = false
+                setShowLoadingValue(false)
             }
             if (!hasNetworkConnection.value) {
-                showSnackBar.postValue("No network connection, data will update when reconnected.")
-                showLoading.value = false
+                showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkUpdateDelayMessage))
+                setShowLoadingValue(false)
                 navigatePoolsToHomeFragment()
             }
         }
     }
 
     fun deletePool() {
-        viewModelScope.launch {
-            repository.deletePool(poolDocUid.value!!) {
-                navigateAddPoolToHomeFragment()
+        val docUid = poolDocUid.value
+        if (!docUid.isNullOrEmpty()) {
+            viewModelScope.launch {
+                repository.deletePool(docUid) {
+                    navigateAddPoolToHomeFragment()
+                }
             }
+        } else {
+            showSnackBar.postValue(stringResourcesProvider.getString(R.string.unableToFindPoolErrorMessage))
         }
     }
 
@@ -326,11 +339,11 @@ class PoolsViewModel @Inject constructor(
 
     private fun navigateJoinPoolToHomeFragment() {
         navigationCommand.postValue(NavigationCommand.To(JoinPoolFragmentDirections.actionJoinPoolFragmentToNavHome()))
-        showLoading.value = false
+        setShowLoadingValue(false)
     }
 
     private fun navigateAddPoolToHomeFragment() {
         navigationCommand.postValue(NavigationCommand.To(AddPoolFragmentDirections.actionAddPoolFragmentToNavHome()))
-        showLoading.value = false
+        setShowLoadingValue(false)
     }
 }

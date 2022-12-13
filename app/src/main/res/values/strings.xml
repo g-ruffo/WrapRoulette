@@ -205,4 +205,7 @@
     <string name="lockBettingDialogTitle">Lock Betting</string>
     <string name="startTimeDialogSubtitle">Set the pools start time according to the call sheet</string>
     <string name="lockBettingDialogSubtitle">At this time no additional bets can be made and are final.</string>
+    <string name="enterProductionNameErrorMessage">Please Enter Production Name</string>
+    <string name="enterPoolDateErrorMessage">Please Enter Pool Date</string>
+    <string name="enterPoolStartTimeErrorMessage">Please Enter Pool Start Time</string>
 </resources>
