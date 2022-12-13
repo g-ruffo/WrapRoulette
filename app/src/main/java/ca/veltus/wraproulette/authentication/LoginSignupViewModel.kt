@@ -95,14 +95,14 @@ class LoginSignupViewModel @Inject constructor(
         _loginFlow.value = Result.Loading
         val result = repository.login(email, password)
         _loginFlow.value = result
-        showLoading.value = false
+        setShowLoadingValue(false)
     }
 
     fun signup(name: String, email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Result.Loading
         val result = repository.signup(name, email, password)
         _signupFlow.value = result
-        showLoading.value = false
+        setShowLoadingValue(false)
     }
 
     fun logout() {
@@ -122,22 +122,22 @@ class LoginSignupViewModel @Inject constructor(
 
     // Check to see if entered email is valid and matches correct format. If valid return true.
     fun resetPassword() {
-        showLoading.value = true
+        setShowLoadingValue(true)
         emailAddress.value = emailAddress.value?.trim()
         if (TextUtils.isEmpty(emailAddress.value)) {
             errorEmailText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterEmailErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
                 .matches()
         ) {
             errorEmailText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.emailNotValidErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
         } else {
             viewModelScope.launch {
                 repository.resetPassword(emailAddress.value!!) {
-                    showLoading.value = false
+                    setShowLoadingValue(false)
                     if (it.isNullOrEmpty()) {
                         showToast.postValue(stringResourcesProvider.getString(R.string.resetEmailSentMessage))
                         navigateBack()
@@ -149,7 +149,7 @@ class LoginSignupViewModel @Inject constructor(
 
     // Check if entered email and password are valid and match correct format. If valid return true.
     fun validateEmailAndPassword(signUp: Boolean = false): Boolean {
-        showLoading.value = true
+        setShowLoadingValue(true)
         emailAddress.value = emailAddress.value?.trim()
         password.value = password.value?.trim()
         username.value = username.value?.trim()
@@ -157,29 +157,29 @@ class LoginSignupViewModel @Inject constructor(
         if (TextUtils.isEmpty(emailAddress.value)) {
             errorEmailText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterEmailErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress.value.toString())
                 .matches()
         ) {
             errorEmailText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.emailNotValidErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return false
         } else if (TextUtils.isEmpty(password.value)) {
             errorPasswordText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterPasswordErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return false
         } else if (signUp && TextUtils.isEmpty(username.value)) {
             errorNameText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterNameErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return false
         } else if (signUp && TextUtils.isEmpty(department.value)) {
             errorDepartmentText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterDepartmentErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return false
         } else {
             if (signUp) {
@@ -192,19 +192,19 @@ class LoginSignupViewModel @Inject constructor(
     }
 
     fun validateUpdateCurrentUser() {
-        showLoading.value = true
+        setShowLoadingValue(true)
         val username = updateUsername.value
         val department = updateDepartment.value
         val tempImage = tempProfileImage.value
         if (username.isNullOrEmpty()) {
             errorNameText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterNameErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return
         } else if (department.isNullOrEmpty()) {
             errorDepartmentText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterDepartmentErrorMessage))
-            showLoading.value = false
+            setShowLoadingValue(false)
             return
         } else {
             viewModelScope.launch {
@@ -240,10 +240,10 @@ class LoginSignupViewModel @Inject constructor(
                 } else {
                     showSnackBar.postValue(it)
                 }
-                showLoading.value = false
+                setShowLoadingValue(false)
             }
             if (!hasNetworkConnection) {
-                showLoading.value = false
+                setShowLoadingValue(false)
                 showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkUpdateDelayMessage))
                 navigateBack()
             }

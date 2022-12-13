@@ -63,7 +63,7 @@ class SignupFragment : BaseFragment() {
                 if (it != null) {
                     when (it) {
                         is Result.Success -> {
-                            _viewModel.initCurrentUserIfFirstTime() {
+                            _viewModel.initCurrentUserIfFirstTime {
                                 startActivity(
                                     Intent(
                                         requireContext(), WrapRouletteActivity::class.java
