@@ -21,9 +21,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class JoinPoolFragment : BaseFragment() {
-    companion object {
-        private const val TAG = "JoinPoolFragment"
-    }
 
     override val _viewModel by viewModels<PoolsViewModel>()
     private var _binding: FragmentJoinPoolBinding? = null
@@ -39,15 +36,14 @@ class JoinPoolFragment : BaseFragment() {
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_pool, container, false)
 
-        binding.viewModel = _viewModel
-        binding.fragment = this
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.viewModel = _viewModel
+        binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
 
     }
@@ -62,24 +58,19 @@ class JoinPoolFragment : BaseFragment() {
         editText.temporaryFocus()
 
         val calendar = Calendar.getInstance()
-        val submitButtonText = "Set"
-        val titleText = "Pool Date"
-        val messageText = "Set the pools date according to the call sheet"
 
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = DatePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         view.apply {
-            title.text = titleText
-            message.text = messageText
             datePicker.minDate = calendar.time.time - Constants.YEAR
             datePicker.maxDate = calendar.time.time + Constants.YEAR
         }
         builder.apply {
             setView(view.root)
-            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton(submitButtonText) { dialog, _ -> }
+            setNeutralButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.set)) { _, _ -> }
         }
 
         val dialog = builder.show()
