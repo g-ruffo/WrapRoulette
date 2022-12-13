@@ -1,7 +1,6 @@
 package ca.veltus.wraproulette.ui.pools.createpool
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,9 +27,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class AddPoolFragment : BaseFragment() {
-    companion object {
-        private const val TAG = "AddPoolsFragment"
-    }
 
     override val _viewModel by viewModels<PoolsViewModel>()
 
@@ -46,9 +42,6 @@ class AddPoolFragment : BaseFragment() {
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_pool, container, false)
 
-        binding.viewModel = _viewModel
-        binding.fragment = this
-
         checkForEditPoolArgs()
 
         return binding.root
@@ -56,14 +49,14 @@ class AddPoolFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = _viewModel
+        binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        Log.i(TAG, "onDestroyView: ")
     }
 
     private fun checkForEditPoolArgs() {
@@ -79,7 +72,7 @@ class AddPoolFragment : BaseFragment() {
                     if (it.isNullOrBlank()) {
                         activityCast.supportActionBar!!.title = getString(R.string.newPool)
                     } else {
-                        binding.createButton.text = "Update"
+                        binding.createButton.text = getString(R.string.update)
                         activityCast.supportActionBar!!.title = getString(R.string.editPool)
                     }
                 }
@@ -88,35 +81,31 @@ class AddPoolFragment : BaseFragment() {
     }
 
     fun launchDeletePoolAlert() {
-        val message = "You are about to delete this pool. Click Yes to continue or No to cancel."
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
-        view.message.text = message
-        view.title.text = "Are You Sure?"
+        view.message.text = getString(R.string.deletePoolConfirmDialogSubtitle)
+        view.title.text = getString(R.string.areYouSureDialogTitle)
         builder.apply {
             setView(view.root)
-            setNeutralButton("No") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Yes") { _, _ ->
+            setNeutralButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.yes)) { _, _ ->
                 _viewModel.deletePool()
             }
         }.show()
     }
 
     fun launchPirInfoDialog() {
-        val message =
-            "The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over."
-
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
         )
         val view = OptionsDialogBinding.inflate(LayoutInflater.from(requireContext()))
-        view.message.text = message
-        view.title.text = "Price Is Right Rules"
+        view.message.text = getString(R.string.pirInfoDialogSubtitle)
+        view.title.text = getString(R.string.pirInfoDialogTitle)
         builder.apply {
             setView(view.root)
-            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
+            setNeutralButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
         }.show()
     }
 
@@ -127,18 +116,17 @@ class AddPoolFragment : BaseFragment() {
         time.set(Calendar.SECOND, 0)
         time.set(Calendar.MILLISECOND, 0)
 
-        val submitButtonText = "Set"
         val titleText: String
         val messageText: String
 
         when (isStartTime) {
             true -> {
-                titleText = "Start Time"
-                messageText = "Set the pools start time according to the call sheet"
+                titleText = getString(R.string.startTimeDialogTitle)
+                messageText = getString(R.string.startTimeDialogSubtitle)
             }
             false -> {
-                titleText = "Lock Betting"
-                messageText = "At this time no additional bets can be made and are final."
+                titleText = getString(R.string.lockBettingDialogTitle)
+                messageText = getString(R.string.lockBettingDialogSubtitle)
             }
         }
 
@@ -155,10 +143,10 @@ class AddPoolFragment : BaseFragment() {
         }
         builder.apply {
             setView(view.root)
-            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton(submitButtonText) { _, _ -> }
+            setNeutralButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.set)) { _, _ -> }
             if (!(editText as MaterialAutoCompleteTextView).text.isNullOrEmpty() && !isStartTime) {
-                setNegativeButton("Clear") { _, _ ->
+                setNegativeButton(getString(R.string.clear)) { _, _ ->
                     _viewModel.clearPoolTimeAndAmount(Constants.SET_FINAL_BETS)
                 }
             }
@@ -194,8 +182,8 @@ class AddPoolFragment : BaseFragment() {
         }
         builder.apply {
             setView(view.root)
-            setNeutralButton("Close") { dialog, _ -> dialog.dismiss() }
-            setPositiveButton("Set") { _, _ -> }
+            setNeutralButton(getString(R.string.close)) { dialog, _ -> dialog.dismiss() }
+            setPositiveButton(getString(R.string.set)) { _, _ -> }
         }
 
         val dialog = builder.show()
@@ -229,24 +217,26 @@ class AddPoolFragment : BaseFragment() {
                 resources.getStringArray(R.array.margin_number_picker_entries)
             view.numberPickerMinutes.displayedValues = array
             view.numberPickerMinutes.maxValue = array.size - 1
-            builder.setPositiveButton("Set") { _, _ ->
+            builder.setPositiveButton(getString(R.string.set)) { _, _ ->
                 _viewModel.setPoolPriceAndMargin(
                     view.numberPickerMinutes.displayedValues[view.numberPickerMinutes.value], false
                 )
-            }.setNeutralButton("Cancel") { dialogCancel, _ -> dialogCancel.dismiss() }
+            }
+                .setNeutralButton(getString(R.string.cancel)) { dialogCancel, _ -> dialogCancel.dismiss() }
         } else {
             val view = BetNumberPickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
             builder.setView(view.root)
-            builder.setPositiveButton("Set") { _, _ ->
+            builder.setPositiveButton(getString(R.string.set)) { _, _ ->
                 var result = view.numberPickerOnes.value.toString()
                 if (view.numberPickerTens.value != 0) result =
                     view.numberPickerTens.value.toString() + result
 
                 _viewModel.setPoolPriceAndMargin(result, true)
-            }.setNeutralButton("Cancel") { dialogCancel, _ -> dialogCancel.dismiss() }
+            }
+                .setNeutralButton(getString(R.string.cancel)) { dialogCancel, _ -> dialogCancel.dismiss() }
         }
         if (!(editText as MaterialAutoCompleteTextView).text.isNullOrEmpty()) {
-            builder.setNegativeButton("Clear") { _, _ ->
+            builder.setNegativeButton(getString(R.string.clear)) { _, _ ->
                 if (isTimeMargin) _viewModel.clearPoolTimeAndAmount(Constants.SET_MARGIN_TIME)
                 else _viewModel.clearPoolTimeAndAmount(Constants.SET_BET_AMOUNT)
             }

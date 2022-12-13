@@ -197,4 +197,12 @@
     <string name="unableToEditPool">You Are Unable To Edit This Pool</string>
     <string name="summary">Summary</string>
     <string name="bids">Bids</string>
+    <string name="deletePoolConfirmDialogSubtitle">You are about to delete this pool. Click Yes to continue or No to cancel.</string>
+    <string name="pirInfoDialogSubtitle">The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over.</string>
+    <string name="pirInfoDialogTitle">Price Is Right Rules</string>
+    <string name="set">Set</string>
+    <string name="startTimeDialogTitle">Start Time</string>
+    <string name="lockBettingDialogTitle">Lock Betting</string>
+    <string name="startTimeDialogSubtitle">Set the pools start time according to the call sheet</string>
+    <string name="lockBettingDialogSubtitle">At this time no additional bets can be made and are final.</string>
 </resources>
