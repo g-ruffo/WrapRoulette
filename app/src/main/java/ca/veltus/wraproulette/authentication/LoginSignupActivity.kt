@@ -28,8 +28,10 @@ class LoginSignupActivity : AppCompatActivity() {
         binding = ActivityLoginSignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Wait until the loginFlow value has been returned before removing the SplashScreen
         splashScreen.setKeepOnScreenCondition { viewModel.loginFlow.value != null }
 
+        // Hide the status bar, toolbar and bottom navigation bar for all fragments in the activity.
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -38,6 +40,10 @@ class LoginSignupActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This public function allows any fragment located in the activity to close the keyboard when
+     * finished typing and the submit button is clicked.
+     */
     fun hideKeyboard(view: View) {
         val inputMethodManager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager

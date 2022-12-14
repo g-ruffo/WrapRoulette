@@ -35,10 +35,6 @@ class LoginSignupViewModel @Inject constructor(
     app: Application
 ) : BaseViewModel(app) {
 
-    companion object {
-        const val TAG = "LoginSignupViewModel"
-    }
-
     val username = MutableLiveData<String>()
     val emailAddress = MutableLiveData<String>()
     val department = MutableLiveData<String>()
@@ -69,6 +65,7 @@ class LoginSignupViewModel @Inject constructor(
         get() = repository.currentUser
 
     init {
+        // If the user is logged in, set the loginFlow flow value and emit the profiles values.
         if (repository.currentUser != null) {
             _loginFlow.value = Result.Success(repository.currentUser!!)
             viewModelScope.launch {
@@ -80,6 +77,7 @@ class LoginSignupViewModel @Inject constructor(
                     }
                 }
                 launch {
+                    // The network connectivity state is used to prevent the user from making certain Firebase changes if not connected.
                     connectivityObserver.observe().collectLatest {
                         if (it == ConnectivityObserver.Status.Available) hasNetworkConnection.emit(
                             true
@@ -111,6 +109,10 @@ class LoginSignupViewModel @Inject constructor(
         _signupFlow.value = null
     }
 
+    /**
+     * When the user initially signs up, create a corresponding Firestore user document using the values provided
+     * and update the users Firebase Authentication values.
+     */
     fun initCurrentUserIfFirstTime(onComplete: () -> Unit) {
         viewModelScope.launch {
             repository.initCurrentUserIfFirstTime(department.value ?: "") {
@@ -120,7 +122,11 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
-    // Check to see if entered email is valid and matches correct format. If valid return true.
+    /**
+     *  Check to see if the entered email is valid and matches correct format. If valid return true and request
+     *  a reset password to be sent to the provided email and navigate back. If there is an issue locating a
+     *  corresponding account, notify the user with a helper text error.
+     */
     fun resetPassword() {
         setShowLoadingValue(true)
         emailAddress.value = emailAddress.value?.trim()
@@ -147,7 +153,10 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
-    // Check if entered email and password are valid and match correct format. If valid return true.
+    /**
+     *  Check if the entered email, password, department and name is valid. If invalid return false and display
+     *  the issue as a helper text error in the appropriate EditText.
+     */
     fun validateEmailAndPassword(signUp: Boolean = false): Boolean {
         setShowLoadingValue(true)
         emailAddress.value = emailAddress.value?.trim()
@@ -191,6 +200,9 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Ensure the provided values are valid and update the profile information in Firebase.
+     */
     fun validateUpdateCurrentUser() {
         setShowLoadingValue(true)
         val username = updateUsername.value
@@ -272,6 +284,10 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Used in the AccountFragment to set the new profile image selected by the user. The ByteArray is stored
+     * as a value until the save button is clicked at which point it is uploaded to Firebase and then set to null.
+     */
     fun setTemporaryProfileImage(image: ByteArray) {
         _tempProfileImage.value = image
     }

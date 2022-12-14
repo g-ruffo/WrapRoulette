@@ -14,9 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ResetPasswordFragment : BaseFragment() {
-    companion object {
-        const val TAG = "ResetPasswordFrag"
-    }
 
     override val _viewModel: LoginSignupViewModel by activityViewModels()
 

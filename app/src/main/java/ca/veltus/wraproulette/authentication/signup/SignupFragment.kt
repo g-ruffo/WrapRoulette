@@ -57,6 +57,10 @@ class SignupFragment : BaseFragment() {
         _binding = null
     }
 
+    /**
+     *  Observe viewModels SignupFlow and if successful navigate to the WrapRouletteActivity.
+     *  If it fails, display the issue as a helper text message in the corresponding EditText or display the message in a Snack Bar.
+     */
     private fun observeSignup() {
         lifecycleScope.launchWhenStarted {
             _viewModel.signupFlow.collectLatest {

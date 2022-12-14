@@ -2,6 +2,7 @@ package ca.veltus.wraproulette.authentication.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,6 @@ import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.databinding.FragmentLoginBinding
 import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.utils.Constants
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +56,10 @@ class LoginFragment : BaseFragment() {
         _binding = null
     }
 
+    /**
+     *  Observe viewModels LoginFlow and if successful navigate to the WrapRouletteActivity.
+     *  If it fails, display the issue as a helper text message in the corresponding EditText or display the message in a Snack Bar.
+     */
     private fun observeLogin() {
         lifecycleScope.launchWhenStarted {
             _viewModel.loginFlow.collectLatest {
@@ -70,7 +74,7 @@ class LoginFragment : BaseFragment() {
                             requireActivity().finish()
                         }
                         is Result.Loading -> {
-                            CircularProgressIndicator(requireContext())
+                            Log.i(TAG, "observeSignup: Loading")
                         }
                         is Result.Failure -> {
                             when (it.exception) {
