@@ -17,10 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginSignupActivity : AppCompatActivity() {
 
-    companion object {
-        const val TAG = "LoginActivityLog"
-    }
-
     private val viewModel: LoginSignupViewModel by viewModels()
 
     private lateinit var binding: ActivityLoginSignupBinding
