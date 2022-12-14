@@ -195,27 +195,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun sendChatMessage(onComplete: () -> Unit) {
-        viewModelScope.launch {
-            val message = Message(
-                userMessageEditText.value!!,
-                Date(Calendar.getInstance().time.time),
-                userAccount.value!!.uid,
-                userAccount.value!!.displayName,
-                userAccount.value?.profilePicturePath,
-                ""
-            )
-            repository.sendChatMessage(userAccount.value!!.activePool!!, message) {
-                viewModelScope.launch {
-                    if (it.isNullOrEmpty()) {
-                        userMessageEditText.emit(null)
-                        onComplete()
-                    } else showToast.postValue(it)
-                }
-            }
-        }
-    }
-
     private fun getPoolData(activePool: String?) {
         if (!activePool.isNullOrEmpty()) {
             viewModelScope.launch {
@@ -283,6 +262,27 @@ class HomeViewModel @Inject constructor(
 
     private fun setUserBetTime(date: Date?) {
         _userBetTime.value = date
+    }
+
+    fun sendChatMessage(onComplete: () -> Unit) {
+        viewModelScope.launch {
+            val message = Message(
+                userMessageEditText.value!!,
+                Date(Calendar.getInstance().time.time),
+                userAccount.value!!.uid,
+                userAccount.value!!.displayName,
+                userAccount.value?.profilePicturePath,
+                ""
+            )
+            userMessageEditText.emit(null)
+            repository.sendChatMessage(userAccount.value!!.activePool!!, message) {
+                launch {
+                    if (it.isNullOrEmpty()) {
+                        onComplete()
+                    } else showToast.postValue(it)
+                }
+            }
+        }
     }
 
     fun leavePool() {
