@@ -65,6 +65,10 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.5.3'
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
+    // Google Play Dependencies
+    implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.play:review-ktx:2.0.1'
+
     // Firebase Dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
