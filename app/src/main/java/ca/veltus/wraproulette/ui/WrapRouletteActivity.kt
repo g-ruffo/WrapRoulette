@@ -3,6 +3,7 @@ package ca.veltus.wraproulette.ui
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -29,7 +30,13 @@ import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.review.ReviewException
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,11 +44,17 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class WrapRouletteActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "WrapRouletteActivity"
+    }
+
     private val viewModel: LoginSignupViewModel by viewModels()
+    private val manager by lazy { ReviewManagerFactory.create(this) }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityWrapRouletteBinding
     private lateinit var drawerLayout: DrawerLayout
+
     private val navController by lazy {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
@@ -54,6 +67,8 @@ class WrapRouletteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupNavigationAndToolbar()
+
+        requestReviewInfo()
 
     }
 
@@ -74,6 +89,28 @@ class WrapRouletteActivity : AppCompatActivity() {
         val inputMethodManager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun requestReviewInfo() {
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                val reviewInfo = task.result
+                startReviewFlow(reviewInfo)
+            } else {
+                // There was some problem, log or handle the error code.
+                @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException).errorCode
+                Log.e(TAG, "requestReviewInfo: $reviewErrorCode")
+                Firebase.crashlytics.recordException(task.exception as ReviewException)
+            }
+        }
+    }
+
+    private fun startReviewFlow(reviewInfo: ReviewInfo?) {
+        if (reviewInfo != null) {
+            manager.launchReviewFlow(this, reviewInfo)
+        }
     }
 
     private fun setupNavigationAndToolbar() {
