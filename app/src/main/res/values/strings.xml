@@ -213,4 +213,5 @@
     <string name="errorWrapNotSet">Error, Wrap Time Not Set</string>
     <string name="winner">Winner</string>
     <string name="winners">Winners</string>
+    <string name="noNetworkOutdatedMessage">Unable to connect to network, the pools data may be out of date.</string>
 </resources>

@@ -301,7 +301,7 @@ class PoolsViewModel @Inject constructor(
                 setShowLoadingValue(false)
             }
             if (!hasNetworkConnection.value) {
-                showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkUpdateDelayMessage))
+                showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkOutdatedMessage))
                 setShowLoadingValue(false)
                 navigatePoolsToHomeFragment()
             }
