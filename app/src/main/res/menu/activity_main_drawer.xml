@@ -12,6 +12,11 @@
             android:id="@+id/nav_pools"
             android:icon="@drawable/ic_baseline_subscriptions_24"
             android:title="@string/pools" />
+
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_baseline_manage_accounts_24"
+            android:title="@string/account" />
     </group>
 
     <item android:title="@string/share">
@@ -31,14 +36,9 @@
     <item android:title="@string/settings">
         <menu>
             <item
-                android:id="@+id/nav_account"
-                android:icon="@drawable/ic_baseline_manage_accounts_24"
-                android:title="@string/account" />
-            <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_baseline_logout_24"
                 android:title="@string/logout" />
         </menu>
     </item>
-
 </menu>
