@@ -14,12 +14,21 @@
             android:id="@+id/action_nav_home_to_addPoolFragment"
             app:destination="@id/addPoolFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_nav_home_to_nav_pools"
             app:destination="@id/nav_pools"
             app:popUpTo="@id/nav_pools"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_account"
+            app:destination="@id/nav_account"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -29,10 +38,18 @@
         tools:layout="@layout/fragment_pools">
         <action
             android:id="@+id/action_nav_pools_to_addPoolFragment"
-            app:destination="@id/addPoolFragment" />
+            app:destination="@id/addPoolFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_nav_pools_to_joinPoolFragment"
-            app:destination="@id/joinPoolFragment" />
+            app:destination="@id/joinPoolFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_nav_pools_to_nav_home"
             app:destination="@id/nav_home"
@@ -68,6 +85,10 @@
         <action
             android:id="@+id/action_joinPoolFragment_to_nav_home"
             app:destination="@id/nav_home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/nav_pools" />
     </fragment>
 
