@@ -53,6 +53,8 @@
         <action
             android:id="@+id/action_nav_pools_to_nav_home"
             app:destination="@id/nav_home"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />
     </fragment>
@@ -74,6 +76,8 @@
         <action
             android:id="@+id/action_addPoolFragment_to_nav_home"
             app:destination="@id/nav_home"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />
     </fragment>
@@ -85,11 +89,10 @@
         <action
             android:id="@+id/action_joinPoolFragment_to_nav_home"
             app:destination="@id/nav_home"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/nav_pools" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/nav_pools"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
