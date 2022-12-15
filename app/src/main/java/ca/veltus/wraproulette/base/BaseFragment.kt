@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
-// Base Fragment to observe on the common LiveData objects
+/**
+ * Base Fragment to observe on the common LiveData objects
+ */
 abstract class BaseFragment : Fragment() {
 
     // Every fragment has to have an instance of a view model that extends from the BaseViewModel
@@ -15,14 +17,14 @@ abstract class BaseFragment : Fragment() {
         super.onStart()
         _viewModel.clearErrorHelperText(null)
 
-        _viewModel.showToast.observe(this) {
+        _viewModel.showToast.observe(viewLifecycleOwner) {
             Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         }
-        _viewModel.showSnackBar.observe(this) {
+        _viewModel.showSnackBar.observe(viewLifecycleOwner) {
             Snackbar.make(this.requireView(), it, Snackbar.LENGTH_LONG).show()
         }
 
-        _viewModel.navigationCommand.observe(this) { command ->
+        _viewModel.navigationCommand.observe(viewLifecycleOwner) { command ->
             when (command) {
                 is NavigationCommand.To -> findNavController().navigate(command.directions)
                 is NavigationCommand.Back -> findNavController().popBackStack()
