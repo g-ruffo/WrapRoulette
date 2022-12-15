@@ -2,6 +2,8 @@ package ca.veltus.wraproulette.utils
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
@@ -43,10 +45,12 @@ object ExifUtil {
                 oriented
             } catch (e: OutOfMemoryError) {
                 e.printStackTrace()
+                Firebase.crashlytics.recordException(e)
                 bitmap
             }
         } catch (e: IOException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         }
         return bitmap
     }
@@ -68,20 +72,28 @@ object ExifUtil {
             orientation = getAttributeInt.invoke(exifInstance, tagOrientation, 1) as Int
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: SecurityException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: NoSuchMethodException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: InstantiationException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: InvocationTargetException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         } catch (e: NoSuchFieldException) {
             e.printStackTrace()
+            Firebase.crashlytics.recordException(e)
         }
         return orientation
     }

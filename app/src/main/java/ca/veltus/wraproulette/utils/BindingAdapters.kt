@@ -388,7 +388,6 @@ object BindingAdapters {
                 )
             )
         }
-
     }
 }
 
