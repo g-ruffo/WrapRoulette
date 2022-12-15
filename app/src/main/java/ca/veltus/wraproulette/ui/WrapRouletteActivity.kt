@@ -115,7 +115,7 @@ class WrapRouletteActivity : AppCompatActivity() {
 
     private fun setupNavigationAndToolbar() {
         drawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
+        val navView: NavigationView = binding.navHostFragmentMain
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -131,10 +131,10 @@ class WrapRouletteActivity : AppCompatActivity() {
 
         navView.menu.apply {
             findItem(R.id.nav_feedback).setOnMenuItemClickListener {
-                launchFeedbackDialog()
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawers()
                 }
+                launchFeedbackDialog()
                 true
             }
             findItem(R.id.nav_logout).setOnMenuItemClickListener {
