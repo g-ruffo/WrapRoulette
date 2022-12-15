@@ -13,6 +13,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -128,6 +130,14 @@ class WrapRouletteActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.addPoolFragment || destination.id == R.id.joinPoolFragment) {
+                drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+            } else {
+                drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            }
+        }
 
         navView.menu.apply {
             findItem(R.id.nav_feedback).setOnMenuItemClickListener {
