@@ -16,7 +16,8 @@
         android:id="@+id/cardView"
         style="@style/ListItemCardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainLayout"
@@ -29,6 +30,7 @@
                 style="@style/ListItemImageCardView"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                app:cardBackgroundColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -101,6 +103,7 @@
                 style="@style/ListItemValueCardView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">

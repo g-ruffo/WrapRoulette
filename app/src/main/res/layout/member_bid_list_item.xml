@@ -17,7 +17,7 @@
         style="@style/ListItemCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
+        app:cardBackgroundColor="@color/white"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,6 +31,7 @@
                 style="@style/ListItemImageCardView"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                app:cardBackgroundColor="@color/white"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/memberDepartmentTextView"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +55,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:adjustViewBounds="true"
+                        android:background="@color/transparent"
                         android:clipToPadding="false"
                         android:contentDescription="@string/memberProfileImageDescription"
                         android:scaleType="centerCrop"

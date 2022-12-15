@@ -1,16 +1,551 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.WrapRoulette" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/bluePrimary</item>
+        <item name="colorPrimaryVariant">@color/blueDark</item>
+        <item name="colorOnPrimary">@color/darkHeaderTextColor</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondary">@color/highlightOrange</item>
+        <item name="colorSecondaryVariant">@color/darkOrange</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:statusBarColor">@color/bluePrimary</item>
+        <item name="android:navigationBarColor">@color/bluePrimary</item>
     </style>
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">5.0dp</item>
+    </style>
+
+    <style name="NavigationView" parent="Base.Theme.AppCompat">
+        <item name="android:listDivider">@color/blueLight</item>
+    </style>
+
+    <style name="Theme.WrapRoulette.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:textColorSecondary">@color/white</item>
+
+    </style>
+
+    <style name="Theme.WrapRoulette.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.WrapRoulette.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="LoginText">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
+        <item name="textFillColor">@color/loginTextDarkBackgroundColor</item>
+    </style>
+
+    <style name="TitleText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ValueText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/valueTextColor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PoolDetailCardText">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/blueLight</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/poolDetailCardTextSize</item>
+    </style>
+
+    <style name="PoolDetailCardSubText">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/poolDetailCardSubTextSize</item>
+    </style>
+
+    <style name="PoolDetailHeaderText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
+        <item name="android:textSize">@dimen/poolDetailHeaderTextSize</item>
+    </style>
+
+    <style name="PoolDetailHeaderValueText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/loginTextDarkBackgroundColor</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PoolSubtitleText">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+    <style name="LoginTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
+        <item name="boxBackgroundColor">@color/loginInputLayoutBoxColor</item>
+        <item name="startIconTint">@color/bluePrimary</item>
+        <item name="android:textColorHint">@color/blueInputHintTextColor</item>
+        <item name="counterTextColor">@color/loginInputLayoutBoxColor</item>
+        <item name="passwordToggleTint">@color/bluePrimary</item>
+        <item name="android:textColor">@color/blueInputHintTextColor</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
+        <item name="colorAccent">@color/fabIconTint</item>
+        <item name="colorControlNormal">@color/fabIconTint</item>
+        <item name="colorControlActivated">@color/fabIconTint</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="colorPrimary">@color/fabIconTint</item>
+        <item name="colorOnSurface">@color/fabIconTint</item>
+        <item name="hintTextColor">@color/blueInputHintTextColor</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="android:textColorPrimary">@color/fabIconTint</item>
+        <item name="android:titleTextColor">@color/blueDark</item>
+        <item name="editTextColor">@color/blueDark</item>
+        <item name="textFillColor">@color/blueDark</item>
+        <item name="android:editTextColor">@color/blueDark</item>
+        <item name="android:textCursorDrawable">@color/fabIconTint</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
+        <item name="colorOnSecondary">@color/fabIconTint</item>
+    </style>
+
+
+    <style name="LoginTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:textColorHint">@color/loginHintTextColor</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="PoolHelperTextStyle">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="PoolHintTextStyle">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="AccountTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="startIconTint">@color/color_states_pir_image</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
+        <item name="boxBackgroundColor">@color/blueGrey</item>
+        <item name="android:textColorHint">@color/loginHintTextColor</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
+        <item name="colorAccent">@color/fabIconTint</item>
+        <item name="colorControlNormal">@color/fabIconTint</item>
+        <item name="colorControlActivated">@color/fabIconTint</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="colorPrimary">@color/fabIconTint</item>
+        <item name="colorOnSurface">@color/fabIconTint</item>
+        <item name="hintTextColor">@color/color_states_pir_image</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="android:textColorPrimary">@color/fabIconTint</item>
+        <item name="android:titleTextColor">@color/fabIconTint</item>
+        <item name="editTextColor">@color/fabIconTint</item>
+        <item name="textFillColor">@color/fabIconTint</item>
+        <item name="android:editTextColor">@color/cardViewTitleColor</item>
+        <item name="android:textCursorDrawable">@color/fabIconTint</item>
+        <!--        <item name="colorOnSecondary">@color/fabIconTint</item>-->
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
+        <item name="colorOnSecondary">@color/fabIconTint</item>
+    </style>
+
+    <style name="AccountTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColorHint">@color/loginHintTextColor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+
+    <style name="PoolTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="startIconTint">@color/color_states_pir_image</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="endIconTint">@color/bluePrimary</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/color_state_text_input_hint_text</item>
+        <item name="hintTextColor">@color/color_state_text_input_hint_text</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/color_state_text_input_layout_border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="helperTextTextAppearance">@style/PoolHelperTextStyle</item>
+        <item name="android:editTextColor">@color/cardViewTitleColor</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
+        <item name="hintTextAppearance">@style/PoolHelperTextStyle</item>
+
+    </style>
+
+
+    <style name="PoolTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/PoolHintTextStyle</item>
+    </style>
+
+    <style name="DialogTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="startIconTint">@color/color_states_pir_image</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="endIconTint">@color/bluePrimary</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/login_edit_text_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/login_edit_text_radius</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/color_state_text_input_hint_text</item>
+        <item name="hintTextColor">@color/color_state_text_input_hint_text</item>
+        <item name="android:textColor">@color/color_states_pir_image</item>
+        <item name="helperTextTextColor">@color/warningRed</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/color_state_text_input_layout_border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="helperTextTextAppearance">@style/PoolHelperTextStyle</item>
+        <item name="android:editTextColor">@color/cardViewTitleColor</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="errorTextColor">@color/warningRed</item>
+        <item name="boxStrokeErrorColor">@color/warningRed</item>
+        <item name="errorIconTint">@color/warningRed</item>
+        <item name="hintTextAppearance">@style/PoolHelperTextStyle</item>
+    </style>
+
+    <style name="DialogTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/PoolHintTextStyle</item>
+    </style>
+
+    <style name="NumberPickerTheme" parent="Theme.WrapRoulette">
+        <item name="colorControlNormal">@color/blueLight</item>
+        <item name="android:textColorPrimary">@color/bluePrimary</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <!-- Alert Dialog -->
+    <style name="NumberPickerDialog.MaterialComponents.MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:gravity">end</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/darkOrange</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:gravity">start</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/darkOrange</item>
+    </style>
+
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/color_states_material_button</item>
+    </style>
+
+    <style name="FabButton">
+        <item name="maxImageSize">32dp</item>
+        <item name="backgroundTint">@color/color_states_fab_button</item>
+        <item name="tint">@color/color_states_fab_text</item>
+        <item name="fabSize">normal</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="iconTint">@color/color_states_fab_text</item>
+        <item name="android:textColor">@color/color_states_fab_text</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="ExtendedSecondaryButton">
+        <item name="maxImageSize">28dp</item>
+        <item name="backgroundTint">@color/color_states_fab_button</item>
+        <item name="tint">@color/color_states_fab_text</item>
+        <item name="fabSize">normal</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:minWidth">90dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="iconTint">@color/color_states_fab_text</item>
+        <item name="android:textColor">@color/color_states_fab_text</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="ExtendedFabButton">
+        <item name="maxImageSize">28dp</item>
+        <item name="backgroundTint">@color/color_states_fab_button</item>
+        <item name="tint">@color/color_states_fab_text</item>
+        <item name="fabSize">normal</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="iconTint">@color/color_states_fab_text</item>
+        <item name="android:textColor">@color/color_states_fab_text</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="SendFabButton">
+        <item name="tint">@color/darkHeaderTextColor</item>
+        <item name="backgroundTint">@color/bluePrimary</item>
+        <item name="fabSize">normal</item>
+        <item name="fabCustomSize">50dp</item>
+        <item name="maxImageSize">24dp</item>
+        <item name="elevation">22dp</item>
+        <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
+        <item name="layout_constraintDimensionRatio">1</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="FabText">
+        <item name="elevation">42dp</item>
+        <item name="android:textColor">@color/color_states_fab_text</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainBlueButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/rounded_corners_button_login</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
+        <item name="backgroundTint">@color/color_states_material_button</item>
+    </style>
+
+    <style name="LoginButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/rounded_corners_button_login</item>
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:stateListAnimator">@animator/send_fab_state_animator</item>
+        <item name="android:backgroundTint">@color/color_states_material_button_login</item>
+        <item name="backgroundTint">@color/color_states_material_button_login</item>
+    </style>
+
+    <style name="BackButton">
+        <item name="android:elevation">12dp</item>
+        <item name="tint">@color/fabIconTint</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_width">@dimen/backButtonSize</item>
+        <item name="android:layout_height">@dimen/backButtonSize</item>
+        <item name="android:layout_margin">@dimen/backButtonLayoutMargin</item>
+    </style>
+
+    <style name="ProgressBar">
+        <item name="android:elevation">8dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:visibility">gone</item>
+        <item name="indicatorColor">@color/highlightOrange</item>
+        <item name="indicatorSize">60dp</item>
+    </style>
+
+    <style name="DialogTitleStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/dialogTitleTopMargin</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+    </style>
+
+    <style name="DialogMessageStyle">
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">start</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:layout_marginTop">@dimen/dialogMessageTopMargin</item>
+        <item name="android:layout_marginStart">@dimen/dialogMessageHorizontalMargin</item>
+        <item name="android:layout_marginEnd">@dimen/dialogMessageHorizontalMargin</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+    </style>
+
+    <style name="DialogSpinnerTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/bluePrimary</item>
+    </style>
+
+    <style name="PoolDetailValueCardView">
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardElevation">6dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="NoDataTextImage">
+        <item name="drawableTint">@color/textTitleColor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="ListItemCardView">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@color/poolItemIconTint</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="ListItemConstraintLayout">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="ListItemImageCardView">
+        <item name="android:clipToPadding">false</item>
+        <item name="android:background">@color/poolItemIconTint</item>
+        <item name="cardCornerRadius">14dp</item>
+        <item name="layout_constraintDimensionRatio">1</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="ListItemTempMemberIcon">
+        <item name="android:layout_width">@dimen/listItemSecondaryImageSize</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">top|start</item>
+        <item name="android:layout_marginStart">@dimen/listItemSecondaryImageMargin</item>
+        <item name="android:layout_marginBottom">@dimen/listItemSecondaryImageMargin</item>
+        <item name="android:src">@drawable/ic_baseline_new_releases_24</item>
+        <item name="tint">@color/memberItemTempIconTint</item>
+    </style>
+
+    <style name="ListItemTitle">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/blueLight</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginStart">18dp</item>
+    </style>
+
+    <style name="ListItemSubtitle">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ListItemValueCardView">
+        <item name="android:clipToPadding">false</item>
+        <item name="android:background">@color/poolItemIconTint</item>
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:minWidth">70dp</item>
+    </style>
+
+    <style name="ListItemValueText">
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="ChatMessageText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:maxWidth">260dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="ChatMessageTimestamp">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/chatSentByTextColor</item>
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="ChatMessageCardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
+
+    <style name="SummaryHeaderCardView">
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">@dimen/login_edit_text_radius</item>
+        <item name="android:backgroundTint">@color/headerSummaryCardViewBackground</item>
+    </style>
+
+    <style name="SummaryInfoCardView">
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">@dimen/login_edit_text_radius</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="layout_constraintHorizontal_weight">1</item>
+        <item name="layout_constraintDimensionRatio">1</item>
+    </style>
+
 </resources>

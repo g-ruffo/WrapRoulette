@@ -31,7 +31,7 @@
                 android:layout_marginHorizontal="90dp"
                 android:layout_marginTop="12dp"
                 android:clipToPadding="false"
-                app:cardBackgroundColor="@color/fabIconTint"
+                app:cardBackgroundColor="@color/calendarWhite"
                 app:cardCornerRadius="14dp"
                 app:cardElevation="22dp"
                 app:layout_constraintBottom_toTopOf="@+id/nameEditTextLayout"

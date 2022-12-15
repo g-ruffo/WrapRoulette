@@ -52,7 +52,7 @@
             android:layout_marginStart="12dp"
             android:fontFamily="@font/roboto_medium"
             android:text="@{message.senderName}"
-            android:textColor="@color/textTitleColor"
+            android:textColor="@color/chatSentByTextColor"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/adminImageCardView"
             app:layout_constraintTop_toTopOf="parent"

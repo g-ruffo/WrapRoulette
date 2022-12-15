@@ -520,7 +520,7 @@
 
     <style name="ChatMessageTimestamp">
         <item name="android:textSize">11sp</item>
-        <item name="android:textColor">@color/textTitleColor</item>
+        <item name="android:textColor">@color/chatSentByTextColor</item>
         <item name="fontFamily">@font/roboto</item>
     </style>
 
