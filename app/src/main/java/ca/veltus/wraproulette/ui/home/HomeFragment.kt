@@ -129,6 +129,8 @@ class HomeFragment : BaseFragment(), MenuProvider {
                     _viewModel.postSnackBarMessage(getString(R.string.bettingLockedPoolActiveCantLeaveMessage))
                 } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
                     _viewModel.postSnackBarMessage(getString(R.string.clearBetToLeavePoolMessage))
+                } else {
+                    _viewModel.postSnackBarMessage(getString(R.string.unableToLeavePoolMessage))
                 }
                 true
             }

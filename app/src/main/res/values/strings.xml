@@ -214,4 +214,5 @@
     <string name="winner">Winner</string>
     <string name="winners">Winners</string>
     <string name="noNetworkOutdatedMessage">Unable to connect to network, the pools data may be out of date.</string>
+    <string name="unableToLeavePoolMessage">You are unable to leave the pool at this time. Please contact the pools administrator.</string>
 </resources>
