@@ -232,8 +232,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/blueDark</item>
         <item name="android:maxLines">1</item>
+        <item name="android:inputType">textCapWords</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
+        <item name="android:digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789</item>
         <item name="android:textAppearance">@style/PoolHintTextStyle</item>
     </style>
 

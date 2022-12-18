@@ -92,7 +92,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/name"
-                    android:inputType="textCapWords"
                     android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.NAME_ERROR)}"
                     android:text="@={viewModel.updateUsername}" />
 
@@ -119,7 +118,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/department"
-                    android:inputType="textCapWords"
                     android:onTextChanged="@{() -> viewModel.clearErrorHelperText(Constants.DEPARTMENT_ERROR)}"
                     android:text="@={viewModel.updateDepartment}" />
             </com.google.android.material.textfield.TextInputLayout>
