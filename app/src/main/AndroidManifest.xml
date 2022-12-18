@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".WrapRouletteApplication"
@@ -16,7 +16,8 @@
         <activity
             android:name=".authentication.LoginSignupActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Starting">
+            android:theme="@style/Theme.AppCompat.Starting"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -28,9 +29,8 @@
         <activity
             android:name=".ui.WrapRouletteActivity"
             android:exported="true"
-            android:theme="@style/Theme.WrapRoulette.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.WrapRoulette.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="preloaded_fonts"
