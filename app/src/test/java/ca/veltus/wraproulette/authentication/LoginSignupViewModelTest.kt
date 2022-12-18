@@ -1,8 +1,8 @@
 package ca.veltus.wraproulette.authentication
 
 import android.app.Application
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.os.Build
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import ca.veltus.wraproulette.WrapRouletteApplication
