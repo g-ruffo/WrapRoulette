@@ -312,9 +312,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun createUpdateTempMember(memberItem: MemberItem? = null): Boolean {
-        val memberName = newMemberName.value
-        val memberDepartment = newMemberDepartment.value
-        var memberEmail = newMemberEmail.value
+        val memberName = newMemberName.value?.trim()
+        val memberDepartment = newMemberDepartment.value?.trim()
+        var memberEmail = newMemberEmail.value?.trim()
         val poolUid = _currentPool.value?.docId
         val ownerUid = _userAccount.value!!.uid
 
