@@ -163,6 +163,8 @@ class LoginSignupViewModel @Inject constructor(
         password.value = password.value?.trim()
         username.value = username.value?.trim()
 
+        if (signUp) department.value = department.value?.trim()
+
         if (TextUtils.isEmpty(emailAddress.value)) {
             errorEmailText.value =
                 ErrorMessage.ErrorText(stringResourcesProvider.getString(R.string.enterEmailErrorMessage))
