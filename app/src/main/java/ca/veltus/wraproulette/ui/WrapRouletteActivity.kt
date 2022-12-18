@@ -30,12 +30,12 @@ import ca.veltus.wraproulette.databinding.ActivityWrapRouletteBinding
 import ca.veltus.wraproulette.databinding.FeedbackDialogBinding
 import ca.veltus.wraproulette.utils.FirebaseStorageUtil
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.model.ReviewErrorCode
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -101,10 +101,20 @@ class WrapRouletteActivity : AppCompatActivity() {
                 val reviewInfo = task.result
                 startReviewFlow(reviewInfo)
             } else {
-                // There was some problem, log or handle the error code.
-                @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException).errorCode
-                Log.e(TAG, "requestReviewInfo: $reviewErrorCode")
-                Firebase.crashlytics.recordException(task.exception as ReviewException)
+                when (val exception = task.exception) {
+                    is ReviewException -> {
+                        Log.e(TAG, "requestReviewInfo: ${exception.errorCode}")
+                        Firebase.crashlytics.recordException(exception)
+                    }
+                    is RuntimeExecutionException -> {
+                        Log.e(TAG, "requestReviewInfo: ${exception.message}")
+                        Firebase.crashlytics.recordException(exception)
+                    }
+                    else -> {
+                        Log.e(TAG, "requestReviewInfo: ${-9999}")
+                        Firebase.crashlytics.log(exception?.message.toString())
+                    }
+                }
             }
         }
     }
