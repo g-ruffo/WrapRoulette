@@ -129,12 +129,16 @@
         <item name="colorOnSecondary">@color/fabIconTint</item>
     </style>
 
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorPrimary">@color/darkOrange</item>
+    </style>
 
     <style name="LoginTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/blueDark</item>
         <item name="android:textColorHint">@color/loginHintTextColor</item>
+        <item name="theme">@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined</item>
         <item name="fontFamily">@font/roboto</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">14sp</item>
