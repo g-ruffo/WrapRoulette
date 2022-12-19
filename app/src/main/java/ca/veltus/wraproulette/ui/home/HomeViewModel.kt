@@ -264,7 +264,7 @@ class HomeViewModel @Inject constructor(
         _userBetTime.value = date
     }
 
-    fun sendChatMessage(onComplete: () -> Unit) {
+    fun sendChatMessage() {
         viewModelScope.launch {
             val message = Message(
                 userMessageEditText.value!!,
@@ -276,11 +276,7 @@ class HomeViewModel @Inject constructor(
             )
             userMessageEditText.emit(null)
             repository.sendChatMessage(userAccount.value!!.activePool!!, message) {
-                launch {
-                    if (it.isNullOrEmpty()) {
-                        onComplete()
-                    } else showToast.postValue(it)
-                }
+                if (!it.isNullOrEmpty()) showToast.postValue(it)
             }
         }
     }

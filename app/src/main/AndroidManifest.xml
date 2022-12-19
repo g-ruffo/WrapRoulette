@@ -29,8 +29,7 @@
         <activity
             android:name=".ui.WrapRouletteActivity"
             android:exported="true"
-            android:theme="@style/Theme.WrapRoulette.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:theme="@style/Theme.WrapRoulette.NoActionBar" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,11 +1,9 @@
 package ca.veltus.wraproulette.ui.home.chat
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +14,7 @@ import ca.veltus.wraproulette.data.objects.Message
 import ca.veltus.wraproulette.data.objects.MessageItemFrom
 import ca.veltus.wraproulette.data.objects.MessageItemTo
 import ca.veltus.wraproulette.databinding.FragmentChatBinding
+import ca.veltus.wraproulette.ui.WrapRouletteActivity
 import ca.veltus.wraproulette.ui.home.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.xwray.groupie.GroupieAdapter
@@ -32,6 +31,8 @@ class ChatFragment : BaseFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val activityCast by lazy { activity as WrapRouletteActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,11 +56,8 @@ class ChatFragment : BaseFragment() {
         }
 
         binding.sendMessageButton.setOnClickListener {
-            _viewModel.sendChatMessage {
-                val inputMethodManager =
-                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-            }
+            activityCast.hideKeyboard(it)
+            _viewModel.sendChatMessage()
         }
     }
 
