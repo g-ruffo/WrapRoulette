@@ -64,6 +64,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation 'androidx.fragment:fragment:1.5.3'
     implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.activity:activity-ktx:1.6.1'
 
     // Google Play Dependencies
     implementation 'com.google.android.play:review:2.0.1'
