@@ -2,7 +2,6 @@ package ca.veltus.wraproulette.authentication.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +73,7 @@ class LoginFragment : BaseFragment() {
                             requireActivity().finish()
                         }
                         is Result.Loading -> {
-                            Log.i(TAG, "observeSignup: Loading")
+//                            Log.i(TAG, "observeSignup: Loading")
                         }
                         is Result.Failure -> {
                             when (it.exception) {

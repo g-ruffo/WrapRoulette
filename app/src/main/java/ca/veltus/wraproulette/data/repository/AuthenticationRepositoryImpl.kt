@@ -1,6 +1,5 @@
 package ca.veltus.wraproulette.data.repository
 
-import android.util.Log
 import ca.veltus.wraproulette.data.Result
 import ca.veltus.wraproulette.data.objects.Feedback
 import ca.veltus.wraproulette.data.objects.User
@@ -48,10 +47,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
     override suspend fun getCurrentUserProfile(): Flow<User?> {
         return firestore.collection("users").document(currentUser!!.uid).snapshots()
             .map<DocumentSnapshot, User?> { it.toObject() }.onCompletion {
-                Log.i(TAG, "getCurrentUserProfile: $it")
+//                Log.i(TAG, "getCurrentUserProfile: $it")
             }.catch {
                 Firebase.crashlytics.recordException(it)
-                Log.e(TAG, "getCurrentUserProfile: $it")
+//                Log.e(TAG, "getCurrentUserProfile: $it")
             }
     }
 
@@ -113,7 +112,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     onComplete(null)
                 }
             } catch (e: FirebaseFirestoreException) {
-                Log.e(TAG, "initCurrentUserIfFirstTime: ${e.message}")
+//                Log.e(TAG, "initCurrentUserIfFirstTime: ${e.message}")
                 onComplete(e.message)
                 Firebase.crashlytics.recordException(e)
             }
@@ -126,7 +125,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 val user = currentUserDocReference.get().await().toObject(User::class.java)
                 onComplete(user!!)
             } catch (e: FirebaseFirestoreException) {
-                Log.e(TAG, "getCurrentUser: ${e.message}")
+//                Log.e(TAG, "getCurrentUser: ${e.message}")
                 Firebase.crashlytics.recordException(e)
             }
         }
@@ -144,7 +143,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 )?.await()
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
-                Log.e(TAG, "updateCurrentUser: ${e.message}")
+//                Log.e(TAG, "updateCurrentUser: ${e.message}")
                 onComplete(e.message)
                 Firebase.crashlytics.recordException(e)
             }
@@ -157,7 +156,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 firestore.collection("feedback").document().set(feedback)
                 onComplete(null)
             } catch (e: FirebaseFirestoreException) {
-                Log.e(TAG, "sendFeedback: ${e.message}")
+//                Log.e(TAG, "sendFeedback: ${e.message}")
                 onComplete(e.message)
                 Firebase.crashlytics.recordException(e)
             }

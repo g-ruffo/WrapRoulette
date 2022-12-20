@@ -1,6 +1,5 @@
 package ca.veltus.wraproulette.data.repository
 
-import android.util.Log
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.data.objects.Member
 import ca.veltus.wraproulette.data.objects.Pool
@@ -52,9 +51,9 @@ class PoolListRepositoryImpl @Inject constructor(
     override suspend fun getCurrentUserProfile(): Flow<User?> {
         return firestore.collection("users").document(currentUser!!.uid).snapshots()
             .map<DocumentSnapshot, User?> { it.toObject() }.onCompletion {
-                Log.i(TAG, "getCurrentUserProfile: $it")
+//                Log.i(TAG, "getCurrentUserProfile: $it")
             }.catch {
-                Log.e(TAG, "getCurrentUserProfile: $it")
+//                Log.e(TAG, "getCurrentUserProfile: $it")
                 Firebase.crashlytics.recordException(it)
             }
     }
@@ -64,9 +63,9 @@ class PoolListRepositoryImpl @Inject constructor(
             "users.$userUid", true
         ).snapshots().map<QuerySnapshot, List<Pool>> { querySnapshot -> querySnapshot.toObjects() }
             .onCompletion {
-                Log.i(TAG, "getPoolsList: $it")
+//                Log.i(TAG, "getPoolsList: $it")
             }.catch {
-                Log.e(TAG, "getPoolsList: $it")
+//                Log.e(TAG, "getPoolsList: $it")
                 Firebase.crashlytics.recordException(it)
             }
     }
@@ -230,7 +229,7 @@ class PoolListRepositoryImpl @Inject constructor(
                     .toObject(Pool::class.java)
                 onComplete(pool)
             } catch (e: FirebaseFirestoreException) {
-                Log.e(TAG, "getEditPool: ${e.message}")
+//                Log.e(TAG, "getEditPool: ${e.message}")
                 onComplete(null)
                 Firebase.crashlytics.recordException(e)
             }

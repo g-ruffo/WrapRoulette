@@ -3,7 +3,6 @@ package ca.veltus.wraproulette.ui
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -103,15 +102,15 @@ class WrapRouletteActivity : AppCompatActivity() {
             } else {
                 when (val exception = task.exception) {
                     is ReviewException -> {
-                        Log.e(TAG, "requestReviewInfo: ${exception.errorCode}")
+//                        Log.e(TAG, "requestReviewInfo: ${exception.errorCode}")
                         Firebase.crashlytics.recordException(exception)
                     }
                     is RuntimeExecutionException -> {
-                        Log.e(TAG, "requestReviewInfo: ${exception.message}")
+//                        Log.e(TAG, "requestReviewInfo: ${exception.message}")
                         Firebase.crashlytics.recordException(exception)
                     }
                     else -> {
-                        Log.e(TAG, "requestReviewInfo: ${-9999}")
+//                        Log.e(TAG, "requestReviewInfo: ${-9999}")
                         Firebase.crashlytics.log(exception?.message.toString())
                     }
                 }
