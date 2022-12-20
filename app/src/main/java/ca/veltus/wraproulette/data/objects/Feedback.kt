@@ -7,7 +7,8 @@ data class Feedback(
     val date: Date,
     val senderUid: String,
     val senderName: String,
-    val senderEmail: String
+    val senderEmail: String,
+    var resolved: Boolean = false
 ) {
-    constructor() : this("", Date(0), "", "", "")
+    constructor() : this("", Date(0), "", "", "", false)
 }
