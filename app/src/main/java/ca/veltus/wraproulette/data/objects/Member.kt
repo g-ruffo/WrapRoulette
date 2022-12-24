@@ -1,6 +1,7 @@
 package ca.veltus.wraproulette.data.objects
 
 import android.view.View
+import androidx.annotation.Keep
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.MemberBidListItemBinding
 import ca.veltus.wraproulette.databinding.MemberListItemBinding
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.xwray.groupie.databinding.BindableItem
 import java.util.*
 
+@Keep
 data class Member(
     val uid: String?,
     var tempMemberUid: String?,

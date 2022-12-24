@@ -1,7 +1,9 @@
 package ca.veltus.wraproulette.data.objects
 
+import androidx.annotation.Keep
 import java.util.*
 
+@Keep
 data class Feedback(
     val message: String,
     val date: Date,

@@ -1,5 +1,8 @@
 package ca.veltus.wraproulette.data.objects
 
+import androidx.annotation.Keep
+
+@Keep
 data class User(
     val uid: String,
     val displayName: String,

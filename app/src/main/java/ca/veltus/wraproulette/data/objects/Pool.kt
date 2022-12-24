@@ -1,11 +1,13 @@
 package ca.veltus.wraproulette.data.objects
 
 import android.view.View
+import androidx.annotation.Keep
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.PoolListItemBinding
 import com.xwray.groupie.databinding.BindableItem
 import java.util.*
 
+@Keep
 data class Pool(
     var docId: String,
     var adminUid: String,
