@@ -1,5 +1,6 @@
 package ca.veltus.wraproulette.data.objects
 
+import androidx.annotation.Keep
 import ca.veltus.wraproulette.R
 import ca.veltus.wraproulette.databinding.MessageListItemFromUserBinding
 import ca.veltus.wraproulette.databinding.MessageListItemToUserBinding
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.xwray.groupie.databinding.BindableItem
 import java.util.*
 
+@Keep
 data class Message(
     val text: String,
     val time: Date,
@@ -24,6 +26,7 @@ class MessageItemFrom(val message: Message) : BindableItem<MessageListItemFromUs
     override fun bind(viewBinding: MessageListItemFromUserBinding, position: Int) {
         viewBinding.message = message
     }
+
     override fun getLayout(): Int {
         return R.layout.message_list_item_from_user
     }
@@ -34,11 +37,13 @@ class MessageItemTo(val message: Message) : BindableItem<MessageListItemToUserBi
     override fun bind(viewBinding: MessageListItemToUserBinding, position: Int) {
         viewBinding.message = message
         if (message.profilePicture != null) {
-            Glide.with(viewBinding.root).load(FirebaseStorageUtil.pathToReference(message.profilePicture))
+            Glide.with(viewBinding.root)
+                .load(FirebaseStorageUtil.pathToReference(message.profilePicture))
                 .placeholder(R.drawable.ic_baseline_account_circle_24)
                 .into(viewBinding.profilePictureImageView)
         }
     }
+
     override fun getLayout(): Int {
         return R.layout.message_list_item_to_user
     }
