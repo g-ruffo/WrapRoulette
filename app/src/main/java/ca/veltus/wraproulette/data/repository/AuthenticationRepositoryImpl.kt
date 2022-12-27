@@ -91,6 +91,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
         firebaseAuth.signOut()
     }
 
+    /**
+     * Create user document in Firestore after completing registration.
+     */
     override suspend fun initCurrentUserIfFirstTime(
         department: String, onComplete: (String?) -> Unit
     ) {

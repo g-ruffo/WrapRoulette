@@ -71,6 +71,9 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Check for pool admin account updates when retrieving pool data.
+     */
     override suspend fun checkAdminForUpdate(poolId: String) {
         val adminFieldMap = mutableMapOf<String, Any>()
         CoroutineScope(Dispatchers.IO).launch {
@@ -99,6 +102,9 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Check for pool member account updates when retrieving pool data.
+     */
     override suspend fun checkMembersForUpdate(poolId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -136,6 +142,9 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Check for pool member account updates when retrieving pool chat data.
+     */
     override suspend fun checkChatMessagesForUpdate(poolId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -168,6 +177,9 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Retrieve active pool data using pool id.
+     */
     override suspend fun getPoolData(poolId: String?): Flow<Pool?> {
         if (poolId.isNullOrBlank()) return flowOf()
         checkAdminForUpdate(poolId)
@@ -279,6 +291,10 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Add new temporary member to pool after checking that no member exists with identical values.
+     * If duplicate member is found, return an error.
+     */
     override suspend fun addNewMemberToPool(member: Member, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val tempMemberUid: String =
@@ -303,6 +319,10 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Update temporary member fields after checking that no other pool member exists with identical values.
+     * If duplicate member is found, return an error.
+     */
     override suspend fun updateTempPoolMember(member: Member, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val result = poolsCollectionReference.document(member.poolId).collection("members")

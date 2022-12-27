@@ -70,6 +70,10 @@ class PoolListRepositoryImpl @Inject constructor(
             }
     }
 
+    /**
+     * Check that the supplied values do not match any existing pool. If the list returns empty, create
+     * a new pool document in Firestore. If matching pool is found return an error.
+     */
     override suspend fun createPool(pool: Pool, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val docId: String = poolsCollectionReference.document().id
@@ -120,6 +124,10 @@ class PoolListRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Check that the updated information does not match any existing pool before updating.
+     * If matching pool is found return an error.
+     */
     override suspend fun updatePool(pool: Pool, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             // Check if pool with supplied parameters already exists.
@@ -141,6 +149,11 @@ class PoolListRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Check to see if the supplied values match any existing pool. If pool does not exist, return an error.
+     * If the current user is already a member of the pool they are trying to join, return an error.
+     * Once the user joins the pool, create and add a member object using their account data to the pool.
+     */
     override suspend fun joinPool(
         production: String, password: String, date: String, onComplete: (String?) -> Unit
     ) {
@@ -236,6 +249,10 @@ class PoolListRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Called when pool admin deletes a pool they created. Once deleted, set the users active pool
+     * value to null.
+     */
     override suspend fun deletePool(poolUid: String, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -253,6 +270,9 @@ class PoolListRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Called when a user joins, creates or selects a different pool from the PoolsFragment.
+     */
     override suspend fun setActivePool(poolId: String, onComplete: (String?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
