@@ -94,6 +94,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
         menuInflater.inflate(R.menu.main, menu)
     }
 
+    /**
+     * Set the pools options menu items based on whether the user is the pools admin or a
+     * joined member.
+     */
     override fun onPrepareMenu(menu: Menu) {
         super.onPrepareMenu(menu)
         if (_viewModel.isPoolAdmin.value) {
@@ -110,6 +114,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
+    /**
+     * Allows the admin to edit the pools details or add temporary members if the wrap time is null.
+     * If user is a joined member, they are able to leave the selected pool if their bid time is null.
+     */
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.actionEditPool -> {
@@ -155,6 +163,9 @@ class HomeFragment : BaseFragment(), MenuProvider {
         _binding = null
     }
 
+    /**
+     * Check if user is the pool admin and set the corresponding floating action button layout.
+     */
     private fun checkAdminStatus() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -179,6 +190,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
+                    // Display counter icon on chat tab if there are unread messages.
                     _viewModel.chatList.combine(_viewModel.readChatListItems) { chatList, readList ->
                         Pair(chatList, readList.first)
                     }.collectLatest {
@@ -199,6 +211,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
                     }
                 }
                 launch {
+                    // Set the action bar title to the pools production name and date.
                     _viewModel.actionbarTitle.collectLatest {
                         activityCast.supportActionBar?.title = it
                         activityCast.supportActionBar?.subtitle =
@@ -210,6 +223,7 @@ class HomeFragment : BaseFragment(), MenuProvider {
 
         binding.viewPager.onPageSelected(viewLifecycleOwner) { position ->
             if (position == 2) {
+                // When navigating to chat fragment, clear unread counter icon and hide floating action button.
                 binding.tabLayout.getTabAt(2)!!.removeBadge()
                 fabView.animate().translationX(400f).alpha(0f).setDuration(200)
                     .setInterpolator(AccelerateInterpolator()).withEndAction {
@@ -226,6 +240,9 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
+    /**
+     * Launches the create new temporary member alert dialog.
+     */
     private fun launchAddMemberDialog() {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
@@ -247,6 +264,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
+    /**
+     * Launches the bet and wrap alert dialogs when corresponding floating action button is clicked.
+     * Only the pools admin is able to set the wrap time.
+     */
     fun launchBetAndWrapDialog(setWrapTime: Boolean = false) {
         val time = Calendar.getInstance()
         time.set(Calendar.SECOND, 0)
@@ -313,6 +334,10 @@ class HomeFragment : BaseFragment(), MenuProvider {
         }
     }
 
+    /**
+     * Launches the confirmation alert dialog when admin is clearing or setting the pools wrap time.
+     * If user is a joined member, confirmation is required before the leaving pool.
+     */
     private fun launchConfirmationDialog(time: Date?, isLeavePool: Boolean = false) {
         val format = SimpleDateFormat("HH:mm MMM d, yyyy", Locale.ENGLISH)
         val message: String = if (time == null && !isLeavePool) {
