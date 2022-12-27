@@ -53,9 +53,12 @@ class PoolItem(
 
     override fun bind(viewBinding: PoolListItemBinding, position: Int) {
         viewBinding.pool = pool
+
+        // Display the green checkmark image on the pool item that is currently active.
         if (pool.docId == user.activePool) viewBinding.activePoolIcon.visibility = View.VISIBLE
         else viewBinding.activePoolIcon.visibility = View.GONE
 
+        // Display the admin icon on the pool items the user has created.
         if (pool.adminUid == user.uid) viewBinding.poolItemImageAdmin.visibility = View.VISIBLE
         else viewBinding.poolItemImageAdmin.visibility = View.GONE
 

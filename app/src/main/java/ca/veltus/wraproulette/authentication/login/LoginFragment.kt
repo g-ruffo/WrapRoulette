@@ -64,6 +64,7 @@ class LoginFragment : BaseFragment() {
             _viewModel.loginFlow.collectLatest {
                 if (it != null) {
                     when (it) {
+                        // After logging in navigate to the WrapRouletteActivity and finish login activity
                         is Result.Success -> {
                             startActivity(
                                 Intent(requireContext(), WrapRouletteActivity::class.java).addFlags(
@@ -76,6 +77,7 @@ class LoginFragment : BaseFragment() {
 //                            Log.i(TAG, "observeSignup: Loading")
                         }
                         is Result.Failure -> {
+                            // If Firebase cannot login with provided details show helper text with task exception message.
                             when (it.exception) {
                                 is FirebaseAuthInvalidCredentialsException -> {
                                     _viewModel.postErrorHelperText(

@@ -34,15 +34,18 @@ class MemberItem(
     override fun bind(viewBinding: MemberListItemBinding, position: Int) {
         viewBinding.member = member
 
+        // Check if current user is the pool admin. If not hide the items edit button.
         if (userUid != member.uid || member.tempMemberUid == null) {
             viewBinding.editMemberIcon.visibility = View.GONE
             viewBinding.cardView.isClickable = false
             viewBinding.cardView.isFocusable = false
         }
+        // If member has left the pool reduce the alpha of item by 50%
         if (!member.activeMember) {
             viewBinding.mainLayout.alpha = 0.5f
         }
 
+        // If the user has uploaded a profile image, retrieve it from Firebase Storage and replace the placeholder.
         if (member.profilePicturePath != null) {
             Glide.with(viewBinding.root)
                 .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))
@@ -61,10 +64,12 @@ class MemberBidItem(val member: Member) : BindableItem<MemberBidListItemBinding>
     override fun bind(viewBinding: MemberBidListItemBinding, position: Int) {
         viewBinding.member = member
 
+        // If member has left the pool reduce the alpha of item by 50%
         if (!member.activeMember) {
             viewBinding.mainLayout.alpha = 0.5f
         }
 
+        // If the user has uploaded a profile image, retrieve it from Firebase Storage and replace the placeholder.
         if (member.profilePicturePath != null) {
             Glide.with(viewBinding.root)
                 .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))
@@ -83,6 +88,7 @@ class WinnerMemberItem(val member: Member) : BindableItem<WinnerMemberItemBindin
     override fun bind(viewBinding: WinnerMemberItemBinding, position: Int) {
         viewBinding.member = member
 
+        // If the user has uploaded a profile image, retrieve it from Firebase Storage and replace the placeholder.
         if (member.profilePicturePath != null) {
             Glide.with(viewBinding.root)
                 .load(FirebaseStorageUtil.pathToReference(member.profilePicturePath))

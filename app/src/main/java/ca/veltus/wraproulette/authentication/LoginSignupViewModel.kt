@@ -203,7 +203,8 @@ class LoginSignupViewModel @Inject constructor(
     }
 
     /**
-     * Ensure the provided values are valid and update the profile information in Firebase.
+     * Ensure the provided values are valid and update the profile information in Firebase. If image is not null,
+     * upload the bitmap to Firebase Storage before updating account details.
      */
     fun validateUpdateCurrentUser() {
         setShowLoadingValue(true)
@@ -235,6 +236,10 @@ class LoginSignupViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Trim provided string values before uploading to Firestore. If the user is not connected to a network
+     * display a toast message notifying them about the pending update.
+     */
     private fun updateUserProfile(
         username: String,
         department: String,
@@ -263,6 +268,12 @@ class LoginSignupViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * If the message is not null, empty or blank, create a Feedback object with the date variable
+     * set to the current timestamp and upload to Firestore. After completing successfully, notify user with
+     * a toast message.
+     */
 
     fun sendFeedbackMessage(): Boolean {
         val message = feedbackMessage.value

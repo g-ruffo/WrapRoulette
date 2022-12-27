@@ -18,10 +18,12 @@ import kotlinx.coroutines.flow.asStateFlow
 // Base class for View Models to declare the common LiveData objects in a single place
 abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
 
+    // Used to show circular progress view in the fragments.
     private val _showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showLoading: StateFlow<Boolean>
         get() = _showLoading.asStateFlow()
 
+    // Used to show the no data image and to hide remaining views within the fragments.
     private val _showNoData: MutableStateFlow<Boolean> = MutableStateFlow(true)
     val showNoData: StateFlow<Boolean>
         get() = _showNoData.asStateFlow()
@@ -42,6 +44,10 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
         navigationCommand.postValue(NavigationCommand.Back)
     }
 
+    /**
+     * Called when needing to clear a given helper text error message. If the variable is null, clear
+     * all messages.
+     */
     fun clearErrorHelperText(error: Int?) {
         when (error) {
             PASSWORD_ERROR -> errorPasswordText.value = null
@@ -64,6 +70,9 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /**
+     * Called when needing to set a given helper text error message.
+     */
     fun postErrorHelperText(error: Int?, message: ErrorMessage<String>) {
         when (error) {
             PASSWORD_ERROR -> errorPasswordText.value = message

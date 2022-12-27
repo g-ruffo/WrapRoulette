@@ -54,7 +54,6 @@ class ChatFragment : BaseFragment() {
                 }
             }
         }
-
         binding.sendMessageButton.setOnClickListener {
             activityCast.hideKeyboard(it)
             _viewModel.sendChatMessage()
@@ -69,6 +68,7 @@ class ChatFragment : BaseFragment() {
     private fun setupRecyclerView(items: List<Message>) {
         val groupieAdapter = GroupieAdapter()
         items.forEach {
+            // Check if the message is from or to the user and add the corresponding item to the adapter.
             if (it.senderUid == FirebaseAuth.getInstance().currentUser!!.uid) {
                 groupieAdapter.add(MessageItemFrom(it))
             } else {
@@ -79,6 +79,7 @@ class ChatFragment : BaseFragment() {
         binding.chatRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = groupieAdapter
+            // Scroll to the bottom of the recycler view after each item is added.
             scrollToPosition(items.size - 1)
         }
     }

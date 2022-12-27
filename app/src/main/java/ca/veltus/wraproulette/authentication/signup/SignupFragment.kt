@@ -65,6 +65,7 @@ class SignupFragment : BaseFragment() {
             _viewModel.signupFlow.collectLatest {
                 if (it != null) {
                     when (it) {
+                        // After logging in navigate to the WrapRouletteActivity and finish login activity
                         is Result.Success -> {
                             _viewModel.initCurrentUserIfFirstTime {
                                 startActivity(

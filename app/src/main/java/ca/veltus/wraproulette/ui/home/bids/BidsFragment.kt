@@ -40,6 +40,7 @@ class BidsFragment : BaseFragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    // This OnItemClickListener is only accessible by the pools admin. If pool is not active, notify user with toast message.
     private val onItemClick = OnItemClickListener { item, _ ->
         if ((item is MemberItem) && _viewModel.isPoolAdmin.value && !item.member.tempMemberUid.isNullOrEmpty()) {
             if (!_viewModel.isPoolActive.value) _viewModel.postSnackBarMessage(getString(R.string.poolFinishedCantUpdateMemberMessage))
@@ -64,6 +65,7 @@ class BidsFragment : BaseFragment() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 _viewModel.memberList.collectLatest {
+                    // Convert values to groupie MemberItems before sending it to the adapter.
                     setupRecyclerView(it.toMemberItem(_viewModel.userAccount.value?.uid ?: ""))
                 }
             }
@@ -77,6 +79,7 @@ class BidsFragment : BaseFragment() {
 
     private fun setupRecyclerView(items: List<MemberItem>) {
         val groupieAdapter = GroupieAdapter().apply {
+            // Display list items sorted by members bid times.
             addAll(items.sortedByDescending { it.member.bidTime })
             setOnItemClickListener(onItemClick)
         }
@@ -87,6 +90,10 @@ class BidsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * This function can only be called by the pools admin and allows the user to either edit the temporary
+     * members information or set the members bid time.
+     */
     private fun launchTempMemberOptionsDialog(memberItem: MemberItem) {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
@@ -107,6 +114,10 @@ class BidsFragment : BaseFragment() {
         }.show()
     }
 
+    /**
+     * Called after the pools admin selects edit from the temporary members options dialog. If the pool is
+     * not active or has finished, inform the user in a snack bar message that they are unable to make changes.
+     */
     private fun launchUpdateTempMemberDialog(memberItem: MemberItem) {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
@@ -115,6 +126,8 @@ class BidsFragment : BaseFragment() {
         view.viewModel = _viewModel
         view.lifecycleOwner = viewLifecycleOwner
         view.member = memberItem.member
+
+        // Load temporary members current saved information into the corresponding edit texts.
         _viewModel.loadTempMemberValues(memberItem.member)
 
         builder.apply {
@@ -136,6 +149,7 @@ class BidsFragment : BaseFragment() {
                 } else if (!_viewModel.isBettingOpen.value && _viewModel.isPoolActive.value) {
                     _viewModel.postSnackBarMessage(getString(R.string.bettingLockedPoolActiveCantRemoveMemberMessage))
                 } else if (_viewModel.isBettingOpen.value && _viewModel.userBetTime.value != null) {
+                    // Require the admin to clear the members bid time before removing them from the pool.
                     _viewModel.postSnackBarMessage(getString(R.string.clearBetBeforeLeavingMessage))
                     launchSetMemberBetDialog(memberItem)
                 } else {
@@ -146,6 +160,10 @@ class BidsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Called after the pools admin selects bet from the temporary members options dialog. The set bet
+     * dialog is then shown to allow the admin to place a bet for the corresponding member.
+     */
     private fun launchSetMemberBetDialog(memberItem: MemberItem) {
         val time = Calendar.getInstance()
         time.set(Calendar.SECOND, 0)
@@ -196,6 +214,10 @@ class BidsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Called after the pools admin selects delete from the temporary members edit dialog. If admin confirms
+     * the temporary member is removed from the pool.
+     */
     private fun launchDeleteMemberConfirmationDialog(memberItem: MemberItem) {
         val message = getString(R.string.areYouSureDialogSubtitle)
         val builder = MaterialAlertDialogBuilder(

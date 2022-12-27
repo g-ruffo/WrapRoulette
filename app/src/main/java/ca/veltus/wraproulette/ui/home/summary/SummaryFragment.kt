@@ -72,16 +72,19 @@ class SummaryFragment : BaseFragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     _viewModel.poolBetsList.collectLatest {
+                        // Convert values to groupie MemberItems before sending it to the adapter.
                         if (it.isNotEmpty()) setupBidsRecyclerView(it.toMemberBidItem())
                     }
                 }
                 launch {
                     _viewModel.poolWinningMembers.collectLatest {
+                        // Convert values to groupie WinnerMemberItems before sending it to the adapter.
                         setupWinnersRecyclerView(it.toWinnerMemberItem())
                     }
                 }
                 launch {
                     _viewModel.poolAdminProfileImage.collectLatest {
+                        // If the admin has uploaded a profile image, load it into the card view.
                         if (!it.isNullOrEmpty()) Glide.with(requireContext()).asBitmap()
                             .load(FirebaseStorageUtil.pathToReference(it))
                             .placeholder(R.drawable.no_profile_image_member)
@@ -109,12 +112,17 @@ class SummaryFragment : BaseFragment() {
         }
 
         if (_viewModel.poolAdminProfileImage.value != null) {
+            // If the admin has uploaded a profile image, load it into the card view.
             Glide.with(requireContext()).asBitmap()
                 .load(FirebaseStorageUtil.pathToReference(_viewModel.poolAdminProfileImage.value!!))
                 .placeholder(R.drawable.no_profile_image_member).into(binding.adminImage)
         }
     }
 
+    /**
+     * Used to display pool details and rules in an alert dialog message when the corresponding card view
+     * is clicked.
+     */
     fun showPoolDetailDialog(dialogValue: Int) {
         if (_viewModel.currentPool.value == null) {
             _viewModel.postToastMessage(getString(R.string.poolHasntLoadedMessage))
@@ -163,6 +171,10 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Sets an OnScrollChangeListener that hides the floating action buttons when the user starts to
+     * scroll down.
+     */
     private fun setupScrollingListener() {
         binding.summaryScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             if (scrollY < 100) {
@@ -186,6 +198,9 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Sets the users bid position that is displayed in the details card view.
+     */
     private fun setPositionTextView(items: List<MemberBidItem>) {
         for (i in items.indices) {
             if (items[i].member.uid == _viewModel.userAccount.value!!.uid && items[i].member.displayName == _viewModel.userAccount.value!!.displayName) {
@@ -207,6 +222,10 @@ class SummaryFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Displays the winners email address in an alert dialog message when list item is clicked. If
+     * member does not have an email saved, notify user with a snack bar message.
+     */
     private fun launchViewWinnerEmailDialog(memberItem: WinnerMemberItem) {
         val email = memberItem.member.email
         if (email.isNullOrEmpty()) {
