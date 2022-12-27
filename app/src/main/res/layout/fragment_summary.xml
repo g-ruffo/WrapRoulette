@@ -451,7 +451,6 @@
                             android:background="@color/poolItemIconTint"
                             android:clipToPadding="false"
                             android:foreground="?android:attr/selectableItemBackground"
-                            android:visibility="@{viewModel.poolAdminProfileImage == null ? View.GONE : View.VISIBLE}"
                             app:cardCornerRadius="14dp"
                             app:cardElevation="4dp"
                             app:layout_constraintBottom_toTopOf="@id/adminTitle"
