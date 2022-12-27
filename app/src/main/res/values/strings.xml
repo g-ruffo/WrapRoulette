@@ -46,7 +46,7 @@
     <string name="wrap">Wrap</string>
     <string name="logoHeaderImage">Logo header image</string>
     <string name="resetPasswordTitle">Reset Password</string>
-    <string name="resetPasswordSubtitle">Enter your email address to reset you password.</string>
+    <string name="resetPasswordSubtitle">Enter your email address to reset your password.</string>
     <string name="reset">Reset</string>
     <string name="backButtonDescription">Back image</string>
     <string name="signUpTitle">Sign Up</string>
@@ -54,8 +54,8 @@
     <string name="typeYourName">Type your name</string>
     <string name="enterYourDepartment">Enter your department</string>
     <string name="signUp">Sign Up</string>
-    <string name="productionName">Production name</string>
-    <string name="poolPassword">Pool password</string>
+    <string name="productionName">Production</string>
+    <string name="poolPassword">Password</string>
     <string name="date">Date</string>
     <string name="join">Join</string>
     <string name="startTime">Start time</string>
@@ -73,11 +73,11 @@
     <string name="addPoolSubtitleText">Create a new pool below. Users can join using the name, password and date inputs.</string>
     <string name="editPoolSubtitleText">Edit your pool details below. Users can join using the name, password and date inputs.</string>
     <string name="pirInfoImageDescription">Price is right rules info image</string>
-    <string name="tempMemberOptionDialogMessage">Select EDIT to modify members details, or select BET to place their bid.</string>
+    <string name="tempMemberOptionDialogMessage">Select EDIT to modify the members details, or select BET to place their bid.</string>
     <string name="memberOptionsDialogTitle">Member Options</string>
     <string name="setMemberBetTimeDialogTitle">Set Members Bet Time</string>
     <string name="bettingMarginDialogTitle">Betting Margin</string>
-    <string name="bettingMarginDialogMessage">Time added to each bet, in 6 minute increments. If 0, only the closest bid will win.</string>
+    <string name="bettingMarginDialogMessage">Time added to each bet, in 6-minute increments. If 0, only the closest bid will win.</string>
     <string name="minutesDialogSpinnerText">/ Minutes</string>
     <string name="poolDateDialogTitle">Set Bet Time</string>
     <string name="poolDateDialogMessage">Set the pools date according to the call sheet.</string>
@@ -169,8 +169,8 @@
     <string name="cancel">Cancel</string>
     <string name="update">Update</string>
     <string name="bettingLockedPoolActiveCantRemoveMemberMessage">Betting has locked and pool is still active, you are unable to remove this member at this time.</string>
-    <string name="clearBetBeforeLeavingMessage">You need to clear your bet before leaving this pool</string>
-    <string name="unableRemoveMemberMessage">You are unable to remove this member at this time</string>
+    <string name="clearBetBeforeLeavingMessage">You need to clear your bet before leaving this pool.</string>
+    <string name="unableRemoveMemberMessage">You are unable to remove this member at this time.</string>
     <string name="setMembersBetDialogSubtitle">Set %s\'s bid time using the spinner below.</string>
     <string name="clear">Clear</string>
     <string name="areYouSureDialogTitle">Are You Sure?</string>
@@ -203,7 +203,7 @@
     <string name="set">Set</string>
     <string name="startTimeDialogTitle">Start Time</string>
     <string name="lockBettingDialogTitle">Lock Betting</string>
-    <string name="startTimeDialogSubtitle">Set the pools start time according to the call sheet</string>
+    <string name="startTimeDialogSubtitle">Set the pools start time according to the call sheet.</string>
     <string name="lockBettingDialogSubtitle">At this time no additional bets can be made and are final.</string>
     <string name="enterProductionNameErrorMessage">Please Enter Production Name</string>
     <string name="enterPoolDateErrorMessage">Please Enter Pool Date</string>
