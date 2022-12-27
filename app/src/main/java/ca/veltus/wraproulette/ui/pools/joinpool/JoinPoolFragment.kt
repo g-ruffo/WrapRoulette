@@ -53,7 +53,9 @@ class JoinPoolFragment : BaseFragment() {
         _binding = null
     }
 
-    // Launch date dialog and listen for its result.
+    /**
+     * Launches an alert dialog for the user to select the date of the pool they are trying to join.
+     */
     fun launchDatePickerDialog(editText: View) {
         editText.temporaryFocus()
 

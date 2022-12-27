@@ -127,6 +127,11 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called when the user attempts to join a pool. If any required field is missing inform the user
+     * in a corresponding helper text message.
+     * If they are not connected to a network return an error.
+     */
     fun joinPool() {
         setShowLoadingValue(true)
         val production = poolProduction.value
@@ -166,6 +171,11 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called when the user creates or updates a pool. If any required field is missing inform the user
+     * in a corresponding helper text message.
+     * If they are not connected to a network return an error.
+     */
     @Suppress("DEPRECATION")
     fun createUpdatePool() {
         setShowLoadingValue(true)
@@ -240,6 +250,7 @@ class PoolsViewModel @Inject constructor(
             poolBets.value
 
         )
+        // If a pool document uid already exists, the user is trying to update an existing pool.
         if (!poolDocUid.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 repository.updatePool(pool) {
@@ -252,6 +263,7 @@ class PoolsViewModel @Inject constructor(
                 }
             }
         } else {
+            // If a pool document uid doesn't exist, the user is trying to create a new pool.
             viewModelScope.launch {
                 repository.createPool(pool) {
                     if (it.isNullOrEmpty()) {
@@ -265,6 +277,9 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Loads the values of the existing pool the user is trying to edit.
+     */
     fun loadEditPool(poolId: String) {
         setShowLoadingValue(true)
         viewModelScope.launch {
@@ -292,6 +307,10 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called when the user either joins, creates or selects a new pool. The selected pool is displayed
+     * in the home fragment.
+     */
     fun setUsersActivePool(poolId: String) {
         viewModelScope.launch {
             setShowLoadingValue(true)
