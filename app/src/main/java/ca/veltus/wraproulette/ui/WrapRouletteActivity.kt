@@ -77,6 +77,9 @@ class WrapRouletteActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    /**
+     * If drawer is open and back button is pressed, close drawer without closing application.
+     */
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -173,7 +176,9 @@ class WrapRouletteActivity : AppCompatActivity() {
         }
 
 
-        // Get Firebase current user data and display it in header.
+        /**
+         * Get Firebase current user data and display it in header.
+         */
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userAccount.collectLatest {
@@ -214,6 +219,9 @@ class WrapRouletteActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Launches an alert dialog for users to submit recommendations.
+     */
     private fun launchFeedbackDialog() {
         viewModel.showToast.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
