@@ -99,6 +99,7 @@ class HomeViewModel @Inject constructor(
     val chatList: StateFlow<List<Message>>
         get() = _chatList.asStateFlow()
 
+    // A list of chat messages that the user has viewed.
     private val _readChatListItems =
         MutableStateFlow<Pair<List<Message>, Boolean>>(Pair(listOf(), false))
     val readChatListItems: StateFlow<Pair<List<Message>, Boolean>>
@@ -281,6 +282,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Require the user to be connected to a network before leaving the pool.
+     * If not, display a snack bar message.
+     */
     fun leavePool() {
         if (!hasNetworkConnection.value) {
             showSnackBar.postValue(stringResourcesProvider.getString(R.string.noNetworkCantUpdateMessage))
@@ -301,12 +306,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets the edit text values when admin is updating the temporary members information.
+     */
     fun loadTempMemberValues(member: Member?) {
         newMemberName.value = member?.displayName
         newMemberDepartment.value = member?.department
         newMemberEmail.value = member?.email
     }
 
+    /**
+     * Called when the pool admin is creating or submitting changes to a temporary pool member.
+     * If the required fields are missing values, return an error.
+     */
     fun createUpdateTempMember(memberItem: MemberItem? = null): Boolean {
         val memberName = newMemberName.value?.trim()
         val memberDepartment = newMemberDepartment.value?.trim()
@@ -350,6 +362,7 @@ class HomeViewModel @Inject constructor(
             null,
             true
         )
+        // If the memberItem is null the admin is trying to create a new temporary member.
         if (memberItem == null) {
             viewModelScope.launch {
                 repository.addNewMemberToPool(newMember) {
@@ -359,6 +372,7 @@ class HomeViewModel @Inject constructor(
             }
             return true
         } else {
+            // If the memberItem is not null the admin is trying to update a temporary members information.
             viewModelScope.launch {
                 repository.updateTempPoolMember(newMember) {
                     if (!it.isNullOrEmpty()) showSnackBar.postValue(it)
@@ -369,6 +383,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called after creating a new temporary pool member to clear edit text values.
+     */
     private fun clearTempMemberValues() {
         newMemberName.value = null
         newMemberDepartment.value = null
@@ -389,6 +406,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called after the user navigates to the chat fragment and marks all messages as read.
+     */
     fun markMessagesAsRead(isUpdated: Boolean) {
         viewModelScope.launch {
             if (isUpdated && !_readChatListItems.value.second || !isUpdated) {
@@ -397,6 +417,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Used to maintain the expanded state of the floating action button.
+     */
     fun toggleFabButton() {
         isFabClicked.value = !isFabClicked.value
     }
@@ -418,6 +441,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called after the pools wrap time has successfully been updated in Firestore. The winners are calculated
+     * using the pools settings created by the admin. The winners list is generated and displayed in the
+     * summary fragment.
+     */
     private fun setWinningMember(wrapTime: Date?) {
         if (wrapTime != null) {
             val winnersList = poolBetsList.value.calculateWinners(

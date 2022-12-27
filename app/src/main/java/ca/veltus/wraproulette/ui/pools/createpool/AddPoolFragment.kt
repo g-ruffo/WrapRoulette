@@ -59,6 +59,10 @@ class AddPoolFragment : BaseFragment() {
         _binding = null
     }
 
+    /**
+     * If pool arguments are null, the user is trying to create a new pool. If not, they are editing
+     * an existing pool and the action bar title and message is updated.
+     */
     private fun checkForEditPoolArgs() {
         val args = AddPoolFragmentArgs.fromBundle(requireArguments()).poolId
         if (args != null) {
@@ -80,6 +84,10 @@ class AddPoolFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Displays a confirmation dialog to the user when the pool admin is trying to delete a pool they
+     * created. Once confirmed the pool document is removed from Firestore.
+     */
     fun launchDeletePoolAlert() {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
@@ -96,6 +104,9 @@ class AddPoolFragment : BaseFragment() {
         }.show()
     }
 
+    /**
+     * Displays an alert dialog explaining The Price Is Right Rules to the user.
+     */
     fun launchPirInfoDialog() {
         val builder = MaterialAlertDialogBuilder(
             activityCast, R.style.NumberPickerDialog_MaterialComponents_MaterialAlertDialog
@@ -109,6 +120,10 @@ class AddPoolFragment : BaseFragment() {
         }.show()
     }
 
+    /**
+     * Launches an alert dialog for the user to select either the start or betting lock time for the pool
+     * they are creating.
+     */
     fun launchTimePickerDialog(isStartTime: Boolean = true, editText: View) {
         editText.temporaryFocus()
 
@@ -166,7 +181,9 @@ class AddPoolFragment : BaseFragment() {
         dialog.setOnDismissListener { editText.clearFocus() }
     }
 
-    // Launch date dialog and listen for its result.
+    /**
+     * Launches an alert dialog for the user to select the pools date.
+     */
     fun launchDatePickerDialog(editText: View) {
         editText.temporaryFocus()
 
@@ -202,6 +219,10 @@ class AddPoolFragment : BaseFragment() {
         dialog.setOnDismissListener { editText.clearFocus() }
     }
 
+    /**
+     * Launches an alert dialog for the user to select either the margin or betting amount for the pool
+     * they are creating.
+     */
     fun launchNumberPickerDialog(isTimeMargin: Boolean = false, editText: View) {
         editText.temporaryFocus()
 
