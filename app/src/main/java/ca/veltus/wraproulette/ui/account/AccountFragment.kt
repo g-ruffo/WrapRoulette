@@ -54,6 +54,7 @@ class AccountFragment : BaseFragment() {
                         )
                     )
                 } else {
+                    // Rotate the image to the correct orientation before compressing.
                     @Suppress("DEPRECATION") rotateBitmap(
                         getPathFromUri(uri),
                         MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
@@ -89,6 +90,7 @@ class AccountFragment : BaseFragment() {
                 launch {
                     _viewModel.userAccount.collectLatest {
                         if (it != null) {
+                            // If the user has uploaded a profile image, retrieve it from Firebase Storage and replace the placeholder.
                             if (it.profilePicturePath != null) {
                                 Glide.with(this@AccountFragment).asBitmap()
                                     .load(FirebaseStorageUtil.pathToReference(it.profilePicturePath))
@@ -99,6 +101,7 @@ class AccountFragment : BaseFragment() {
                     }
                 }
                 launch {
+                    // Once a new profile image is selected load it into the card view.
                     _viewModel.tempProfileImage.collectLatest {
                         if (it != null) {
                             selectedImageBytes = it
@@ -123,6 +126,9 @@ class AccountFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Used to convert the image uri generated from the photo picker to a string path.
+     */
     @Suppress("SENSELESS_COMPARISON")
     private fun getPathFromUri(uri: Uri?): String {
         var result: String? = null
@@ -137,7 +143,7 @@ class AccountFragment : BaseFragment() {
             cursor.close()
         }
         if (result == null) {
-            result = "Not found"
+            result = getString(R.string.notFound)
         }
         return result
     }
