@@ -117,9 +117,6 @@ dependencies {
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:2.44"
     androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
 
-    // Koin Dependencies
-    implementation "io.insert-koin:koin-android:3.2.0"
-
     // Hilt Dependencies
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-android-compiler:2.44"
