@@ -26,7 +26,40 @@ Built using Kotlin, Wrap Roulette is an Android application which allows coworke
 - Built using the MVVM design pattern.
 - Employed JUnit and Espresso framework to perform both unit and UI tests.
 
+
+# Installation
+
+You can download the app directly from the Google Play Store using the link below.
+
+Google Play [Wrap Roulette](https://play.google.com/store/apps/details?id=ca.veltus.wraproulette)
+
 ## Frameworks
 
 - Dagger Hilt
-- 
+- Firebase 
+- JUnit
+- Espresso
+
+## Libraries
+
+- Groupie
+- Glide 
+- LeakCanary
+- CircleImageView
+
+## Permissions
+
+- Access Network State
+
+## Required OS
+
+Android 7.0 and up.
+
+# Developed By
+Grayson Ruffo
+
+      Copyright 2022 Veltus
+
+
+
+
