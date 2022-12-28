@@ -89,6 +89,9 @@ class WrapRouletteActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A global function that is called from any fragment to close the keyboard after typing.
+     */
     fun hideKeyboard(view: View) {
         val inputMethodManager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -143,6 +146,7 @@ class WrapRouletteActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        // Disable the navigation drawer when user is navigating to the create, edit or join pool fragments.
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.addPoolFragment || destination.id == R.id.joinPoolFragment) {
                 drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)

@@ -91,6 +91,9 @@ class PoolsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Retrieves a list of every pool that contains the users uid with the value of true.
+     */
     private fun fetchPoolList(uid: String) {
         viewModelScope.launch {
             repository.getPoolsList(uid).collect {
@@ -109,11 +112,17 @@ class PoolsViewModel @Inject constructor(
         poolDate.value = date
     }
 
+    /**
+     * Called when the admin sets the bid price and time margin for the active pool.
+     */
     fun setPoolPriceAndMargin(value: String?, isPrice: Boolean = true) {
         if (isPrice) poolBetAmount.value = value
         else poolMargin.value = value
     }
 
+    /**
+     * Called when the admin sets the betting lock time and start time for the active pool.
+     */
     fun setPoolTime(time: Date?, isStartTime: Boolean = true) {
         if (isStartTime) poolStartTime.value = time
         else poolBetLockTime.value = time

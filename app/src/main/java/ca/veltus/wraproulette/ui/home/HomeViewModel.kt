@@ -392,6 +392,9 @@ class HomeViewModel @Inject constructor(
         newMemberEmail.value = null
     }
 
+    /**
+     * Called when the pool admin tries to delete a temporary member from the active pool.
+     */
     fun deleteTempMember(memberItem: MemberItem) {
         if (!_isPoolAdmin.value) {
             showToast.value =
@@ -424,6 +427,10 @@ class HomeViewModel @Inject constructor(
         isFabClicked.value = !isFabClicked.value
     }
 
+    /**
+     * Called after admin confirms the wrap time for the pool. If wrapTime value is null, the admin
+     * is trying to clear the previous set wrap time.
+     */
     fun setWrapTime(wrapTime: Date?, isConfirmed: Boolean = false) {
         if (isConfirmed) {
             viewModelScope.launch {
@@ -465,6 +472,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets the bid time for the user. If there is an error display the message in a toast.
+     */
     fun setUserPoolBet(time: Date?) {
         viewModelScope.launch {
             repository.setUserPoolBet(
@@ -475,6 +485,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called when the pool admin sets the bid time for a temporary member.
+     * If there is an error display the message in a toast.
+     */
     fun setMemberPoolBet(poolId: String, tempMemberUid: String, time: Date?) {
         viewModelScope.launch {
             repository.setUserPoolBet(
@@ -486,6 +500,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Called when the pool admin clicks the edit options menu item.
+     */
     fun navigateToEditPool() {
         if (_isPoolAdmin.value && currentPool.value != null) {
             val action = HomeFragmentDirections.actionNavHomeToAddPoolFragment()
