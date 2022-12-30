@@ -22,7 +22,7 @@ Built using Kotlin, Wrap Roulette is an Android application which allows coworke
 # Description
 
 - Integrates Firebase Authentication and Cloud Firestore to allow users to login and access their data from any device.
-- Network calls are run on a background thread using Kotlin Coroutines to avoid stalling the UI.
+- Network calls are run using Kotlin Coroutines to avoid stalling the UI.
 - Built using the MVVM design pattern.
 - Employed JUnit and Espresso framework to perform both unit and UI tests.
 
