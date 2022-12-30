@@ -73,7 +73,7 @@
     <string name="addPoolSubtitleText">Create a new pool below. Users can join using the name, password and date inputs.</string>
     <string name="editPoolSubtitleText">Edit your pool details below. Users can join using the name, password and date inputs.</string>
     <string name="pirInfoImageDescription">Price is right rules info image</string>
-    <string name="tempMemberOptionDialogMessage">Select EDIT to modify the members details, or select BET to place their bid.</string>
+    <string name="tempMemberOptionDialogMessage">Select EDIT to modify member’s details, or select BET to place their bid.</string>
     <string name="memberOptionsDialogTitle">Member Options</string>
     <string name="setMemberBetTimeDialogTitle">Set Members Bet Time</string>
     <string name="bettingMarginDialogTitle">Betting Margin</string>
@@ -112,8 +112,8 @@
     <string name="bidAmountDialogTitle">Bid Amount</string>
     <string name="poolAdminDialogTitle">Pool Administrator</string>
     <string name="bettingMarginDialogPoolMessage">The current margin is %s minutes for this pool. This time is added to any bets made.</string>
-    <string name="poolAdminDialogMessage">The creator and admin for this pool is %s. They are responsible for adding temporary members, declaring rules and setting the wrap time.</string>
-    <string name="priceIsRightRulesDialogMessage">The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over. For this pool the admin has set this to %s.</string>
+    <string name="poolAdminDialogMessage">The administrator for this pool is %s. They are responsible for setting rules, adding temporary members and entering the wrap time.</string>
+    <string name="priceIsRightRulesDialogMessage">“The Price Is Right” rules designate a winner with the closest bet time to the wrap time without going over. For this pool the admin has set this to %s.</string>
     <string name="bidAmountDialogMessage">The admin has set the bid price as $%s.00 for this pool.</string>
     <string name="messageHint">Message</string>
     <string name="sendFabDescription">Send message fab</string>
@@ -138,7 +138,7 @@
     <string name="accountSettings">Account Settings</string>
     <string name="joinPool">Join Pool</string>
     <string name="sendFeedbackDialogTitle">Send Feedback</string>
-    <string name="sendFeedbackDialogMessage">Are you experiencing issues with the app or have suggestions to improve your experience? Let us know below.</string>
+    <string name="sendFeedbackDialogMessage">Are you experiencing issues with this app or have suggestions to improve your experience? Let us know below.</string>
     <string name="feedback">Feedback</string>
     <string name="feedbackDialogEmptyErrorToast">Please enter your message before sending.</string>
     <string name="feedbackDialogSuccessToast">Thanks for sharing your feedback!</string>
@@ -198,7 +198,7 @@
     <string name="summary">Summary</string>
     <string name="bids">Bids</string>
     <string name="deletePoolConfirmDialogSubtitle">You are about to delete this pool. Click Yes to continue or No to cancel.</string>
-    <string name="pirInfoDialogSubtitle">The Price Is Right rules picks a winner that has the closest bet time to the wrap time without going over.</string>
+    <string name="pirInfoDialogSubtitle">“The Price Is Right” rules designate a winner with the closest bet time to the wrap time without going over. \n\n *Exception if margins apply.</string>
     <string name="pirInfoDialogTitle">Price Is Right Rules</string>
     <string name="set">Set</string>
     <string name="startTimeDialogTitle">Start Time</string>
