@@ -13,7 +13,7 @@ Built using Kotlin, Wrap Roulette is an Android application which allows coworke
 - View a summary of all your past and upcoming pools
 
 
-# Screen Shots
+# Screenshots
 
 <img src="https://user-images.githubusercontent.com/93240608/209605871-8adeee1c-5158-48a8-ab9f-8bfa2f3e5881.png" width="100%">
 
